@@ -28,7 +28,7 @@ func TestMain(m *testing.M) {
 
 // Configuring a new Tcl interpreter to use the Tcl/Tk standard libraries.
 // Error handling omitted.
-func Example() {
+func Example_config() {
 	in, _ := NewInterp(map[string]string{
 		"tcl_library": tcl.MustStdlib(),
 		"tk_library":  MustStdlib(),
@@ -38,4 +38,31 @@ func Example() {
 	// Output:
 	// 2.10b1 <nil>
 	// 9.0b1 <nil>
+}
+
+// Create and show an interactive dialog with a close button.
+func Example_dialog() {
+	in, _ := NewInterp(map[string]string{
+		"tcl_library": tcl.MustStdlib(),
+		"tk_library":  MustStdlib(),
+	})
+	in.Eval(`
+
+package require http;
+
+ttk::style theme use clam
+. configure -pady 10
+ttk::label .l -text "Hello, World!" -padding 3
+ttk::spinbox .s -from 1 -to 10
+ttk::button .b -text "Close dialog and exit" -command { destroy . }
+pack .l .s .b
+tk::PlaceWindow . center
+wm title . "modernc.org/tk9.0 example"
+wm geometry . 300x[winfo height .]
+tkwait window .
+
+`,
+		tcl.EvalGlobal,
+	)
+	// Output:
 }
