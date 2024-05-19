@@ -48,8 +48,6 @@ func Example_dialog() {
 	})
 	in.Eval(`
 
-package require http;
-
 ttk::style theme use clam
 . configure -pady 10
 ttk::label .l -text "Hello, World!" -padding 3
