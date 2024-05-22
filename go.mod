@@ -4,8 +4,8 @@ go 1.20
 
 require (
 	github.com/evilsocket/islazy v1.11.0
-	modernc.org/libtk9.0 v0.1.3
-	modernc.org/tcl9.0 v0.2.7
+	modernc.org/libtk9.0 v0.2.0
+	modernc.org/tcl9.0 v0.3.0
 )
 
 require (
@@ -18,17 +18,17 @@ require (
 	modernc.org/libX11 v0.1.15 // indirect
 	modernc.org/libXau v0.1.24 // indirect
 	modernc.org/libXdmcp v0.1.9 // indirect
-	modernc.org/libXft v0.0.9 // indirect
-	modernc.org/libXrender v0.0.13 // indirect
+	modernc.org/libXft v0.0.12 // indirect
+	modernc.org/libXrender v0.0.16 // indirect
 	modernc.org/libbsd v0.1.31 // indirect
-	modernc.org/libc v1.50.7 // indirect
+	modernc.org/libc v1.50.8 // indirect
 	modernc.org/libexpat v0.2.12 // indirect
-	modernc.org/libfontconfig v0.1.9 // indirect
+	modernc.org/libfontconfig v0.1.10 // indirect
 	modernc.org/libfreetype v0.2.21 // indirect
 	modernc.org/libmd v0.2.18 // indirect
-	modernc.org/libtcl9.0 v0.2.1 // indirect
+	modernc.org/libtcl9.0 v0.3.0 // indirect
 	modernc.org/libxcb v0.2.13 // indirect
-	modernc.org/libz v0.10.2 // indirect
+	modernc.org/libz v0.10.3 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
 )
