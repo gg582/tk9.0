@@ -36,8 +36,8 @@ func Example_config() {
 	fmt.Println(in.Eval("package require http;", tcl.EvalGlobal))
 	fmt.Println(in.Eval("package require Tk;", tcl.EvalGlobal))
 	// Output:
-	// 2.10b1 <nil>
-	// 9.0b1 <nil>
+	// 2.10b2 <nil>
+	// 9.0b2 <nil>
 }
 
 // Create and show an interactive dialog with a close button.
