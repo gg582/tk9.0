@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/evilsocket/islazy v1.11.0
 	modernc.org/libtk9.0 v0.2.0
-	modernc.org/tcl9.0 v0.3.0
+	modernc.org/tcl9.0 v0.3.1
 )
 
 require (
