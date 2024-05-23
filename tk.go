@@ -4,10 +4,15 @@
 
 // Package tk9.0 is an idiomatic Go wrapper for [libtk9.0].
 //
+// Parts of the documentation are copied and/or modified from [TkDocs], see the
+// LICENSE-TKDOCS file for details.
+//
+// [TkDocs]: https://tkdocs.com/about.html
 // [libtk9.0]: https://pkg.go.dev/modernc.org/libtk9.0
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -20,53 +25,41 @@ import (
 )
 
 var (
-	onceStdlib    sync.Once
-	onceStdlibErr error
-	stdlib        string
+	single     *Tk
+	singleErr  error
+	singleOnce sync.Once
+
+	tclDir string
+	tkDir  string
 )
 
-// Stdlib returns the path to the Tk standard library or an error, if any. It
+// stdlib returns the path to the Tk standard library or an error, if any. It
 // once creates a temporary directory where the standard library is written.
-// Subsequent calls to Stdlib share the same temporary directory.
+// Subsequent calls to stdlib share the same temporary directory.
 //
-// Stdlib is safe for concurrent access by multiple goroutines.
-func Stdlib() (string, error) {
-	onceStdlib.Do(func() {
-		dir, err := os.MkdirTemp("", "tk-library-")
-		defer func() { onceStdlibErr = err }()
-		if err != nil {
-			return
-		}
-
-		fn := filepath.Join(dir, "library.zip")
-		if err = os.WriteFile(fn, []byte(tklib.Zip), 0600); err != nil {
-			return
-		}
-
-		if _, err = zip.Unzip(fn, dir); err != nil {
-			return
-		}
-
-		stdlib = filepath.Join(dir, "library")
-	})
-	return stdlib, onceStdlibErr
-}
-
-// MustStdlib is like Stdlib but panics on error.
-func MustStdlib() (r string) {
-	r, err := Stdlib()
-	if err != nil {
-		panic(err)
+// stdlib is safe for concurrent access by multiple goroutines.
+func stdlib() (dir string, err error) {
+	if dir, err = os.MkdirTemp("", "tk-library-"); err != nil {
+		return "", err
 	}
 
-	return r
+	fn := filepath.Join(dir, "library.zip")
+	if err = os.WriteFile(fn, []byte(tklib.Zip), 0600); err != nil {
+		return
+	}
+
+	if _, err = zip.Unzip(fn, dir); err != nil {
+		return
+	}
+
+	return filepath.Join(dir, "library"), nil
 }
 
-// NewInterp is like [tcl.NewInterp] but additionally initializes the Tk
+// newInterp is like [tcl.NewInterp] but additionally initializes the Tk
 // subsystem.
 //
 // [tcl.NewInterp]: https://pkg.go.dev/modernc.org/tcl9.0#NewInterp
-func NewInterp(tclvars map[string]string) (r *tcl.Interp, err error) {
+func newInterp(tclvars map[string]string) (r *tcl.Interp, err error) {
 	if r, err = tcl.NewInterp(tclvars); err != nil {
 		return nil, err
 	}
@@ -77,4 +70,51 @@ func NewInterp(tclvars map[string]string) (r *tcl.Interp, err error) {
 	}
 
 	return r, nil
+}
+
+// Finalize releases all resources held, if any. Finalize is intended to be
+// called on process shutdown only.
+func Finalize() (err error) {
+	if single != nil {
+		err = single.in.Close()
+		single = nil
+	}
+	for _, v := range []string{tclDir, tkDir} {
+		err = errors.Join(err, os.RemoveAll(v))
+	}
+	return err
+}
+
+// Tk represents the main window of an application. It has an associated Tcl
+// interpreter.
+type Tk struct {
+	in *tcl.Interp
+}
+
+// Initialize performs package initialization and returns a *Tk or error, if
+// any.
+//
+// The returned value is a singleton. Multiple calls to Initialize() are
+// idempotent and all return the same instance.
+func Initialize() (r *Tk, err error) {
+	singleOnce.Do(func() {
+		if tclDir, singleErr = tcl.Stdlib(); err != nil {
+			return
+		}
+
+		if tkDir, singleErr = stdlib(); singleErr != nil {
+			return
+		}
+
+		var in *tcl.Interp
+		if in, singleErr = newInterp(map[string]string{
+			"tcl_library": tclDir,
+			"tk_library":  tkDir,
+		}); singleErr != nil {
+			return
+		}
+
+		single = &Tk{in: in}
+	})
+	return single, singleErr
 }

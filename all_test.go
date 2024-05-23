@@ -6,7 +6,6 @@ package tk9_0 // import "modernc.org/tk9.0"
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"testing"
 
@@ -23,30 +22,14 @@ func TestMain(m *testing.M) {
 	}
 
 	flag.Parse()
-	os.Exit(m.Run())
+	rc := m.Run()
+	Finalize()
+	os.Exit(rc)
 }
 
-// Configuring a new Tcl interpreter to use the Tcl/Tk standard libraries.
-// Error handling omitted.
-func Example_config() {
-	in, _ := NewInterp(map[string]string{
-		"tcl_library": tcl.MustStdlib(),
-		"tk_library":  MustStdlib(),
-	})
-	fmt.Println(in.Eval("package require http;", tcl.EvalGlobal))
-	fmt.Println(in.Eval("package require Tk;", tcl.EvalGlobal))
-	// Output:
-	// 2.10b2 <nil>
-	// 9.0b2 <nil>
-}
-
-// Create and show an interactive dialog with a close button.
-func Example_dialog() {
-	in, _ := NewInterp(map[string]string{
-		"tcl_library": tcl.MustStdlib(),
-		"tk_library":  MustStdlib(),
-	})
-	in.Eval(`
+func Test(t *testing.T) {
+	in, _ := Initialize()
+	if _, err := in.in.Eval(`
 
 ttk::style theme use clam
 . configure -pady 10
@@ -60,7 +43,8 @@ wm geometry . 300x[winfo height .]
 tkwait window .
 
 `,
-		tcl.EvalGlobal,
-	)
-	// Output:
+		tcl.EvalDirect,
+	); err != nil {
+		t.Fatal(err)
+	}
 }
