@@ -39,6 +39,8 @@ var (
 
 	tclDir string
 	tkDir  string
+
+	finished atomic.Int32
 )
 
 // stdlib returns the path to the Tk standard library or an error, if any. It
@@ -63,26 +65,13 @@ func stdlib() (dir string, err error) {
 	return filepath.Join(dir, "library"), nil
 }
 
-// newInterp is like [tcl.NewInterp] but additionally initializes the Tk
-// subsystem.
-//
-// [tcl.NewInterp]: https://pkg.go.dev/modernc.org/tcl9.0#NewInterp
-func newInterp(tclvars map[string]string) (r *tcl.Interp, err error) {
-	if r, err = tcl.NewInterp(tclvars); err != nil {
-		return nil, err
-	}
-
-	if rc := lib.XTk_Init(r.TLS(), r.Handle()); rc != lib.TCL_OK {
-		r.Close()
-		return nil, fmt.Errorf("failed to initialize the Tk subsystem")
-	}
-
-	return r, nil
-}
-
 // Finalize releases all resources held, if any. Finalize is intended to be
 // called on process shutdown only.
 func Finalize() (err error) {
+	if finished.Swap(1) != 0 {
+		return
+	}
+
 	runtime.UnlockOSThread()
 	if tk != nil {
 		err = tk.in.Close()
@@ -106,7 +95,7 @@ type Tk struct {
 func (tk *Tk) eval(code string) (r string, err error) {
 	if tk.trace {
 		defer func() {
-			fmt.Fprintf(os.Stderr, "code=%s -> (r=%v err=%v)", code, r, err)
+			fmt.Fprintf(os.Stderr, "code=%s -> (r=%v err=%v)\n", code, r, err)
 		}()
 	}
 	return tk.in.Eval(code, tcl.EvalGlobal)
@@ -129,10 +118,16 @@ func Initialize() (r *Tk, err error) {
 		}
 
 		var in *tcl.Interp
-		if in, tkErr = newInterp(map[string]string{
+		if in, tkErr = tcl.NewInterp(map[string]string{
 			"tcl_library": tclDir,
 			"tk_library":  tkDir,
 		}); tkErr != nil {
+			return
+		}
+
+		if rc := lib.XTk_Init(in.TLS(), in.Handle()); rc != lib.TCL_OK {
+			in.Close()
+			tkErr = fmt.Errorf("failed to initialize the Tk subsystem")
 			return
 		}
 

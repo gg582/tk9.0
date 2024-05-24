@@ -51,7 +51,11 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	in, _ := Initialize()
+	in, err := Initialize()
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	in.trace = true
 	b, err := Button(Txt("{[Close\nMe]}"))
 	in.eval(fmt.Sprintf(`
@@ -63,4 +67,7 @@ tkwait window .
 
 `, b.path()))
 	trc("", b, err)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
