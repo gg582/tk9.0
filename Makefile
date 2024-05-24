@@ -18,7 +18,7 @@ clean:
 
 edit:
 	@touch log
-	@if [ -f "Session.vim" ]; then gvim -S & else gvim -p Makefile all_test.go go.mod builder.json tk.go & fi
+	@if [ -f "Session.vim" ]; then gvim -S & else gvim -p Makefile go.mod builder.json *.go & fi
 
 editor:
 	gofmt -l -s -w . 2>&1 | tee log-editor

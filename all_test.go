@@ -6,10 +6,10 @@ package tk9_0 // import "modernc.org/tk9.0"
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"testing"
-
-	tcl "modernc.org/tcl9.0"
+	// tcl "modernc.org/tcl9.0"
 )
 
 var (
@@ -28,30 +28,39 @@ func TestMain(m *testing.M) {
 }
 
 func Test(t *testing.T) {
-	in, _ := Initialize()
-	if _, err := in.in.Eval(`
+	//	in, _ := Initialize()
+	//	if _, err := in.in.Eval(`
+	//
+	// ttk::style theme use clam
+	// . configure -pady 10
+	// ttk::label .l -text "Hello, World!" -padding 3
+	// ttk::spinbox .s -from 1 -to 10
+	// ttk::button .b -text "Close dialog and exit" -command { destroy . }
+	// pack .l .s .b
+	// tk::PlaceWindow . center
+	// wm title . "modernc.org/tk9.0 example"
+	// wm geometry . 300x[winfo height .]
+	// tkwait window .
+	//
+	// `,
+	//
+	//		tcl.EvalDirect,
+	//	); err != nil {
+	//		t.Fatal(err)
+	//	}
+}
 
-ttk::style theme use clam
-. configure -pady 10
-ttk::label .l -text "Hello, World!" -padding 3
-ttk::spinbox .s -from 1 -to 10
-ttk::button .b -text "Close dialog and exit" -command { destroy . }
-pack .l .s .b
+func Test2(t *testing.T) {
+	in, _ := Initialize()
+	in.trace = true
+	b, err := Button(Txt("{[Close\nMe]}"))
+	in.eval(fmt.Sprintf(`
+pack %s
 tk::PlaceWindow . center
 wm title . "modernc.org/tk9.0 example"
 wm geometry . 300x[winfo height .]
 tkwait window .
 
-`,
-		tcl.EvalDirect,
-	); err != nil {
-		t.Fatal(err)
-	}
+`, b.path()))
+	trc("", b, err)
 }
-
-// func Test(t *testing.T) {
-// 	in, _ := Initialize()
-// 	in.trace = true
-// 	b, err := Button()
-// 	trc("", b, err)
-// }

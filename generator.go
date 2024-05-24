@@ -28,7 +28,6 @@ package tk9_0 // import "modernc.org/tk9.0"
 type document map[string]any
 
 func main() {
-	return //TODO
 	var docs []document
 	if err := json.Unmarshal([]byte(tklib.API), &docs); err != nil {
 		panic(err)

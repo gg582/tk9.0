@@ -11,13 +11,16 @@
 // [libtk9.0]: https://pkg.go.dev/modernc.org/libtk9.0
 package tk9_0 // import "modernc.org/tk9.0"
 
+// dmesgs cc/v4 style
+// error modes: panic (default), collect, ignore
+
 import (
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
-	// "strings"
+	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -100,13 +103,13 @@ type Tk struct {
 	trace bool
 }
 
-func (tk *Tk) eval(s string) (r string, err error) {
+func (tk *Tk) eval(code string) (r string, err error) {
 	if tk.trace {
 		defer func() {
-			fmt.Fprintf(os.Stderr, "%s ->(r=%v err=%v)", s, r, err)
+			fmt.Fprintf(os.Stderr, "code=%s -> (r=%v err=%v)", code, r, err)
 		}()
 	}
-	return tk.in.Eval(s, tcl.EvalGlobal)
+	return tk.in.Eval(code, tcl.EvalGlobal)
 }
 
 // Initialize performs package initialization and returns a *Tk or error, if
@@ -153,19 +156,57 @@ func (w *Window) path() (r string) {
 	return r
 }
 
-// func (w *Window) newChild(nm string, opts ...Opt) (*Window, error) {
-// 	cls := strings.Replace(nm, "ttk_", "ttk::", 1)
-// 	if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
-// 		nm += "_"
-// 	}
-// 	path := fmt.Sprintf("%s.%s%v", w.path(), nm, id.Add(1))
-// 	r, err := tk.eval(fmt.Sprintf("%s %s", cls, path))
-// 	if err != nil {
-// 		return nil, fmt.Errorf("%v %v", err, r)
-// 	}
+func (w *Window) newChild(nm string, opts ...Opt) (*Window, error) {
+	cls := strings.Replace(nm, "ttk_", "ttk::", 1)
+	if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
+		nm += "_"
+	}
+	path := fmt.Sprintf("%s.%s%v", w.path(), nm, id.Add(1))
+	var a []string
+	for _, v := range opts {
+		a = append(a, v.opt())
+	}
+	r, err := tk.eval(fmt.Sprintf("%s %s %s", cls, path, strings.Join(a, " ")))
+	if err != nil {
+		return nil, fmt.Errorf("%v %v", err, r)
+	}
+
+	return &Window{fpath: r}, nil
+}
+
+// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
 //
-// 	return &Window{fpath: r}, nil
-// }
+// The following characters are dissallowed or have special meanings in Tcl and
+// so are escaped:
 //
-// // Opt represents a set of options.
-// type Opt map[any]any
+//	&;`'"|*?~<>^()[]{}$\
+func tclSafeString(s string) string {
+	//TODO const chars = "\\&;`'\"|*?~<>^()[]{}$"
+	//TODO if strings.ContainsAny(s, chars) {
+	//TODO 	for i := 0; i < len(chars); i++ {
+	//TODO 		c := chars[i : i+1]
+	//TODO 		s = strings.ReplaceAll(s, c, `\`+c)
+	//TODO 	}
+	//TODO }
+	//TODO if strings.ContainsAny(s, "\n\r\t ") {
+	//TODO 	s = "{" + s + "}"
+	//TODO }
+	return s
+}
+
+// Opt represents an optional argument.
+type Opt interface {
+	opt() string
+}
+
+type text string
+
+func (t text) opt() string {
+	return fmt.Sprintf("-text %s", tclSafeString(string(t)))
+}
+
+// Txt produces the '-text s' option. It is not named 'Text' because of the
+// Text() function.
+func Txt(s string) Opt {
+	return text(s)
+}
