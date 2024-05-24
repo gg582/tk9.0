@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	// "strings"
 	"sync"
 	"sync/atomic"
@@ -79,6 +80,7 @@ func newInterp(tclvars map[string]string) (r *tcl.Interp, err error) {
 // Finalize releases all resources held, if any. Finalize is intended to be
 // called on process shutdown only.
 func Finalize() (err error) {
+	runtime.UnlockOSThread()
 	if tk != nil {
 		err = tk.in.Close()
 		tk = nil
@@ -114,6 +116,7 @@ func (tk *Tk) eval(s string) (r string, err error) {
 // all return the same (instance, error) tuple.
 func Initialize() (r *Tk, err error) {
 	tkOnce.Do(func() {
+		runtime.LockOSThread()
 		if tclDir, tkErr = tcl.Stdlib(); err != nil {
 			return
 		}
