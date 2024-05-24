@@ -16,7 +16,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	// "strings"
 	"sync"
+	"sync/atomic"
 
 	"github.com/evilsocket/islazy/zip"
 	lib "modernc.org/libtk9.0"
@@ -25,9 +27,11 @@ import (
 )
 
 var (
-	single     *Tk
-	singleErr  error
-	singleOnce sync.Once
+	id atomic.Int32
+
+	tk     *Tk
+	tkErr  error
+	tkOnce sync.Once
 
 	tclDir string
 	tkDir  string
@@ -75,9 +79,9 @@ func newInterp(tclvars map[string]string) (r *tcl.Interp, err error) {
 // Finalize releases all resources held, if any. Finalize is intended to be
 // called on process shutdown only.
 func Finalize() (err error) {
-	if single != nil {
-		err = single.in.Close()
-		single = nil
+	if tk != nil {
+		err = tk.in.Close()
+		tk = nil
 	}
 	for _, v := range []string{tclDir, tkDir} {
 		err = errors.Join(err, os.RemoveAll(v))
@@ -88,33 +92,77 @@ func Finalize() (err error) {
 // Tk represents the main window of an application. It has an associated Tcl
 // interpreter.
 type Tk struct {
+	*Window
 	in *tcl.Interp
+
+	trace bool
+}
+
+func (tk *Tk) eval(s string) (r string, err error) {
+	if tk.trace {
+		defer func() {
+			fmt.Fprintf(os.Stderr, "%s ->(r=%v err=%v)", s, r, err)
+		}()
+	}
+	return tk.in.Eval(s, tcl.EvalGlobal)
 }
 
 // Initialize performs package initialization and returns a *Tk or error, if
 // any.
 //
-// The returned value is a singleton. Multiple calls to Initialize() are
-// idempotent and all return the same instance.
+// The returned value is a singleton. Calls to Initialize() are idempotent and
+// all return the same (instance, error) tuple.
 func Initialize() (r *Tk, err error) {
-	singleOnce.Do(func() {
-		if tclDir, singleErr = tcl.Stdlib(); err != nil {
+	tkOnce.Do(func() {
+		if tclDir, tkErr = tcl.Stdlib(); err != nil {
 			return
 		}
 
-		if tkDir, singleErr = stdlib(); singleErr != nil {
+		if tkDir, tkErr = stdlib(); tkErr != nil {
 			return
 		}
 
 		var in *tcl.Interp
-		if in, singleErr = newInterp(map[string]string{
+		if in, tkErr = newInterp(map[string]string{
 			"tcl_library": tclDir,
 			"tk_library":  tkDir,
-		}); singleErr != nil {
+		}); tkErr != nil {
 			return
 		}
 
-		single = &Tk{in: in}
+		tk = &Tk{
+			Window: &Window{},
+			in:     in,
+		}
 	})
-	return single, singleErr
+	return tk, tkErr
 }
+
+// Window represents a Tk window/widget.
+type Window struct {
+	fpath string
+}
+
+func (w *Window) path() (r string) {
+	if r = w.fpath; r == "" {
+		r = "."
+	}
+	return r
+}
+
+// func (w *Window) newChild(nm string, opts ...Opt) (*Window, error) {
+// 	cls := strings.Replace(nm, "ttk_", "ttk::", 1)
+// 	if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
+// 		nm += "_"
+// 	}
+// 	path := fmt.Sprintf("%s.%s%v", w.path(), nm, id.Add(1))
+// 	r, err := tk.eval(fmt.Sprintf("%s %s", cls, path))
+// 	if err != nil {
+// 		return nil, fmt.Errorf("%v %v", err, r)
+// 	}
+//
+// 	return &Window{fpath: r}, nil
+// }
+//
+// // Opt represents a set of options.
+// type Opt map[any]any

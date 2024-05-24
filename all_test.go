@@ -48,3 +48,10 @@ tkwait window .
 		t.Fatal(err)
 	}
 }
+
+// func Test(t *testing.T) {
+// 	in, _ := Initialize()
+// 	in.trace = true
+// 	b, err := Button()
+// 	trc("", b, err)
+// }
