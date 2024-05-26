@@ -6,8 +6,6 @@ import (
 	"fmt"
 )
 
-
-
 // button - Create and manipulate 'button' action widgets
 //
 // The resulting Window is a child of 'w'.
@@ -2654,10 +2652,10 @@ func (o tabstyleOption) option(w *Window) string {
 // Specifies how to interpret the relationship between tab stops on a line and
 // tabs in the text of that line. The value must be 'tabular' (the default)
 // or 'wordprocessor'. Note that tabs are interpreted as they are encountered
-// in the text. If the tab style is 'tabular' then the 'n''th tab
-// character in the line's text will be associated with the 'n''th tab stop
+// in the text. If the tab style is 'tabular' then the 'n”th tab
+// character in the line's text will be associated with the 'n”th tab stop
 // defined for that line. If the tab character's x coordinate falls to the right
-// of the 'n''th tab stop, then a gap of a single space will be inserted as a
+// of the 'n”th tab stop, then a gap of a single space will be inserted as a
 // fallback. If the tab style is 'wordprocessor' then any tab character being
 // laid out will use (and be defined by) the first tab stop to the right of the
 // preceding characters already laid out on that line. The value of the

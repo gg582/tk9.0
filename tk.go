@@ -134,6 +134,8 @@ import (
 )
 
 var (
+	isBuilder = os.Getenv("MODERNC_BUILDER") != ""
+
 	id atomic.Int32
 
 	// Inter is the singleton Tk instance created on package initialization.
@@ -160,6 +162,10 @@ var (
 )
 
 func init() {
+	if isBuilder {
+		return
+	}
+
 	initialize()
 	if interErr != nil {
 		panic(interErr)

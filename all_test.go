@@ -12,10 +12,6 @@ import (
 	// tcl "modernc.org/tcl9.0"
 )
 
-var (
-	isBuilder = os.Getenv("MODERNC_BUILDER") != ""
-)
-
 func TestMain(m *testing.M) {
 	if isBuilder {
 		os.Exit(0)
