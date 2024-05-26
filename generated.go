@@ -2,9 +2,15 @@
 
 package tk9_0 // import "modernc.org/tk9.0"
 
+import (
+	"fmt"
+)
+
 
 
 // button - Create and manipulate 'button' action widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Button(opts ...Opt) *Window {
 	return w.newChild("button", opts...)
 }
@@ -15,6 +21,8 @@ func Button(opts ...Opt) *Window {
 }
 
 // canvas - Create and manipulate 'canvas' hypergraphics drawing surface widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Canvas(opts ...Opt) *Window {
 	return w.newChild("canvas", opts...)
 }
@@ -25,6 +33,8 @@ func Canvas(opts ...Opt) *Window {
 }
 
 // checkbutton - Create and manipulate 'checkbutton' boolean selection widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Checkbutton(opts ...Opt) *Window {
 	return w.newChild("checkbutton", opts...)
 }
@@ -35,6 +45,8 @@ func Checkbutton(opts ...Opt) *Window {
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Entry(opts ...Opt) *Window {
 	return w.newChild("entry", opts...)
 }
@@ -45,6 +57,8 @@ func Entry(opts ...Opt) *Window {
 }
 
 // frame - Create and manipulate 'frame' simple container widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Frame(opts ...Opt) *Window {
 	return w.newChild("frame", opts...)
 }
@@ -55,6 +69,8 @@ func Frame(opts ...Opt) *Window {
 }
 
 // label - Create and manipulate 'label' non-interactive text or image widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Label(opts ...Opt) *Window {
 	return w.newChild("label", opts...)
 }
@@ -65,6 +81,8 @@ func Label(opts ...Opt) *Window {
 }
 
 // labelframe - Create and manipulate 'labelframe' labelled container widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Labelframe(opts ...Opt) *Window {
 	return w.newChild("labelframe", opts...)
 }
@@ -75,6 +93,8 @@ func Labelframe(opts ...Opt) *Window {
 }
 
 // listbox - Create and manipulate 'listbox' item list widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Listbox(opts ...Opt) *Window {
 	return w.newChild("listbox", opts...)
 }
@@ -85,6 +105,8 @@ func Listbox(opts ...Opt) *Window {
 }
 
 // menu, tk_menuSetFocus - Create and manipulate 'menu' widgets and menubars
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Menu(opts ...Opt) *Window {
 	return w.newChild("menu", opts...)
 }
@@ -95,6 +117,8 @@ func Menu(opts ...Opt) *Window {
 }
 
 // menubutton - Create and manipulate 'menubutton' pop-up menu indicator widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Menubutton(opts ...Opt) *Window {
 	return w.newChild("menubutton", opts...)
 }
@@ -105,6 +129,8 @@ func Menubutton(opts ...Opt) *Window {
 }
 
 // message - Create and manipulate 'message' non-interactive text widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Message(opts ...Opt) *Window {
 	return w.newChild("message", opts...)
 }
@@ -115,6 +141,8 @@ func Message(opts ...Opt) *Window {
 }
 
 // tk_optionMenu - Create an option menubutton and its menu
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) OptionMenu(opts ...Opt) *Window {
 	return w.newChild("optionMenu", opts...)
 }
@@ -124,7 +152,953 @@ func OptionMenu(opts ...Opt) *Window {
 	return tk.OptionMenu(opts...)
 }
 
+type activebackgroundOpt string
+
+func (o activebackgroundOpt) opt() string {
+	return fmt.Sprintf(`-activebackground %s`, tclSafeString(string(o)))
+}
+
+// Specifies background color to use when drawing active elements.
+// An element (a widget or portion of a widget) is active if the
+// mouse cursor is positioned over the element and pressing a mouse button
+// will cause some action to occur.
+// If strict Motif compliance has been requested by setting the
+// -tk_strictMotif- variable, this option will normally be
+// ignored;  the normal background color will be used instead.
+// For some elements on Windows and Macintosh systems, the active color
+// will only be used while mouse button 1 is pressed over the element.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-activebackground
+func Activebackground(value string) Opt {
+	return activebackgroundOpt(value)
+}
+
+type activeborderwidthOpt string
+
+func (o activeborderwidthOpt) opt() string {
+	return fmt.Sprintf(`-activeborderwidth %s`, tclSafeString(string(o)))
+}
+
+// Specifies a non-negative value indicating
+// the width of the 3-D border drawn around active elements.  See above for
+// definition of active elements.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+// This option is typically only available in widgets displaying more
+// than one element at a time (e.g. menus but not buttons).
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-activeborderwidth
+func Activeborderwidth(value string) Opt {
+	return activeborderwidthOpt(value)
+}
+
+type activeforegroundOpt string
+
+func (o activeforegroundOpt) opt() string {
+	return fmt.Sprintf(`-activeforeground %s`, tclSafeString(string(o)))
+}
+
+// Specifies foreground color to use when drawing active elements.
+// See above for definition of active elements.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-activeforeground
+func Activeforeground(value string) Opt {
+	return activeforegroundOpt(value)
+}
+
+type activereliefOpt string
+
+func (o activereliefOpt) opt() string {
+	return fmt.Sprintf(`-activerelief %s`, tclSafeString(string(o)))
+}
+
+// Specifies the 3-D effect desired for the active item of the widget.
+// See the --relief- option for details.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-activerelief
+func Activerelief(value string) Opt {
+	return activereliefOpt(value)
+}
+
+type anchorOpt string
+
+func (o anchorOpt) opt() string {
+	return fmt.Sprintf(`-anchor %s`, tclSafeString(string(o)))
+}
+
+// Specifies how the information in a widget (e.g. text or a bitmap)
+// is to be displayed in the widget.
+// Must be one of the values -n-, -ne-, -e-, -se-,
+// -s-, -sw-, -w-, -nw-, or -center-.
+// For example, -nw- means display the information such that its
+// top-left corner is at the top-left corner of the widget.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-anchor
+func Anchor(value string) Opt {
+	return anchorOpt(value)
+}
+
+type backgroundOpt string
+
+func (o backgroundOpt) opt() string {
+	return fmt.Sprintf(`-background %s`, tclSafeString(string(o)))
+}
+
+// Specifies the normal background color to use when displaying the
+// widget.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-background
+func Background(value string) Opt {
+	return backgroundOpt(value)
+}
+
+type bgOpt string
+
+func (o bgOpt) opt() string {
+	return fmt.Sprintf(`-bg %s`, tclSafeString(string(o)))
+}
+
+// Specifies the normal background color to use when displaying the
+// widget.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-bg
+func Bg(value string) Opt {
+	return bgOpt(value)
+}
+
+type bitmapOpt string
+
+func (o bitmapOpt) opt() string {
+	return fmt.Sprintf(`-bitmap %s`, tclSafeString(string(o)))
+}
+
+// Specifies a bitmap to display in the widget, in any of the forms
+// acceptable to -Tk_GetBitmap-.
+// The exact way in which the bitmap is displayed may be affected by
+// other options such as --anchor- or --justify-.
+// Typically, if this option is specified then it overrides other
+// options that specify a textual value to display in the widget
+// but this is controlled by the --compound- option;
+// the --bitmap- option may be reset to an empty string to re-enable
+// a text display.
+// In widgets that support both --bitmap- and --image- options,
+// --image- will usually override --bitmap-.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-bitmap
+func Bitmap(value string) Opt {
+	return bitmapOpt(value)
+}
+
+type borderwidthOpt string
+
+func (o borderwidthOpt) opt() string {
+	return fmt.Sprintf(`-borderwidth %s`, tclSafeString(string(o)))
+}
+
+// Specifies a non-negative value indicating the width
+// of the 3-D border to draw around the outside of the widget (if such a
+// border is being drawn;  the --relief- option typically determines
+// this).  The value may also be used when drawing 3-D effects in the
+// interior of the widget.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-borderwidth
+func Borderwidth(value string) Opt {
+	return borderwidthOpt(value)
+}
+
+type bdOpt string
+
+func (o bdOpt) opt() string {
+	return fmt.Sprintf(`-bd %s`, tclSafeString(string(o)))
+}
+
+// Specifies a non-negative value indicating the width
+// of the 3-D border to draw around the outside of the widget (if such a
+// border is being drawn;  the --relief- option typically determines
+// this).  The value may also be used when drawing 3-D effects in the
+// interior of the widget.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-bd
+func Bd(value string) Opt {
+	return bdOpt(value)
+}
+
+type cursorOpt string
+
+func (o cursorOpt) opt() string {
+	return fmt.Sprintf(`-cursor %s`, tclSafeString(string(o)))
+}
+
+// Specifies the mouse cursor to be used for the widget.
+// The value may have any of the forms acceptable to -Tk_GetCursor-.
+// In addition, if an empty string is specified, it indicates that the
+// widget should defer to its parent for cursor specification.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-cursor
+func Cursor(value string) Opt {
+	return cursorOpt(value)
+}
+
+type compoundOpt string
+
+func (o compoundOpt) opt() string {
+	return fmt.Sprintf(`-compound %s`, tclSafeString(string(o)))
+}
+
+// Specifies if the widget should display text and bitmaps/images at the
+// same time, and if so, where the bitmap/image should be placed relative
+// to the text.  Must be one of the values -none-, -bottom-,
+// -top-, -left-, -right-, or -center-.  For example, the
+// (default) value -none- specifies that the bitmap or image should
+// (if defined) be displayed instead of the text, the value -left-
+// specifies that the bitmap or image should be displayed to the left of
+// the text, and the value -center- specifies that the bitmap or
+// image should be displayed on top of the text.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-compound
+func Compound(value string) Opt {
+	return compoundOpt(value)
+}
+
+type disabledforegroundOpt string
+
+func (o disabledforegroundOpt) opt() string {
+	return fmt.Sprintf(`-disabledforeground %s`, tclSafeString(string(o)))
+}
+
+// Specifies foreground color to use when drawing a disabled element.
+// If the option is specified as an empty string (which is typically the
+// case on monochrome displays), disabled elements are drawn with the
+// normal foreground color but they are dimmed by drawing them
+// with a stippled fill pattern.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-disabledforeground
+func Disabledforeground(value string) Opt {
+	return disabledforegroundOpt(value)
+}
+
+type exportselectionOpt string
+
+func (o exportselectionOpt) opt() string {
+	return fmt.Sprintf(`-exportselection %s`, tclSafeString(string(o)))
+}
+
+// Specifies whether or not a selection in the widget should also be
+// the X selection.
+// The value may have any of the forms accepted by -Tcl_GetBoolean-,
+// such as -true-, -false-, -0-, -1-, -yes-, or -no-.
+// If the selection is exported, then selecting in the widget deselects
+// the current X selection, selecting outside the widget deselects any
+// widget selection, and the widget will respond to selection retrieval
+// requests when it has a selection.  The default is usually for widgets
+// to export selections.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-exportselection
+func Exportselection(value string) Opt {
+	return exportselectionOpt(value)
+}
+
+type fontOpt string
+
+func (o fontOpt) opt() string {
+	return fmt.Sprintf(`-font %s`, tclSafeString(string(o)))
+}
+
+// Specifies the font to use when drawing text inside the widget.
+// The value may have any of the forms described in the -font- manual
+// page under -FONT DESCRIPTION-.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-font
+func Font(value string) Opt {
+	return fontOpt(value)
+}
+
+type foregroundOpt string
+
+func (o foregroundOpt) opt() string {
+	return fmt.Sprintf(`-foreground %s`, tclSafeString(string(o)))
+}
+
+// Specifies the normal foreground color to use when displaying the widget.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-foreground
+func Foreground(value string) Opt {
+	return foregroundOpt(value)
+}
+
+type fgOpt string
+
+func (o fgOpt) opt() string {
+	return fmt.Sprintf(`-fg %s`, tclSafeString(string(o)))
+}
+
+// Specifies the normal foreground color to use when displaying the widget.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-fg
+func Fg(value string) Opt {
+	return fgOpt(value)
+}
+
+type highlightbackgroundOpt string
+
+func (o highlightbackgroundOpt) opt() string {
+	return fmt.Sprintf(`-highlightbackground %s`, tclSafeString(string(o)))
+}
+
+// Specifies the color to display in the traversal highlight region when
+// the widget does not have the input focus.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-highlightbackground
+func Highlightbackground(value string) Opt {
+	return highlightbackgroundOpt(value)
+}
+
+type highlightcolorOpt string
+
+func (o highlightcolorOpt) opt() string {
+	return fmt.Sprintf(`-highlightcolor %s`, tclSafeString(string(o)))
+}
+
+// Specifies the color to use for the traversal highlight rectangle that is
+// drawn around the widget when it has the input focus.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-highlightcolor
+func Highlightcolor(value string) Opt {
+	return highlightcolorOpt(value)
+}
+
+type highlightthicknessOpt string
+
+func (o highlightthicknessOpt) opt() string {
+	return fmt.Sprintf(`-highlightthickness %s`, tclSafeString(string(o)))
+}
+
+// Specifies a non-negative value indicating the width of the highlight
+// rectangle to draw around the outside of the widget when it has the
+// input focus.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+// If the value is zero, no focus highlight is drawn around the widget.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-highlightthickness
+func Highlightthickness(value string) Opt {
+	return highlightthicknessOpt(value)
+}
+
+type imageOpt string
+
+func (o imageOpt) opt() string {
+	return fmt.Sprintf(`-image %s`, tclSafeString(string(o)))
+}
+
+// Specifies an image to display in the widget, which must have been
+// created with the -image create- command.
+// Typically, if the --image- option is specified then it overrides other
+// options that specify a bitmap or textual value to display in the
+// widget, though this is controlled by the --compound- option;
+// the --image- option may be reset to an empty string to re-enable
+// a bitmap or text display.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-image
+func Image(value string) Opt {
+	return imageOpt(value)
+}
+
+type insertbackgroundOpt string
+
+func (o insertbackgroundOpt) opt() string {
+	return fmt.Sprintf(`-insertbackground %s`, tclSafeString(string(o)))
+}
+
+// Specifies the color to use as background in the area covered by the
+// insertion cursor.  This color will normally override either the normal
+// background for the widget (or the selection background if the insertion
+// cursor happens to fall in the selection).
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertbackground
+func Insertbackground(value string) Opt {
+	return insertbackgroundOpt(value)
+}
+
+type insertborderwidthOpt string
+
+func (o insertborderwidthOpt) opt() string {
+	return fmt.Sprintf(`-insertborderwidth %s`, tclSafeString(string(o)))
+}
+
+// Specifies a non-negative value indicating the width
+// of the 3-D border to draw around the insertion cursor.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertborderwidth
+func Insertborderwidth(value string) Opt {
+	return insertborderwidthOpt(value)
+}
+
+type insertofftimeOpt int
+
+func (o insertofftimeOpt) opt() string {
+	return fmt.Sprintf(`-insertofftime %v`, o)
+}
+
+// Specifies a non-negative integer value indicating the number of
+// milliseconds the insertion cursor should remain
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertofftime
+func Insertofftime(value int) Opt {
+	return insertofftimeOpt(value)
+}
+
+type insertontimeOpt int
+
+func (o insertontimeOpt) opt() string {
+	return fmt.Sprintf(`-insertontime %v`, o)
+}
+
+// Specifies a non-negative integer value indicating the number of
+// milliseconds the insertion cursor should remain
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertontime
+func Insertontime(value int) Opt {
+	return insertontimeOpt(value)
+}
+
+type insertwidthOpt string
+
+func (o insertwidthOpt) opt() string {
+	return fmt.Sprintf(`-insertwidth %s`, tclSafeString(string(o)))
+}
+
+// Specifies a  value indicating the total width of the insertion cursor.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+// If a border has been specified for the insertion
+// cursor (using the --insertborderwidth- option), the border
+// will be drawn inside the width specified by the --insertwidth-
+// option.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertwidth
+func Insertwidth(value string) Opt {
+	return insertwidthOpt(value)
+}
+
+type jumpOpt bool
+
+func (o jumpOpt) opt() string {
+	return fmt.Sprintf(`-jump %v`, o)
+}
+
+// For widgets with a slider that can be dragged to adjust a value,
+// such as scrollbars, this option determines when
+// notifications are made about changes in the value.
+// The option's value must be a boolean of the form accepted by
+// -Tcl_GetBoolean-.
+// If the value is false, updates are made continuously as the
+// slider is dragged.
+// If the value is true, updates are delayed until the mouse button
+// is released to end the drag;  at that point a single notification
+// is made (the value
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-jump
+func Jump(value bool) Opt {
+	return jumpOpt(value)
+}
+
+type justifyOpt string
+
+func (o justifyOpt) opt() string {
+	return fmt.Sprintf(`-justify %s`, tclSafeString(string(o)))
+}
+
+// When there are multiple lines of text displayed in a widget, this
+// option determines how the lines line up with each other.
+// Must be one of -left-, -center-, or -right-.
+// -Left- means that the lines' left edges all line up, -center-
+// means that the lines' centers are aligned, and -right- means
+// that the lines' right edges line up.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-justify
+func Justify(value string) Opt {
+	return justifyOpt(value)
+}
+
+type orientOpt string
+
+func (o orientOpt) opt() string {
+	return fmt.Sprintf(`-orient %s`, tclSafeString(string(o)))
+}
+
+// For widgets that can lay themselves out with either a horizontal
+// or vertical orientation, such as scrollbars, this option specifies
+// which orientation should be used.  Must be either -horizontal-
+// or -vertical- or an abbreviation of one of these.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-orient
+func Orient(value string) Opt {
+	return orientOpt(value)
+}
+
+type padxOpt string
+
+func (o padxOpt) opt() string {
+	return fmt.Sprintf(`-padx %s`, tclSafeString(string(o)))
+}
+
+// Specifies a non-negative value indicating how much extra space
+// to request for the widget in the X-direction.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+// When computing how large a window it needs, the widget will
+// add this amount to the width it would normally need (as determined
+// by the width of the things displayed in the widget);  if the geometry
+// manager can satisfy this request, the widget will end up with extra
+// internal space to the left and/or right of what it displays inside.
+// Most widgets only use this option for padding text:  if they are
+// displaying a bitmap or image, then they usually ignore padding
+// options.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-padx
+func Padx(value string) Opt {
+	return padxOpt(value)
+}
+
+type padyOpt string
+
+func (o padyOpt) opt() string {
+	return fmt.Sprintf(`-pady %s`, tclSafeString(string(o)))
+}
+
+// Specifies a non-negative value indicating how much extra space
+// to request for the widget in the Y-direction.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+// When computing how large a window it needs, the widget will add
+// this amount to the height it would normally need (as determined by
+// the height of the things displayed in the widget);  if the geometry
+// manager can satisfy this request, the widget will end up with extra
+// internal space above and/or below what it displays inside.
+// Most widgets only use this option for padding text:  if they are
+// displaying a bitmap or image, then they usually ignore padding
+// options.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-pady
+func Pady(value string) Opt {
+	return padyOpt(value)
+}
+
+type placeholderOpt string
+
+func (o placeholderOpt) opt() string {
+	return fmt.Sprintf(`-placeholder %s`, tclSafeString(string(o)))
+}
+
+// Specifies a help text string to display if no text is otherwise displayed,
+// that is when the widget is empty. The placeholder text is displayed using
+// the values of the --font- and --justify- options.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-placeholder
+func Placeholder(value string) Opt {
+	return placeholderOpt(value)
+}
+
+type placeholderforegroundOpt string
+
+func (o placeholderforegroundOpt) opt() string {
+	return fmt.Sprintf(`-placeholderforeground %s`, tclSafeString(string(o)))
+}
+
+// Specifies the foreground color to use when the placeholder text is
+// displayed. The default color is platform-specific.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-placeholderforeground
+func Placeholderforeground(value string) Opt {
+	return placeholderforegroundOpt(value)
+}
+
+type reliefOpt string
+
+func (o reliefOpt) opt() string {
+	return fmt.Sprintf(`-relief %s`, tclSafeString(string(o)))
+}
+
+// Specifies the 3-D effect desired for the widget.  Acceptable
+// values are -raised-, -sunken-, -flat-, -ridge-,
+// -solid-, and -groove-.
+// The value
+// indicates how the interior of the widget should appear relative
+// to its exterior;  for example, -raised- means the interior of
+// the widget should appear to protrude from the screen, relative to
+// the exterior of the widget.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-relief
+func Relief(value string) Opt {
+	return reliefOpt(value)
+}
+
+type repeatdelayOpt string
+
+func (o repeatdelayOpt) opt() string {
+	return fmt.Sprintf(`-repeatdelay %s`, tclSafeString(string(o)))
+}
+
+// Specifies the number of milliseconds a button or key must be held
+// down before it begins to auto-repeat.  Used, for example, on the
+// up- and down-arrows in scrollbars.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-repeatdelay
+func Repeatdelay(value string) Opt {
+	return repeatdelayOpt(value)
+}
+
+type repeatintervalOpt string
+
+func (o repeatintervalOpt) opt() string {
+	return fmt.Sprintf(`-repeatinterval %s`, tclSafeString(string(o)))
+}
+
+// Used in conjunction with --repeatdelay-:  once auto-repeat
+// begins, this option determines the number of milliseconds between
+// auto-repeats.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-repeatinterval
+func Repeatinterval(value string) Opt {
+	return repeatintervalOpt(value)
+}
+
+type selectbackgroundOpt string
+
+func (o selectbackgroundOpt) opt() string {
+	return fmt.Sprintf(`-selectbackground %s`, tclSafeString(string(o)))
+}
+
+// Specifies the background color to use when displaying selected
+// items.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-selectbackground
+func Selectbackground(value string) Opt {
+	return selectbackgroundOpt(value)
+}
+
+type selectborderwidthOpt string
+
+func (o selectborderwidthOpt) opt() string {
+	return fmt.Sprintf(`-selectborderwidth %s`, tclSafeString(string(o)))
+}
+
+// Specifies a non-negative value indicating the width
+// of the 3-D border to draw around selected items.
+// The value may have any of the forms acceptable to -Tk_GetPixels-.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-selectborderwidth
+func Selectborderwidth(value string) Opt {
+	return selectborderwidthOpt(value)
+}
+
+type selectforegroundOpt string
+
+func (o selectforegroundOpt) opt() string {
+	return fmt.Sprintf(`-selectforeground %s`, tclSafeString(string(o)))
+}
+
+// Specifies the foreground color to use when displaying selected
+// items.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-selectforeground
+func Selectforeground(value string) Opt {
+	return selectforegroundOpt(value)
+}
+
+type setgridOpt bool
+
+func (o setgridOpt) opt() string {
+	return fmt.Sprintf(`-setgrid %v`, o)
+}
+
+// Specifies a boolean value that determines whether this widget controls the
+// resizing grid for its top-level window.
+// This option is typically used in text widgets, where the information
+// in the widget has a natural size (the size of a character) and it makes
+// sense for the window's dimensions to be integral numbers of these units.
+// These natural window sizes form a grid.
+// If the --setgrid- option is set to true then the widget will
+// communicate with the window manager so that when the user interactively
+// resizes the top-level window that contains the widget, the dimensions of
+// the window will be displayed to the user in grid units and the window
+// size will be constrained to integral numbers of grid units.
+// See the section -GRIDDED GEOMETRY MANAGEMENT- in the -wm- manual
+// entry for more details.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-setgrid
+func Setgrid(value bool) Opt {
+	return setgridOpt(value)
+}
+
+type takefocusOpt string
+
+func (o takefocusOpt) opt() string {
+	return fmt.Sprintf(`-takefocus %s`, tclSafeString(string(o)))
+}
+
+// Determines whether the window accepts the focus during keyboard
+// traversal (e.g., Tab and Shift-Tab).
+// Before setting the focus to a window, the traversal scripts
+// consult the value of the --takefocus- option.
+// A value of -0- means that the window should be skipped entirely
+// during keyboard traversal.
+// -1- means that the window should receive the input
+// focus as long as it is viewable (it and all of its ancestors are mapped).
+// An empty value for the option means that the traversal scripts make
+// the decision about whether or not to focus on the window:  the current
+// algorithm is to skip the window if it is
+// disabled, if it has no key bindings, or if it is not viewable.
+// If the value has any other form, then the traversal scripts take
+// the value, append the name of the window to it (with a separator space),
+// and evaluate the resulting string as a Tcl script.
+// The script must return -0-, -1-, or an empty string:  a
+// -0- or -1- value specifies whether the window will receive
+// the input focus, and an empty string results in the default decision
+// described above.
+// Note that this interpretation of the option is defined entirely by
+// the Tcl scripts that implement traversal:  the widget implementations
+// ignore the option entirely, so you can change its meaning if you
+// redefine the keyboard traversal scripts.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-takefocus
+func Takefocus(value string) Opt {
+	return takefocusOpt(value)
+}
+
+type textOpt string
+
+func (o textOpt) opt() string {
+	return fmt.Sprintf(`-text %s`, tclSafeString(string(o)))
+}
+
+// Specifies a string to be displayed inside the widget.  The way in which
+// the string is displayed depends on the particular widget and may be
+// determined by other options, such as --anchor- or --justify-.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-text
+func Txt(value string) Opt {
+	return textOpt(value)
+}
+
+type textvariableOpt string
+
+func (o textvariableOpt) opt() string {
+	return fmt.Sprintf(`-textvariable %s`, tclSafeString(string(o)))
+}
+
+// Specifies the name of a global variable.  The value of the variable is a text
+// string to be displayed inside the widget;  if the variable value changes
+// then the widget will automatically update itself to reflect the new value.
+// The way in which the string is displayed in the widget depends on the
+// particular widget and may be determined by other options, such as
+// --anchor- or --justify-.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-textvariable
+func Textvariable(value string) Opt {
+	return textvariableOpt(value)
+}
+
+type troughcolorOpt string
+
+func (o troughcolorOpt) opt() string {
+	return fmt.Sprintf(`-troughcolor %s`, tclSafeString(string(o)))
+}
+
+// Specifies the color to use for the rectangular trough areas
+// in widgets such as scrollbars and scales.  This option is ignored for
+// scrollbars on Windows (native widget does not recognize this option).
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-troughcolor
+func Troughcolor(value string) Opt {
+	return troughcolorOpt(value)
+}
+
+type underlineOpt int
+
+func (o underlineOpt) opt() string {
+	return fmt.Sprintf(`-underline %v`, o)
+}
+
+// Specifies the integer index of a character to underline in the widget.
+// This option is used by the default bindings to implement keyboard
+// traversal for menu buttons and menu entries.
+// 0 corresponds to the first character of the text displayed in the
+// widget, 1 to the next character, and so on. -end- corresponds to the
+// last character, -end--1 to the before last character, and so on.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-underline
+func Underline(value int) Opt {
+	return underlineOpt(value)
+}
+
+type wraplengthOpt string
+
+func (o wraplengthOpt) opt() string {
+	return fmt.Sprintf(`-wraplength %s`, tclSafeString(string(o)))
+}
+
+// For widgets that can perform word-wrapping, this option specifies
+// the maximum line length.
+// Lines that would exceed this length are wrapped onto the next line,
+// so that no line is longer than the specified length.
+// The value may be specified in any of the standard forms for
+// screen distances.
+// If this value is less than or equal to 0 then no wrapping is done:  lines
+// will break only at newline characters in the text.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-wraplength
+func Wraplength(value string) Opt {
+	return wraplengthOpt(value)
+}
+
+type xscrollcommandOpt string
+
+func (o xscrollcommandOpt) opt() string {
+	return fmt.Sprintf(`-xscrollcommand %s`, tclSafeString(string(o)))
+}
+
+// Specifies the prefix for a command used to communicate with horizontal
+// scrollbars.
+// When the view in the widget's window changes (or
+// whenever anything else occurs that could change the display in a
+// scrollbar, such as a change in the total size of the widget's
+// contents), the widget will
+// generate a Tcl command by concatenating the scroll command and
+// two numbers.
+// Each of the numbers is a fraction between 0 and 1, which indicates
+// a position in the document.  0 indicates the beginning of the document,
+// 1 indicates the end, .333 indicates a position one third the way through
+// the document, and so on.
+// The first fraction indicates the first information in the document
+// that is visible in the window, and the second fraction indicates
+// the information just after the last portion that is visible.
+// The command is
+// then passed to the Tcl interpreter for execution.  Typically the
+// --xscrollcommand- option consists of the path name of a scrollbar
+// widget followed by
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-xscrollcommand
+func Xscrollcommand(value string) Opt {
+	return xscrollcommandOpt(value)
+}
+
+type yscrollcommandOpt string
+
+func (o yscrollcommandOpt) opt() string {
+	return fmt.Sprintf(`-yscrollcommand %s`, tclSafeString(string(o)))
+}
+
+// Specifies the prefix for a command used to communicate with vertical
+// scrollbars.  This option is treated in the same way as the
+// --xscrollcommand- option, except that it is used for vertical
+// scrollbars and is provided by widgets that support vertical scrolling.
+// See the description of --xscrollcommand- for details
+// on how this option is used.
+//
+// The above is the original [Tcl/Tk documentation].
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-yscrollcommand
+func Yscrollcommand(value string) Opt {
+	return yscrollcommandOpt(value)
+}
+
 // panedwindow - Create and manipulate 'panedwindow' split container widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Panedwindow(opts ...Opt) *Window {
 	return w.newChild("panedwindow", opts...)
 }
@@ -135,6 +1109,8 @@ func Panedwindow(opts ...Opt) *Window {
 }
 
 // radiobutton - Create and manipulate 'radiobutton' pick-one widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Radiobutton(opts ...Opt) *Window {
 	return w.newChild("radiobutton", opts...)
 }
@@ -145,6 +1121,8 @@ func Radiobutton(opts ...Opt) *Window {
 }
 
 // scale - Create and manipulate 'scale' value-controlled slider widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Scale(opts ...Opt) *Window {
 	return w.newChild("scale", opts...)
 }
@@ -155,6 +1133,8 @@ func Scale(opts ...Opt) *Window {
 }
 
 // scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Scrollbar(opts ...Opt) *Window {
 	return w.newChild("scrollbar", opts...)
 }
@@ -165,6 +1145,8 @@ func Scrollbar(opts ...Opt) *Window {
 }
 
 // spinbox - Create and manipulate 'spinbox' value spinner widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Spinbox(opts ...Opt) *Window {
 	return w.newChild("spinbox", opts...)
 }
@@ -175,6 +1157,8 @@ func Spinbox(opts ...Opt) *Window {
 }
 
 // text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Text(opts ...Opt) *Window {
 	return w.newChild("text", opts...)
 }
@@ -185,6 +1169,8 @@ func Text(opts ...Opt) *Window {
 }
 
 // toplevel - Create and manipulate 'toplevel' main and popup window widgets
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) Toplevel(opts ...Opt) *Window {
 	return w.newChild("toplevel", opts...)
 }
@@ -195,6 +1181,8 @@ func Toplevel(opts ...Opt) *Window {
 }
 
 // ttk::button - Widget that issues a command when pressed
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TButton(opts ...Opt) *Window {
 	return w.newChild("ttk_button", opts...)
 }
@@ -205,6 +1193,8 @@ func TButton(opts ...Opt) *Window {
 }
 
 // ttk::checkbutton - On/off widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TCheckbutton(opts ...Opt) *Window {
 	return w.newChild("ttk_checkbutton", opts...)
 }
@@ -215,6 +1205,8 @@ func TCheckbutton(opts ...Opt) *Window {
 }
 
 // ttk::combobox - text field with popdown selection list
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TCombobox(opts ...Opt) *Window {
 	return w.newChild("ttk_combobox", opts...)
 }
@@ -225,6 +1217,8 @@ func TCombobox(opts ...Opt) *Window {
 }
 
 // ttk::entry - Editable text field widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TEntry(opts ...Opt) *Window {
 	return w.newChild("ttk_entry", opts...)
 }
@@ -235,6 +1229,8 @@ func TEntry(opts ...Opt) *Window {
 }
 
 // ttk::frame - Simple container widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TFrame(opts ...Opt) *Window {
 	return w.newChild("ttk_frame", opts...)
 }
@@ -245,6 +1241,8 @@ func TFrame(opts ...Opt) *Window {
 }
 
 // ttk::label - Display a text string and/or image
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TLabel(opts ...Opt) *Window {
 	return w.newChild("ttk_label", opts...)
 }
@@ -255,6 +1253,8 @@ func TLabel(opts ...Opt) *Window {
 }
 
 // ttk::labelframe - Container widget with optional label
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TLabelframe(opts ...Opt) *Window {
 	return w.newChild("ttk_labelframe", opts...)
 }
@@ -265,6 +1265,8 @@ func TLabelframe(opts ...Opt) *Window {
 }
 
 // ttk::menubutton - Widget that pops down a menu when pressed
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TMenubutton(opts ...Opt) *Window {
 	return w.newChild("ttk_menubutton", opts...)
 }
@@ -275,6 +1277,8 @@ func TMenubutton(opts ...Opt) *Window {
 }
 
 // ttk::notebook - Multi-paned container widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TNotebook(opts ...Opt) *Window {
 	return w.newChild("ttk_notebook", opts...)
 }
@@ -285,6 +1289,8 @@ func TNotebook(opts ...Opt) *Window {
 }
 
 // ttk::panedwindow - Multi-pane container window
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TPanedwindow(opts ...Opt) *Window {
 	return w.newChild("ttk_panedwindow", opts...)
 }
@@ -295,6 +1301,8 @@ func TPanedwindow(opts ...Opt) *Window {
 }
 
 // ttk::progressbar - Provide progress feedback
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TProgressbar(opts ...Opt) *Window {
 	return w.newChild("ttk_progressbar", opts...)
 }
@@ -305,6 +1313,8 @@ func TProgressbar(opts ...Opt) *Window {
 }
 
 // ttk::radiobutton - Mutually exclusive option widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TRadiobutton(opts ...Opt) *Window {
 	return w.newChild("ttk_radiobutton", opts...)
 }
@@ -315,6 +1325,8 @@ func TRadiobutton(opts ...Opt) *Window {
 }
 
 // ttk::scale - Create and manipulate a scale widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TScale(opts ...Opt) *Window {
 	return w.newChild("ttk_scale", opts...)
 }
@@ -325,6 +1337,8 @@ func TScale(opts ...Opt) *Window {
 }
 
 // ttk::scrollbar - Control the viewport of a scrollable widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TScrollbar(opts ...Opt) *Window {
 	return w.newChild("ttk_scrollbar", opts...)
 }
@@ -335,6 +1349,8 @@ func TScrollbar(opts ...Opt) *Window {
 }
 
 // ttk::separator - Separator bar
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TSeparator(opts ...Opt) *Window {
 	return w.newChild("ttk_separator", opts...)
 }
@@ -345,6 +1361,8 @@ func TSeparator(opts ...Opt) *Window {
 }
 
 // ttk::sizegrip - Bottom-right corner resize widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TSizegrip(opts ...Opt) *Window {
 	return w.newChild("ttk_sizegrip", opts...)
 }
@@ -355,6 +1373,8 @@ func TSizegrip(opts ...Opt) *Window {
 }
 
 // ttk::spinbox - Selecting text field widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TSpinbox(opts ...Opt) *Window {
 	return w.newChild("ttk_spinbox", opts...)
 }
@@ -365,6 +1385,8 @@ func TSpinbox(opts ...Opt) *Window {
 }
 
 // ttk::treeview - hierarchical multicolumn data display widget
+//
+// The resulting Window is a child of 'w'.
 func (w *Window) TTreeview(opts ...Opt) *Window {
 	return w.newChild("ttk_treeview", opts...)
 }

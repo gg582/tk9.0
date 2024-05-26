@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package tk9.0 is an idiomatic Go wrapper for [libtk9.0].
+// Package tk9.0 is an idiomatic Go wrapper for [libtk9.0]. It is similar to
+// Python's tkinter.
 //
 // Parts of the documentation are copied and/or modified from [TkDocs], see the
 // LICENSE-TKDOCS file for details.
@@ -266,9 +267,14 @@ func (w *Window) newChild(nm string, opts ...Opt) *Window {
 	for _, v := range opts {
 		a = append(a, v.opt())
 	}
-	r, err := tk.eval(fmt.Sprintf("%s %s %s", cls, path, strings.Join(a, " ")))
+	code := fmt.Sprintf("%s %s %s", cls, path, strings.Join(a, " "))
+	r, err := tk.eval(code)
 	if err != nil {
 		if !CollectErrors {
+			err := fmt.Errorf("code=%s -> r=%s err=%v", code, r, err)
+			if dmesgs {
+				dmesg("PANIC %v", err)
+			}
 			panic(err)
 		}
 
@@ -327,18 +333,15 @@ func tclSafeString(s string) string {
 	return s
 }
 
+func bool2int(b bool) int {
+	if b {
+		return 1
+	}
+
+	return 0
+}
+
 // Opt represents an optional argument.
 type Opt interface {
 	opt() string
-}
-
-type text string
-
-func (t text) opt() string {
-	return fmt.Sprintf("-text %s", tclSafeString(string(t)))
-}
-
-// Txt produces the '-text s' configuration option.
-func Txt(s string) Opt {
-	return text(s)
 }
