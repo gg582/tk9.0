@@ -48,40 +48,70 @@ func generated(fn string, docs []document) {
 		panic(err)
 	}
 
-	var a []string
+	var pages []string
 	m := map[string]document{}
 	for _, v := range docs {
 		nm := v["Page"].(string)
-		a = append(a, nm)
+		pages = append(pages, nm)
 		m[nm] = v
 	}
-	slices.Sort(a)
+	slices.Sort(pages)
 
-	for _, nm0 := range a {
+	genericOptions := map[string]struct{}{}
+	specificOptions2Page := map[string][]string{} // option name: widget names
+	specificOptions := map[string]string{}        // option name: docs
+	for _, nm0 := range pages {
 		doc := m[nm0]
 		switch doc["Page"].(string) {
 		case "options":
 			for _, v := range doc["Options"].([]any) {
 				v := v.(map[string]any)
-				nm := v["Name"].(string)
+				onms := v["Name"].(string)
 				docs := v["Docs"].(string)
-				option(w, nm, docs)
+				for _, onm := range optionNames(onms) {
+					genericOptions[onm] = struct{}{}
+				}
+				option(w, onms, docs, nil)
 			}
 		default:
 			nm := tclName2GoName(nm0)
 			if _, ok := doc["IsWindow"].(bool); ok {
 				fmt.Fprintf(w, "\n\n// %v", doc["Name"])
 				fmt.Fprintf(w, "\n//\n// The resulting Window is a child of 'w'.")
-				fmt.Fprintf(w, "\nfunc (w *Window) %s(opts ...Opt) *Window {", nm)
-				fmt.Fprintf(w, "\n\treturn w.newChild(%q, opts...)", nm0)
+				fmt.Fprintf(w, "\nfunc (w *Window) %s(options ...Option) *Window {", nm)
+				fmt.Fprintf(w, "\n\treturn w.newChild(%q, options...)", nm0)
 				fmt.Fprintf(w, "\n}")
 
 				fmt.Fprintf(w, "\n\n// %v", doc["Name"])
-				fmt.Fprintf(w, "\nfunc %s(opts ...Opt) *Window {", nm)
-				fmt.Fprintf(w, "\n\treturn tk.%s(opts...)", nm)
+				fmt.Fprintf(w, "\nfunc %s(options ...Option) *Window {", nm)
+				fmt.Fprintf(w, "\n\treturn Inter.%s(options...)", nm)
 				fmt.Fprintf(w, "\n}")
+				if opts, ok := doc["Options"].([]any); ok {
+					for _, v := range opts {
+						v := v.(map[string]any)
+						onms := v["Name"].(string)
+						docs := v["Docs"].(string)
+						for _, onm := range optionNames(onms) {
+							specificOptions2Page[onm] = append(specificOptions2Page[onm], nm)
+							if _, ok := specificOptions[onm]; !ok {
+								specificOptions[onm] = docs
+							}
+						}
+					}
+				}
 			}
 		}
+	}
+	// Pass 2, generate specific options.
+	var onms []string
+	for k := range specificOptions2Page {
+		if _, ok := genericOptions[k]; !ok {
+			onms = append(onms, k)
+		}
+	}
+	slices.Sort(onms)
+	for _, onm := range onms {
+		option(w, onm, specificOptions[onm], specificOptions2Page[onm])
 	}
 
 	if err := os.WriteFile(fn, w.Bytes(), 0660); err != nil {
@@ -89,17 +119,22 @@ func generated(fn string, docs []document) {
 	}
 }
 
-func option(w io.Writer, nm, docs string) {
+func optionNames(nm string) (r []string) {
 	nm = strings.ReplaceAll(nm, `"`, "")
-	a := strings.Fields(nm)
+	r = strings.Fields(nm)
 	x := 0
-	for i, v := range a {
-		if strings.HasPrefix(v, "-") && (i == 0 || a[i-1] == "or") {
-			a[x] = v
+	for i, v := range r {
+		if strings.HasPrefix(v, "-") && (i == 0 || r[i-1] == "or") {
+			r[x] = v
 			x++
 		}
 	}
-	a = a[:x]
+	return r[:x]
+}
+
+func option(w io.Writer, nm, docs string, appliesTo []string) {
+	nm = strings.ReplaceAll(nm, `"`, "")
+	a := optionNames(nm)
 	typ := "string"
 	switch {
 	case strings.Contains(docs, " integer "):
@@ -109,8 +144,12 @@ func option(w io.Writer, nm, docs string) {
 	}
 	for _, nm := range a {
 		nm = nm[1:] // remove leading '-'
-		fmt.Fprintf(w, "\n\ntype %sOpt %s", nm, typ)
-		fmt.Fprintf(w, "\n\nfunc (o %sOpt) opt() string {", nm)
+		if hideOpt[nm] {
+			continue
+		}
+
+		fmt.Fprintf(w, "\n\ntype %sOption %s", nm, typ)
+		fmt.Fprintf(w, "\n\nfunc (o %sOption) option(w *Window) string {", nm)
 		switch typ {
 		case "string":
 			fmt.Fprintf(w, "\n\treturn fmt.Sprintf(`-%s %%s`, tclSafeString(string(o)))", nm)
@@ -124,16 +163,39 @@ func option(w io.Writer, nm, docs string) {
 		}
 		d := strings.Split(strings.TrimSpace(docs), "\n")
 		fmt.Fprintf(w, "\n\n// %s", strings.Join(d, "\n// "))
-		fmt.Fprintf(w, "\n//\n// The above is the original [Tcl/Tk documentation].")
-		fmt.Fprintf(w, "\n//\n// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-%s", nm)
-		fmt.Fprintf(w, "\nfunc %s(value %s) Opt {", export(nm2), typ)
-		fmt.Fprintf(w, "\n\treturn %sOpt(value)", nm)
+		switch {
+		case len(appliesTo) == 0:
+			fmt.Fprintf(w, "\n//\n// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].")
+			fmt.Fprintf(w, "\n//\n// Note: This is a \"standard\" option and may apply to different windows/widgets, although not necessarily to all of them.")
+		default:
+			fmt.Fprintf(w, "\n//\n// Note: This option applies to %s.", strings.Join(appliesTo, ", "))
+		}
+		if len(appliesTo) == 0 {
+			fmt.Fprintf(w, "\n//\n// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-%s", nm)
+		}
+		fmt.Fprintf(w, "\nfunc %s(value %s) Option {", export(nm2), typ)
+		fmt.Fprintf(w, "\n\treturn %sOption(value)", nm)
 		fmt.Fprintf(w, "\n}")
 	}
 }
 
+var hideOpt = map[string]bool{
+	"command":         true,
+	"invalidcommand":  true,
+	"invcmd":          true,
+	"postcommand":     true,
+	"tearoffcommand":  true,
+	"textvariable":    true,
+	"validatecommand": true,
+	"vcmd":            true,
+	"xscrollcommand":  true,
+	"yscrollcommand":  true,
+}
+
 var replaceOpt = map[string]string{
-	"text": "txt",
+	"label": "lbl",
+	"menu":  "mnu",
+	"text":  "txt",
 }
 
 func tclName2GoName(s string) string {

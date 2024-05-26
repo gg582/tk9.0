@@ -5,8 +5,21 @@
 // Package tk9.0 is an idiomatic Go wrapper for [libtk9.0]. It is similar to
 // Python's tkinter.
 //
-// Parts of the documentation are copied and/or modified from [TkDocs], see the
-// LICENSE-TKDOCS file for details.
+// # Event handlers
+//
+// The various command options, like Command() expect arguments that must be one of:
+//
+// - EventHandler or a function literal of signature func(*Window, any) (any, error), ie. the same as EventHandler.
+//
+// - EventDetacher or a function literal of signature func(*Window, any), ie. the same as EventDetacher.
+//
+// - Any other type, used as the additonal 'data' argument when invoking the event handler/detacher.
+//
+// Each of the three types must be present at most once and only the event handler is mandatory.
+// The event detacher and additional data are both optional.
+//
+// Note: Parts of the documentation are copied and/or modified from [TkDocs],
+// see the LICENSE-TKDOCS file for details.
 //
 // [TkDocs]: https://tkdocs.com/about.html
 // [libtk9.0]: https://pkg.go.dev/modernc.org/libtk9.0
@@ -108,11 +121,13 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
 
 	"github.com/evilsocket/islazy/zip"
+	libtcl "modernc.org/libtcl9.0"
 	lib "modernc.org/libtk9.0"
 	tklib "modernc.org/libtk9.0/library"
 	tcl "modernc.org/tcl9.0"
@@ -121,9 +136,11 @@ import (
 var (
 	id atomic.Int32
 
-	tk     *Tk
-	tkErr  error
-	tkOnce sync.Once
+	// Inter is the singleton Tk instance created on package initialization.
+	Inter *Tk
+
+	interErr  error
+	interOnce sync.Once
 
 	tclDir string
 	tkDir  string
@@ -141,6 +158,13 @@ var (
 	// Error records errors when ErrModeCollect is true.
 	Error error
 )
+
+func init() {
+	initialize()
+	if interErr != nil {
+		panic(interErr)
+	}
+}
 
 // stdlib returns the path to the Tk standard library or an error, if any. It
 // once creates a temporary directory where the standard library is written.
@@ -172,9 +196,9 @@ func Finalize() (err error) {
 	}
 
 	runtime.UnlockOSThread()
-	if tk != nil {
-		err = tk.in.Close()
-		tk = nil
+	if Inter != nil {
+		err = Inter.in.Close()
+		Inter = nil
 	}
 	for _, v := range []string{tclDir, tkDir} {
 		err = errors.Join(err, os.RemoveAll(v))
@@ -188,7 +212,8 @@ func Finalize() (err error) {
 // Note: Tk has all *Window methods promoted.
 type Tk struct {
 	*Window
-	in *tcl.Interp
+	handlers map[int32]*eventHandler
+	in       *tcl.Interp
 
 	trace bool
 }
@@ -202,46 +227,75 @@ func (tk *Tk) eval(code string) (r string, err error) {
 	return tk.in.Eval(code, tcl.EvalGlobal)
 }
 
-// Initialize performs package initialization and returns a *Tk or error, if
+func (tk *Tk) fail(err error) {
+	if !CollectErrors {
+		if dmesgs {
+			dmesg("PANIC %v", err)
+		}
+		panic(err)
+	}
+
+	Error = errors.Join(Error, err)
+}
+
+// initialize performs package initialization and returns a *Tk or error, if
 // any.
 //
-// The returned value is a singleton. Calls to Initialize() are idempotent and
+// The returned value is a singleton. Calls to initialize() are idempotent and
 // all return the same (instance, error) tuple.
 //
-// Initialize will perform runtime.LockOSThread. All further uses of this
+// initialize will perform runtime.LockOSThread. All further uses of this
 // package should be done using the same goroutine that first called
-// Initialize.
-func Initialize() (r *Tk, err error) {
-	tkOnce.Do(func() {
+// initialize.
+func initialize() (r *Tk, err error) {
+	interOnce.Do(func() {
 		runtime.LockOSThread()
-		if tclDir, tkErr = tcl.Stdlib(); err != nil {
+		if tclDir, interErr = tcl.Stdlib(); err != nil {
 			return
 		}
 
-		if tkDir, tkErr = stdlib(); tkErr != nil {
+		if tkDir, interErr = stdlib(); interErr != nil {
 			return
 		}
 
 		var in *tcl.Interp
-		if in, tkErr = tcl.NewInterp(map[string]string{
+		if in, interErr = tcl.NewInterp(map[string]string{
 			"tcl_library": tclDir,
 			"tk_library":  tkDir,
-		}); tkErr != nil {
+		}); interErr != nil {
 			return
 		}
 
 		if rc := lib.XTk_Init(in.TLS(), in.Handle()); rc != lib.TCL_OK {
 			in.Close()
-			tkErr = fmt.Errorf("failed to initialize the Tk subsystem")
+			interErr = fmt.Errorf("failed to initialize the Tk subsystem")
 			return
 		}
 
-		tk = &Tk{
-			Window: &Window{},
-			in:     in,
+		Inter = &Tk{
+			Window:   &Window{},
+			handlers: map[int32]*eventHandler{},
+			in:       in,
 		}
+		interErr = Inter.in.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil)
 	})
-	return tk, tkErr
+	return Inter, interErr
+}
+
+func eventDispatcher(data any, in *tcl.Interp, args []string) int {
+	id, err := strconv.Atoi(args[1])
+	if err != nil {
+		panic(todo("event dispatcher internal error: %q", args))
+	}
+
+	h := Inter.handlers[int32(id)]
+	r, err := h.handler(h.w, h.data)
+	Inter.in.SetResult(tclSafeString(fmt.Sprint(r)))
+	if err != nil {
+		return libtcl.TCL_ERROR
+	}
+
+	return libtcl.TCL_OK
 }
 
 // Window represents a Tk window/widget.
@@ -256,7 +310,7 @@ func (w *Window) path() (r string) {
 	return r
 }
 
-func (w *Window) newChild(nm string, opts ...Opt) *Window {
+func (w *Window) newChild(nm string, options ...Option) *Window {
 	cls := strings.Replace(nm, "ttk_", "ttk::", 1)
 	nm = strings.Replace(nm, "ttk_", "t", 1)
 	if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
@@ -264,21 +318,13 @@ func (w *Window) newChild(nm string, opts ...Opt) *Window {
 	}
 	path := fmt.Sprintf("%s.%s%v", w.path(), nm, id.Add(1))
 	var a []string
-	for _, v := range opts {
-		a = append(a, v.opt())
+	for _, v := range options {
+		a = append(a, v.option(w))
 	}
 	code := fmt.Sprintf("%s %s %s", cls, path, strings.Join(a, " "))
-	r, err := tk.eval(code)
+	r, err := Inter.eval(code)
 	if err != nil {
-		if !CollectErrors {
-			err := fmt.Errorf("code=%s -> r=%s err=%v", code, r, err)
-			if dmesgs {
-				dmesg("PANIC %v", err)
-			}
-			panic(err)
-		}
-
-		Error = errors.Join(Error, err)
+		Inter.fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
 	}
 	return &Window{fpath: r}
 }
@@ -341,7 +387,275 @@ func bool2int(b bool) int {
 	return 0
 }
 
-// Opt represents an optional argument.
-type Opt interface {
-	opt() string
+// Option represents an optional argument.
+type Option interface {
+	option(w *Window) string
+}
+
+// EventHandler is invoked when its associated event fires. The 'data' argument
+// is the additional value passed when the handler was registered
+type EventHandler func(w *Window, data any) (any, error)
+
+// EventDetacher is invoked when the handler is detached. The 'data' argument
+// is the additional value passed when the handler was registered.
+type EventDetacher func(w *Window, data any)
+
+type eventHandler struct {
+	data     any
+	detacher EventDetacher
+	handler  EventHandler
+	id       int32
+	tcl      string
+	w        *Window
+}
+
+func newEventHandler(option string, args ...any) (r *eventHandler) {
+	if len(args) == 0 {
+		Inter.fail(fmt.Errorf("registering event handler: need at least one argument"))
+		return nil
+	}
+
+	var handler EventHandler
+	var detacher EventDetacher
+	var data any
+	for _, v := range args {
+		switch x := v.(type) {
+		case EventHandler:
+			if handler != nil {
+				Inter.fail(fmt.Errorf("registering event handler: multiple handling functions"))
+				return nil
+			}
+
+			handler = x
+		case func(*Window, any) (any, error):
+			if handler != nil {
+				Inter.fail(fmt.Errorf("registering event handler: multiple handling functions"))
+				return nil
+			}
+
+			handler = x
+		case func():
+			if handler != nil {
+				if detacher != nil {
+					Inter.fail(fmt.Errorf("registering event handler: multiple detaching functions"))
+					return nil
+				}
+
+				detacher = func(*Window, any) { x() }
+				break
+			}
+
+			handler = func(*Window, any) (any, error) { x(); return nil, nil }
+		case EventDetacher:
+			if detacher != nil {
+				Inter.fail(fmt.Errorf("registering event handler: multiple detaching functions"))
+				return nil
+			}
+
+			detacher = x
+		case func(*Window, any):
+			if detacher != nil {
+				Inter.fail(fmt.Errorf("registering event handler: multiple detaching functions"))
+				return nil
+			}
+
+			detacher = x
+		default:
+			if data != nil {
+				Inter.fail(fmt.Errorf("registering event handler: multiple data values"))
+				return nil
+			}
+
+			data = x
+		}
+	}
+	if handler == nil {
+		Inter.fail(fmt.Errorf("registering event handler: no event handler argument"))
+		return nil
+	}
+
+	r = &eventHandler{
+		handler:  handler,
+		detacher: detacher,
+		data:     data,
+		id:       id.Add(1),
+		tcl:      option,
+	}
+	Inter.handlers[r.id] = r
+	return r
+}
+
+func (e *eventHandler) option(w *Window) string {
+	if e == nil {
+		return ""
+	}
+
+	e.w = w
+	return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
+}
+
+//TODO type xscrollcommandOption string
+//TODO
+//TODO func (o xscrollcommandOption) option(w *Window) string {
+//TODO 	return fmt.Sprintf(`-xscrollcommand %s`, tclSafeString(string(o)))
+//TODO }
+//TODO
+//TODO // Specifies the prefix for a command used to communicate with horizontal
+//TODO // scrollbars.
+//TODO // When the view in the widget's window changes (or
+//TODO // whenever anything else occurs that could change the display in a
+//TODO // scrollbar, such as a change in the total size of the widget's
+//TODO // contents), the widget will
+//TODO // generate a Tcl command by concatenating the scroll command and
+//TODO // two numbers.
+//TODO // Each of the numbers is a fraction between 0 and 1, which indicates
+//TODO // a position in the document.  0 indicates the beginning of the document,
+//TODO // 1 indicates the end, .333 indicates a position one third the way through
+//TODO // the document, and so on.
+//TODO // The first fraction indicates the first information in the document
+//TODO // that is visible in the window, and the second fraction indicates
+//TODO // the information just after the last portion that is visible.
+//TODO // The command is
+//TODO // then passed to the Tcl interpreter for execution.  Typically the
+//TODO // '-xscrollcommand' option consists of the path name of a scrollbar
+//TODO // widget followed by 'set', e.g. '.x.scrollbar set': this will cause
+//TODO // the scrollbar to be updated whenever the view in the window changes. If this
+//TODO // option is not specified, then no command will be executed.
+//TODO //
+//TODO // More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//TODO //
+//TODO // Note: This option applies to all windows/widgets.
+//TODO //
+//TODO // [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-xscrollcommand
+//TODO func Xscrollcommand(value string) Option {
+//TODO 	return xscrollcommandOption(value)
+//TODO }
+//TODO
+//TODO type yscrollcommandOption string
+//TODO
+//TODO func (o yscrollcommandOption) option(w *Window) string {
+//TODO 	return fmt.Sprintf(`-yscrollcommand %s`, tclSafeString(string(o)))
+//TODO }
+//TODO
+//TODO // Specifies the prefix for a command used to communicate with vertical
+//TODO // scrollbars.  This option is treated in the same way as the
+//TODO // '-xscrollcommand' option, except that it is used for vertical
+//TODO // scrollbars and is provided by widgets that support vertical scrolling.
+//TODO // See the description of '-xscrollcommand' for details
+//TODO // on how this option is used.
+//TODO //
+//TODO // More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//TODO //
+//TODO // Note: This option applies to all windows/widgets.
+//TODO //
+//TODO // [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-yscrollcommand
+//TODO func Yscrollcommand(value string) Option {
+//TODO 	return yscrollcommandOption(value)
+//TODO }
+
+// Specifies a Tcl command to associate with the button.  This command
+// is typically invoked when mouse button 1 is released over the button
+// window.
+//
+// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//
+// Note: This option applies to Button, Checkbutton, Radiobutton, Scale, Scrollbar, Spinbox, TButton, TCheckbutton, TRadiobutton, TScale, TScrollbar, TSpinbox.
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-command
+func Command(args ...any) Option {
+	return newEventHandler("-command", args...)
+}
+
+// If this option is specified then it provides a Tcl command to execute
+// each time the menu is posted.  The command is invoked by the 'post'
+// widget command before posting the menu. Note that in Tk 8.0 on Macintosh
+// and Windows, all post-commands in a system of menus are executed before any
+// of those menus are posted.
+// This is due to the limitations in the individual platforms' menu managers.
+//
+// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//
+// Note: This option applies to Menu, TCombobox.
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-postcommand
+func Postcommand(args ...any) Option {
+	return newEventHandler("-postcommand", args...)
+}
+
+// If this option has a non-empty value, then it specifies a Tcl command
+// to invoke whenever the menu is torn off.  The actual command will
+// consist of the value of this option, followed by a space, followed
+// by the name of the menu window, followed by a space, followed by
+// the name of the name of the torn off menu window.  For example, if
+// the option's value is
+//
+// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//
+// Note: This option applies to Menu.
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-tearoffcommand
+func Tearoffcommand(args ...any) Option {
+	return newEventHandler("-tearoffcommand", args...)
+}
+
+// Specifies a script to eval when '-validatecommand' returns 0.
+// Setting it to {} disables this feature (the default).  The best use
+// of this option is to set it to 'bell'.  See 'VALIDATION'
+// below for more information.
+//
+// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//
+// Note: This option applies to Entry, Spinbox, TEntry.
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-invalidcommand
+func Invalidcommand(args ...any) Option {
+	return newEventHandler("-invalidcommand", args...)
+}
+
+// Specifies a script to eval when '-validatecommand' returns 0.
+// Setting it to {} disables this feature (the default).  The best use
+// of this option is to set it to 'bell'.  See 'VALIDATION'
+// below for more information.
+//
+// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//
+// Note: This option applies to Entry, Spinbox.
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-invcmd
+func Invcmd(args ...any) Option {
+	return newEventHandler("-invcmd", args...)
+}
+
+// Specifies a script to eval when you want to validate the input into
+// the entry widget.  Setting it to {} disables this feature (the default).
+// This command must return a valid Tcl boolean value.  If it returns 0 (or
+// the valid Tcl boolean equivalent) then it means you reject the new edition
+// and it will not occur and the '-invalidcommand' will be evaluated if it
+// is set. If it returns 1, then the new edition occurs.
+// See 'VALIDATION' below for more information.
+//
+// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//
+// Note: This option applies to Entry, Spinbox, TEntry.
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-validatecommand
+func Validatecommand(args ...any) Option {
+	return newEventHandler("-validatecommand", args...)
+}
+
+// Specifies a script to eval when you want to validate the input into
+// the entry widget.  Setting it to {} disables this feature (the default).
+// This command must return a valid Tcl boolean value.  If it returns 0 (or
+// the valid Tcl boolean equivalent) then it means you reject the new edition
+// and it will not occur and the '-invalidcommand' will be evaluated if it
+// is set. If it returns 1, then the new edition occurs.
+// See 'VALIDATION' below for more information.
+//
+// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+//
+// Note: This option applies to Entry, Spinbox.
+//
+// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-vcmd
+func Vcmd(args ...any) Option {
+	return newEventHandler("-vcmd", args...)
 }

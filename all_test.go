@@ -51,14 +51,8 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	tk, err := Initialize()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	tk.trace = true
-	b := TButton(Txt("{[Close\nMe]}"))
-	tk.eval(fmt.Sprintf(`
+	b := TButton(Txt("{[Close\nMe]}"), Underline(2), Command(func() { Inter.eval("destroy .") }))
+	Inter.eval(fmt.Sprintf(`
 ttk::style theme use clam
 . configure -pady 10
 pack %s
