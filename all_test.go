@@ -51,14 +51,16 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	in, err := Initialize()
+	tk, err := Initialize()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	in.trace = true
-	b, err := Button(Txt("{[Close\nMe]}"))
-	in.eval(fmt.Sprintf(`
+	tk.trace = true
+	b := TButton(Txt("{[Close\nMe]}"))
+	tk.eval(fmt.Sprintf(`
+ttk::style theme use clam
+. configure -pady 10
 pack %s
 tk::PlaceWindow . center
 wm title . "modernc.org/tk9.0 example"
@@ -66,8 +68,5 @@ wm geometry . 300x[winfo height .]
 tkwait window .
 
 `, b.path()))
-	trc("", b, err)
-	if err != nil {
-		t.Fatal(err)
-	}
+	trc("", b)
 }

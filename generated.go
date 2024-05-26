@@ -5,361 +5,371 @@ package tk9_0 // import "modernc.org/tk9.0"
 
 
 // button - Create and manipulate 'button' action widgets
-func (w *Window) Button(opts ...Opt) (*Window, error) {
+func (w *Window) Button(opts ...Opt) *Window {
 	return w.newChild("button", opts...)
 }
 
 // button - Create and manipulate 'button' action widgets
-func Button(opts ...Opt) (*Window, error) {
+func Button(opts ...Opt) *Window {
 	return tk.Button(opts...)
 }
 
 // canvas - Create and manipulate 'canvas' hypergraphics drawing surface widgets
-func (w *Window) Canvas(opts ...Opt) (*Window, error) {
+func (w *Window) Canvas(opts ...Opt) *Window {
 	return w.newChild("canvas", opts...)
 }
 
 // canvas - Create and manipulate 'canvas' hypergraphics drawing surface widgets
-func Canvas(opts ...Opt) (*Window, error) {
+func Canvas(opts ...Opt) *Window {
 	return tk.Canvas(opts...)
 }
 
 // checkbutton - Create and manipulate 'checkbutton' boolean selection widgets
-func (w *Window) Checkbutton(opts ...Opt) (*Window, error) {
+func (w *Window) Checkbutton(opts ...Opt) *Window {
 	return w.newChild("checkbutton", opts...)
 }
 
 // checkbutton - Create and manipulate 'checkbutton' boolean selection widgets
-func Checkbutton(opts ...Opt) (*Window, error) {
+func Checkbutton(opts ...Opt) *Window {
 	return tk.Checkbutton(opts...)
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
-func (w *Window) Entry(opts ...Opt) (*Window, error) {
+func (w *Window) Entry(opts ...Opt) *Window {
 	return w.newChild("entry", opts...)
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
-func Entry(opts ...Opt) (*Window, error) {
+func Entry(opts ...Opt) *Window {
 	return tk.Entry(opts...)
 }
 
 // frame - Create and manipulate 'frame' simple container widgets
-func (w *Window) Frame(opts ...Opt) (*Window, error) {
+func (w *Window) Frame(opts ...Opt) *Window {
 	return w.newChild("frame", opts...)
 }
 
 // frame - Create and manipulate 'frame' simple container widgets
-func Frame(opts ...Opt) (*Window, error) {
+func Frame(opts ...Opt) *Window {
 	return tk.Frame(opts...)
 }
 
 // label - Create and manipulate 'label' non-interactive text or image widgets
-func (w *Window) Label(opts ...Opt) (*Window, error) {
+func (w *Window) Label(opts ...Opt) *Window {
 	return w.newChild("label", opts...)
 }
 
 // label - Create and manipulate 'label' non-interactive text or image widgets
-func Label(opts ...Opt) (*Window, error) {
+func Label(opts ...Opt) *Window {
 	return tk.Label(opts...)
 }
 
 // labelframe - Create and manipulate 'labelframe' labelled container widgets
-func (w *Window) Labelframe(opts ...Opt) (*Window, error) {
+func (w *Window) Labelframe(opts ...Opt) *Window {
 	return w.newChild("labelframe", opts...)
 }
 
 // labelframe - Create and manipulate 'labelframe' labelled container widgets
-func Labelframe(opts ...Opt) (*Window, error) {
+func Labelframe(opts ...Opt) *Window {
 	return tk.Labelframe(opts...)
 }
 
 // listbox - Create and manipulate 'listbox' item list widgets
-func (w *Window) Listbox(opts ...Opt) (*Window, error) {
+func (w *Window) Listbox(opts ...Opt) *Window {
 	return w.newChild("listbox", opts...)
 }
 
 // listbox - Create and manipulate 'listbox' item list widgets
-func Listbox(opts ...Opt) (*Window, error) {
+func Listbox(opts ...Opt) *Window {
 	return tk.Listbox(opts...)
 }
 
 // menu, tk_menuSetFocus - Create and manipulate 'menu' widgets and menubars
-func (w *Window) Menu(opts ...Opt) (*Window, error) {
+func (w *Window) Menu(opts ...Opt) *Window {
 	return w.newChild("menu", opts...)
 }
 
 // menu, tk_menuSetFocus - Create and manipulate 'menu' widgets and menubars
-func Menu(opts ...Opt) (*Window, error) {
+func Menu(opts ...Opt) *Window {
 	return tk.Menu(opts...)
 }
 
 // menubutton - Create and manipulate 'menubutton' pop-up menu indicator widgets
-func (w *Window) Menubutton(opts ...Opt) (*Window, error) {
+func (w *Window) Menubutton(opts ...Opt) *Window {
 	return w.newChild("menubutton", opts...)
 }
 
 // menubutton - Create and manipulate 'menubutton' pop-up menu indicator widgets
-func Menubutton(opts ...Opt) (*Window, error) {
+func Menubutton(opts ...Opt) *Window {
 	return tk.Menubutton(opts...)
 }
 
 // message - Create and manipulate 'message' non-interactive text widgets
-func (w *Window) Message(opts ...Opt) (*Window, error) {
+func (w *Window) Message(opts ...Opt) *Window {
 	return w.newChild("message", opts...)
 }
 
 // message - Create and manipulate 'message' non-interactive text widgets
-func Message(opts ...Opt) (*Window, error) {
+func Message(opts ...Opt) *Window {
 	return tk.Message(opts...)
 }
 
+// tk_optionMenu - Create an option menubutton and its menu
+func (w *Window) OptionMenu(opts ...Opt) *Window {
+	return w.newChild("optionMenu", opts...)
+}
+
+// tk_optionMenu - Create an option menubutton and its menu
+func OptionMenu(opts ...Opt) *Window {
+	return tk.OptionMenu(opts...)
+}
+
 // panedwindow - Create and manipulate 'panedwindow' split container widgets
-func (w *Window) Panedwindow(opts ...Opt) (*Window, error) {
+func (w *Window) Panedwindow(opts ...Opt) *Window {
 	return w.newChild("panedwindow", opts...)
 }
 
 // panedwindow - Create and manipulate 'panedwindow' split container widgets
-func Panedwindow(opts ...Opt) (*Window, error) {
+func Panedwindow(opts ...Opt) *Window {
 	return tk.Panedwindow(opts...)
 }
 
 // radiobutton - Create and manipulate 'radiobutton' pick-one widgets
-func (w *Window) Radiobutton(opts ...Opt) (*Window, error) {
+func (w *Window) Radiobutton(opts ...Opt) *Window {
 	return w.newChild("radiobutton", opts...)
 }
 
 // radiobutton - Create and manipulate 'radiobutton' pick-one widgets
-func Radiobutton(opts ...Opt) (*Window, error) {
+func Radiobutton(opts ...Opt) *Window {
 	return tk.Radiobutton(opts...)
 }
 
 // scale - Create and manipulate 'scale' value-controlled slider widgets
-func (w *Window) Scale(opts ...Opt) (*Window, error) {
+func (w *Window) Scale(opts ...Opt) *Window {
 	return w.newChild("scale", opts...)
 }
 
 // scale - Create and manipulate 'scale' value-controlled slider widgets
-func Scale(opts ...Opt) (*Window, error) {
+func Scale(opts ...Opt) *Window {
 	return tk.Scale(opts...)
 }
 
 // scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
-func (w *Window) Scrollbar(opts ...Opt) (*Window, error) {
+func (w *Window) Scrollbar(opts ...Opt) *Window {
 	return w.newChild("scrollbar", opts...)
 }
 
 // scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
-func Scrollbar(opts ...Opt) (*Window, error) {
+func Scrollbar(opts ...Opt) *Window {
 	return tk.Scrollbar(opts...)
 }
 
 // spinbox - Create and manipulate 'spinbox' value spinner widgets
-func (w *Window) Spinbox(opts ...Opt) (*Window, error) {
+func (w *Window) Spinbox(opts ...Opt) *Window {
 	return w.newChild("spinbox", opts...)
 }
 
 // spinbox - Create and manipulate 'spinbox' value spinner widgets
-func Spinbox(opts ...Opt) (*Window, error) {
+func Spinbox(opts ...Opt) *Window {
 	return tk.Spinbox(opts...)
 }
 
 // text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
-func (w *Window) Text(opts ...Opt) (*Window, error) {
+func (w *Window) Text(opts ...Opt) *Window {
 	return w.newChild("text", opts...)
 }
 
 // text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
-func Text(opts ...Opt) (*Window, error) {
+func Text(opts ...Opt) *Window {
 	return tk.Text(opts...)
 }
 
 // toplevel - Create and manipulate 'toplevel' main and popup window widgets
-func (w *Window) Toplevel(opts ...Opt) (*Window, error) {
+func (w *Window) Toplevel(opts ...Opt) *Window {
 	return w.newChild("toplevel", opts...)
 }
 
 // toplevel - Create and manipulate 'toplevel' main and popup window widgets
-func Toplevel(opts ...Opt) (*Window, error) {
+func Toplevel(opts ...Opt) *Window {
 	return tk.Toplevel(opts...)
 }
 
 // ttk::button - Widget that issues a command when pressed
-func (w *Window) TtkButton(opts ...Opt) (*Window, error) {
+func (w *Window) TButton(opts ...Opt) *Window {
 	return w.newChild("ttk_button", opts...)
 }
 
 // ttk::button - Widget that issues a command when pressed
-func TtkButton(opts ...Opt) (*Window, error) {
-	return tk.TtkButton(opts...)
+func TButton(opts ...Opt) *Window {
+	return tk.TButton(opts...)
 }
 
 // ttk::checkbutton - On/off widget
-func (w *Window) TtkCheckbutton(opts ...Opt) (*Window, error) {
+func (w *Window) TCheckbutton(opts ...Opt) *Window {
 	return w.newChild("ttk_checkbutton", opts...)
 }
 
 // ttk::checkbutton - On/off widget
-func TtkCheckbutton(opts ...Opt) (*Window, error) {
-	return tk.TtkCheckbutton(opts...)
+func TCheckbutton(opts ...Opt) *Window {
+	return tk.TCheckbutton(opts...)
 }
 
 // ttk::combobox - text field with popdown selection list
-func (w *Window) TtkCombobox(opts ...Opt) (*Window, error) {
+func (w *Window) TCombobox(opts ...Opt) *Window {
 	return w.newChild("ttk_combobox", opts...)
 }
 
 // ttk::combobox - text field with popdown selection list
-func TtkCombobox(opts ...Opt) (*Window, error) {
-	return tk.TtkCombobox(opts...)
+func TCombobox(opts ...Opt) *Window {
+	return tk.TCombobox(opts...)
 }
 
 // ttk::entry - Editable text field widget
-func (w *Window) TtkEntry(opts ...Opt) (*Window, error) {
+func (w *Window) TEntry(opts ...Opt) *Window {
 	return w.newChild("ttk_entry", opts...)
 }
 
 // ttk::entry - Editable text field widget
-func TtkEntry(opts ...Opt) (*Window, error) {
-	return tk.TtkEntry(opts...)
+func TEntry(opts ...Opt) *Window {
+	return tk.TEntry(opts...)
 }
 
 // ttk::frame - Simple container widget
-func (w *Window) TtkFrame(opts ...Opt) (*Window, error) {
+func (w *Window) TFrame(opts ...Opt) *Window {
 	return w.newChild("ttk_frame", opts...)
 }
 
 // ttk::frame - Simple container widget
-func TtkFrame(opts ...Opt) (*Window, error) {
-	return tk.TtkFrame(opts...)
+func TFrame(opts ...Opt) *Window {
+	return tk.TFrame(opts...)
 }
 
 // ttk::label - Display a text string and/or image
-func (w *Window) TtkLabel(opts ...Opt) (*Window, error) {
+func (w *Window) TLabel(opts ...Opt) *Window {
 	return w.newChild("ttk_label", opts...)
 }
 
 // ttk::label - Display a text string and/or image
-func TtkLabel(opts ...Opt) (*Window, error) {
-	return tk.TtkLabel(opts...)
+func TLabel(opts ...Opt) *Window {
+	return tk.TLabel(opts...)
 }
 
 // ttk::labelframe - Container widget with optional label
-func (w *Window) TtkLabelframe(opts ...Opt) (*Window, error) {
+func (w *Window) TLabelframe(opts ...Opt) *Window {
 	return w.newChild("ttk_labelframe", opts...)
 }
 
 // ttk::labelframe - Container widget with optional label
-func TtkLabelframe(opts ...Opt) (*Window, error) {
-	return tk.TtkLabelframe(opts...)
+func TLabelframe(opts ...Opt) *Window {
+	return tk.TLabelframe(opts...)
 }
 
 // ttk::menubutton - Widget that pops down a menu when pressed
-func (w *Window) TtkMenubutton(opts ...Opt) (*Window, error) {
+func (w *Window) TMenubutton(opts ...Opt) *Window {
 	return w.newChild("ttk_menubutton", opts...)
 }
 
 // ttk::menubutton - Widget that pops down a menu when pressed
-func TtkMenubutton(opts ...Opt) (*Window, error) {
-	return tk.TtkMenubutton(opts...)
+func TMenubutton(opts ...Opt) *Window {
+	return tk.TMenubutton(opts...)
 }
 
 // ttk::notebook - Multi-paned container widget
-func (w *Window) TtkNotebook(opts ...Opt) (*Window, error) {
+func (w *Window) TNotebook(opts ...Opt) *Window {
 	return w.newChild("ttk_notebook", opts...)
 }
 
 // ttk::notebook - Multi-paned container widget
-func TtkNotebook(opts ...Opt) (*Window, error) {
-	return tk.TtkNotebook(opts...)
+func TNotebook(opts ...Opt) *Window {
+	return tk.TNotebook(opts...)
 }
 
 // ttk::panedwindow - Multi-pane container window
-func (w *Window) TtkPanedwindow(opts ...Opt) (*Window, error) {
+func (w *Window) TPanedwindow(opts ...Opt) *Window {
 	return w.newChild("ttk_panedwindow", opts...)
 }
 
 // ttk::panedwindow - Multi-pane container window
-func TtkPanedwindow(opts ...Opt) (*Window, error) {
-	return tk.TtkPanedwindow(opts...)
+func TPanedwindow(opts ...Opt) *Window {
+	return tk.TPanedwindow(opts...)
 }
 
 // ttk::progressbar - Provide progress feedback
-func (w *Window) TtkProgressbar(opts ...Opt) (*Window, error) {
+func (w *Window) TProgressbar(opts ...Opt) *Window {
 	return w.newChild("ttk_progressbar", opts...)
 }
 
 // ttk::progressbar - Provide progress feedback
-func TtkProgressbar(opts ...Opt) (*Window, error) {
-	return tk.TtkProgressbar(opts...)
+func TProgressbar(opts ...Opt) *Window {
+	return tk.TProgressbar(opts...)
 }
 
 // ttk::radiobutton - Mutually exclusive option widget
-func (w *Window) TtkRadiobutton(opts ...Opt) (*Window, error) {
+func (w *Window) TRadiobutton(opts ...Opt) *Window {
 	return w.newChild("ttk_radiobutton", opts...)
 }
 
 // ttk::radiobutton - Mutually exclusive option widget
-func TtkRadiobutton(opts ...Opt) (*Window, error) {
-	return tk.TtkRadiobutton(opts...)
+func TRadiobutton(opts ...Opt) *Window {
+	return tk.TRadiobutton(opts...)
 }
 
 // ttk::scale - Create and manipulate a scale widget
-func (w *Window) TtkScale(opts ...Opt) (*Window, error) {
+func (w *Window) TScale(opts ...Opt) *Window {
 	return w.newChild("ttk_scale", opts...)
 }
 
 // ttk::scale - Create and manipulate a scale widget
-func TtkScale(opts ...Opt) (*Window, error) {
-	return tk.TtkScale(opts...)
+func TScale(opts ...Opt) *Window {
+	return tk.TScale(opts...)
 }
 
 // ttk::scrollbar - Control the viewport of a scrollable widget
-func (w *Window) TtkScrollbar(opts ...Opt) (*Window, error) {
+func (w *Window) TScrollbar(opts ...Opt) *Window {
 	return w.newChild("ttk_scrollbar", opts...)
 }
 
 // ttk::scrollbar - Control the viewport of a scrollable widget
-func TtkScrollbar(opts ...Opt) (*Window, error) {
-	return tk.TtkScrollbar(opts...)
+func TScrollbar(opts ...Opt) *Window {
+	return tk.TScrollbar(opts...)
 }
 
 // ttk::separator - Separator bar
-func (w *Window) TtkSeparator(opts ...Opt) (*Window, error) {
+func (w *Window) TSeparator(opts ...Opt) *Window {
 	return w.newChild("ttk_separator", opts...)
 }
 
 // ttk::separator - Separator bar
-func TtkSeparator(opts ...Opt) (*Window, error) {
-	return tk.TtkSeparator(opts...)
+func TSeparator(opts ...Opt) *Window {
+	return tk.TSeparator(opts...)
 }
 
 // ttk::sizegrip - Bottom-right corner resize widget
-func (w *Window) TtkSizegrip(opts ...Opt) (*Window, error) {
+func (w *Window) TSizegrip(opts ...Opt) *Window {
 	return w.newChild("ttk_sizegrip", opts...)
 }
 
 // ttk::sizegrip - Bottom-right corner resize widget
-func TtkSizegrip(opts ...Opt) (*Window, error) {
-	return tk.TtkSizegrip(opts...)
+func TSizegrip(opts ...Opt) *Window {
+	return tk.TSizegrip(opts...)
 }
 
 // ttk::spinbox - Selecting text field widget
-func (w *Window) TtkSpinbox(opts ...Opt) (*Window, error) {
+func (w *Window) TSpinbox(opts ...Opt) *Window {
 	return w.newChild("ttk_spinbox", opts...)
 }
 
 // ttk::spinbox - Selecting text field widget
-func TtkSpinbox(opts ...Opt) (*Window, error) {
-	return tk.TtkSpinbox(opts...)
+func TSpinbox(opts ...Opt) *Window {
+	return tk.TSpinbox(opts...)
 }
 
 // ttk::treeview - hierarchical multicolumn data display widget
-func (w *Window) TtkTreeview(opts ...Opt) (*Window, error) {
+func (w *Window) TTreeview(opts ...Opt) *Window {
 	return w.newChild("ttk_treeview", opts...)
 }
 
 // ttk::treeview - hierarchical multicolumn data display widget
-func TtkTreeview(opts ...Opt) (*Window, error) {
-	return tk.TtkTreeview(opts...)
+func TTreeview(opts ...Opt) *Window {
+	return tk.TTreeview(opts...)
 }

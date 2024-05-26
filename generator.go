@@ -54,15 +54,15 @@ func generated(fn string, docs []document) {
 
 	for _, nm0 := range a {
 		doc := m[nm0]
-		nm := export(nm0)
+		nm := tclName2GoName(nm0)
 		if _, ok := doc["IsWindow"].(bool); ok {
 			fmt.Fprintf(w, "\n\n// %v", doc["Name"])
-			fmt.Fprintf(w, "\nfunc (w *Window) %s(opts ...Opt) (*Window, error) {", nm)
+			fmt.Fprintf(w, "\nfunc (w *Window) %s(opts ...Opt) *Window {", nm)
 			fmt.Fprintf(w, "\n\treturn w.newChild(%q, opts...)", nm0)
 			fmt.Fprintf(w, "\n}")
 
 			fmt.Fprintf(w, "\n\n// %v", doc["Name"])
-			fmt.Fprintf(w, "\nfunc %s(opts ...Opt) (*Window, error) {", nm)
+			fmt.Fprintf(w, "\nfunc %s(opts ...Opt) *Window {", nm)
 			fmt.Fprintf(w, "\n\treturn tk.%s(opts...)", nm)
 			fmt.Fprintf(w, "\n}")
 		}
@@ -70,6 +70,15 @@ func generated(fn string, docs []document) {
 
 	if err := os.WriteFile(fn, w.Bytes(), 0660); err != nil {
 		panic(err)
+	}
+}
+
+func tclName2GoName(s string) string {
+	switch {
+	case strings.HasPrefix(s, "ttk_"):
+		return "T" + export(s[len("ttk_"):])
+	default:
+		return export(s)
 	}
 }
 
