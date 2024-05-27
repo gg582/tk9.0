@@ -5,115 +5,57 @@
 // Package tk9.0 is an idiomatic Go wrapper for [libtk9.0]. It is similar to
 // Python's tkinter.
 //
+// # Overview
+//
+// At least some minimal knowledge of Tcl/Tk is required for using this
+// package. However you will not need to write any Tcl code and you do not need
+// to care about the grammar of Tcl words/strings and how it differs from Go.
+//
+// # OS thread
+//
+// This package should be used from the same goroutine that initialized the
+// package. Package initialization performs a runtime.LockOSThread.
+//
+// # time.Duration
+//
+// When passing an argument of type time.Durarion to a function accepting
+// 'any', the duration is converted to an integer number of milliseconds.
+//
+// There are several Tcl/Tk tutorials available, for example at
+// [tutorialspoint].
+//
 // # Event handlers
 //
-// The various command options, like Command() expect arguments that must be one of:
+// The Command() and similar options expect arguments that must be one of:
 //
-// - EventHandler or a function literal of signature func(*Window, any) (any, error), ie. the same as EventHandler.
+// - EventHandler or a function literal of signature func(*Window, any) (any, error).
 //
-// - EventDetacher or a function literal of signature func(*Window, any), ie. the same as EventDetacher.
+// - EventDetacher or a function literal of signature func(*Window, any).
 //
 // - Any other type, used as the additonal 'data' argument when invoking the event handler/detacher.
 //
 // Each of the three types must be present at most once and only the event handler is mandatory.
 // The event detacher and additional data are both optional.
 //
+// For convenience, additionally type 'func()' literals are accepted as well.
+// They are converted internally to EventHandler and or EventDetacher. The
+// first occurrence is used as an EventHandler if it was not yet specified or
+// as an EventDetacher if that was not yet specified. The second instance is
+// used as an EventDetacher if that was not yet specified.
+//
 // Note: Parts of the documentation are copied and/or modified from [TkDocs],
 // see the LICENSE-TKDOCS file for details.
 //
+// Note: Parts of the documentation are copied and/or modified from the [tcl.tk
+// site], see the LICENSE-TCLTK file for details.
+//
+// [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
 // [TkDocs]: https://tkdocs.com/about.html
 // [libtk9.0]: https://pkg.go.dev/modernc.org/libtk9.0
+// [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 package tk9_0 // import "modernc.org/tk9.0"
 
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/bell.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/bind.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/bindtags.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/bitmap.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/busy.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/button.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/canvas.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/clipboard.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/colors.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/console.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/cursors.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/destroy.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/dialog.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/entry.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/event.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/focus.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/focusNext.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/fontchooser.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/font.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/frame.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/getOpenFile.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/grab.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/grid.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/checkbutton.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/chooseColor.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/chooseDirectory.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/image.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/keysyms.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/labelframe.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/label.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/listbox.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/loadTk.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/lower.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/menubutton.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/menu.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/messageBox.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/message.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/nsimage.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/optionMenu.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/option.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/options.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/pack.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/palette.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/panedwindow.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/photo.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/place.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/popup.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/print.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/radiobutton.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/raise.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/scale.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/scrollbar.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/selection.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/send.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/spinbox.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/sysnotify.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/systray.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/text.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/tkerror.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/tk_mac.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/tk.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/tkvars.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/tkwait.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/toplevel.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_button.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_combobox.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_entry.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_frame.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_checkbutton.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_image.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_intro.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_labelframe.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_label.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_menubutton.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_notebook.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_panedwindow.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_progressbar.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_radiobutton.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_scale.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_scrollbar.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_separator.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_sizegrip.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_spinbox.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_style.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_treeview.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_vsapi.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/ttk_widget.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/winfo.n
-//	/home/jnml/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b1/doc/wm.n
+//TODO Use Tcl 'uknown' for prefixed commands
 
 import (
 	"errors"
@@ -125,10 +67,11 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/evilsocket/islazy/zip"
 	libtcl "modernc.org/libtcl9.0"
-	lib "modernc.org/libtk9.0"
+	libtk "modernc.org/libtk9.0"
 	tklib "modernc.org/libtk9.0/library"
 	tcl "modernc.org/tcl9.0"
 )
@@ -159,6 +102,39 @@ var (
 	CollectErrors bool
 	// Error records errors when ErrModeCollect is true.
 	Error error
+
+	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
+	//
+	// The following characters are dissallowed or have special meanings in Tcl and
+	// so are escaped:
+	//
+	//	&;`'"|*?~<>^()[]{}$\
+	badChars = [...]bool{
+		' ':  true,
+		'"':  true,
+		'$':  true,
+		'&':  true,
+		'(':  true,
+		')':  true,
+		'*':  true,
+		';':  true,
+		'<':  true,
+		'>':  true,
+		'?':  true,
+		'[':  true,
+		'\'': true,
+		'\\': true,
+		'\n': true,
+		'\r': true,
+		'\t': true,
+		']':  true,
+		'^':  true,
+		'`':  true,
+		'{':  true,
+		'|':  true,
+		'}':  true,
+		'~':  true,
+	}
 )
 
 func init() {
@@ -172,44 +148,40 @@ func init() {
 	}
 }
 
-// stdlib returns the path to the Tk standard library or an error, if any. It
-// once creates a temporary directory where the standard library is written.
-// Subsequent calls to stdlib share the same temporary directory.
-//
-// stdlib is safe for concurrent access by multiple goroutines.
-func stdlib() (dir string, err error) {
-	if dir, err = os.MkdirTemp("", "tk-library-"); err != nil {
-		return "", err
-	}
-
-	fn := filepath.Join(dir, "library.zip")
-	if err = os.WriteFile(fn, []byte(tklib.Zip), 0600); err != nil {
-		return
-	}
-
-	if _, err = zip.Unzip(fn, dir); err != nil {
-		return
-	}
-
-	return filepath.Join(dir, "library"), nil
+// Window represents a Tk window/widget.
+type Window struct {
+	fpath string
 }
 
-// Finalize releases all resources held, if any. Finalize is intended to be
-// called on process shutdown only.
-func Finalize() (err error) {
-	if finished.Swap(1) != 0 {
-		return
+func (w *Window) path() (r string) {
+	if r = w.fpath; r == "" {
+		r = "."
 	}
+	return r
+}
 
-	runtime.UnlockOSThread()
-	if Inter != nil {
-		err = Inter.in.Close()
-		Inter = nil
+func (w *Window) newChild(nm string, options ...option) *Window {
+	cls := strings.Replace(nm, "ttk_", "ttk::", 1)
+	nm = strings.Replace(nm, "ttk_", "t", 1)
+	if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
+		nm += "_"
 	}
-	for _, v := range []string{tclDir, tkDir} {
-		err = errors.Join(err, os.RemoveAll(v))
+	path := fmt.Sprintf("%s.%s%v", w.path(), nm, id.Add(1))
+	var a []string
+	for _, v := range options {
+		a = append(a, v.optionString(w))
 	}
-	return err
+	code := fmt.Sprintf("%s %s %s", cls, path, strings.Join(a, " "))
+	r, err := Inter.eval(code)
+	if err != nil {
+		Inter.fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+	}
+	return &Window{fpath: r}
+}
+
+// option represents an optional argument.
+type option interface {
+	optionString(w *Window) string
 }
 
 // Tk represents the main window of an application. It has an associated Tcl
@@ -242,160 +214,6 @@ func (tk *Tk) fail(err error) {
 	}
 
 	Error = errors.Join(Error, err)
-}
-
-// initialize performs package initialization and returns a *Tk or error, if
-// any.
-//
-// The returned value is a singleton. Calls to initialize() are idempotent and
-// all return the same (instance, error) tuple.
-//
-// initialize will perform runtime.LockOSThread. All further uses of this
-// package should be done using the same goroutine that first called
-// initialize.
-func initialize() (r *Tk, err error) {
-	interOnce.Do(func() {
-		runtime.LockOSThread()
-		if tclDir, interErr = tcl.Stdlib(); err != nil {
-			return
-		}
-
-		if tkDir, interErr = stdlib(); interErr != nil {
-			return
-		}
-
-		var in *tcl.Interp
-		if in, interErr = tcl.NewInterp(map[string]string{
-			"tcl_library": tclDir,
-			"tk_library":  tkDir,
-		}); interErr != nil {
-			return
-		}
-
-		if rc := lib.XTk_Init(in.TLS(), in.Handle()); rc != lib.TCL_OK {
-			in.Close()
-			interErr = fmt.Errorf("failed to initialize the Tk subsystem")
-			return
-		}
-
-		Inter = &Tk{
-			Window:   &Window{},
-			handlers: map[int32]*eventHandler{},
-			in:       in,
-		}
-		interErr = Inter.in.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil)
-	})
-	return Inter, interErr
-}
-
-func eventDispatcher(data any, in *tcl.Interp, args []string) int {
-	id, err := strconv.Atoi(args[1])
-	if err != nil {
-		panic(todo("event dispatcher internal error: %q", args))
-	}
-
-	h := Inter.handlers[int32(id)]
-	r, err := h.handler(h.w, h.data)
-	Inter.in.SetResult(tclSafeString(fmt.Sprint(r)))
-	if err != nil {
-		return libtcl.TCL_ERROR
-	}
-
-	return libtcl.TCL_OK
-}
-
-// Window represents a Tk window/widget.
-type Window struct {
-	fpath string
-}
-
-func (w *Window) path() (r string) {
-	if r = w.fpath; r == "" {
-		r = "."
-	}
-	return r
-}
-
-func (w *Window) newChild(nm string, options ...Option) *Window {
-	cls := strings.Replace(nm, "ttk_", "ttk::", 1)
-	nm = strings.Replace(nm, "ttk_", "t", 1)
-	if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
-		nm += "_"
-	}
-	path := fmt.Sprintf("%s.%s%v", w.path(), nm, id.Add(1))
-	var a []string
-	for _, v := range options {
-		a = append(a, v.option(w))
-	}
-	code := fmt.Sprintf("%s %s %s", cls, path, strings.Join(a, " "))
-	r, err := Inter.eval(code)
-	if err != nil {
-		Inter.fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
-	}
-	return &Window{fpath: r}
-}
-
-// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
-//
-// The following characters are dissallowed or have special meanings in Tcl and
-// so are escaped:
-//
-//	&;`'"|*?~<>^()[]{}$\
-var badChars = [...]bool{
-	' ':  true,
-	'"':  true,
-	'$':  true,
-	'&':  true,
-	'(':  true,
-	')':  true,
-	'*':  true,
-	';':  true,
-	'<':  true,
-	'>':  true,
-	'?':  true,
-	'[':  true,
-	'\'': true,
-	'\\': true,
-	'\n': true,
-	'\r': true,
-	'\t': true,
-	']':  true,
-	'^':  true,
-	'`':  true,
-	'{':  true,
-	'|':  true,
-	'}':  true,
-	'~':  true,
-}
-
-func tclSafeString(s string) string {
-	const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badChars) && badChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
-}
-
-func bool2int(b bool) int {
-	if b {
-		return 1
-	}
-
-	return 0
-}
-
-// Option represents an optional argument.
-type Option interface {
-	option(w *Window) string
 }
 
 // EventHandler is invoked when its associated event fires. The 'data' argument
@@ -487,11 +305,20 @@ func newEventHandler(option string, args ...any) (r *eventHandler) {
 		id:       id.Add(1),
 		tcl:      option,
 	}
+	switch {
+	case r.detacher == nil:
+		r.detacher = func(w *Window, v any) { delete(Inter.handlers, r.id) }
+	default:
+		r.detacher = func(w *Window, v any) {
+			detacher(w, v)
+			delete(Inter.handlers, r.id)
+		}
+	}
 	Inter.handlers[r.id] = r
 	return r
 }
 
-func (e *eventHandler) option(w *Window) string {
+func (e *eventHandler) optionString(w *Window) string {
 	if e == nil {
 		return ""
 	}
@@ -500,168 +327,230 @@ func (e *eventHandler) option(w *Window) string {
 	return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
 }
 
-//TODO type xscrollcommandOption string
-//TODO
-//TODO func (o xscrollcommandOption) option(w *Window) string {
-//TODO 	return fmt.Sprintf(`-xscrollcommand %s`, tclSafeString(string(o)))
-//TODO }
-//TODO
-//TODO // Specifies the prefix for a command used to communicate with horizontal
-//TODO // scrollbars.
-//TODO // When the view in the widget's window changes (or
-//TODO // whenever anything else occurs that could change the display in a
-//TODO // scrollbar, such as a change in the total size of the widget's
-//TODO // contents), the widget will
-//TODO // generate a Tcl command by concatenating the scroll command and
-//TODO // two numbers.
-//TODO // Each of the numbers is a fraction between 0 and 1, which indicates
-//TODO // a position in the document.  0 indicates the beginning of the document,
-//TODO // 1 indicates the end, .333 indicates a position one third the way through
-//TODO // the document, and so on.
-//TODO // The first fraction indicates the first information in the document
-//TODO // that is visible in the window, and the second fraction indicates
-//TODO // the information just after the last portion that is visible.
-//TODO // The command is
-//TODO // then passed to the Tcl interpreter for execution.  Typically the
-//TODO // '-xscrollcommand' option consists of the path name of a scrollbar
-//TODO // widget followed by 'set', e.g. '.x.scrollbar set': this will cause
-//TODO // the scrollbar to be updated whenever the view in the window changes. If this
-//TODO // option is not specified, then no command will be executed.
-//TODO //
-//TODO // More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//TODO //
-//TODO // Note: This option applies to all windows/widgets.
-//TODO //
-//TODO // [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-xscrollcommand
-//TODO func Xscrollcommand(value string) Option {
-//TODO 	return xscrollcommandOption(value)
-//TODO }
-//TODO
-//TODO type yscrollcommandOption string
-//TODO
-//TODO func (o yscrollcommandOption) option(w *Window) string {
-//TODO 	return fmt.Sprintf(`-yscrollcommand %s`, tclSafeString(string(o)))
-//TODO }
-//TODO
-//TODO // Specifies the prefix for a command used to communicate with vertical
-//TODO // scrollbars.  This option is treated in the same way as the
-//TODO // '-xscrollcommand' option, except that it is used for vertical
-//TODO // scrollbars and is provided by widgets that support vertical scrolling.
-//TODO // See the description of '-xscrollcommand' for details
-//TODO // on how this option is used.
-//TODO //
-//TODO // More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//TODO //
-//TODO // Note: This option applies to all windows/widgets.
-//TODO //
-//TODO // [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-yscrollcommand
-//TODO func Yscrollcommand(value string) Option {
-//TODO 	return yscrollcommandOption(value)
-//TODO }
-
-// Specifies a Tcl command to associate with the button.  This command
-// is typically invoked when mouse button 1 is released over the button
-// window.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This option applies to Button, Checkbutton, Radiobutton, Scale, Scrollbar, Spinbox, TButton, TCheckbutton, TRadiobutton, TScale, TScrollbar, TSpinbox.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-command
-func Command(args ...any) Option {
-	return newEventHandler("-command", args...)
+func optionString(v any) string {
+	switch x := v.(type) {
+	case time.Duration:
+		return fmt.Sprint(int64((x + time.Millisecond/2) / time.Millisecond))
+	default:
+		return tclSafeString(fmt.Sprint(v))
+	}
 }
 
-// If this option is specified then it provides a Tcl command to execute
-// each time the menu is posted.  The command is invoked by the 'post'
-// widget command before posting the menu. Note that in Tk 8.0 on Macintosh
-// and Windows, all post-commands in a system of menus are executed before any
-// of those menus are posted.
-// This is due to the limitations in the individual platforms' menu managers.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This option applies to Menu, TCombobox.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-postcommand
-func Postcommand(args ...any) Option {
-	return newEventHandler("-postcommand", args...)
+func tclSafeString(s string) string {
+	if s == "" {
+		return "{}"
+	}
+
+	const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
+	if strings.ContainsAny(s, badString) {
+		var b strings.Builder
+		for _, c := range s {
+			switch {
+			case int(c) < len(badChars) && badChars[c]:
+				fmt.Fprintf(&b, "\\x%02x", c)
+			default:
+				b.WriteRune(c)
+			}
+		}
+		s = b.String()
+	}
+	return s
 }
 
-// If this option has a non-empty value, then it specifies a Tcl command
-// to invoke whenever the menu is torn off.  The actual command will
-// consist of the value of this option, followed by a space, followed
-// by the name of the menu window, followed by a space, followed by
-// the name of the name of the torn off menu window.  For example, if
-// the option's value is
+// initialize performs package initialization and returns a *Tk or error, if
+// any.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// The returned value is a singleton. Calls to initialize() are idempotent and
+// all return the same (instance, error) tuple.
 //
-// Note: This option applies to Menu.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-tearoffcommand
-func Tearoffcommand(args ...any) Option {
-	return newEventHandler("-tearoffcommand", args...)
+// initialize will perform runtime.LockOSThread. All further uses of this
+// package should be done using the same goroutine that first called
+// initialize.
+func initialize() (r *Tk, err error) {
+	interOnce.Do(func() {
+		runtime.LockOSThread()
+		if tclDir, interErr = tcl.Stdlib(); err != nil {
+			return
+		}
+
+		if tkDir, interErr = stdlib(); interErr != nil {
+			return
+		}
+
+		var in *tcl.Interp
+		if in, interErr = tcl.NewInterp(map[string]string{
+			"tcl_library": tclDir,
+			"tk_library":  tkDir,
+		}); interErr != nil {
+			return
+		}
+
+		if rc := libtk.XTk_Init(in.TLS(), in.Handle()); rc != libtk.TCL_OK {
+			in.Close()
+			interErr = fmt.Errorf("failed to initialize the Tk subsystem")
+			return
+		}
+
+		Inter = &Tk{
+			Window:   &Window{},
+			handlers: map[int32]*eventHandler{},
+			in:       in,
+		}
+		interErr = Inter.in.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil)
+	})
+	return Inter, interErr
 }
 
-// Specifies a script to eval when '-validatecommand' returns 0.
-// Setting it to {} disables this feature (the default).  The best use
-// of this option is to set it to 'bell'.  See 'VALIDATION'
-// below for more information.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This option applies to Entry, Spinbox, TEntry.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-invalidcommand
-func Invalidcommand(args ...any) Option {
-	return newEventHandler("-invalidcommand", args...)
+func eventDispatcher(data any, in *tcl.Interp, args []string) int {
+	id, err := strconv.Atoi(args[1])
+	if err != nil {
+		panic(todo("event dispatcher internal error: %q", args))
+	}
+
+	h := Inter.handlers[int32(id)]
+	r, err := h.handler(h.w, h.data)
+	Inter.in.SetResult(tclSafeString(fmt.Sprint(r)))
+	if err != nil {
+		return libtcl.TCL_ERROR
+	}
+
+	return libtcl.TCL_OK
 }
 
-// Specifies a script to eval when '-validatecommand' returns 0.
-// Setting it to {} disables this feature (the default).  The best use
-// of this option is to set it to 'bell'.  See 'VALIDATION'
-// below for more information.
+// stdlib returns the path to the Tk standard library or an error, if any. It
+// once creates a temporary directory where the standard library is written.
+// Subsequent calls to stdlib share the same temporary directory.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This option applies to Entry, Spinbox.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-invcmd
-func Invcmd(args ...any) Option {
-	return newEventHandler("-invcmd", args...)
+// stdlib is safe for concurrent access by multiple goroutines.
+func stdlib() (dir string, err error) {
+	if dir, err = os.MkdirTemp("", "tk-library-"); err != nil {
+		return "", err
+	}
+
+	fn := filepath.Join(dir, "library.zip")
+	if err = os.WriteFile(fn, []byte(tklib.Zip), 0600); err != nil {
+		return
+	}
+
+	if _, err = zip.Unzip(fn, dir); err != nil {
+		return
+	}
+
+	return filepath.Join(dir, "library"), nil
 }
 
-// Specifies a script to eval when you want to validate the input into
-// the entry widget.  Setting it to {} disables this feature (the default).
-// This command must return a valid Tcl boolean value.  If it returns 0 (or
-// the valid Tcl boolean equivalent) then it means you reject the new edition
-// and it will not occur and the '-invalidcommand' will be evaluated if it
-// is set. If it returns 1, then the new edition occurs.
-// See 'VALIDATION' below for more information.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This option applies to Entry, Spinbox, TEntry.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-validatecommand
-func Validatecommand(args ...any) Option {
-	return newEventHandler("-validatecommand", args...)
+// Finalize releases all resources held, if any. Finalize is intended to be
+// called on process shutdown only.
+func Finalize() (err error) {
+	if finished.Swap(1) != 0 {
+		return
+	}
+
+	runtime.UnlockOSThread()
+	if Inter != nil {
+		err = Inter.in.Close()
+		Inter = nil
+	}
+	for _, v := range []string{tclDir, tkDir} {
+		err = errors.Join(err, os.RemoveAll(v))
+	}
+	return err
 }
 
-// Specifies a script to eval when you want to validate the input into
-// the entry widget.  Setting it to {} disables this feature (the default).
-// This command must return a valid Tcl boolean value.  If it returns 0 (or
-// the valid Tcl boolean equivalent) then it means you reject the new edition
-// and it will not occur and the '-invalidcommand' will be evaluated if it
-// is set. If it returns 1, then the new edition occurs.
-// See 'VALIDATION' below for more information.
+// bell — Ring a display's bell
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This option applies to Entry, Spinbox.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-vcmd
-func Vcmd(args ...any) Option {
-	return newEventHandler("-vcmd", args...)
-}
+// bell ?-displayof window? ?-nice?
+// func Bell(opts ...option) {
+// }
+
+// Displayof
+
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/bell.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/bind.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/bindtags.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/bitmap.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/busy.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/button.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/canvas.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/clipboard.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/colors.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/console.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/cursors.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/destroy.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/dialog.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/entry.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/event.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/focus.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/focusNext.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/fontchooser.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/font.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/frame.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/getOpenFile.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/grab.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/grid.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/checkbutton.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/chooseColor.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/chooseDirectory.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/image.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/keysyms.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/labelframe.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/label.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/listbox.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/loadTk.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/lower.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/menubutton.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/menu.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/messageBox.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/message.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/nsimage.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/optionMenu.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/option.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/options.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/pack.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/palette.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/panedwindow.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/photo.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/place.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/popup.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/print.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/radiobutton.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/raise.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/scale.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/scrollbar.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/selection.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/send.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/spinbox.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/sysnotify.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/systray.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/text.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tkerror.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tk_mac.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tk.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tkvars.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tkwait.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/toplevel.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_button.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_combobox.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_entry.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_frame.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_checkbutton.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_image.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_intro.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_labelframe.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_label.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_menubutton.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_notebook.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_panedwindow.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_progressbar.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_radiobutton.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_scale.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_scrollbar.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_separator.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_sizegrip.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_spinbox.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_style.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_treeview.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_vsapi.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_widget.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/winfo.n
+//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/wm.n

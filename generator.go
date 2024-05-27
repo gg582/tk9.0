@@ -41,6 +41,11 @@ func main() {
 	generated("generated.go", docs)
 }
 
+type optionDocs struct {
+	page string
+	docs string
+}
+
 func generated(fn string, docs []document) {
 	w := bytes.NewBuffer(nil)
 	w.WriteString(header)
@@ -57,33 +62,31 @@ func generated(fn string, docs []document) {
 	}
 	slices.Sort(pages)
 
-	genericOptions := map[string]struct{}{}
-	specificOptions2Page := map[string][]string{} // option name: widget names
-	specificOptions := map[string]string{}        // option name: docs
+	options := map[string][]*optionDocs{}
+
 	for _, nm0 := range pages {
 		doc := m[nm0]
-		switch doc["Page"].(string) {
+		switch page := doc["Page"].(string); page {
 		case "options":
 			for _, v := range doc["Options"].([]any) {
 				v := v.(map[string]any)
 				onms := v["Name"].(string)
 				docs := v["Docs"].(string)
 				for _, onm := range optionNames(onms) {
-					genericOptions[onm] = struct{}{}
+					options[onm] = append(options[onm], &optionDocs{"", docs})
 				}
-				option(w, onms, docs, nil)
 			}
 		default:
 			nm := tclName2GoName(nm0)
 			if _, ok := doc["IsWindow"].(bool); ok {
 				fmt.Fprintf(w, "\n\n// %v", doc["Name"])
 				fmt.Fprintf(w, "\n//\n// The resulting Window is a child of 'w'.")
-				fmt.Fprintf(w, "\nfunc (w *Window) %s(options ...Option) *Window {", nm)
+				fmt.Fprintf(w, "\nfunc (w *Window) %s(options ...option) *Window {", nm)
 				fmt.Fprintf(w, "\n\treturn w.newChild(%q, options...)", nm0)
 				fmt.Fprintf(w, "\n}")
 
 				fmt.Fprintf(w, "\n\n// %v", doc["Name"])
-				fmt.Fprintf(w, "\nfunc %s(options ...Option) *Window {", nm)
+				fmt.Fprintf(w, "\nfunc %s(options ...option) *Window {", nm)
 				fmt.Fprintf(w, "\n\treturn Inter.%s(options...)", nm)
 				fmt.Fprintf(w, "\n}")
 				if opts, ok := doc["Options"].([]any); ok {
@@ -92,26 +95,28 @@ func generated(fn string, docs []document) {
 						onms := v["Name"].(string)
 						docs := v["Docs"].(string)
 						for _, onm := range optionNames(onms) {
-							specificOptions2Page[onm] = append(specificOptions2Page[onm], nm)
-							if _, ok := specificOptions[onm]; !ok {
-								specificOptions[onm] = docs
-							}
+							options[onm] = append(options[onm], &optionDocs{page, docs})
 						}
 					}
 				}
+				break
 			}
+
+			//TODO- v := doc["Synopsis"]
+			//TODO- if v != nil {
+			//TODO- 	commandFromSynopsis(w, doc)
+			//TODO- }
 		}
 	}
-	// Pass 2, generate specific options.
 	var onms []string
-	for k := range specificOptions2Page {
-		if _, ok := genericOptions[k]; !ok {
-			onms = append(onms, k)
-		}
+	for k := range options {
+		onms = append(onms, k)
 	}
 	slices.Sort(onms)
 	for _, onm := range onms {
-		option(w, onm, specificOptions[onm], specificOptions2Page[onm])
+		docsv := options[onm]
+		slices.SortFunc(docsv, func(a, b *optionDocs) int { return strings.Compare(a.page, b.page) })
+		option(w, onm, docsv)
 	}
 
 	if err := os.WriteFile(fn, w.Bytes(), 0660); err != nil {
@@ -132,54 +137,50 @@ func optionNames(nm string) (r []string) {
 	return r[:x]
 }
 
-func option(w io.Writer, nm, docs string, appliesTo []string) {
+func option(w io.Writer, nm string, docsv []*optionDocs) {
 	nm = strings.ReplaceAll(nm, `"`, "")
 	a := optionNames(nm)
-	typ := "string"
-	switch {
-	case strings.Contains(docs, " integer "):
-		typ = "int"
-	case strings.Contains(docs, " boolean "):
-		typ = "bool"
-	}
 	for _, nm := range a {
 		nm = nm[1:] // remove leading '-'
-		if hideOpt[nm] {
-			continue
+		if !isCommand[nm] {
+			fmt.Fprintf(w, "\n\ntype %sOption struct { v any }", nm)
+			fmt.Fprintf(w, "\n\nfunc (o %sOption) optionString(w *Window) string {", nm)
+			fmt.Fprintf(w, "\n\treturn fmt.Sprintf(`-%s %%s`, optionString(o.v))", nm)
+			fmt.Fprintf(w, "\n}")
 		}
-
-		fmt.Fprintf(w, "\n\ntype %sOption %s", nm, typ)
-		fmt.Fprintf(w, "\n\nfunc (o %sOption) option(w *Window) string {", nm)
-		switch typ {
-		case "string":
-			fmt.Fprintf(w, "\n\treturn fmt.Sprintf(`-%s %%s`, tclSafeString(string(o)))", nm)
-		case "bool", "int":
-			fmt.Fprintf(w, "\n\treturn fmt.Sprintf(`-%s %%v`, o)", nm)
-		}
-		fmt.Fprintf(w, "\n}")
 		nm2 := nm
 		if r := replaceOpt[nm]; r != "" {
 			nm2 = r
 		}
-		d := strings.Split(strings.TrimSpace(docs), "\n")
-		fmt.Fprintf(w, "\n\n// %s", strings.Join(d, "\n// "))
+		fmt.Fprintf(w, "\n\n")
+		if isCommand[nm] {
+			fmt.Fprintf(w, "\n// See also [Event handlers]\n//")
+		}
+		for i, docs := range docsv {
+			if docs.page != "" {
+				if i != 0 {
+					fmt.Fprintf(w, "\n//")
+				}
+				fmt.Fprintf(w, "\n// # %s %s\n//", tclName2GoName(docs.page), nm2)
+			}
+			d := strings.Split(strings.TrimSpace(docs.docs), "\n")
+			fmt.Fprintf(w, "\n// %s", strings.Join(d, "\n// "))
+		}
 		switch {
-		case len(appliesTo) == 0:
-			fmt.Fprintf(w, "\n//\n// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].")
-			fmt.Fprintf(w, "\n//\n// Note: This is a \"standard\" option and may apply to different windows/widgets, although not necessarily to all of them.")
+		case isCommand[nm]:
+			fmt.Fprintf(w, "\n//\n// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers")
+			fmt.Fprintf(w, "\nfunc %s(args ...any) option {", export(nm2))
+			fmt.Fprintf(w, "\n\treturn newEventHandler(%q, args...)", "-"+nm)
+			fmt.Fprintf(w, "\n}")
 		default:
-			fmt.Fprintf(w, "\n//\n// Note: This option applies to %s.", strings.Join(appliesTo, ", "))
+			fmt.Fprintf(w, "\nfunc %s(value any) option {", export(nm2))
+			fmt.Fprintf(w, "\n\treturn %sOption{value}", nm)
+			fmt.Fprintf(w, "\n}")
 		}
-		if len(appliesTo) == 0 {
-			fmt.Fprintf(w, "\n//\n// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-%s", nm)
-		}
-		fmt.Fprintf(w, "\nfunc %s(value %s) Option {", export(nm2), typ)
-		fmt.Fprintf(w, "\n\treturn %sOption(value)", nm)
-		fmt.Fprintf(w, "\n}")
 	}
 }
 
-var hideOpt = map[string]bool{
+var isCommand = map[string]bool{
 	"command":         true,
 	"invalidcommand":  true,
 	"invcmd":          true,
@@ -214,3 +215,94 @@ func export(s string) (r string) {
 	}
 	return strings.Join(a, "")
 }
+
+//TODO- func commandFromSynopsis(w io.Writer, doc document) {
+//TODO- 	page := doc["Page"].(string)
+//TODO- 	for _, v := range doc["Synopsis"].([]any) {
+//TODO- 		syn := parseSyn(v.(string))
+//TODO- 		if len(syn) == 0 {
+//TODO- 			continue
+//TODO- 		}
+//TODO-
+//TODO- 		var head []synTok
+//TODO- 		for _, v := range syn {
+//TODO- 			if x, ok := v.(synTok); ok {
+//TODO- 				head = append(head, x)
+//TODO- 				continue
+//TODO- 			}
+//TODO-
+//TODO- 			break
+//TODO- 		}
+//TODO- 		if len(head) == 0 || head[0].tok != page {
+//TODO- 			continue
+//TODO- 		}
+//TODO-
+//TODO- 		if len(head) == 1 {
+//TODO- 			fmt.Fprintf(w, "\n\n// %s", doc["Name"])
+//TODO- 			fmt.Fprintf(w, "\nfunc %s() {} // SYN", export(page))
+//TODO- 			continue
+//TODO- 		}
+//TODO- 	}
+//TODO- }
+//TODO-
+//TODO- type synTok struct {
+//TODO- 	tok string
+//TODO-
+//TODO- 	variadic bool
+//TODO- }
+//TODO-
+//TODO- func (s synTok) String() string {
+//TODO- 	return fmt.Sprintf("%q%s", s.tok, vari(s.variadic))
+//TODO- }
+//TODO-
+//TODO- func vari(b bool) string {
+//TODO- 	if b {
+//TODO- 		return "..."
+//TODO- 	}
+//TODO-
+//TODO- 	return ""
+//TODO- }
+//TODO-
+//TODO- type synOpt struct {
+//TODO- 	opt []string
+//TODO-
+//TODO- 	variadic bool
+//TODO- }
+//TODO-
+//TODO- func (s synOpt) String() string {
+//TODO- 	return fmt.Sprintf("%q%s", s.opt, vari(s.variadic))
+//TODO- }
+//TODO-
+//TODO- func parseSyn(line string) (r []any) {
+//TODO- 	line = strings.TrimSpace(line)
+//TODO- 	if line == "." {
+//TODO- 		return nil
+//TODO- 	}
+//TODO- 	line = strings.ReplaceAll(line, "??", "")
+//TODO- 	for {
+//TODO- 		line = strings.TrimSpace(line)
+//TODO- 		switch {
+//TODO- 		case line == "":
+//TODO- 			return r
+//TODO- 		case line[0] == '?':
+//TODO- 			x := strings.IndexByte(line[1:], '?')
+//TODO- 			opt := synOpt{opt: strings.Fields(line[1 : x+1])}
+//TODO- 			if n := len(opt.opt); opt.opt[n-1] == "..." {
+//TODO- 				opt.opt = opt.opt[:n-1]
+//TODO- 				opt.variadic = true
+//TODO- 			}
+//TODO- 			r = append(r, opt)
+//TODO- 			line = line[x+2:]
+//TODO- 		default:
+//TODO- 			x := strings.IndexByte(line, ' ')
+//TODO- 			switch {
+//TODO- 			case x < 0:
+//TODO- 				r = append(r, synTok{tok: line})
+//TODO- 				return
+//TODO- 			default:
+//TODO- 				r = append(r, synTok{tok: line[:x]})
+//TODO- 				line = line[x+1:]
+//TODO- 			}
+//TODO- 		}
+//TODO- 	}
+//TODO- }

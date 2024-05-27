@@ -9,151 +9,451 @@ import (
 // button - Create and manipulate 'button' action widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Button(options ...Option) *Window {
+func (w *Window) Button(options ...option) *Window {
 	return w.newChild("button", options...)
 }
 
 // button - Create and manipulate 'button' action widgets
-func Button(options ...Option) *Window {
+func Button(options ...option) *Window {
 	return Inter.Button(options...)
 }
 
 // canvas - Create and manipulate 'canvas' hypergraphics drawing surface widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Canvas(options ...Option) *Window {
+func (w *Window) Canvas(options ...option) *Window {
 	return w.newChild("canvas", options...)
 }
 
 // canvas - Create and manipulate 'canvas' hypergraphics drawing surface widgets
-func Canvas(options ...Option) *Window {
+func Canvas(options ...option) *Window {
 	return Inter.Canvas(options...)
 }
 
 // checkbutton - Create and manipulate 'checkbutton' boolean selection widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Checkbutton(options ...Option) *Window {
+func (w *Window) Checkbutton(options ...option) *Window {
 	return w.newChild("checkbutton", options...)
 }
 
 // checkbutton - Create and manipulate 'checkbutton' boolean selection widgets
-func Checkbutton(options ...Option) *Window {
+func Checkbutton(options ...option) *Window {
 	return Inter.Checkbutton(options...)
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Entry(options ...Option) *Window {
+func (w *Window) Entry(options ...option) *Window {
 	return w.newChild("entry", options...)
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
-func Entry(options ...Option) *Window {
+func Entry(options ...option) *Window {
 	return Inter.Entry(options...)
 }
 
 // frame - Create and manipulate 'frame' simple container widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Frame(options ...Option) *Window {
+func (w *Window) Frame(options ...option) *Window {
 	return w.newChild("frame", options...)
 }
 
 // frame - Create and manipulate 'frame' simple container widgets
-func Frame(options ...Option) *Window {
+func Frame(options ...option) *Window {
 	return Inter.Frame(options...)
 }
 
 // label - Create and manipulate 'label' non-interactive text or image widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Label(options ...Option) *Window {
+func (w *Window) Label(options ...option) *Window {
 	return w.newChild("label", options...)
 }
 
 // label - Create and manipulate 'label' non-interactive text or image widgets
-func Label(options ...Option) *Window {
+func Label(options ...option) *Window {
 	return Inter.Label(options...)
 }
 
 // labelframe - Create and manipulate 'labelframe' labelled container widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Labelframe(options ...Option) *Window {
+func (w *Window) Labelframe(options ...option) *Window {
 	return w.newChild("labelframe", options...)
 }
 
 // labelframe - Create and manipulate 'labelframe' labelled container widgets
-func Labelframe(options ...Option) *Window {
+func Labelframe(options ...option) *Window {
 	return Inter.Labelframe(options...)
 }
 
 // listbox - Create and manipulate 'listbox' item list widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Listbox(options ...Option) *Window {
+func (w *Window) Listbox(options ...option) *Window {
 	return w.newChild("listbox", options...)
 }
 
 // listbox - Create and manipulate 'listbox' item list widgets
-func Listbox(options ...Option) *Window {
+func Listbox(options ...option) *Window {
 	return Inter.Listbox(options...)
 }
 
 // menu, tk_menuSetFocus - Create and manipulate 'menu' widgets and menubars
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Menu(options ...Option) *Window {
+func (w *Window) Menu(options ...option) *Window {
 	return w.newChild("menu", options...)
 }
 
 // menu, tk_menuSetFocus - Create and manipulate 'menu' widgets and menubars
-func Menu(options ...Option) *Window {
+func Menu(options ...option) *Window {
 	return Inter.Menu(options...)
 }
 
 // menubutton - Create and manipulate 'menubutton' pop-up menu indicator widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Menubutton(options ...Option) *Window {
+func (w *Window) Menubutton(options ...option) *Window {
 	return w.newChild("menubutton", options...)
 }
 
 // menubutton - Create and manipulate 'menubutton' pop-up menu indicator widgets
-func Menubutton(options ...Option) *Window {
+func Menubutton(options ...option) *Window {
 	return Inter.Menubutton(options...)
 }
 
 // message - Create and manipulate 'message' non-interactive text widgets
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) Message(options ...Option) *Window {
+func (w *Window) Message(options ...option) *Window {
 	return w.newChild("message", options...)
 }
 
 // message - Create and manipulate 'message' non-interactive text widgets
-func Message(options ...Option) *Window {
+func Message(options ...option) *Window {
 	return Inter.Message(options...)
 }
 
 // tk_optionMenu - Create an option menubutton and its menu
 //
 // The resulting Window is a child of 'w'.
-func (w *Window) OptionMenu(options ...Option) *Window {
+func (w *Window) OptionMenu(options ...option) *Window {
 	return w.newChild("optionMenu", options...)
 }
 
 // tk_optionMenu - Create an option menubutton and its menu
-func OptionMenu(options ...Option) *Window {
+func OptionMenu(options ...option) *Window {
 	return Inter.OptionMenu(options...)
 }
 
-type activebackgroundOption string
+// panedwindow - Create and manipulate 'panedwindow' split container widgets
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) Panedwindow(options ...option) *Window {
+	return w.newChild("panedwindow", options...)
+}
 
-func (o activebackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-activebackground %s`, tclSafeString(string(o)))
+// panedwindow - Create and manipulate 'panedwindow' split container widgets
+func Panedwindow(options ...option) *Window {
+	return Inter.Panedwindow(options...)
+}
+
+// radiobutton - Create and manipulate 'radiobutton' pick-one widgets
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) Radiobutton(options ...option) *Window {
+	return w.newChild("radiobutton", options...)
+}
+
+// radiobutton - Create and manipulate 'radiobutton' pick-one widgets
+func Radiobutton(options ...option) *Window {
+	return Inter.Radiobutton(options...)
+}
+
+// scale - Create and manipulate 'scale' value-controlled slider widgets
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) Scale(options ...option) *Window {
+	return w.newChild("scale", options...)
+}
+
+// scale - Create and manipulate 'scale' value-controlled slider widgets
+func Scale(options ...option) *Window {
+	return Inter.Scale(options...)
+}
+
+// scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) Scrollbar(options ...option) *Window {
+	return w.newChild("scrollbar", options...)
+}
+
+// scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
+func Scrollbar(options ...option) *Window {
+	return Inter.Scrollbar(options...)
+}
+
+// spinbox - Create and manipulate 'spinbox' value spinner widgets
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) Spinbox(options ...option) *Window {
+	return w.newChild("spinbox", options...)
+}
+
+// spinbox - Create and manipulate 'spinbox' value spinner widgets
+func Spinbox(options ...option) *Window {
+	return Inter.Spinbox(options...)
+}
+
+// text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) Text(options ...option) *Window {
+	return w.newChild("text", options...)
+}
+
+// text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
+func Text(options ...option) *Window {
+	return Inter.Text(options...)
+}
+
+// toplevel - Create and manipulate 'toplevel' main and popup window widgets
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) Toplevel(options ...option) *Window {
+	return w.newChild("toplevel", options...)
+}
+
+// toplevel - Create and manipulate 'toplevel' main and popup window widgets
+func Toplevel(options ...option) *Window {
+	return Inter.Toplevel(options...)
+}
+
+// ttk::button - Widget that issues a command when pressed
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TButton(options ...option) *Window {
+	return w.newChild("ttk_button", options...)
+}
+
+// ttk::button - Widget that issues a command when pressed
+func TButton(options ...option) *Window {
+	return Inter.TButton(options...)
+}
+
+// ttk::checkbutton - On/off widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TCheckbutton(options ...option) *Window {
+	return w.newChild("ttk_checkbutton", options...)
+}
+
+// ttk::checkbutton - On/off widget
+func TCheckbutton(options ...option) *Window {
+	return Inter.TCheckbutton(options...)
+}
+
+// ttk::combobox - text field with popdown selection list
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TCombobox(options ...option) *Window {
+	return w.newChild("ttk_combobox", options...)
+}
+
+// ttk::combobox - text field with popdown selection list
+func TCombobox(options ...option) *Window {
+	return Inter.TCombobox(options...)
+}
+
+// ttk::entry - Editable text field widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TEntry(options ...option) *Window {
+	return w.newChild("ttk_entry", options...)
+}
+
+// ttk::entry - Editable text field widget
+func TEntry(options ...option) *Window {
+	return Inter.TEntry(options...)
+}
+
+// ttk::frame - Simple container widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TFrame(options ...option) *Window {
+	return w.newChild("ttk_frame", options...)
+}
+
+// ttk::frame - Simple container widget
+func TFrame(options ...option) *Window {
+	return Inter.TFrame(options...)
+}
+
+// ttk::label - Display a text string and/or image
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TLabel(options ...option) *Window {
+	return w.newChild("ttk_label", options...)
+}
+
+// ttk::label - Display a text string and/or image
+func TLabel(options ...option) *Window {
+	return Inter.TLabel(options...)
+}
+
+// ttk::labelframe - Container widget with optional label
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TLabelframe(options ...option) *Window {
+	return w.newChild("ttk_labelframe", options...)
+}
+
+// ttk::labelframe - Container widget with optional label
+func TLabelframe(options ...option) *Window {
+	return Inter.TLabelframe(options...)
+}
+
+// ttk::menubutton - Widget that pops down a menu when pressed
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TMenubutton(options ...option) *Window {
+	return w.newChild("ttk_menubutton", options...)
+}
+
+// ttk::menubutton - Widget that pops down a menu when pressed
+func TMenubutton(options ...option) *Window {
+	return Inter.TMenubutton(options...)
+}
+
+// ttk::notebook - Multi-paned container widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TNotebook(options ...option) *Window {
+	return w.newChild("ttk_notebook", options...)
+}
+
+// ttk::notebook - Multi-paned container widget
+func TNotebook(options ...option) *Window {
+	return Inter.TNotebook(options...)
+}
+
+// ttk::panedwindow - Multi-pane container window
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TPanedwindow(options ...option) *Window {
+	return w.newChild("ttk_panedwindow", options...)
+}
+
+// ttk::panedwindow - Multi-pane container window
+func TPanedwindow(options ...option) *Window {
+	return Inter.TPanedwindow(options...)
+}
+
+// ttk::progressbar - Provide progress feedback
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TProgressbar(options ...option) *Window {
+	return w.newChild("ttk_progressbar", options...)
+}
+
+// ttk::progressbar - Provide progress feedback
+func TProgressbar(options ...option) *Window {
+	return Inter.TProgressbar(options...)
+}
+
+// ttk::radiobutton - Mutually exclusive option widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TRadiobutton(options ...option) *Window {
+	return w.newChild("ttk_radiobutton", options...)
+}
+
+// ttk::radiobutton - Mutually exclusive option widget
+func TRadiobutton(options ...option) *Window {
+	return Inter.TRadiobutton(options...)
+}
+
+// ttk::scale - Create and manipulate a scale widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TScale(options ...option) *Window {
+	return w.newChild("ttk_scale", options...)
+}
+
+// ttk::scale - Create and manipulate a scale widget
+func TScale(options ...option) *Window {
+	return Inter.TScale(options...)
+}
+
+// ttk::scrollbar - Control the viewport of a scrollable widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TScrollbar(options ...option) *Window {
+	return w.newChild("ttk_scrollbar", options...)
+}
+
+// ttk::scrollbar - Control the viewport of a scrollable widget
+func TScrollbar(options ...option) *Window {
+	return Inter.TScrollbar(options...)
+}
+
+// ttk::separator - Separator bar
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TSeparator(options ...option) *Window {
+	return w.newChild("ttk_separator", options...)
+}
+
+// ttk::separator - Separator bar
+func TSeparator(options ...option) *Window {
+	return Inter.TSeparator(options...)
+}
+
+// ttk::sizegrip - Bottom-right corner resize widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TSizegrip(options ...option) *Window {
+	return w.newChild("ttk_sizegrip", options...)
+}
+
+// ttk::sizegrip - Bottom-right corner resize widget
+func TSizegrip(options ...option) *Window {
+	return Inter.TSizegrip(options...)
+}
+
+// ttk::spinbox - Selecting text field widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TSpinbox(options ...option) *Window {
+	return w.newChild("ttk_spinbox", options...)
+}
+
+// ttk::spinbox - Selecting text field widget
+func TSpinbox(options ...option) *Window {
+	return Inter.TSpinbox(options...)
+}
+
+// ttk::treeview - hierarchical multicolumn data display widget
+//
+// The resulting Window is a child of 'w'.
+func (w *Window) TTreeview(options ...option) *Window {
+	return w.newChild("ttk_treeview", options...)
+}
+
+// ttk::treeview - hierarchical multicolumn data display widget
+func TTreeview(options ...option) *Window {
+	return Inter.TTreeview(options...)
+}
+
+type activebackgroundOption struct{ v any }
+
+func (o activebackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activebackground %s`, optionString(o.v))
 }
 
 // Specifies background color to use when drawing active elements.
@@ -165,20 +465,14 @@ func (o activebackgroundOption) option(w *Window) string {
 // ignored;  the normal background color will be used instead.
 // For some elements on Windows and Macintosh systems, the active color
 // will only be used while mouse button 1 is pressed over the element.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-activebackground
-func Activebackground(value string) Option {
-	return activebackgroundOption(value)
+func Activebackground(value any) option {
+	return activebackgroundOption{value}
 }
 
-type activeborderwidthOption string
+type activeborderwidthOption struct{ v any }
 
-func (o activeborderwidthOption) option(w *Window) string {
-	return fmt.Sprintf(`-activeborderwidth %s`, tclSafeString(string(o)))
+func (o activeborderwidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activeborderwidth %s`, optionString(o.v))
 }
 
 // Specifies a non-negative value indicating
@@ -187,56 +481,62 @@ func (o activeborderwidthOption) option(w *Window) string {
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
 // This option is typically only available in widgets displaying more
 // than one element at a time (e.g. menus but not buttons).
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-activeborderwidth
-func Activeborderwidth(value string) Option {
-	return activeborderwidthOption(value)
+func Activeborderwidth(value any) option {
+	return activeborderwidthOption{value}
 }
 
-type activeforegroundOption string
+type activeforegroundOption struct{ v any }
 
-func (o activeforegroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-activeforeground %s`, tclSafeString(string(o)))
+func (o activeforegroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activeforeground %s`, optionString(o.v))
 }
 
 // Specifies foreground color to use when drawing active elements.
 // See above for definition of active elements.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-activeforeground
-func Activeforeground(value string) Option {
-	return activeforegroundOption(value)
+func Activeforeground(value any) option {
+	return activeforegroundOption{value}
 }
 
-type activereliefOption string
+type activereliefOption struct{ v any }
 
-func (o activereliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-activerelief %s`, tclSafeString(string(o)))
+func (o activereliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activerelief %s`, optionString(o.v))
 }
 
 // Specifies the 3-D effect desired for the active item of the widget.
 // See the '-relief' option for details.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # Scrollbar activerelief
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-activerelief
-func Activerelief(value string) Option {
-	return activereliefOption(value)
+// Specifies the relief to use when displaying the element that is
+// active, if any.
+// Elements other than the active element are always displayed with
+// a raised relief.
+func Activerelief(value any) option {
+	return activereliefOption{value}
 }
 
-type anchorOption string
+type activestyleOption struct{ v any }
 
-func (o anchorOption) option(w *Window) string {
-	return fmt.Sprintf(`-anchor %s`, tclSafeString(string(o)))
+func (o activestyleOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activestyle %s`, optionString(o.v))
+}
+
+// # Listbox activestyle
+//
+// Specifies the style in which to draw the active element.  This must be
+// one of 'dotbox' (show a focus ring around the active element),
+// 'none' (no special indication of active element) or
+// 'underline' (underline the active element).
+// The default is 'underline' on Windows, and 'dotbox' elsewhere.
+func Activestyle(value any) option {
+	return activestyleOption{value}
+}
+
+type anchorOption struct{ v any }
+
+func (o anchorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-anchor %s`, optionString(o.v))
 }
 
 // Specifies how the information in a widget (e.g. text or a bitmap)
@@ -245,56 +545,159 @@ func (o anchorOption) option(w *Window) string {
 // 's', 'sw', 'w', 'nw', or 'center'.
 // For example, 'nw' means display the information such that its
 // top-left corner is at the top-left corner of the widget.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-anchor
-func Anchor(value string) Option {
-	return anchorOption(value)
+func Anchor(value any) option {
+	return anchorOption{value}
 }
 
-type backgroundOption string
+type aspectOption struct{ v any }
 
-func (o backgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-background %s`, tclSafeString(string(o)))
+func (o aspectOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-aspect %s`, optionString(o.v))
+}
+
+// # Message aspect
+//
+// Specifies a non-negative integer value indicating desired
+// aspect ratio for the text.  The aspect ratio is specified as
+// 100*width/height.  100 means the text should
+// be as wide as it is tall, 200 means the text should
+// be twice as wide as it is tall, 50 means the text should
+// be twice as tall as it is wide, and so on.
+// Used to choose line length for text if '-width' option
+// is not specified.
+// Defaults to 150.
+func Aspect(value any) option {
+	return aspectOption{value}
+}
+
+type autoseparatorsOption struct{ v any }
+
+func (o autoseparatorsOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-autoseparators %s`, optionString(o.v))
+}
+
+// # Text autoseparators
+//
+// Specifies a boolean that says whether separators are automatically inserted in
+// the undo stack. Only meaningful when the '-undo' option is true.
+func Autoseparators(value any) option {
+	return autoseparatorsOption{value}
+}
+
+type backgroundOption struct{ v any }
+
+func (o backgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-background %s`, optionString(o.v))
 }
 
 // Specifies the normal background color to use when displaying the
 // widget.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # Frame background
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// This option is the same as the standard '-background' option
+// except that its value may also be specified as an empty string.
+// In this case, the widget will display no background or border, and
+// no colors will be consumed from its colormap for its background
+// and border.
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-background
-func Background(value string) Option {
-	return backgroundOption(value)
+// # Labelframe background
+//
+// This option is the same as the standard '-background' option
+// except that its value may also be specified as an empty string.
+// In this case, the widget will display no background or border, and
+// no colors will be consumed from its colormap for its background
+// and border.
+//
+// # Toplevel background
+//
+// This option is the same as the standard '-background' option
+// except that its value may also be specified as an empty string.
+// In this case, the widget will display no background or border, and
+// no colors will be consumed from its colormap for its background
+// and border.
+//
+// # TLabel background
+//
+// The widget's background color.
+// If unspecified, the theme default is used.
+func Background(value any) option {
+	return backgroundOption{value}
 }
 
-type bgOption string
+type backgroundimageOption struct{ v any }
 
-func (o bgOption) option(w *Window) string {
-	return fmt.Sprintf(`-bg %s`, tclSafeString(string(o)))
+func (o backgroundimageOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-backgroundimage %s`, optionString(o.v))
+}
+
+// # Frame backgroundimage
+//
+// This specifies an image to display on the frame's background within
+// the border of the frame (i.e., the image will be clipped by the
+// frame's highlight ring and border, if either are present); subwidgets
+// of the frame will be drawn on top. The image must have been created
+// with the 'image create' command. If specified as the empty string,
+// no image will be displayed.
+//
+// # Toplevel backgroundimage
+//
+// This specifies an image to display on the toplevel's background within
+// the border of the toplevel (i.e., the image will be clipped by the
+// toplevel's highlight ring and border, if either are present) on top of
+// the background;
+// subwidgets of the toplevel will be drawn on top. The image must have
+// been created with the 'image create' command. If specified as the
+// empty string, no image will be displayed.
+func Backgroundimage(value any) option {
+	return backgroundimageOption{value}
+}
+
+type bdOption struct{ v any }
+
+func (o bdOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-bd %s`, optionString(o.v))
+}
+
+// Specifies a non-negative value indicating the width
+// of the 3-D border to draw around the outside of the widget (if such a
+// border is being drawn;  the '-relief' option typically determines
+// this).  The value may also be used when drawing 3-D effects in the
+// interior of the widget.
+// The value may have any of the forms acceptable to 'Tk_GetPixels'.
+func Bd(value any) option {
+	return bdOption{value}
+}
+
+type bgOption struct{ v any }
+
+func (o bgOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-bg %s`, optionString(o.v))
 }
 
 // Specifies the normal background color to use when displaying the
 // widget.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-bg
-func Bg(value string) Option {
-	return bgOption(value)
+func Bg(value any) option {
+	return bgOption{value}
 }
 
-type bitmapOption string
+type bigincrementOption struct{ v any }
 
-func (o bitmapOption) option(w *Window) string {
-	return fmt.Sprintf(`-bitmap %s`, tclSafeString(string(o)))
+func (o bigincrementOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-bigincrement %s`, optionString(o.v))
+}
+
+// # Scale bigincrement
+//
+// Some interactions with the scale cause its value to change by
+func Bigincrement(value any) option {
+	return bigincrementOption{value}
+}
+
+type bitmapOption struct{ v any }
+
+func (o bitmapOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-bitmap %s`, optionString(o.v))
 }
 
 // Specifies a bitmap to display in the widget, in any of the forms
@@ -308,42 +711,29 @@ func (o bitmapOption) option(w *Window) string {
 // a text display.
 // In widgets that support both '-bitmap' and '-image' options,
 // '-image' will usually override '-bitmap'.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-bitmap
-func Bitmap(value string) Option {
-	return bitmapOption(value)
+func Bitmap(value any) option {
+	return bitmapOption{value}
 }
 
-type borderwidthOption string
+type blockcursorOption struct{ v any }
 
-func (o borderwidthOption) option(w *Window) string {
-	return fmt.Sprintf(`-borderwidth %s`, tclSafeString(string(o)))
+func (o blockcursorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-blockcursor %s`, optionString(o.v))
 }
 
-// Specifies a non-negative value indicating the width
-// of the 3-D border to draw around the outside of the widget (if such a
-// border is being drawn;  the '-relief' option typically determines
-// this).  The value may also be used when drawing 3-D effects in the
-// interior of the widget.
-// The value may have any of the forms acceptable to 'Tk_GetPixels'.
+// # Text blockcursor
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-borderwidth
-func Borderwidth(value string) Option {
-	return borderwidthOption(value)
+// Specifies a boolean that says whether the blinking insertion cursor should be
+// drawn as a character-sized rectangular block. If false (the default) a thin
+// vertical line is used for the insertion cursor.
+func Blockcursor(value any) option {
+	return blockcursorOption{value}
 }
 
-type bdOption string
+type borderwidthOption struct{ v any }
 
-func (o bdOption) option(w *Window) string {
-	return fmt.Sprintf(`-bd %s`, tclSafeString(string(o)))
+func (o borderwidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-borderwidth %s`, optionString(o.v))
 }
 
 // Specifies a non-negative value indicating the width
@@ -353,39 +743,271 @@ func (o bdOption) option(w *Window) string {
 // interior of the widget.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TFrame borderwidth
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-bd
-func Bd(value string) Option {
-	return bdOption(value)
+// The desired width of the widget border.  Defaults to 0.
+// May be ignored depending on the theme used.
+func Borderwidth(value any) option {
+	return borderwidthOption{value}
 }
 
-type cursorOption string
+type buttonbackgroundOption struct{ v any }
 
-func (o cursorOption) option(w *Window) string {
-	return fmt.Sprintf(`-cursor %s`, tclSafeString(string(o)))
+func (o buttonbackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-buttonbackground %s`, optionString(o.v))
 }
 
-// Specifies the mouse cursor to be used for the widget.
-// The value may have any of the forms acceptable to 'Tk_GetCursor'.
-// In addition, if an empty string is specified, it indicates that the
-// widget should defer to its parent for cursor specification.
+// # Spinbox buttonbackground
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-cursor
-func Cursor(value string) Option {
-	return cursorOption(value)
+// The background color to be used for the spin buttons.
+func Buttonbackground(value any) option {
+	return buttonbackgroundOption{value}
 }
 
-type compoundOption string
+type buttoncursorOption struct{ v any }
 
-func (o compoundOption) option(w *Window) string {
-	return fmt.Sprintf(`-compound %s`, tclSafeString(string(o)))
+func (o buttoncursorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-buttoncursor %s`, optionString(o.v))
+}
+
+// # Spinbox buttoncursor
+//
+// The cursor to be used when over the spin buttons.  If this is empty
+// (the default), a default cursor will be used.
+func Buttoncursor(value any) option {
+	return buttoncursorOption{value}
+}
+
+type buttondownreliefOption struct{ v any }
+
+func (o buttondownreliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-buttondownrelief %s`, optionString(o.v))
+}
+
+// # Spinbox buttondownrelief
+//
+// The relief to be used for the upper spin button.
+func Buttondownrelief(value any) option {
+	return buttondownreliefOption{value}
+}
+
+type buttonupreliefOption struct{ v any }
+
+func (o buttonupreliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-buttonuprelief %s`, optionString(o.v))
+}
+
+// # Spinbox buttonuprelief
+//
+// The relief to be used for the lower spin button.
+func Buttonuprelief(value any) option {
+	return buttonupreliefOption{value}
+}
+
+type classOption struct{ v any }
+
+func (o classOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-class %s`, optionString(o.v))
+}
+
+// # Frame class
+//
+// Specifies a class for the window.
+// This class will be used when querying the option database for
+// the window's other options, and it will also be used later for
+// other purposes such as bindings.
+// The '-class' option may not be changed with the 'configure'
+// widget command.
+//
+// # Labelframe class
+//
+// Specifies a class for the window.
+// This class will be used when querying the option database for
+// the window's other options, and it will also be used later for
+// other purposes such as bindings.
+// The '-class' option may not be changed with the 'configure'
+// widget command.
+//
+// # Toplevel class
+//
+// Specifies a class for the window.
+// This class will be used when querying the option database for
+// the window's other options, and it will also be used later for
+// other purposes such as bindings. Some window managers display the
+// class name for windows in their dock while some others display the
+// window title.
+// The '-class' option may not be changed with the 'configure'
+// widget command.
+func Class(value any) option {
+	return classOption{value}
+}
+
+type closeenoughOption struct{ v any }
+
+func (o closeenoughOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-closeenough %s`, optionString(o.v))
+}
+
+// # Canvas closeenough
+//
+// Specifies a floating-point value indicating how close the mouse cursor
+// must be to an item before it is considered to be
+func Closeenough(value any) option {
+	return closeenoughOption{value}
+}
+
+type colormapOption struct{ v any }
+
+func (o colormapOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-colormap %s`, optionString(o.v))
+}
+
+// # Frame colormap
+//
+// Specifies a colormap to use for the window.
+// The value may be either 'new', in which case a new colormap is
+// created for the window and its children, or the name of another
+// window (which must be on the same screen and have the same visual
+// as 'pathName'), in which case the new window will use the colormap
+// from the specified window.
+// If the '-colormap' option is not specified, the new window
+// uses the same colormap as its parent.
+// This option may not be changed with the 'configure'
+// widget command.
+//
+// # Labelframe colormap
+//
+// Specifies a colormap to use for the window.
+// The value may be either 'new', in which case a new colormap is
+// created for the window and its children, or the name of another
+// window (which must be on the same screen and have the same visual
+// as 'pathName'), in which case the new window will use the colormap
+// from the specified window.
+// If the '-colormap' option is not specified, the new window
+// uses the same colormap as its parent.
+// This option may not be changed with the 'configure'
+// widget command.
+//
+// # Toplevel colormap
+//
+// Specifies a colormap to use for the window.
+// The value may be either 'new', in which case a new colormap is
+// created for the window and its children, or the name of another
+// window (which must be on the same screen and have the same visual
+// as 'pathName'), in which case the new window will use the colormap
+// from the specified window.
+// If the '-colormap' option is not specified, the new window
+// uses the default colormap of its screen.
+// This option may not be changed with the 'configure'
+// widget command.
+func Colormap(value any) option {
+	return colormapOption{value}
+}
+
+type columnsOption struct{ v any }
+
+func (o columnsOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-columns %s`, optionString(o.v))
+}
+
+// # TTreeview columns
+//
+// A list of column identifiers,
+// specifying the number of columns and their names.
+func Columns(value any) option {
+	return columnsOption{value}
+}
+
+// See also [Event handlers]
+//
+// # Button command
+//
+// Specifies a Tcl command to associate with the button.  This command
+// is typically invoked when mouse button 1 is released over the button
+// window.
+//
+// # Checkbutton command
+//
+// Specifies a Tcl command to associate with the button.  This command
+// is typically invoked when mouse button 1 is released over the button
+// window.  The button's global variable ('-variable' option) will
+// be updated before the command is invoked.
+//
+// # Radiobutton command
+//
+// Specifies a Tcl command to associate with the button.  This command
+// is typically invoked when mouse button 1 is released over the button
+// window.  The button's global variable ('-variable' option) will
+// be updated before the command is invoked.
+//
+// # Scale command
+//
+// Specifies the prefix of a Tcl command to invoke whenever the scale's
+// value is changed via a widget command.
+// The actual command consists
+// of this option followed by a space and a real number indicating the
+// new value of the scale.
+//
+// # Scrollbar command
+//
+// Specifies the prefix of a Tcl command to invoke to change the view
+// in the widget associated with the scrollbar.  When a user requests
+// a view change by manipulating the scrollbar, a Tcl command is
+// invoked.  The actual command consists of this option followed by
+// additional information as described later.  This option almost always has
+// a value such as '.t xview' or '.t yview', consisting of the
+// name of a widget and either 'xview' (if the scrollbar is for
+// horizontal scrolling) or 'yview' (for vertical scrolling).
+// All scrollable widgets have 'xview' and 'yview' commands
+// that take exactly the additional arguments appended by the scrollbar
+// as described in 'SCROLLING COMMANDS' below.
+//
+// # Spinbox command
+//
+// Specifies a Tcl command to invoke whenever a spinbutton is invoked.
+// The command recognizes several percent substitutions: '%W' for
+// the widget path, '%s' for the current value of the widget, and
+// '%d' for the direction of the button pressed ('up' or 'down').
+//
+// # TButton command
+//
+// A script to evaluate when the widget is invoked.
+//
+// # TCheckbutton command
+//
+// A Tcl script to execute whenever the widget is invoked.
+//
+// # TRadiobutton command
+//
+// A Tcl script to evaluate whenever the widget is invoked.
+//
+// # TScale command
+//
+// Specifies the prefix of a Tcl command to invoke whenever the scale's value is
+// changed via a widget command. The actual command consists of this option
+// followed by a space and a real number indicating the new value of the scale.
+//
+// # TScrollbar command
+//
+// A Tcl script prefix to evaluate
+// to change the view in the widget associated with the scrollbar.
+// Additional arguments are appended to the value of this option,
+// as described in 'SCROLLING COMMANDS' below,
+// whenever the user requests a view change by manipulating the scrollbar.
+//
+// # TSpinbox command
+//
+// Specifies a Tcl command to be invoked whenever a spinbutton is invoked.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Command(args ...any) option {
+	return newEventHandler("-command", args...)
+}
+
+type compoundOption struct{ v any }
+
+func (o compoundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-compound %s`, optionString(o.v))
 }
 
 // Specifies if the widget should display text and bitmaps/images at the
@@ -398,19 +1020,173 @@ func (o compoundOption) option(w *Window) string {
 // the text, and the value 'center' specifies that the bitmap or
 // image should be displayed on top of the text.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TNotebook compound
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-compound
-func Compound(value string) Option {
-	return compoundOption(value)
+// Specifies how to display the image relative to the text,
+// in the case both '-text' and '-image' are present.
+// See 'label(n)' for legal values.
+func Compound(value any) option {
+	return compoundOption{value}
 }
 
-type disabledforegroundOption string
+type confineOption struct{ v any }
 
-func (o disabledforegroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-disabledforeground %s`, tclSafeString(string(o)))
+func (o confineOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-confine %s`, optionString(o.v))
+}
+
+// # Canvas confine
+//
+// Specifies a boolean value that indicates whether or not it should be
+// allowable to set the canvas's view outside the region defined by the
+// 'scrollRegion' argument.
+// Defaults to true, which means that the view will
+// be constrained within the scroll region.
+func Confine(value any) option {
+	return confineOption{value}
+}
+
+type containerOption struct{ v any }
+
+func (o containerOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-container %s`, optionString(o.v))
+}
+
+// # Frame container
+//
+// The value must be a boolean.  If true, it means that this window will
+// be used as a container in which some other application will be embedded
+// (for example, a Tk toplevel can be embedded using the '-use' option).
+// The window will support the appropriate window manager protocols for
+// things like geometry requests.  The window should not have any
+// children of its own in this application.
+// This option may not be changed with the 'configure'
+// widget command.
+// Note that '-borderwidth', '-padx' and '-pady' are ignored when
+// configured as a container since a container has no border.
+//
+// # Toplevel container
+//
+// The value must be a boolean.  If true, it means that this window will
+// be used as a container in which some other application will be embedded
+// (for example, a Tk toplevel can be embedded using the '-use' option).
+// The window will support the appropriate window manager protocols for
+// things like geometry requests.  The window should not have any
+// children of its own in this application.
+// This option may not be changed with the 'configure'
+// widget command.
+func Container(value any) option {
+	return containerOption{value}
+}
+
+type cursorOption struct{ v any }
+
+func (o cursorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-cursor %s`, optionString(o.v))
+}
+
+// Specifies the mouse cursor to be used for the widget.
+// The value may have any of the forms acceptable to 'Tk_GetCursor'.
+// In addition, if an empty string is specified, it indicates that the
+// widget should defer to its parent for cursor specification.
+func Cursor(value any) option {
+	return cursorOption{value}
+}
+
+type defaultOption struct{ v any }
+
+func (o defaultOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-default %s`, optionString(o.v))
+}
+
+// # Button default
+//
+// Specifies one of three states for the default ring: 'normal',
+// 'active', or 'disabled'.  In active state, the button is drawn
+// with the platform specific appearance for a default button.  In normal
+// state, the button is drawn with the platform specific appearance for a
+// non-default button, leaving enough space to draw the default button
+// appearance.  The normal and active states will result in buttons of
+// the same size.  In disabled state, the button is drawn with the
+// non-default button appearance without leaving space for the default
+// appearance.  The disabled state may result in a smaller button than
+// the active state.
+//
+// # TButton default
+//
+// May be set to one of  'normal', 'active', or 'disabled'.
+// In a dialog box, one button may be designated the
+func Default(value any) option {
+	return defaultOption{value}
+}
+
+type digitsOption struct{ v any }
+
+func (o digitsOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-digits %s`, optionString(o.v))
+}
+
+// # Scale digits
+//
+// An integer specifying how many significant digits should be retained
+// when converting the value of the scale to a string.
+// If the number is less than or equal to zero, then the scale picks
+// the smallest value that guarantees that every possible slider
+// position prints as a different string.
+func Digits(value any) option {
+	return digitsOption{value}
+}
+
+type directionOption struct{ v any }
+
+func (o directionOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-direction %s`, optionString(o.v))
+}
+
+// # Menubutton direction
+//
+// Specifies where the menu is going to be popup up. 'above' tries to
+// pop the menu above the menubutton. 'below' tries to pop the menu
+// below the menubutton. 'left' tries to pop the menu to the left of
+// the menubutton. 'right' tries to pop the menu to the right of the
+// menu button. 'flush' pops the menu directly over the menubutton.
+// In the case of 'above' or 'below', the direction will be
+// reversed if the menu would show offscreen.
+//
+// # TMenubutton direction
+//
+// Specifies where the menu is to be popped up relative
+// to the menubutton.
+// One of: 'above', 'below', 'left', 'right',
+// or 'flush'.  The default is 'below'.
+// 'flush' pops the menu up directly over the menubutton.
+func Direction(value any) option {
+	return directionOption{value}
+}
+
+type disabledbackgroundOption struct{ v any }
+
+func (o disabledbackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-disabledbackground %s`, optionString(o.v))
+}
+
+// # Entry disabledbackground
+//
+// Specifies the background color to use when the entry is disabled.  If
+// this option is the empty string, the normal background color is used.
+//
+// # Spinbox disabledbackground
+//
+// Specifies the background color to use when the spinbox is disabled.  If
+// this option is the empty string, the normal background color is used.
+func Disabledbackground(value any) option {
+	return disabledbackgroundOption{value}
+}
+
+type disabledforegroundOption struct{ v any }
+
+func (o disabledforegroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-disabledforeground %s`, optionString(o.v))
 }
 
 // Specifies foreground color to use when drawing a disabled element.
@@ -419,19 +1195,77 @@ func (o disabledforegroundOption) option(w *Window) string {
 // normal foreground color but they are dimmed by drawing them
 // with a stippled fill pattern.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # Entry disabledforeground
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// Specifies the foreground color to use when the entry is disabled.  If
+// this option is the empty string, the normal foreground color is used.
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-disabledforeground
-func Disabledforeground(value string) Option {
-	return disabledforegroundOption(value)
+// # Spinbox disabledforeground
+//
+// Specifies the foreground color to use when the spinbox is disabled.  If
+// this option is the empty string, the normal foreground color is used.
+func Disabledforeground(value any) option {
+	return disabledforegroundOption{value}
 }
 
-type exportselectionOption string
+type displaycolumnsOption struct{ v any }
 
-func (o exportselectionOption) option(w *Window) string {
-	return fmt.Sprintf(`-exportselection %s`, tclSafeString(string(o)))
+func (o displaycolumnsOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-displaycolumns %s`, optionString(o.v))
+}
+
+// # TTreeview displaycolumns
+//
+// A list of column identifiers
+// (either symbolic names or integer indices)
+// specifying which data columns are displayed
+// and the order in which they appear,
+// or the string '#all\fP.
+// If set to '#all\fP (the default),
+// all columns are shown in the order given.
+func Displaycolumns(value any) option {
+	return displaycolumnsOption{value}
+}
+
+type elementborderwidthOption struct{ v any }
+
+func (o elementborderwidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-elementborderwidth %s`, optionString(o.v))
+}
+
+// # Scrollbar elementborderwidth
+//
+// Specifies the width of borders drawn around the internal elements
+// of the scrollbar (the two arrows and the slider).  The value may
+// have any of the forms acceptable to 'Tk_GetPixels'.
+// If this value is less than zero, the value of the '-borderwidth'
+// option is used in its place.
+func Elementborderwidth(value any) option {
+	return elementborderwidthOption{value}
+}
+
+type endlineOption struct{ v any }
+
+func (o endlineOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-endline %s`, optionString(o.v))
+}
+
+// # Text endline
+//
+// Specifies an integer line index representing the line of the underlying
+// textual data store that should be just after the last line contained in
+// the widget. This allows a text widget to reflect only a portion of a
+// larger piece of text. Instead of an integer, the empty string can be
+// provided to this configuration option, which will configure the widget
+// to end at the very last line in the textual data store.
+func Endline(value any) option {
+	return endlineOption{value}
+}
+
+type exportselectionOption struct{ v any }
+
+func (o exportselectionOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-exportselection %s`, optionString(o.v))
 }
 
 // Specifies whether or not a selection in the widget should also be
@@ -444,108 +1278,305 @@ func (o exportselectionOption) option(w *Window) string {
 // requests when it has a selection.  The default is usually for widgets
 // to export selections.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TCombobox exportselection
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// Boolean value.
+// If set, the widget selection is linked to the X selection.
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-exportselection
-func Exportselection(value string) Option {
-	return exportselectionOption(value)
+// # TEntry exportselection
+//
+// A boolean value specifying whether or not
+// a selection in the widget should be linked to the X selection.
+// If the selection is exported, then selecting in the widget deselects
+// the current X selection, selecting outside the widget deselects any
+// widget selection, and the widget will respond to selection retrieval
+// requests when it has a selection.
+func Exportselection(value any) option {
+	return exportselectionOption{value}
 }
 
-type fontOption string
+type fgOption struct{ v any }
 
-func (o fontOption) option(w *Window) string {
-	return fmt.Sprintf(`-font %s`, tclSafeString(string(o)))
+func (o fgOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-fg %s`, optionString(o.v))
+}
+
+// Specifies the normal foreground color to use when displaying the widget.
+func Fg(value any) option {
+	return fgOption{value}
+}
+
+type fontOption struct{ v any }
+
+func (o fontOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-font %s`, optionString(o.v))
 }
 
 // Specifies the font to use when drawing text inside the widget.
 // The value may have any of the forms described in the 'font' manual
 // page under 'FONT DESCRIPTION'.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-font
-func Font(value string) Option {
-	return fontOption(value)
+func Font(value any) option {
+	return fontOption{value}
 }
 
-type foregroundOption string
+type foregroundOption struct{ v any }
 
-func (o foregroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-foreground %s`, tclSafeString(string(o)))
+func (o foregroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-foreground %s`, optionString(o.v))
 }
 
 // Specifies the normal foreground color to use when displaying the widget.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-foreground
-func Foreground(value string) Option {
-	return foregroundOption(value)
+func Foreground(value any) option {
+	return foregroundOption{value}
 }
 
-type fgOption string
+type formatOption struct{ v any }
 
-func (o fgOption) option(w *Window) string {
-	return fmt.Sprintf(`-fg %s`, tclSafeString(string(o)))
+func (o formatOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-format %s`, optionString(o.v))
 }
 
-// Specifies the normal foreground color to use when displaying the widget.
+// # Spinbox format
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// Specifies an alternate format to use when setting the string value
+// when using the '-from' and '-to' range.
+// This must be a format specifier of the form '%<pad>.<pad>f',
+// as it will format a floating-point number.
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// # TSpinbox format
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-fg
-func Fg(value string) Option {
-	return fgOption(value)
+// Specifies an alternate format to use when setting the string value
+// when using the '-from' and '-to' range.
+// This must be a format specifier of the form '%<pad>.<pad>f',
+// as it will format a floating-point number.
+func Format(value any) option {
+	return formatOption{value}
 }
 
-type highlightbackgroundOption string
+type fromOption struct{ v any }
 
-func (o highlightbackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-highlightbackground %s`, tclSafeString(string(o)))
+func (o fromOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-from %s`, optionString(o.v))
+}
+
+// # Scale from
+//
+// A real value corresponding to the left or top end of the scale.
+//
+// # Spinbox from
+//
+// A floating-point value corresponding to the lowest value for a spinbox, to
+// be used in conjunction with '-to' and '-increment'.  When all
+// are specified correctly, the spinbox will use these values to control its
+// contents. If this value is greater than the '-to' option, then
+// '-from' and '-to' values are automatically swapped.
+// If '-values' is specified, it supersedes this option.
+//
+// # TScale from
+//
+// A real value corresponding to the left or top end of the scale.
+//
+// # TSpinbox from
+//
+// A floating-point value specifying the lowest value for the spinbox. This is
+// used in conjunction with '-to' and '-increment' to set a numerical
+// range.
+func From(value any) option {
+	return fromOption{value}
+}
+
+type handlepadOption struct{ v any }
+
+func (o handlepadOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-handlepad %s`, optionString(o.v))
+}
+
+// # Panedwindow handlepad
+//
+// When sash handles are drawn, specifies the distance from the top or
+// left end of the sash (depending on the orientation of the widget) at
+// which to draw the handle.  May be any value accepted by 'Tk_GetPixels'.
+func Handlepad(value any) option {
+	return handlepadOption{value}
+}
+
+type handlesizeOption struct{ v any }
+
+func (o handlesizeOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-handlesize %s`, optionString(o.v))
+}
+
+// # Panedwindow handlesize
+//
+// Specifies the side length of a sash handle.  Handles are always
+// drawn as squares.  May be any value accepted by 'Tk_GetPixels'.
+func Handlesize(value any) option {
+	return handlesizeOption{value}
+}
+
+type heightOption struct{ v any }
+
+func (o heightOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-height %s`, optionString(o.v))
+}
+
+// # Button height
+//
+// Specifies a desired height for the button.
+// If an image or bitmap is being displayed in the button then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in lines of text.
+// If this option is not specified, the button's desired height is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Canvas height
+//
+// Specifies a desired window height that the canvas widget should request from
+// its geometry manager. The value may be specified in any
+// of the forms described in the 'COORDINATES' section below.
+//
+// # Checkbutton height
+//
+// Specifies a desired height for the button.
+// If an image or bitmap is being displayed in the button then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in lines of text.
+// If this option is not specified, the button's desired height is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Frame height
+//
+// Specifies the desired height for the window in any of the forms
+// acceptable to 'Tk_GetPixels'.  If this option is less than or equal
+// to zero then the window will not request any size at all.  Note that this
+// sets the total height of the frame, any '-borderwidth' or similar is
+// not added.  Normally '-height' should not be used if a propagating
+// geometry manager, such as 'grid' or 'pack', is used within the
+// frame since the geometry manager will override the height of the frame.
+//
+// # Label height
+//
+// Specifies a desired height for the label.
+// If an image or bitmap is being displayed in the label then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in lines of text.
+// If this option is not specified, the label's desired height is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Labelframe height
+//
+// Specifies the desired height for the window in any of the forms
+// acceptable to 'Tk_GetPixels'.
+// If this option is less than or equal to zero then the window will
+// not request any size at all.
+//
+// # Listbox height
+//
+// Specifies the desired height for the window, in lines.
+// If zero or less, then the desired height for the window is made just
+// large enough to hold all the elements in the listbox.
+//
+// # Menubutton height
+//
+// Specifies a desired height for the menubutton.
+// If an image or bitmap is being displayed in the menubutton then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in lines of text.
+// If this option is not specified, the menubutton's desired height is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Panedwindow height
+//
+// Specifies a desired height for the overall panedwindow widget. May be any
+// value accepted by 'Tk_GetPixels'. If an empty string, the widget will be
+// made high enough to allow all contained widgets to have their natural height.
+//
+// # Radiobutton height
+//
+// Specifies a desired height for the button.
+// If an image or bitmap is being displayed in the button then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in lines of text.
+// If this option is not specified, the button's desired height is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Text height
+//
+// Specifies the desired height for the window, in units of characters in the
+// font given by the '-font' option. Must be at least one.
+//
+// # Toplevel height
+//
+// Specifies the desired height for the window in any of the forms
+// acceptable to 'Tk_GetPixels'.
+// If this option is less than or equal to zero then the window will
+// not request any size at all.
+//
+// # TCombobox height
+//
+// Specifies the height of the pop-down listbox, in rows.
+//
+// # TFrame height
+//
+// If specified, the widget's requested height in pixels.
+//
+// # TLabelframe height
+//
+// If specified, the widget's requested height in pixels.
+// (See 'ttk::frame(n)' for further notes on '-width' and
+// '-height').
+//
+// # TNotebook height
+//
+// If present and greater than zero,
+// specifies the desired height of the pane area
+// (not including internal padding or tabs).
+// Otherwise, the maximum height of all panes is used.
+//
+// # TPanedwindow height
+//
+// If present and greater than zero,
+// specifies the desired height of the widget in pixels.
+// Otherwise, the requested height is determined by the height
+// of the managed windows.
+//
+// # TTreeview height
+//
+// Specifies the number of rows which should be visible.
+// Note that
+// the requested width is determined from the sum of the column widths.
+func Height(value any) option {
+	return heightOption{value}
+}
+
+type highlightbackgroundOption struct{ v any }
+
+func (o highlightbackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-highlightbackground %s`, optionString(o.v))
 }
 
 // Specifies the color to display in the traversal highlight region when
 // the widget does not have the input focus.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-highlightbackground
-func Highlightbackground(value string) Option {
-	return highlightbackgroundOption(value)
+func Highlightbackground(value any) option {
+	return highlightbackgroundOption{value}
 }
 
-type highlightcolorOption string
+type highlightcolorOption struct{ v any }
 
-func (o highlightcolorOption) option(w *Window) string {
-	return fmt.Sprintf(`-highlightcolor %s`, tclSafeString(string(o)))
+func (o highlightcolorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-highlightcolor %s`, optionString(o.v))
 }
 
 // Specifies the color to use for the traversal highlight rectangle that is
 // drawn around the widget when it has the input focus.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-highlightcolor
-func Highlightcolor(value string) Option {
-	return highlightcolorOption(value)
+func Highlightcolor(value any) option {
+	return highlightcolorOption{value}
 }
 
-type highlightthicknessOption string
+type highlightthicknessOption struct{ v any }
 
-func (o highlightthicknessOption) option(w *Window) string {
-	return fmt.Sprintf(`-highlightthickness %s`, tclSafeString(string(o)))
+func (o highlightthicknessOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-highlightthickness %s`, optionString(o.v))
 }
 
 // Specifies a non-negative value indicating the width of the highlight
@@ -553,20 +1584,14 @@ func (o highlightthicknessOption) option(w *Window) string {
 // input focus.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
 // If the value is zero, no focus highlight is drawn around the widget.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-highlightthickness
-func Highlightthickness(value string) Option {
-	return highlightthicknessOption(value)
+func Highlightthickness(value any) option {
+	return highlightthicknessOption{value}
 }
 
-type imageOption string
+type imageOption struct{ v any }
 
-func (o imageOption) option(w *Window) string {
-	return fmt.Sprintf(`-image %s`, tclSafeString(string(o)))
+func (o imageOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-image %s`, optionString(o.v))
 }
 
 // Specifies an image to display in the widget, which must have been
@@ -577,94 +1602,150 @@ func (o imageOption) option(w *Window) string {
 // the '-image' option may be reset to an empty string to re-enable
 // a bitmap or text display.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TNotebook image
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-image
-func Image(value string) Option {
-	return imageOption(value)
+// Specifies an image to display in the tab.
+// See 'ttk_widget(n)' for details.
+func Image(value any) option {
+	return imageOption{value}
 }
 
-type insertbackgroundOption string
+type inactiveselectbackgroundOption struct{ v any }
 
-func (o insertbackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-insertbackground %s`, tclSafeString(string(o)))
+func (o inactiveselectbackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-inactiveselectbackground %s`, optionString(o.v))
+}
+
+// # Text inactiveselectbackground
+//
+// Specifies the colour to use for the selection (the 'sel' tag) when the
+// window does not have the input focus. If empty, '{}', then no selection is
+// shown when the window does not have the focus.
+func Inactiveselectbackground(value any) option {
+	return inactiveselectbackgroundOption{value}
+}
+
+type incrementOption struct{ v any }
+
+func (o incrementOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-increment %s`, optionString(o.v))
+}
+
+// # Spinbox increment
+//
+// A floating-point value specifying the increment.  When used with
+// '-from' and '-to', the value in the widget will be adjusted by
+// '-increment' when a spin button is pressed (up adds the value,
+// down subtracts the value).
+//
+// # TSpinbox increment
+//
+// A floating-point value specifying the change in value to be applied each
+// time one of the widget spin buttons is pressed. The up button applies a
+// positive increment, the down button applies a negative increment.
+func Increment(value any) option {
+	return incrementOption{value}
+}
+
+type indicatoronOption struct{ v any }
+
+func (o indicatoronOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-indicatoron %s`, optionString(o.v))
+}
+
+// # Checkbutton indicatoron
+//
+// Specifies whether or not the indicator should be drawn.  Must be a
+// proper boolean value.  If false, the '-relief' option is
+// ignored and the widget's relief is always sunken if the widget is
+// selected and raised otherwise.
+//
+// # Menubutton indicatoron
+//
+// The value must be a proper boolean value.  If it is true then
+// a small indicator rectangle will be displayed on the right side
+// of the menubutton and the default menu bindings will treat this
+// as an option menubutton.  If false then no indicator will be
+// displayed.
+//
+// # Radiobutton indicatoron
+//
+// Specifies whether or not the indicator should be drawn.  Must be a
+// proper boolean value.  If false, the '-relief' option is
+// ignored and the widget's relief is always sunken if the widget is
+// selected and raised otherwise.
+func Indicatoron(value any) option {
+	return indicatoronOption{value}
+}
+
+type insertbackgroundOption struct{ v any }
+
+func (o insertbackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-insertbackground %s`, optionString(o.v))
 }
 
 // Specifies the color to use as background in the area covered by the
 // insertion cursor.  This color will normally override either the normal
 // background for the widget (or the selection background if the insertion
 // cursor happens to fall in the selection).
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertbackground
-func Insertbackground(value string) Option {
-	return insertbackgroundOption(value)
+func Insertbackground(value any) option {
+	return insertbackgroundOption{value}
 }
 
-type insertborderwidthOption string
+type insertborderwidthOption struct{ v any }
 
-func (o insertborderwidthOption) option(w *Window) string {
-	return fmt.Sprintf(`-insertborderwidth %s`, tclSafeString(string(o)))
+func (o insertborderwidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-insertborderwidth %s`, optionString(o.v))
 }
 
 // Specifies a non-negative value indicating the width
 // of the 3-D border to draw around the insertion cursor.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertborderwidth
-func Insertborderwidth(value string) Option {
-	return insertborderwidthOption(value)
+func Insertborderwidth(value any) option {
+	return insertborderwidthOption{value}
 }
 
-type insertofftimeOption int
+type insertofftimeOption struct{ v any }
 
-func (o insertofftimeOption) option(w *Window) string {
-	return fmt.Sprintf(`-insertofftime %v`, o)
+func (o insertofftimeOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-insertofftime %s`, optionString(o.v))
 }
 
 // Specifies a non-negative integer value indicating the number of
 // milliseconds the insertion cursor should remain
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertofftime
-func Insertofftime(value int) Option {
-	return insertofftimeOption(value)
+func Insertofftime(value any) option {
+	return insertofftimeOption{value}
 }
 
-type insertontimeOption int
+type insertontimeOption struct{ v any }
 
-func (o insertontimeOption) option(w *Window) string {
-	return fmt.Sprintf(`-insertontime %v`, o)
+func (o insertontimeOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-insertontime %s`, optionString(o.v))
 }
 
 // Specifies a non-negative integer value indicating the number of
 // milliseconds the insertion cursor should remain
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertontime
-func Insertontime(value int) Option {
-	return insertontimeOption(value)
+func Insertontime(value any) option {
+	return insertontimeOption{value}
 }
 
-type insertwidthOption string
+type insertunfocussedOption struct{ v any }
 
-func (o insertwidthOption) option(w *Window) string {
-	return fmt.Sprintf(`-insertwidth %s`, tclSafeString(string(o)))
+func (o insertunfocussedOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-insertunfocussed %s`, optionString(o.v))
+}
+
+// # Text insertunfocussed
+//
+// 8.6
+func Insertunfocussed(value any) option {
+	return insertunfocussedOption{value}
+}
+
+type insertwidthOption struct{ v any }
+
+func (o insertwidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-insertwidth %s`, optionString(o.v))
 }
 
 // Specifies a  value indicating the total width of the insertion cursor.
@@ -673,20 +1754,61 @@ func (o insertwidthOption) option(w *Window) string {
 // cursor (using the '-insertborderwidth' option), the border
 // will be drawn inside the width specified by the '-insertwidth'
 // option.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-insertwidth
-func Insertwidth(value string) Option {
-	return insertwidthOption(value)
+func Insertwidth(value any) option {
+	return insertwidthOption{value}
 }
 
-type jumpOption bool
+// See also [Event handlers]
+//
+// # Entry invalidcommand
+//
+// Specifies a script to eval when '-validatecommand' returns 0.
+// Setting it to {} disables this feature (the default).  The best use
+// of this option is to set it to 'bell'.  See 'VALIDATION'
+// below for more information.
+//
+// # Spinbox invalidcommand
+//
+// Specifies a script to eval when '-validatecommand' returns 0.  Setting
+// it to an empty string disables this feature (the default).  The best use of
+// this option is to set it to 'bell'.  See 'VALIDATION' below for
+// more information.
+//
+// # TEntry invalidcommand
+//
+// A script template to evaluate whenever the '-validatecommand' returns 0.
+// See 'VALIDATION' below for more information.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Invalidcommand(args ...any) option {
+	return newEventHandler("-invalidcommand", args...)
+}
 
-func (o jumpOption) option(w *Window) string {
-	return fmt.Sprintf(`-jump %v`, o)
+// See also [Event handlers]
+//
+// # Entry invcmd
+//
+// Specifies a script to eval when '-validatecommand' returns 0.
+// Setting it to {} disables this feature (the default).  The best use
+// of this option is to set it to 'bell'.  See 'VALIDATION'
+// below for more information.
+//
+// # Spinbox invcmd
+//
+// Specifies a script to eval when '-validatecommand' returns 0.  Setting
+// it to an empty string disables this feature (the default).  The best use of
+// this option is to set it to 'bell'.  See 'VALIDATION' below for
+// more information.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Invcmd(args ...any) option {
+	return newEventHandler("-invcmd", args...)
+}
+
+type jumpOption struct{ v any }
+
+func (o jumpOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-jump %s`, optionString(o.v))
 }
 
 // For widgets with a slider that can be dragged to adjust a value,
@@ -699,20 +1821,14 @@ func (o jumpOption) option(w *Window) string {
 // If the value is true, updates are delayed until the mouse button
 // is released to end the drag;  at that point a single notification
 // is made (the value
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-jump
-func Jump(value bool) Option {
-	return jumpOption(value)
+func Jump(value any) option {
+	return jumpOption{value}
 }
 
-type justifyOption string
+type justifyOption struct{ v any }
 
-func (o justifyOption) option(w *Window) string {
-	return fmt.Sprintf(`-justify %s`, tclSafeString(string(o)))
+func (o justifyOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-justify %s`, optionString(o.v))
 }
 
 // When there are multiple lines of text displayed in a widget, this
@@ -722,19 +1838,299 @@ func (o justifyOption) option(w *Window) string {
 // means that the lines' centers are aligned, and 'right' means
 // that the lines' right edges line up.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # Message justify
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// Specifies how to justify lines of text.
+// Must be one of 'left', 'center', or 'right'.  Defaults
+// to 'left'.
+// This option works together with the '-anchor', '-aspect',
+// '-padx', '-pady', and '-width' options to provide a variety
+// of arrangements of the text within the window.
+// The '-aspect' and '-width' options determine the amount of
+// screen space needed to display the text.
+// The '-anchor', '-padx', and '-pady' options determine where this
+// rectangular area is displayed within the widget's window, and the
+// '-justify' option determines how each line is displayed within that
+// rectangular region.
+// For example, suppose '-anchor' is 'e' and '-justify' is
+// 'left', and that the message window is much larger than needed
+// for the text.
+// The text will be displayed so that the left edges of all the lines
+// line up and the right edge of the longest line is '-padx' from
+// the right side of the window;  the entire text block will be centered
+// in the vertical span of the window.
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-justify
-func Justify(value string) Option {
-	return justifyOption(value)
+// # TCombobox justify
+//
+// Specifies how the text is aligned within the widget.
+// Must be one of 'left', 'center', or 'right'.
+//
+// # TEntry justify
+//
+// Specifies how the text is aligned within the entry widget.
+// One of 'left', 'center', or 'right'.
+func Justify(value any) option {
+	return justifyOption{value}
 }
 
-type orientOption string
+type labelOption struct{ v any }
 
-func (o orientOption) option(w *Window) string {
-	return fmt.Sprintf(`-orient %s`, tclSafeString(string(o)))
+func (o labelOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-label %s`, optionString(o.v))
+}
+
+// # Scale lbl
+//
+// A string to display as a label for the scale.  For
+// vertical scales the label is displayed just to the right of the
+// top end of the scale.  For horizontal scales the label is displayed
+// just above the left end of the scale.  If the option is specified
+// as an empty string, no label is displayed.
+func Lbl(value any) option {
+	return labelOption{value}
+}
+
+type labelanchorOption struct{ v any }
+
+func (o labelanchorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-labelanchor %s`, optionString(o.v))
+}
+
+// # Labelframe labelanchor
+//
+// Specifies where to place the label. A label is only displayed if the
+// '-text' option is not the empty string.
+// Valid values for this option are (listing them clockwise)
+// 'nw', 'n', 'ne', 'en', 'e', 'es',
+// 'se', 's','sw', 'ws', 'w' and 'wn'.
+// The default value is 'nw'.
+//
+// # TLabelframe labelanchor
+//
+// Specifies where to place the label.
+// Allowed values are (clockwise from the top upper left corner):
+// 'nw', 'n', 'ne', 'en', 'e', 'es',
+// 'se', 's','sw', 'ws', 'w' and 'wn'.
+// The default value is theme-dependent.
+func Labelanchor(value any) option {
+	return labelanchorOption{value}
+}
+
+type labelwidgetOption struct{ v any }
+
+func (o labelwidgetOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-labelwidget %s`, optionString(o.v))
+}
+
+// # Labelframe labelwidget
+//
+// Specifies a widget to use as label. This overrides any '-text'
+// option. The widget must exist before being used as '-labelwidget'
+// and if it is not a descendant of this window, it will be raised
+// above it in the stacking order.
+//
+// # TLabelframe labelwidget
+//
+// The name of a widget to use for the label.
+// If set, overrides the '-text' option.
+// The '-labelwidget' must be a child of the 'labelframe' widget
+// or one of the 'labelframe”s ancestors, and must belong to the
+// same top-level widget as the 'labelframe'.
+func Labelwidget(value any) option {
+	return labelwidgetOption{value}
+}
+
+type lengthOption struct{ v any }
+
+func (o lengthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-length %s`, optionString(o.v))
+}
+
+// # Scale length
+//
+// Specifies the desired long dimension of the scale in screen units
+// (i.e. any of the forms acceptable to 'Tk_GetPixels').
+// For vertical scales this is the scale's height;  for horizontal scales
+// it is the scale's width.
+//
+// # TProgressbar length
+//
+// Specifies the length of the long axis of the progress bar
+// (width if horizontal, height if vertical). The value may have any of the forms
+// acceptable to 'Tk_GetPixels'.
+//
+// # TScale length
+//
+// Specifies the desired long dimension of the scale in screen units (i.e. any of
+// the forms acceptable to 'Tk_GetPixels'). For vertical scales this is the
+// scale's height; for horizontal scales it is the scale's width.
+func Length(value any) option {
+	return lengthOption{value}
+}
+
+type listvariableOption struct{ v any }
+
+func (o listvariableOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-listvariable %s`, optionString(o.v))
+}
+
+// # Listbox listvariable
+//
+// Specifies the name of a global variable.  The value of the variable is a list to
+// be displayed inside the widget; if the variable value changes then the
+// widget will automatically update itself to reflect the new value.  Attempts
+// to assign a variable with an invalid list value to '-listvariable'
+// will cause an error.  Attempts to unset a variable in use as a
+// '-listvariable' will fail but will not generate an error.
+func Listvariable(value any) option {
+	return listvariableOption{value}
+}
+
+type maximumOption struct{ v any }
+
+func (o maximumOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-maximum %s`, optionString(o.v))
+}
+
+// # TProgressbar maximum
+//
+// A floating point number specifying the maximum '-value'.
+// Defaults to 100.
+func Maximum(value any) option {
+	return maximumOption{value}
+}
+
+type maxundoOption struct{ v any }
+
+func (o maxundoOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-maxundo %s`, optionString(o.v))
+}
+
+// # Text maxundo
+//
+// Specifies the maximum number of compound undo actions on the undo stack. A
+// zero or a negative value imply an unlimited undo stack.
+func Maxundo(value any) option {
+	return maxundoOption{value}
+}
+
+type menuOption struct{ v any }
+
+func (o menuOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-menu %s`, optionString(o.v))
+}
+
+// # Menubutton mnu
+//
+// Specifies the path name of the menu associated with this menubutton.
+// The menu must be a child of the menubutton.
+//
+// # Toplevel mnu
+//
+// Specifies a menu widget to be used as a menubar. On the Macintosh, the
+// menubar will be displayed across the top of the main monitor. On
+// Microsoft Windows and all UNIX platforms, the menu will appear across
+// the toplevel window as part of the window dressing maintained by the
+// window manager.
+//
+// # TMenubutton mnu
+//
+// Specifies the path name of the menu associated with the menubutton.
+// To be on the safe side, the menu ought to be a direct child of the
+// menubutton.
+func Mnu(value any) option {
+	return menuOption{value}
+}
+
+type modeOption struct{ v any }
+
+func (o modeOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-mode %s`, optionString(o.v))
+}
+
+// # TProgressbar mode
+//
+// One of 'determinate' or 'indeterminate'.
+func Mode(value any) option {
+	return modeOption{value}
+}
+
+type offreliefOption struct{ v any }
+
+func (o offreliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-offrelief %s`, optionString(o.v))
+}
+
+// # Checkbutton offrelief
+//
+// Specifies the relief for the checkbutton when the indicator is not drawn and
+// the checkbutton is off.  The default value is
+//
+// # Radiobutton offrelief
+//
+// Specifies the relief for the checkbutton when the indicator is not drawn and
+// the checkbutton is off.  The default value is
+func Offrelief(value any) option {
+	return offreliefOption{value}
+}
+
+type offvalueOption struct{ v any }
+
+func (o offvalueOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-offvalue %s`, optionString(o.v))
+}
+
+// # Checkbutton offvalue
+//
+// Specifies value to store in the button's associated variable whenever
+// this button is deselected.  Defaults to
+//
+// # TCheckbutton offvalue
+//
+// The value to store in the associated '-variable'
+// when the widget is deselected.  Defaults to '0'.
+func Offvalue(value any) option {
+	return offvalueOption{value}
+}
+
+type onvalueOption struct{ v any }
+
+func (o onvalueOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-onvalue %s`, optionString(o.v))
+}
+
+// # Checkbutton onvalue
+//
+// Specifies value to store in the button's associated variable whenever
+// this button is selected.  Defaults to
+//
+// # TCheckbutton onvalue
+//
+// The value to store in the associated '-variable'
+// when the widget is selected.  Defaults to '1'.
+func Onvalue(value any) option {
+	return onvalueOption{value}
+}
+
+type opaqueresizeOption struct{ v any }
+
+func (o opaqueresizeOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-opaqueresize %s`, optionString(o.v))
+}
+
+// # Panedwindow opaqueresize
+//
+// Specifies whether panes should be resized as a sash is moved (true),
+// or if resizing should be deferred until the sash is placed (false).
+// In the latter case, a
+func Opaqueresize(value any) option {
+	return opaqueresizeOption{value}
+}
+
+type orientOption struct{ v any }
+
+func (o orientOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-orient %s`, optionString(o.v))
 }
 
 // For widgets that can lay themselves out with either a horizontal
@@ -742,19 +2138,104 @@ func (o orientOption) option(w *Window) string {
 // which orientation should be used.  Must be either 'horizontal'
 // or 'vertical' or an abbreviation of one of these.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TPanedwindow orient
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// Specifies the orientation of the window.
+// If 'vertical', subpanes are stacked top-to-bottom;
+// if 'horizontal', subpanes are stacked left-to-right.
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-orient
-func Orient(value string) Option {
-	return orientOption(value)
+// # TProgressbar orient
+//
+// One of 'horizontal' or 'vertical'.
+// Specifies the orientation of the progress bar.
+//
+// # TScale orient
+//
+// Specifies which orientation whether the widget should be laid out horizontally
+// or vertically. Must be either 'horizontal' or 'vertical' or an
+// abbreviation of one of these.
+//
+// # TScrollbar orient
+//
+// One of 'horizontal' or 'vertical'.
+// Specifies the orientation of the scrollbar.
+//
+// # TSeparator orient
+//
+// One of 'horizontal' or 'vertical'.
+// Specifies the orientation of the separator.
+func Orient(value any) option {
+	return orientOption{value}
 }
 
-type padxOption string
+type overreliefOption struct{ v any }
 
-func (o padxOption) option(w *Window) string {
-	return fmt.Sprintf(`-padx %s`, tclSafeString(string(o)))
+func (o overreliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-overrelief %s`, optionString(o.v))
+}
+
+// # Button overrelief
+//
+// Specifies an alternative relief for the button, to be used when the
+// mouse cursor is over the widget.  This option can be used to make
+// toolbar buttons, by configuring '-relief flat -overrelief
+// raised'.  If the value of this option is the empty string, then no
+// alternative relief is used when the mouse cursor is over the button.
+// The empty string is the default value.
+//
+// # Checkbutton overrelief
+//
+// Specifies an alternative relief for the checkbutton, to be used when the
+// mouse cursor is over the widget.  This option can be used to make
+// toolbar buttons, by configuring '-relief flat -overrelief
+// raised'.  If the value of this option is the empty string, then no
+// alternative relief is used when the mouse cursor is over the checkbutton.
+// The empty string is the default value.
+//
+// # Radiobutton overrelief
+//
+// Specifies an alternative relief for the radiobutton, to be used when the
+// mouse cursor is over the widget.  This option can be used to make
+// toolbar buttons, by configuring '-relief flat -overrelief
+// raised'.  If the value of this option is the empty string, then no
+// alternative relief is used when the mouse cursor is over the radiobutton.
+// The empty string is the default value.
+func Overrelief(value any) option {
+	return overreliefOption{value}
+}
+
+type paddingOption struct{ v any }
+
+func (o paddingOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-padding %s`, optionString(o.v))
+}
+
+// # TNotebook padding
+//
+// Specifies the amount of extra space to add around the outside
+// of the notebook.
+// The padding is a list of up to four length specifications
+// 'left top right bottom'.
+// If fewer than four elements are specified,
+// 'bottom' defaults to 'top',
+// 'right' defaults to 'left', and
+// 'top' defaults to 'left'.
+// In other words, a list of three numbers specify the left, vertical, and right
+// padding; a list of two numbers specify the horizontal and the vertical padding;
+// a single number specifies the same padding all the way around the widget.
+//
+// # TNotebook padding
+//
+// Specifies the amount of extra space to add between the notebook and this pane.
+// Syntax is the same as for the widget '-padding' option.
+func Padding(value any) option {
+	return paddingOption{value}
+}
+
+type padxOption struct{ v any }
+
+func (o padxOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-padx %s`, optionString(o.v))
 }
 
 // Specifies a non-negative value indicating how much extra space
@@ -768,20 +2249,14 @@ func (o padxOption) option(w *Window) string {
 // Most widgets only use this option for padding text:  if they are
 // displaying a bitmap or image, then they usually ignore padding
 // options.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-padx
-func Padx(value string) Option {
-	return padxOption(value)
+func Padx(value any) option {
+	return padxOption{value}
 }
 
-type padyOption string
+type padyOption struct{ v any }
 
-func (o padyOption) option(w *Window) string {
-	return fmt.Sprintf(`-pady %s`, tclSafeString(string(o)))
+func (o padyOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-pady %s`, optionString(o.v))
 }
 
 // Specifies a non-negative value indicating how much extra space
@@ -795,57 +2270,140 @@ func (o padyOption) option(w *Window) string {
 // Most widgets only use this option for padding text:  if they are
 // displaying a bitmap or image, then they usually ignore padding
 // options.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-pady
-func Pady(value string) Option {
-	return padyOption(value)
+func Pady(value any) option {
+	return padyOption{value}
 }
 
-type placeholderOption string
+type phaseOption struct{ v any }
 
-func (o placeholderOption) option(w *Window) string {
-	return fmt.Sprintf(`-placeholder %s`, tclSafeString(string(o)))
+func (o phaseOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-phase %s`, optionString(o.v))
+}
+
+// # TProgressbar phase
+//
+// Read-only option.
+// The widget periodically increments the value of this option
+// whenever the '-value' is greater than 0 and,
+// in 'determinate' mode, less than '-maximum'.
+// This option may be used by the current theme
+// to provide additional animation effects.
+func Phase(value any) option {
+	return phaseOption{value}
+}
+
+type placeholderOption struct{ v any }
+
+func (o placeholderOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-placeholder %s`, optionString(o.v))
 }
 
 // Specifies a help text string to display if no text is otherwise displayed,
 // that is when the widget is empty. The placeholder text is displayed using
 // the values of the '-font' and '-justify' options.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-placeholder
-func Placeholder(value string) Option {
-	return placeholderOption(value)
+func Placeholder(value any) option {
+	return placeholderOption{value}
 }
 
-type placeholderforegroundOption string
+type placeholderforegroundOption struct{ v any }
 
-func (o placeholderforegroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-placeholderforeground %s`, tclSafeString(string(o)))
+func (o placeholderforegroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-placeholderforeground %s`, optionString(o.v))
 }
 
 // Specifies the foreground color to use when the placeholder text is
 // displayed. The default color is platform-specific.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-placeholderforeground
-func Placeholderforeground(value string) Option {
-	return placeholderforegroundOption(value)
+func Placeholderforeground(value any) option {
+	return placeholderforegroundOption{value}
 }
 
-type reliefOption string
+// See also [Event handlers]
+//
+// # Menu postcommand
+//
+// If this option is specified then it provides a Tcl command to execute
+// each time the menu is posted.  The command is invoked by the 'post'
+// widget command before posting the menu. Note that in Tk 8.0 on Macintosh
+// and Windows, all post-commands in a system of menus are executed before any
+// of those menus are posted.
+// This is due to the limitations in the individual platforms' menu managers.
+//
+// # TCombobox postcommand
+//
+// A Tcl script to evaluate immediately before displaying the listbox.
+// The '-postcommand' script may specify the '-values' to display.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Postcommand(args ...any) option {
+	return newEventHandler("-postcommand", args...)
+}
 
-func (o reliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-relief %s`, tclSafeString(string(o)))
+type proxybackgroundOption struct{ v any }
+
+func (o proxybackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-proxybackground %s`, optionString(o.v))
+}
+
+// # Panedwindow proxybackground
+//
+// Background color to use when drawing the proxy. If an empty string, the
+// value of the '-background' option will be used.
+func Proxybackground(value any) option {
+	return proxybackgroundOption{value}
+}
+
+type proxyborderwidthOption struct{ v any }
+
+func (o proxyborderwidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-proxyborderwidth %s`, optionString(o.v))
+}
+
+// # Panedwindow proxyborderwidth
+//
+// Specifies the borderwidth of the proxy. May be any value accepted by
+// 'Tk_GetPixels'.
+func Proxyborderwidth(value any) option {
+	return proxyborderwidthOption{value}
+}
+
+type proxyreliefOption struct{ v any }
+
+func (o proxyreliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-proxyrelief %s`, optionString(o.v))
+}
+
+// # Panedwindow proxyrelief
+//
+// Relief to use when drawing the proxy. May be any of the standard Tk
+// relief values. If an empty string, the value of the '-sashrelief'
+// option will be used.
+func Proxyrelief(value any) option {
+	return proxyreliefOption{value}
+}
+
+type readonlybackgroundOption struct{ v any }
+
+func (o readonlybackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-readonlybackground %s`, optionString(o.v))
+}
+
+// # Entry readonlybackground
+//
+// Specifies the background color to use when the entry is readonly.  If
+// this option is the empty string, the normal background color is used.
+//
+// # Spinbox readonlybackground
+//
+// Specifies the background color to use when the spinbox is readonly.  If
+// this option is the empty string, the normal background color is used.
+func Readonlybackground(value any) option {
+	return readonlybackgroundOption{value}
+}
+
+type reliefOption struct{ v any }
+
+func (o reliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-relief %s`, optionString(o.v))
 }
 
 // Specifies the 3-D effect desired for the widget.  Acceptable
@@ -857,112 +2415,293 @@ func (o reliefOption) option(w *Window) string {
 // the widget should appear to protrude from the screen, relative to
 // the exterior of the widget.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TFrame relief
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// One of the standard Tk border styles:
+// 'flat', 'groove', 'raised', 'ridge',
+// 'solid', or 'sunken'.
+// Defaults to 'flat'.
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-relief
-func Relief(value string) Option {
-	return reliefOption(value)
+// # TLabel relief
+//
+// \" Rewrite this:
+func Relief(value any) option {
+	return reliefOption{value}
 }
 
-type repeatdelayOption string
+type repeatdelayOption struct{ v any }
 
-func (o repeatdelayOption) option(w *Window) string {
-	return fmt.Sprintf(`-repeatdelay %s`, tclSafeString(string(o)))
+func (o repeatdelayOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-repeatdelay %s`, optionString(o.v))
 }
 
 // Specifies the number of milliseconds a button or key must be held
 // down before it begins to auto-repeat.  Used, for example, on the
 // up- and down-arrows in scrollbars.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-repeatdelay
-func Repeatdelay(value string) Option {
-	return repeatdelayOption(value)
+func Repeatdelay(value any) option {
+	return repeatdelayOption{value}
 }
 
-type repeatintervalOption string
+type repeatintervalOption struct{ v any }
 
-func (o repeatintervalOption) option(w *Window) string {
-	return fmt.Sprintf(`-repeatinterval %s`, tclSafeString(string(o)))
+func (o repeatintervalOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-repeatinterval %s`, optionString(o.v))
 }
 
 // Used in conjunction with '-repeatdelay':  once auto-repeat
 // begins, this option determines the number of milliseconds between
 // auto-repeats.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-repeatinterval
-func Repeatinterval(value string) Option {
-	return repeatintervalOption(value)
+func Repeatinterval(value any) option {
+	return repeatintervalOption{value}
 }
 
-type selectbackgroundOption string
+type resolutionOption struct{ v any }
 
-func (o selectbackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-selectbackground %s`, tclSafeString(string(o)))
+func (o resolutionOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-resolution %s`, optionString(o.v))
+}
+
+// # Scale resolution
+//
+// A real value specifying the resolution for the scale.
+// If this value is greater than zero then the scale's value will always be
+// rounded to an even multiple of this value, as will
+// the endpoints of the scale.  If the value is less than zero then no
+// rounding occurs.  Defaults to 1 (i.e., the value will be integral).
+func Resolution(value any) option {
+	return resolutionOption{value}
+}
+
+type sashcursorOption struct{ v any }
+
+func (o sashcursorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-sashcursor %s`, optionString(o.v))
+}
+
+// # Panedwindow sashcursor
+//
+// Mouse cursor to use when over a sash.  If null,
+// 'sb_h_double_arrow' will be used for horizontal panedwindows, and
+// 'sb_v_double_arrow' will be used for vertical panedwindows.
+func Sashcursor(value any) option {
+	return sashcursorOption{value}
+}
+
+type sashpadOption struct{ v any }
+
+func (o sashpadOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-sashpad %s`, optionString(o.v))
+}
+
+// # Panedwindow sashpad
+//
+// Specifies the amount of padding to leave of each side of a sash.  May
+// be any value accepted by 'Tk_GetPixels'.
+func Sashpad(value any) option {
+	return sashpadOption{value}
+}
+
+type sashreliefOption struct{ v any }
+
+func (o sashreliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-sashrelief %s`, optionString(o.v))
+}
+
+// # Panedwindow sashrelief
+//
+// Relief to use when drawing a sash.  May be any of the standard Tk
+// relief values.
+func Sashrelief(value any) option {
+	return sashreliefOption{value}
+}
+
+type sashwidthOption struct{ v any }
+
+func (o sashwidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-sashwidth %s`, optionString(o.v))
+}
+
+// # Panedwindow sashwidth
+//
+// Specifies the width of each sash.  May be any value accepted by
+// 'Tk_GetPixels'.
+func Sashwidth(value any) option {
+	return sashwidthOption{value}
+}
+
+type screenOption struct{ v any }
+
+func (o screenOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-screen %s`, optionString(o.v))
+}
+
+// # Toplevel screen
+//
+// Specifies the screen on which to place the new window.
+// Any valid screen name may be used, even one associated with a
+// different display.
+// Defaults to the same screen as its parent.
+// This option is special in that it may not be specified via the option
+// database, and it may not be modified with the 'configure'
+// widget command.
+func Screen(value any) option {
+	return screenOption{value}
+}
+
+type scrollregionOption struct{ v any }
+
+func (o scrollregionOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-scrollregion %s`, optionString(o.v))
+}
+
+// # Canvas scrollregion
+//
+// Specifies a list with four coordinates describing the left, top, right, and
+// bottom coordinates of a rectangular region.
+// This region is used for scrolling purposes and is considered to be
+// the boundary of the information in the canvas.
+// Each of the coordinates may be specified
+// in any of the forms given in the 'COORDINATES' section below.
+func Scrollregion(value any) option {
+	return scrollregionOption{value}
+}
+
+type selectbackgroundOption struct{ v any }
+
+func (o selectbackgroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-selectbackground %s`, optionString(o.v))
 }
 
 // Specifies the background color to use when displaying selected
 // items.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-selectbackground
-func Selectbackground(value string) Option {
-	return selectbackgroundOption(value)
+func Selectbackground(value any) option {
+	return selectbackgroundOption{value}
 }
 
-type selectborderwidthOption string
+type selectborderwidthOption struct{ v any }
 
-func (o selectborderwidthOption) option(w *Window) string {
-	return fmt.Sprintf(`-selectborderwidth %s`, tclSafeString(string(o)))
+func (o selectborderwidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-selectborderwidth %s`, optionString(o.v))
 }
 
 // Specifies a non-negative value indicating the width
 // of the 3-D border to draw around selected items.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-selectborderwidth
-func Selectborderwidth(value string) Option {
-	return selectborderwidthOption(value)
+func Selectborderwidth(value any) option {
+	return selectborderwidthOption{value}
 }
 
-type selectforegroundOption string
+type selectcolorOption struct{ v any }
 
-func (o selectforegroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-selectforeground %s`, tclSafeString(string(o)))
+func (o selectcolorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-selectcolor %s`, optionString(o.v))
+}
+
+// # Checkbutton selectcolor
+//
+// Specifies a background color to use when the button is selected.
+// If 'indicatorOn' is true then the color is used as the background for
+// the indicator regardless of the select state.
+// If 'indicatorOn' is false, this color is used as the background
+// for the entire widget, in place of 'background' or 'activeBackground',
+// whenever the widget is selected.
+// If specified as an empty string then no special color is used for
+// displaying when the widget is selected.
+//
+// # Menu selectcolor
+//
+// For menu entries that are check buttons or radio buttons, this option
+// specifies the color to display in the indicator when the check button
+// or radio button is selected.
+//
+// # Radiobutton selectcolor
+//
+// Specifies a background color to use when the button is selected.
+// If 'indicatorOn' is true then the color is used as the background for
+// the indicator regardless of the select state.
+// If '-indicatoron' is false, this color is used as the background for the
+// entire widget, in place of '-background' or '-activeBackground',
+// whenever the widget is selected.
+// If specified as an empty string then no special color is used for
+// displaying when the widget is selected.
+func Selectcolor(value any) option {
+	return selectcolorOption{value}
+}
+
+type selectforegroundOption struct{ v any }
+
+func (o selectforegroundOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-selectforeground %s`, optionString(o.v))
 }
 
 // Specifies the foreground color to use when displaying selected
 // items.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-selectforeground
-func Selectforeground(value string) Option {
-	return selectforegroundOption(value)
+func Selectforeground(value any) option {
+	return selectforegroundOption{value}
 }
 
-type setgridOption bool
+type selectimageOption struct{ v any }
 
-func (o setgridOption) option(w *Window) string {
-	return fmt.Sprintf(`-setgrid %v`, o)
+func (o selectimageOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-selectimage %s`, optionString(o.v))
+}
+
+// # Checkbutton selectimage
+//
+// Specifies an image to display (in place of the '-image' option)
+// when the checkbutton is selected.
+// This option is ignored unless the '-image' option has been
+// specified.
+//
+// # Radiobutton selectimage
+//
+// Specifies an image to display (in place of the '-image' option)
+// when the radiobutton is selected.
+// This option is ignored unless the '-image' option has been
+// specified.
+func Selectimage(value any) option {
+	return selectimageOption{value}
+}
+
+type selectmodeOption struct{ v any }
+
+func (o selectmodeOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-selectmode %s`, optionString(o.v))
+}
+
+// # Listbox selectmode
+//
+// Specifies one of several styles for manipulating the selection.
+// The value of the option may be arbitrary, but the default bindings
+// expect it to be either 'single', 'browse', 'multiple',
+// or 'extended';  the default value is 'browse'.
+//
+// # TTreeview selectmode
+//
+// Controls how the built-in class bindings manage the selection.
+// One of 'extended', 'browse', or 'none'.
+func Selectmode(value any) option {
+	return selectmodeOption{value}
+}
+
+type selecttypeOption struct{ v any }
+
+func (o selecttypeOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-selecttype %s`, optionString(o.v))
+}
+
+// # TTreeview selecttype
+//
+// Controls how the built-in class bindings manage the selection.
+// One of 'item' or 'cell'.
+func Selecttype(value any) option {
+	return selecttypeOption{value}
+}
+
+type setgridOption struct{ v any }
+
+func (o setgridOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-setgrid %s`, optionString(o.v))
 }
 
 // Specifies a boolean value that determines whether this widget controls the
@@ -978,20 +2717,402 @@ func (o setgridOption) option(w *Window) string {
 // size will be constrained to integral numbers of grid units.
 // See the section 'GRIDDED GEOMETRY MANAGEMENT' in the 'wm' manual
 // entry for more details.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-setgrid
-func Setgrid(value bool) Option {
-	return setgridOption(value)
+func Setgrid(value any) option {
+	return setgridOption{value}
 }
 
-type takefocusOption string
+type showOption struct{ v any }
 
-func (o takefocusOption) option(w *Window) string {
-	return fmt.Sprintf(`-takefocus %s`, tclSafeString(string(o)))
+func (o showOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-show %s`, optionString(o.v))
+}
+
+// # Entry show
+//
+// If this option is specified, then the true contents of the entry
+// are not displayed in the window.
+// Instead, each character in the entry's value will be displayed as
+// the first character in the value of this option, such as
+//
+// # TEntry show
+//
+// If this option is specified, then the true contents of the entry
+// are not displayed in the window.
+// Instead, each character in the entry's value will be displayed as
+// the first character in the value of this option, such as
+//
+// # TTreeview show
+//
+// A list containing zero or more of the following values, specifying
+// which elements of the tree to display.
+func Show(value any) option {
+	return showOption{value}
+}
+
+type showhandleOption struct{ v any }
+
+func (o showhandleOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-showhandle %s`, optionString(o.v))
+}
+
+// # Panedwindow showhandle
+//
+// Specifies whether sash handles should be shown.  May be any valid Tcl
+// boolean value.
+func Showhandle(value any) option {
+	return showhandleOption{value}
+}
+
+type showvalueOption struct{ v any }
+
+func (o showvalueOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-showvalue %s`, optionString(o.v))
+}
+
+// # Scale showvalue
+//
+// Specifies a boolean value indicating whether or not the current
+// value of the scale is to be displayed.
+func Showvalue(value any) option {
+	return showvalueOption{value}
+}
+
+type sliderlengthOption struct{ v any }
+
+func (o sliderlengthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-sliderlength %s`, optionString(o.v))
+}
+
+// # Scale sliderlength
+//
+// Specifies the size of the slider, measured in screen units along the slider's
+// long dimension.  The value may be specified in any of the forms acceptable
+// to 'Tk_GetPixels'.
+func Sliderlength(value any) option {
+	return sliderlengthOption{value}
+}
+
+type sliderreliefOption struct{ v any }
+
+func (o sliderreliefOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-sliderrelief %s`, optionString(o.v))
+}
+
+// # Scale sliderrelief
+//
+// Specifies the relief to use when drawing the slider, such as 'raised'
+// or 'sunken'.
+func Sliderrelief(value any) option {
+	return sliderreliefOption{value}
+}
+
+type spacing1Option struct{ v any }
+
+func (o spacing1Option) optionString(w *Window) string {
+	return fmt.Sprintf(`-spacing1 %s`, optionString(o.v))
+}
+
+// # Text spacing1
+//
+// Requests additional space above each text line in the widget, using any of the
+// standard forms for screen distances. If a line wraps, this option only applies
+// to the first line on the display. This option may be overridden with
+// '-spacing1' options in tags.
+func Spacing1(value any) option {
+	return spacing1Option{value}
+}
+
+type spacing2Option struct{ v any }
+
+func (o spacing2Option) optionString(w *Window) string {
+	return fmt.Sprintf(`-spacing2 %s`, optionString(o.v))
+}
+
+// # Text spacing2
+//
+// For lines that wrap (so that they cover more than one line on the display)
+// this option specifies additional space to provide between the display lines
+// that represent a single line of text. The value may have any of the standard
+// forms for screen distances. This option may be overridden with
+// '-spacing2' options in tags.
+func Spacing2(value any) option {
+	return spacing2Option{value}
+}
+
+type spacing3Option struct{ v any }
+
+func (o spacing3Option) optionString(w *Window) string {
+	return fmt.Sprintf(`-spacing3 %s`, optionString(o.v))
+}
+
+// # Text spacing3
+//
+// Requests additional space below each text line in the widget, using any of the
+// standard forms for screen distances. If a line wraps, this option only applies
+// to the last line on the display. This option may be overridden with
+// '-spacing3' options in tags.
+func Spacing3(value any) option {
+	return spacing3Option{value}
+}
+
+type startlineOption struct{ v any }
+
+func (o startlineOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-startline %s`, optionString(o.v))
+}
+
+// # Text startline
+//
+// Specifies an integer line index representing the first line of the underlying
+// textual data store that should be contained in the widget. This allows a text
+// widget to reflect only a portion of a larger piece of text. Instead of an
+// integer, the empty string can be provided to this configuration option, which
+// will configure the widget to start at the very first line in the textual data
+// store.
+func Startline(value any) option {
+	return startlineOption{value}
+}
+
+type stateOption struct{ v any }
+
+func (o stateOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-state %s`, optionString(o.v))
+}
+
+// # Button state
+//
+// Specifies one of three states for the button:  'normal', 'active',
+// or 'disabled'.  In normal state the button is displayed using the
+// '-foreground' and '-background' options.  The active state is
+// typically used when the pointer is over the button.  In active state
+// the button is displayed using the '-activeforeground' and
+// '-activebackground' options.  Disabled state means that the button
+// should be insensitive:  the default bindings will refuse to activate
+// the widget and will ignore mouse button presses.
+// In this state the '-disabledforeground' and
+// '-background' options determine how the button is displayed.
+//
+// # Canvas state
+//
+// Modifies the default state of the canvas where 'state' may be set to
+// one of: 'normal', 'disabled', or 'hidden'. Individual canvas
+// objects all have their own state option which may override the default
+// state. Many options can take separate specifications such that the
+// appearance of the item can be different in different situations. The
+// options that start with 'active' control the appearance when the mouse
+// pointer is over it, while the option starting with 'disabled' controls
+// the appearance when the state is disabled. Canvas items which are
+// 'disabled' will not react to canvas bindings.
+//
+// # Checkbutton state
+//
+// Specifies one of three states for the checkbutton:  'normal', 'active',
+// or 'disabled'.  In normal state the checkbutton is displayed using the
+// '-foreground' and '-background' options.  The active state is
+// typically used when the pointer is over the checkbutton.  In active state
+// the checkbutton is displayed using the '-activeforeground' and
+// '-activebackground' options.  Disabled state means that the checkbutton
+// should be insensitive:  the default bindings will refuse to activate
+// the widget and will ignore mouse button presses.
+// In this state the '-disabledforeground' and
+// '-background' options determine how the checkbutton is displayed.
+//
+// # Entry state
+//
+// Specifies one of three states for the entry:  'normal',
+// 'disabled', or 'readonly'.  If the entry is readonly, then the
+// value may not be changed using widget commands and no insertion cursor
+// will be displayed, even if the input focus is in the widget; the
+// contents of the widget may still be selected.  If the entry is
+// disabled, the value may not be changed, no insertion cursor will be
+// displayed, the contents will not be selectable, and the entry may
+// be displayed in a different color, depending on the values of the
+// '-disabledforeground' and '-disabledbackground' options.
+//
+// # Label state
+//
+// Specifies one of three states for the label:  'normal', 'active',
+// or 'disabled'.  In normal state the button is displayed using the
+// '-foreground' and '-background' options.  In active state
+// the label is displayed using the '-activeforeground' and
+// '-activebackground' options.  In the disabled state the
+// '-disabledforeground' and '-background' options determine how
+// the button is displayed.
+//
+// # Listbox state
+//
+// Specifies one of two states for the listbox:  'normal' or 'disabled'.
+// If the listbox is disabled then items may not be inserted or deleted,
+// items are drawn in the '-disabledforeground' color, and selection
+// cannot be modified and is not shown (though selection information is retained).
+//
+// # Menubutton state
+//
+// Specifies one of three states for the menubutton:  'normal', 'active',
+// or 'disabled'.  In normal state the menubutton is displayed using the
+// 'foreground' and 'background' options.  The active state is
+// typically used when the pointer is over the menubutton.  In active state
+// the menubutton is displayed using the '-activeforeground' and
+// '-activebackground' options.  Disabled state means that the menubutton
+// should be insensitive:  the default bindings will refuse to activate
+// the widget and will ignore mouse button presses.
+// In this state the '-disabledforeground' and
+// '-background' options determine how the button is displayed.
+//
+// # Radiobutton state
+//
+// Specifies one of three states for the radiobutton:  'normal', 'active',
+// or 'disabled'.  In normal state the radiobutton is displayed using the
+// '-foreground' and '-background' options.  The active state is
+// typically used when the pointer is over the radiobutton.  In active state
+// the radiobutton is displayed using the '-activeforeground' and
+// '-activebackground' options.  Disabled state means that the radiobutton
+// should be insensitive:  the default bindings will refuse to activate
+// the widget and will ignore mouse button presses.
+// In this state the '-disabledforeground' and
+// '-background' options determine how the radiobutton is displayed.
+//
+// # Scale state
+//
+// Specifies one of three states for the scale:  'normal',
+// 'active', or 'disabled'.
+// If the scale is disabled then the value may not be changed and the scale
+// will not activate.
+// If the scale is active, the slider is displayed using the color
+// specified by the '-activebackground' option.
+//
+// # Spinbox state
+//
+// Specifies one of three states for the spinbox:  'normal',
+// 'disabled', or 'readonly'.  If the spinbox is readonly, then the
+// value may not be changed using widget commands and no insertion cursor
+// will be displayed, even if the input focus is in the widget; the
+// contents of the widget may still be selected.  If the spinbox is
+// disabled, the value may not be changed, no insertion cursor will be
+// displayed, the contents will not be selectable, and the spinbox may
+// be displayed in a different color, depending on the values of the
+// '-disabledforeground' and '-disabledbackground' options.
+//
+// # Text state
+//
+// Specifies one of two states for the text: 'normal' or 'disabled'. If
+// the text is disabled then characters may not be inserted or deleted and no
+// insertion cursor will be displayed, even if the input focus is in the widget.
+//
+// # TCombobox state
+//
+// One of 'normal', 'readonly', or 'disabled'.
+// In the 'readonly' state,
+// the value may not be edited directly, and
+// the user can only select one of the '-values' from the
+// dropdown list.
+// In the 'normal' state,
+// the text field is directly editable.
+// In the 'disabled' state, no interaction is possible.
+//
+// # TEntry state
+//
+// Compatibility option; see 'ttk::widget(n)' for details.
+// Specifies one of three states for the entry,
+// 'normal', 'disabled', or 'readonly'.
+// See 'WIDGET STATES', below.
+//
+// # TNotebook state
+//
+// Either 'normal', 'disabled' or 'hidden'.
+// If 'disabled', then the tab is not selectable.
+// If 'hidden', then the tab is not shown.
+func State(value any) option {
+	return stateOption{value}
+}
+
+type stickyOption struct{ v any }
+
+func (o stickyOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-sticky %s`, optionString(o.v))
+}
+
+// # TNotebook sticky
+//
+// Specifies how the content window is positioned within the pane area.
+// Value is a string containing zero or more of the characters
+// 'n, s, e,' or 'w'.
+// Each letter refers to a side (north, south, east, or west)
+// that the content window will
+func Sticky(value any) option {
+	return stickyOption{value}
+}
+
+type stripedOption struct{ v any }
+
+func (o stripedOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-striped %s`, optionString(o.v))
+}
+
+// # TTreeview striped
+//
+// Boolean specifying zebra striped item coloring.
+// Note that
+// striped items uses the '-stripedbackground' option if set by the theme or
+// a tag. If not supported by the current theme, it will not show.
+func Striped(value any) option {
+	return stripedOption{value}
+}
+
+type tabsOption struct{ v any }
+
+func (o tabsOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-tabs %s`, optionString(o.v))
+}
+
+// # Text tabs
+//
+// Specifies a set of tab stops for the window. The option's value consists of a
+// list of screen distances giving the positions of the tab stops, each of which
+// is a distance relative to the left edge of the widget (excluding borders,
+// padding, etc). Each position may optionally be followed in the next list
+// element by one of the keywords 'left', 'right', 'center', or
+// 'numeric', which specifies how to justify text relative to the tab stop.
+// 'Left' is the default; it causes the text following the tab character to
+// be positioned with its left edge at the tab position. 'Right' means that
+// the right edge of the text following the tab character is positioned at the
+// tab position, and 'center' means that the text is centered at the tab
+// position. 'Numeric' means that the decimal point in the text is positioned
+// at the tab position; if there is no decimal point then the least significant
+// digit of the number is positioned just to the left of the tab position; if
+// there is no number in the text then the text is right-justified at the tab
+// position. For example,
+func Tabs(value any) option {
+	return tabsOption{value}
+}
+
+type tabstyleOption struct{ v any }
+
+func (o tabstyleOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-tabstyle %s`, optionString(o.v))
+}
+
+// # Text tabstyle
+//
+// Specifies how to interpret the relationship between tab stops on a line and
+// tabs in the text of that line. The value must be 'tabular' (the default)
+// or 'wordprocessor'. Note that tabs are interpreted as they are encountered
+// in the text. If the tab style is 'tabular' then the 'n”th tab
+// character in the line's text will be associated with the 'n”th tab stop
+// defined for that line. If the tab character's x coordinate falls to the right
+// of the 'n”th tab stop, then a gap of a single space will be inserted as a
+// fallback. If the tab style is 'wordprocessor' then any tab character being
+// laid out will use (and be defined by) the first tab stop to the right of the
+// preceding characters already laid out on that line. The value of the
+// '-tabstyle' option may be overridden by '-tabstyle' options in tags.
+func Tabstyle(value any) option {
+	return tabstyleOption{value}
+}
+
+type takefocusOption struct{ v any }
+
+func (o takefocusOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-takefocus %s`, optionString(o.v))
 }
 
 // Determines whether the window accepts the focus during keyboard
@@ -1017,58 +3138,286 @@ func (o takefocusOption) option(w *Window) string {
 // the Tcl scripts that implement traversal:  the widget implementations
 // ignore the option entirely, so you can change its meaning if you
 // redefine the keyboard traversal scripts.
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-takefocus
-func Takefocus(value string) Option {
-	return takefocusOption(value)
+func Takefocus(value any) option {
+	return takefocusOption{value}
 }
 
-type textOption string
+type tearoffOption struct{ v any }
 
-func (o textOption) option(w *Window) string {
-	return fmt.Sprintf(`-text %s`, tclSafeString(string(o)))
+func (o tearoffOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-tearoff %s`, optionString(o.v))
+}
+
+// # Menu tearoff
+//
+// This option must have a proper boolean value (default is false),
+// which specifies whether or not the menu should include a tear-off
+// entry at the top.  If so, it will exist as entry 0 of the menu and
+// the other entries will number starting at 1.  The default menu
+// bindings arrange for the menu to be torn off when the tear-off entry
+// is invoked.
+// This option is ignored under Aqua/MacOS, where menus cannot
+// be torn off.
+func Tearoff(value any) option {
+	return tearoffOption{value}
+}
+
+// See also [Event handlers]
+//
+// # Menu tearoffcommand
+//
+// If this option has a non-empty value, then it specifies a Tcl command
+// to invoke whenever the menu is torn off.  The actual command will
+// consist of the value of this option, followed by a space, followed
+// by the name of the menu window, followed by a space, followed by
+// the name of the name of the torn off menu window.  For example, if
+// the option's value is
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Tearoffcommand(args ...any) option {
+	return newEventHandler("-tearoffcommand", args...)
+}
+
+type textOption struct{ v any }
+
+func (o textOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-text %s`, optionString(o.v))
 }
 
 // Specifies a string to be displayed inside the widget.  The way in which
 // the string is displayed depends on the particular widget and may be
 // determined by other options, such as '-anchor' or '-justify'.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TLabelframe txt
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// Specifies the text of the label.
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-text
-func Txt(value string) Option {
-	return textOption(value)
+// # TNotebook txt
+//
+// Specifies a string to be displayed in the tab.
+func Txt(value any) option {
+	return textOption{value}
 }
 
-type troughcolorOption string
+// See also [Event handlers]
+//
+// Specifies the name of a global variable.  The value of the variable is a text
+// string to be displayed inside the widget;  if the variable value changes
+// then the widget will automatically update itself to reflect the new value.
+// The way in which the string is displayed in the widget depends on the
+// particular widget and may be determined by other options, such as
+// '-anchor' or '-justify'.
+//
+// # TCombobox textvariable
+//
+// Specifies the name of a global variable whose value is linked
+// to the widget value.
+// Whenever the variable changes value the widget value is updated,
+// and vice versa.
+//
+// # TEntry textvariable
+//
+// Specifies the name of a global variable whose value is linked
+// to the entry widget's contents.
+// Whenever the variable changes value, the widget's contents are updated,
+// and vice versa.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Textvariable(args ...any) option {
+	return newEventHandler("-textvariable", args...)
+}
 
-func (o troughcolorOption) option(w *Window) string {
-	return fmt.Sprintf(`-troughcolor %s`, tclSafeString(string(o)))
+type tickintervalOption struct{ v any }
+
+func (o tickintervalOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-tickinterval %s`, optionString(o.v))
+}
+
+// # Scale tickinterval
+//
+// Must be a real value.
+// Determines the spacing between numerical
+// tick marks displayed below or to the left of the slider. The values will all
+// be displayed with the same number of decimal places, which will be enough to
+// ensure they are all accurate to within 20% of a tick interval.
+// If 0, no tick marks will be displayed.
+func Tickinterval(value any) option {
+	return tickintervalOption{value}
+}
+
+type tileOption struct{ v any }
+
+func (o tileOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-tile %s`, optionString(o.v))
+}
+
+// # Frame tile
+//
+// "8.7, TIP262"
+//
+// # Toplevel tile
+//
+// "8.7, TIP262"
+func Tile(value any) option {
+	return tileOption{value}
+}
+
+type titleOption struct{ v any }
+
+func (o titleOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-title %s`, optionString(o.v))
+}
+
+// # Menu title
+//
+// The string will be used to title the window created when this menu is
+// torn off. If the title is NULL, then the window will have the title
+// of the menubutton or the text of the cascade item from which this menu
+// was invoked.
+func Title(value any) option {
+	return titleOption{value}
+}
+
+type titlecolumnsOption struct{ v any }
+
+func (o titlecolumnsOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-titlecolumns %s`, optionString(o.v))
+}
+
+// # TTreeview titlecolumns
+//
+// Number of display columns at the left that should not be scrolled. The tree
+// column counts, even if '-show tree' is not specified. Thus for value N of
+// this option, column #N is the first one that is scrollable. Default is 0.
+func Titlecolumns(value any) option {
+	return titlecolumnsOption{value}
+}
+
+type titleitemsOption struct{ v any }
+
+func (o titleitemsOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-titleitems %s`, optionString(o.v))
+}
+
+// # TTreeview titleitems
+//
+// Number of items at the top that should not be vertically scrolled. Default is 0.
+func Titleitems(value any) option {
+	return titleitemsOption{value}
+}
+
+type toOption struct{ v any }
+
+func (o toOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-to %s`, optionString(o.v))
+}
+
+// # Scale to
+//
+// Specifies a real value corresponding
+// to the right or bottom end of the scale.
+// This value may be either less than or greater than the '-from' option.
+//
+// # Spinbox to
+//
+// A floating-point value corresponding to the highest value for the spinbox,
+// to be used in conjunction with '-from' and '-increment'.  When
+// all are specified correctly, the spinbox will use these values to control
+// its contents. If this value is less than the '-from' option, then
+// '-from' and '-to' values are automatically swapped.
+// If '-values' is specified, it supersedes this option.
+//
+// # TScale to
+//
+// Specifies a real value corresponding to the right or bottom end of the scale.
+// This value may be either less than or greater than the '-from' option.
+//
+// # TSpinbox to
+//
+// A floating-point value specifying the highest permissible value for the
+// widget. See also '-from' and '-increment'.
+// range.
+func To(value any) option {
+	return toOption{value}
+}
+
+type tristateimageOption struct{ v any }
+
+func (o tristateimageOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-tristateimage %s`, optionString(o.v))
+}
+
+// # Checkbutton tristateimage
+//
+// Specifies an image to display (in place of the '-image' option)
+// when the checkbutton is in tri-state mode.
+// This option is ignored unless the '-image' option has been
+// specified.
+//
+// # Radiobutton tristateimage
+//
+// Specifies an image to display (in place of the '-image' option)
+// when the radiobutton is selected.
+// This option is ignored unless the '-image' option has been
+// specified.
+func Tristateimage(value any) option {
+	return tristateimageOption{value}
+}
+
+type tristatevalueOption struct{ v any }
+
+func (o tristatevalueOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-tristatevalue %s`, optionString(o.v))
+}
+
+// # Checkbutton tristatevalue
+//
+// Specifies the value that causes the checkbutton to display the multi-value
+// selection, also known as the tri-state mode.  Defaults to
+//
+// # Radiobutton tristatevalue
+//
+// Specifies the value that causes the radiobutton to display the multi-value
+// selection, also known as the tri-state mode.  Defaults to
+func Tristatevalue(value any) option {
+	return tristatevalueOption{value}
+}
+
+type troughcolorOption struct{ v any }
+
+func (o troughcolorOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-troughcolor %s`, optionString(o.v))
 }
 
 // Specifies the color to use for the rectangular trough areas
 // in widgets such as scrollbars and scales.  This option is ignored for
 // scrollbars on Windows (native widget does not recognize this option).
-//
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
-//
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-troughcolor
-func Troughcolor(value string) Option {
-	return troughcolorOption(value)
+func Troughcolor(value any) option {
+	return troughcolorOption{value}
 }
 
-type underlineOption int
+type typeOption struct{ v any }
 
-func (o underlineOption) option(w *Window) string {
-	return fmt.Sprintf(`-underline %v`, o)
+func (o typeOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-type %s`, optionString(o.v))
+}
+
+// # Menu type
+//
+// This option can be one of 'menubar', 'tearoff', or
+// 'normal', and is set when the menu is created. While the string
+// returned by the configuration database will change if this option is
+// changed, this does not affect the menu widget's behavior. This is used
+// by the cloning mechanism and is not normally set outside of the Tk
+// library.
+func Type(value any) option {
+	return typeOption{value}
+}
+
+type underlineOption struct{ v any }
+
+func (o underlineOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-underline %s`, optionString(o.v))
 }
 
 // Specifies the integer index of a character to underline in the widget.
@@ -1078,19 +3427,523 @@ func (o underlineOption) option(w *Window) string {
 // widget, 1 to the next character, and so on. 'end' corresponds to the
 // last character, 'end'-1 to the before last character, and so on.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TLabelframe underline
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
+// If set, specifies the integer index (0-based) of a character to
+// underline in the text string.
+// The underlined character is used for mnemonic activation.
+// Mnemonic activation for a 'ttk::labelframe'
+// sets the keyboard focus to the first child of the 'ttk::labelframe' widget.
 //
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-underline
-func Underline(value int) Option {
-	return underlineOption(value)
+// # TNotebook underline
+//
+// Specifies the integer index (0-based) of a character to underline
+// in the text string.
+// The underlined character is used for mnemonic activation
+// if 'ttk::notebook::enableTraversal' is called.
+func Underline(value any) option {
+	return underlineOption{value}
 }
 
-type wraplengthOption string
+type undoOption struct{ v any }
 
-func (o wraplengthOption) option(w *Window) string {
-	return fmt.Sprintf(`-wraplength %s`, tclSafeString(string(o)))
+func (o undoOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-undo %s`, optionString(o.v))
+}
+
+// # Text undo
+//
+// Specifies a boolean that says whether the undo mechanism is active or not.
+func Undo(value any) option {
+	return undoOption{value}
+}
+
+type useOption struct{ v any }
+
+func (o useOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-use %s`, optionString(o.v))
+}
+
+// # Toplevel use
+//
+// This option is used for embedding. If the value is not an empty string,
+// it must be the window identifier of a container window, specified as
+// a hexadecimal string like the ones returned by the 'winfo id'
+// command. The toplevel widget will be created as a child of the given
+// container instead of the root window for the screen.  If the container
+// window is in a Tk application, it must be a frame or toplevel widget for
+// which the '-container' option was specified.
+// This option may not be changed with the 'configure'
+// widget command.
+func Use(value any) option {
+	return useOption{value}
+}
+
+type validateOption struct{ v any }
+
+func (o validateOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-validate %s`, optionString(o.v))
+}
+
+// # Entry validate
+//
+// Specifies the mode in which validation should operate: 'none',
+// 'focus', 'focusin', 'focusout', 'key', or 'all'.
+// It defaults to 'none'.  When you want validation, you must explicitly
+// state which mode you wish to use.  See 'VALIDATION' below for more.
+//
+// # Spinbox validate
+//
+// Specifies the mode in which validation should operate: 'none',
+// 'focus', 'focusin', 'focusout', 'key', or 'all'.
+// It defaults to 'none'.  When you want validation, you must explicitly
+// state which mode you wish to use.  See 'VALIDATION' below for more.
+//
+// # TEntry validate
+//
+// Specifies the mode in which validation should operate:
+// 'none', 'focus', 'focusin', 'focusout', 'key', or 'all'.
+// Default is 'none', meaning that validation is disabled.
+// See 'VALIDATION' below.
+func Validate(value any) option {
+	return validateOption{value}
+}
+
+// See also [Event handlers]
+//
+// # Entry validatecommand
+//
+// Specifies a script to eval when you want to validate the input into
+// the entry widget.  Setting it to {} disables this feature (the default).
+// This command must return a valid Tcl boolean value.  If it returns 0 (or
+// the valid Tcl boolean equivalent) then it means you reject the new edition
+// and it will not occur and the '-invalidcommand' will be evaluated if it
+// is set. If it returns 1, then the new edition occurs.
+// See 'VALIDATION' below for more information.
+//
+// # Spinbox validatecommand
+//
+// Specifies a script to evaluate when you want to validate the input in the
+// widget.  Setting it to an empty string disables this feature (the default).
+// Validation occurs according to the value of '-validate'.
+// This command must return a valid Tcl boolean value.  If it returns 0 (or
+// the valid Tcl boolean equivalent) then the value of the widget will not
+// change and the '-invalidcommand' will be evaluated if it is set.  If it
+// returns 1, then value will be changed.
+// See 'VALIDATION' below for more information.
+//
+// # TEntry validatecommand
+//
+// A script template to evaluate whenever validation is triggered.
+// If set to the empty string (the default), validation is disabled.
+// The script must return a boolean value.
+// See 'VALIDATION' below.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Validatecommand(args ...any) option {
+	return newEventHandler("-validatecommand", args...)
+}
+
+type valueOption struct{ v any }
+
+func (o valueOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-value %s`, optionString(o.v))
+}
+
+// # Radiobutton value
+//
+// Specifies value to store in the button's associated variable whenever
+// this button is selected.
+//
+// # TProgressbar value
+//
+// The current value of the progress bar.
+// In 'determinate' mode, this represents the amount of work completed.
+// In 'indeterminate' mode, it is interpreted modulo '-maximum';
+// that is, the progress bar completes one
+//
+// # TRadiobutton value
+//
+// The value to store in the associated '-variable'
+// when the widget is selected.
+//
+// # TScale value
+//
+// Specifies the current floating-point value of the variable.
+// If '-variable' is set to an existing variable, specifying '-value'
+// has no effect (the variable value takes precedence).
+func Value(value any) option {
+	return valueOption{value}
+}
+
+type valuesOption struct{ v any }
+
+func (o valuesOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-values %s`, optionString(o.v))
+}
+
+// # Spinbox values
+//
+// Must be a proper list value.  If specified, the spinbox will use these
+// values as to control its contents, starting with the first value.  This
+// option has precedence over the '-from' and '-to' range.
+//
+// # TCombobox values
+//
+// Specifies the list of values to display in the drop-down listbox.
+//
+// # TSpinbox values
+//
+// This must be a Tcl list of values. If this option is set then this will
+// override any range set using the '-from', '-to' and
+// '-increment' options. The widget will instead use the values
+// specified beginning with the first value.
+func Values(value any) option {
+	return valuesOption{value}
+}
+
+type variableOption struct{ v any }
+
+func (o variableOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-variable %s`, optionString(o.v))
+}
+
+// # Checkbutton variable
+//
+// Specifies the name of a global variable to set to indicate whether
+// or not this button is selected.  Defaults to the name of the
+// button within its parent (i.e. the last element of the button
+// window's path name).
+//
+// # Radiobutton variable
+//
+// Specifies the name of a global variable to set whenever this button is
+// selected.  Changes in this variable also cause the button to select
+// or deselect itself.
+// Defaults to the value 'selectedButton'.
+//
+// # Scale variable
+//
+// Specifies the name of a global variable to link to the scale.  Whenever the
+// value of the variable changes, the scale will update to reflect this
+// value.
+// Whenever the scale is manipulated interactively, the variable
+// will be modified to reflect the scale's new value.
+//
+// # TCheckbutton variable
+//
+// The name of a global variable whose value is linked to the widget.
+// Defaults to the widget pathname if not specified.
+//
+// # TProgressbar variable
+//
+// The name of a global Tcl variable which is linked to the '-value'.
+// If specified to an existing variable, the '-value' of the progress bar is
+// automatically set to the value of the variable whenever
+// the latter is modified.
+//
+// # TRadiobutton variable
+//
+// The name of a global variable whose value is linked to the widget.
+// Default value is '::selectedButton'.
+//
+// # TScale variable
+//
+// Specifies the name of a global variable to link to the scale. Whenever the
+// value of the variable changes, the scale will update to reflect this value.
+// Whenever the scale is manipulated interactively, the variable will be modified
+// to reflect the scale's new value.
+func Variable(value any) option {
+	return variableOption{value}
+}
+
+// See also [Event handlers]
+//
+// # Entry vcmd
+//
+// Specifies a script to eval when you want to validate the input into
+// the entry widget.  Setting it to {} disables this feature (the default).
+// This command must return a valid Tcl boolean value.  If it returns 0 (or
+// the valid Tcl boolean equivalent) then it means you reject the new edition
+// and it will not occur and the '-invalidcommand' will be evaluated if it
+// is set. If it returns 1, then the new edition occurs.
+// See 'VALIDATION' below for more information.
+//
+// # Spinbox vcmd
+//
+// Specifies a script to evaluate when you want to validate the input in the
+// widget.  Setting it to an empty string disables this feature (the default).
+// Validation occurs according to the value of '-validate'.
+// This command must return a valid Tcl boolean value.  If it returns 0 (or
+// the valid Tcl boolean equivalent) then the value of the widget will not
+// change and the '-invalidcommand' will be evaluated if it is set.  If it
+// returns 1, then value will be changed.
+// See 'VALIDATION' below for more information.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Vcmd(args ...any) option {
+	return newEventHandler("-vcmd", args...)
+}
+
+type visualOption struct{ v any }
+
+func (o visualOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-visual %s`, optionString(o.v))
+}
+
+// # Frame visual
+//
+// Specifies visual information for the new window in any of the
+// forms accepted by 'Tk_GetVisual'.
+// If this option is not specified, the new window will use the same
+// visual as its parent.
+// The '-visual' option may not be modified with the 'configure'
+// widget command.
+//
+// # Labelframe visual
+//
+// Specifies visual information for the new window in any of the
+// forms accepted by 'Tk_GetVisual'.
+// If this option is not specified, the new window will use the same
+// visual as its parent.
+// The '-visual' option may not be modified with the 'configure'
+// widget command.
+//
+// # Toplevel visual
+//
+// Specifies visual information for the new window in any of the
+// forms accepted by 'Tk_GetVisual'.
+// If this option is not specified, the new window will use the default
+// visual for its screen.
+// The '-visual' option may not be modified with the 'configure'
+// widget command.
+func Visual(value any) option {
+	return visualOption{value}
+}
+
+type weightOption struct{ v any }
+
+func (o weightOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-weight %s`, optionString(o.v))
+}
+
+// # TPanedwindow weight
+//
+// An integer specifying the relative stretchability of the pane.
+// When the paned window is resized, the extra space is added
+// or subtracted to each pane proportionally to its '-weight'.
+func Weight(value any) option {
+	return weightOption{value}
+}
+
+type widthOption struct{ v any }
+
+func (o widthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-width %s`, optionString(o.v))
+}
+
+// # Button width
+//
+// Specifies a desired width for the button.
+// If an image or bitmap is being displayed in the button then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels').
+// For a text button (no image or with '-compound none') then the width
+// specifies how much space in characters to allocate for the text label.
+// If the width is negative then this specifies a minimum width.
+// If this option is not specified, the button's desired width is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Canvas width
+//
+// Specifies a desired window width that the canvas widget should request from
+// its geometry manager. The value may be specified in any
+// of the forms described in the 'COORDINATES' section below.
+//
+// # Checkbutton width
+//
+// Specifies a desired width for the button.
+// If an image or bitmap is being displayed in the button then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in characters.
+// If this option is not specified, the button's desired width is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Entry width
+//
+// Specifies an integer value indicating the desired width of the entry window,
+// in average-size characters of the widget's font.
+// If the value is less than or equal to zero, the widget picks a
+// size just large enough to hold its current text.
+//
+// # Frame width
+//
+// Specifies the desired width for the window in any of the forms
+// acceptable to 'Tk_GetPixels'.  If this option is less than or equal
+// to zero then the window will not request any size at all.  Note that this
+// sets the total width of the frame, any '-borderwidth' or similar is
+// not added.  Normally '-width' should not be used if a propagating
+// geometry manager, such as 'grid' or 'pack', is used within the
+// frame since the geometry manager will override the width of the frame.
+//
+// # Label width
+//
+// Specifies a desired width for the label.
+// If an image or bitmap is being displayed in the label then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in characters.
+// If this option is not specified, the label's desired width is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Labelframe width
+//
+// Specifies the desired width for the window in any of the forms
+// acceptable to 'Tk_GetPixels'.
+// If this option is less than or equal to zero then the window will
+// not request any size at all.
+//
+// # Listbox width
+//
+// Specifies the desired width for the window in characters.
+// If the font does not have a uniform width then the width of the character
+//
+// # Menubutton width
+//
+// Specifies a desired width for the menubutton.
+// If an image or bitmap is being displayed in the menubutton then the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in characters.
+// If this option is not specified, the menubutton's desired width is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Message width
+//
+// Specifies the length of lines in the window.
+// The value may have any of the forms acceptable to 'Tk_GetPixels'.
+// If this option has a value greater than zero then the '-aspect'
+// option is ignored and the '-width' option determines the line
+// length.
+// If this option has a value less than or equal to zero, then
+// the '-aspect' option determines the line length.
+//
+// # Panedwindow width
+//
+// Specifies a desired width for the overall panedwindow widget. May be any
+// value accepted by 'Tk_GetPixels'. If an empty string, the widget will be
+// made wide enough to allow all contained widgets to have their natural width.
+//
+// # Radiobutton width
+//
+// Specifies a desired width for the button.
+// If an image or bitmap is being displayed in the button, the value is in
+// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
+// for text it is in characters.
+// If this option is not specified, the button's desired width is computed
+// from the size of the image or bitmap or text being displayed in it.
+//
+// # Scale width
+//
+// Specifies the desired narrow dimension of the scale in screen units
+// (i.e. any of the forms acceptable to 'Tk_GetPixels').
+// For vertical scales this is the scale's width;  for horizontal scales
+// this is the scale's height.
+//
+// # Scrollbar width
+//
+// Specifies the desired narrow dimension of the scrollbar window,
+// not including 3-D border, if any.  For vertical
+// scrollbars this will be the width and for horizontal scrollbars
+// this will be the height.
+// The value may have any of the forms acceptable to 'Tk_GetPixels'.
+//
+// # Spinbox width
+//
+// Specifies an integer value indicating the desired width of the spinbox window,
+// in average-size characters of the widget's font.
+// If the value is less than or equal to zero, the widget picks a
+// size just large enough to hold its current text.
+//
+// # Text width
+//
+// Specifies the desired width for the window in units of characters in the font
+// given by the '-font' option. If the font does not have a uniform width
+// then the width of the character
+//
+// # Toplevel width
+//
+// Specifies the desired width for the window in any of the forms
+// acceptable to 'Tk_GetPixels'.
+// If this option is less than or equal to zero then the window will
+// not request any size at all.
+//
+// # TCombobox width
+//
+// Specifies an integer value indicating the desired width of the entry window,
+// in average-size characters of the widget's font.
+//
+// # TEntry width
+//
+// Specifies an integer value indicating the desired width of the entry window,
+// in average-size characters of the widget's font.
+//
+// # TFrame width
+//
+// If specified, the widget's requested width in pixels.
+//
+// # TLabelframe width
+//
+// If specified, the widget's requested width in pixels.
+//
+// # TNotebook width
+//
+// If present and greater than zero,
+// specifies the desired width of the pane area
+// (not including internal padding).
+// Otherwise, the maximum width of all panes is used.
+//
+// # TPanedwindow width
+//
+// If present and greater than zero,
+// specifies the desired width of the widget in pixels.
+// Otherwise, the requested width is determined by the width
+// of the managed windows.
+func Width(value any) option {
+	return widthOption{value}
+}
+
+type wrapOption struct{ v any }
+
+func (o wrapOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-wrap %s`, optionString(o.v))
+}
+
+// # Spinbox wrap
+//
+// Must be a proper boolean value.  If on, the spinbox will wrap around the
+// values of data in the widget.
+//
+// # Text wrap
+//
+// Specifies how to handle lines in the text that are too long to be displayed in
+// a single line of the text's window. The value must be 'none' or 'char'
+// or 'word'. A wrap mode of 'none' means that each line of text appears
+// as exactly one line on the screen; extra characters that do not fit on the
+// screen are not displayed. In the other modes each line of text will be broken
+// up into several screen lines if necessary to keep all the characters visible.
+// In 'char' mode a screen line break may occur after any character; in
+// 'word' mode a line break will only be made at word boundaries.
+//
+// # TSpinbox wrap
+//
+// Must be a proper boolean value.  If on, the spinbox will wrap around the
+// values of data in the widget.
+func Wrap(value any) option {
+	return wrapOption{value}
+}
+
+type wraplengthOption struct{ v any }
+
+func (o wraplengthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-wraplength %s`, optionString(o.v))
 }
 
 // For widgets that can perform word-wrapping, this option specifies
@@ -1102,1896 +3955,52 @@ func (o wraplengthOption) option(w *Window) string {
 // If this value is less than or equal to 0 then no wrapping is done:  lines
 // will break only at newline characters in the text.
 //
-// More details about the option and the values it accepts can be possibly found at the [Tcl/Tk documentation].
+// # TLabel wraplength
+//
+// Specifies the maximum line length (in pixels).
+// If this option is less than or equal to zero,
+// then automatic wrapping is not performed; otherwise
+// the text is split into lines such that no line is longer
+// than the specified value.
+func Wraplength(value any) option {
+	return wraplengthOption{value}
+}
+
+// See also [Event handlers]
+//
+// Specifies the prefix for a command used to communicate with horizontal
+// scrollbars.
+// When the view in the widget's window changes (or
+// whenever anything else occurs that could change the display in a
+// scrollbar, such as a change in the total size of the widget's
+// contents), the widget will
+// generate a Tcl command by concatenating the scroll command and
+// two numbers.
+// Each of the numbers is a fraction between 0 and 1, which indicates
+// a position in the document.  0 indicates the beginning of the document,
+// 1 indicates the end, .333 indicates a position one third the way through
+// the document, and so on.
+// The first fraction indicates the first information in the document
+// that is visible in the window, and the second fraction indicates
+// the information just after the last portion that is visible.
+// The command is
+// then passed to the Tcl interpreter for execution.  Typically the
+// '-xscrollcommand' option consists of the path name of a scrollbar
+// widget followed by
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Xscrollcommand(args ...any) option {
+	return newEventHandler("-xscrollcommand", args...)
+}
+
+type xscrollincrementOption struct{ v any }
+
+func (o xscrollincrementOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-xscrollincrement %s`, optionString(o.v))
+}
+
+// # Canvas xscrollincrement
 //
-// Note: This is a "standard" option and may apply to different windows/widgets, although not necessarily to all of them.
-//
-// [Tcl/Tk documentation]: https://www.tcl.tk/man/tcl9.0/TkCmd/options.html#M-wraplength
-func Wraplength(value string) Option {
-	return wraplengthOption(value)
-}
-
-// panedwindow - Create and manipulate 'panedwindow' split container widgets
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) Panedwindow(options ...Option) *Window {
-	return w.newChild("panedwindow", options...)
-}
-
-// panedwindow - Create and manipulate 'panedwindow' split container widgets
-func Panedwindow(options ...Option) *Window {
-	return Inter.Panedwindow(options...)
-}
-
-// radiobutton - Create and manipulate 'radiobutton' pick-one widgets
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) Radiobutton(options ...Option) *Window {
-	return w.newChild("radiobutton", options...)
-}
-
-// radiobutton - Create and manipulate 'radiobutton' pick-one widgets
-func Radiobutton(options ...Option) *Window {
-	return Inter.Radiobutton(options...)
-}
-
-// scale - Create and manipulate 'scale' value-controlled slider widgets
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) Scale(options ...Option) *Window {
-	return w.newChild("scale", options...)
-}
-
-// scale - Create and manipulate 'scale' value-controlled slider widgets
-func Scale(options ...Option) *Window {
-	return Inter.Scale(options...)
-}
-
-// scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) Scrollbar(options ...Option) *Window {
-	return w.newChild("scrollbar", options...)
-}
-
-// scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
-func Scrollbar(options ...Option) *Window {
-	return Inter.Scrollbar(options...)
-}
-
-// spinbox - Create and manipulate 'spinbox' value spinner widgets
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) Spinbox(options ...Option) *Window {
-	return w.newChild("spinbox", options...)
-}
-
-// spinbox - Create and manipulate 'spinbox' value spinner widgets
-func Spinbox(options ...Option) *Window {
-	return Inter.Spinbox(options...)
-}
-
-// text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) Text(options ...Option) *Window {
-	return w.newChild("text", options...)
-}
-
-// text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
-func Text(options ...Option) *Window {
-	return Inter.Text(options...)
-}
-
-// toplevel - Create and manipulate 'toplevel' main and popup window widgets
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) Toplevel(options ...Option) *Window {
-	return w.newChild("toplevel", options...)
-}
-
-// toplevel - Create and manipulate 'toplevel' main and popup window widgets
-func Toplevel(options ...Option) *Window {
-	return Inter.Toplevel(options...)
-}
-
-// ttk::button - Widget that issues a command when pressed
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TButton(options ...Option) *Window {
-	return w.newChild("ttk_button", options...)
-}
-
-// ttk::button - Widget that issues a command when pressed
-func TButton(options ...Option) *Window {
-	return Inter.TButton(options...)
-}
-
-// ttk::checkbutton - On/off widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TCheckbutton(options ...Option) *Window {
-	return w.newChild("ttk_checkbutton", options...)
-}
-
-// ttk::checkbutton - On/off widget
-func TCheckbutton(options ...Option) *Window {
-	return Inter.TCheckbutton(options...)
-}
-
-// ttk::combobox - text field with popdown selection list
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TCombobox(options ...Option) *Window {
-	return w.newChild("ttk_combobox", options...)
-}
-
-// ttk::combobox - text field with popdown selection list
-func TCombobox(options ...Option) *Window {
-	return Inter.TCombobox(options...)
-}
-
-// ttk::entry - Editable text field widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TEntry(options ...Option) *Window {
-	return w.newChild("ttk_entry", options...)
-}
-
-// ttk::entry - Editable text field widget
-func TEntry(options ...Option) *Window {
-	return Inter.TEntry(options...)
-}
-
-// ttk::frame - Simple container widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TFrame(options ...Option) *Window {
-	return w.newChild("ttk_frame", options...)
-}
-
-// ttk::frame - Simple container widget
-func TFrame(options ...Option) *Window {
-	return Inter.TFrame(options...)
-}
-
-// ttk::label - Display a text string and/or image
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TLabel(options ...Option) *Window {
-	return w.newChild("ttk_label", options...)
-}
-
-// ttk::label - Display a text string and/or image
-func TLabel(options ...Option) *Window {
-	return Inter.TLabel(options...)
-}
-
-// ttk::labelframe - Container widget with optional label
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TLabelframe(options ...Option) *Window {
-	return w.newChild("ttk_labelframe", options...)
-}
-
-// ttk::labelframe - Container widget with optional label
-func TLabelframe(options ...Option) *Window {
-	return Inter.TLabelframe(options...)
-}
-
-// ttk::menubutton - Widget that pops down a menu when pressed
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TMenubutton(options ...Option) *Window {
-	return w.newChild("ttk_menubutton", options...)
-}
-
-// ttk::menubutton - Widget that pops down a menu when pressed
-func TMenubutton(options ...Option) *Window {
-	return Inter.TMenubutton(options...)
-}
-
-// ttk::notebook - Multi-paned container widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TNotebook(options ...Option) *Window {
-	return w.newChild("ttk_notebook", options...)
-}
-
-// ttk::notebook - Multi-paned container widget
-func TNotebook(options ...Option) *Window {
-	return Inter.TNotebook(options...)
-}
-
-// ttk::panedwindow - Multi-pane container window
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TPanedwindow(options ...Option) *Window {
-	return w.newChild("ttk_panedwindow", options...)
-}
-
-// ttk::panedwindow - Multi-pane container window
-func TPanedwindow(options ...Option) *Window {
-	return Inter.TPanedwindow(options...)
-}
-
-// ttk::progressbar - Provide progress feedback
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TProgressbar(options ...Option) *Window {
-	return w.newChild("ttk_progressbar", options...)
-}
-
-// ttk::progressbar - Provide progress feedback
-func TProgressbar(options ...Option) *Window {
-	return Inter.TProgressbar(options...)
-}
-
-// ttk::radiobutton - Mutually exclusive option widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TRadiobutton(options ...Option) *Window {
-	return w.newChild("ttk_radiobutton", options...)
-}
-
-// ttk::radiobutton - Mutually exclusive option widget
-func TRadiobutton(options ...Option) *Window {
-	return Inter.TRadiobutton(options...)
-}
-
-// ttk::scale - Create and manipulate a scale widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TScale(options ...Option) *Window {
-	return w.newChild("ttk_scale", options...)
-}
-
-// ttk::scale - Create and manipulate a scale widget
-func TScale(options ...Option) *Window {
-	return Inter.TScale(options...)
-}
-
-// ttk::scrollbar - Control the viewport of a scrollable widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TScrollbar(options ...Option) *Window {
-	return w.newChild("ttk_scrollbar", options...)
-}
-
-// ttk::scrollbar - Control the viewport of a scrollable widget
-func TScrollbar(options ...Option) *Window {
-	return Inter.TScrollbar(options...)
-}
-
-// ttk::separator - Separator bar
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TSeparator(options ...Option) *Window {
-	return w.newChild("ttk_separator", options...)
-}
-
-// ttk::separator - Separator bar
-func TSeparator(options ...Option) *Window {
-	return Inter.TSeparator(options...)
-}
-
-// ttk::sizegrip - Bottom-right corner resize widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TSizegrip(options ...Option) *Window {
-	return w.newChild("ttk_sizegrip", options...)
-}
-
-// ttk::sizegrip - Bottom-right corner resize widget
-func TSizegrip(options ...Option) *Window {
-	return Inter.TSizegrip(options...)
-}
-
-// ttk::spinbox - Selecting text field widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TSpinbox(options ...Option) *Window {
-	return w.newChild("ttk_spinbox", options...)
-}
-
-// ttk::spinbox - Selecting text field widget
-func TSpinbox(options ...Option) *Window {
-	return Inter.TSpinbox(options...)
-}
-
-// ttk::treeview - hierarchical multicolumn data display widget
-//
-// The resulting Window is a child of 'w'.
-func (w *Window) TTreeview(options ...Option) *Window {
-	return w.newChild("ttk_treeview", options...)
-}
-
-// ttk::treeview - hierarchical multicolumn data display widget
-func TTreeview(options ...Option) *Window {
-	return Inter.TTreeview(options...)
-}
-
-type activestyleOption string
-
-func (o activestyleOption) option(w *Window) string {
-	return fmt.Sprintf(`-activestyle %s`, tclSafeString(string(o)))
-}
-
-// Specifies the style in which to draw the active element.  This must be
-// one of 'dotbox' (show a focus ring around the active element),
-// 'none' (no special indication of active element) or
-// 'underline' (underline the active element).
-// The default is 'underline' on Windows, and 'dotbox' elsewhere.
-//
-// Note: This option applies to Listbox.
-func Activestyle(value string) Option {
-	return activestyleOption(value)
-}
-
-type aspectOption int
-
-func (o aspectOption) option(w *Window) string {
-	return fmt.Sprintf(`-aspect %v`, o)
-}
-
-// Specifies a non-negative integer value indicating desired
-// aspect ratio for the text.  The aspect ratio is specified as
-// 100*width/height.  100 means the text should
-// be as wide as it is tall, 200 means the text should
-// be twice as wide as it is tall, 50 means the text should
-// be twice as tall as it is wide, and so on.
-// Used to choose line length for text if '-width' option
-// is not specified.
-// Defaults to 150.
-//
-// Note: This option applies to Message.
-func Aspect(value int) Option {
-	return aspectOption(value)
-}
-
-type autoseparatorsOption bool
-
-func (o autoseparatorsOption) option(w *Window) string {
-	return fmt.Sprintf(`-autoseparators %v`, o)
-}
-
-// Specifies a boolean that says whether separators are automatically inserted in
-// the undo stack. Only meaningful when the '-undo' option is true.
-//
-// Note: This option applies to Text.
-func Autoseparators(value bool) Option {
-	return autoseparatorsOption(value)
-}
-
-type backgroundimageOption string
-
-func (o backgroundimageOption) option(w *Window) string {
-	return fmt.Sprintf(`-backgroundimage %s`, tclSafeString(string(o)))
-}
-
-// This specifies an image to display on the frame's background within
-// the border of the frame (i.e., the image will be clipped by the
-// frame's highlight ring and border, if either are present); subwidgets
-// of the frame will be drawn on top. The image must have been created
-// with the 'image create' command. If specified as the empty string,
-// no image will be displayed.
-//
-// Note: This option applies to Frame, Toplevel.
-func Backgroundimage(value string) Option {
-	return backgroundimageOption(value)
-}
-
-type bigincrementOption string
-
-func (o bigincrementOption) option(w *Window) string {
-	return fmt.Sprintf(`-bigincrement %s`, tclSafeString(string(o)))
-}
-
-// Some interactions with the scale cause its value to change by
-//
-// Note: This option applies to Scale.
-func Bigincrement(value string) Option {
-	return bigincrementOption(value)
-}
-
-type blockcursorOption bool
-
-func (o blockcursorOption) option(w *Window) string {
-	return fmt.Sprintf(`-blockcursor %v`, o)
-}
-
-// Specifies a boolean that says whether the blinking insertion cursor should be
-// drawn as a character-sized rectangular block. If false (the default) a thin
-// vertical line is used for the insertion cursor.
-//
-// Note: This option applies to Text.
-func Blockcursor(value bool) Option {
-	return blockcursorOption(value)
-}
-
-type buttonbackgroundOption string
-
-func (o buttonbackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-buttonbackground %s`, tclSafeString(string(o)))
-}
-
-// The background color to be used for the spin buttons.
-//
-// Note: This option applies to Spinbox.
-func Buttonbackground(value string) Option {
-	return buttonbackgroundOption(value)
-}
-
-type buttoncursorOption string
-
-func (o buttoncursorOption) option(w *Window) string {
-	return fmt.Sprintf(`-buttoncursor %s`, tclSafeString(string(o)))
-}
-
-// The cursor to be used when over the spin buttons.  If this is empty
-// (the default), a default cursor will be used.
-//
-// Note: This option applies to Spinbox.
-func Buttoncursor(value string) Option {
-	return buttoncursorOption(value)
-}
-
-type buttondownreliefOption string
-
-func (o buttondownreliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-buttondownrelief %s`, tclSafeString(string(o)))
-}
-
-// The relief to be used for the upper spin button.
-//
-// Note: This option applies to Spinbox.
-func Buttondownrelief(value string) Option {
-	return buttondownreliefOption(value)
-}
-
-type buttonupreliefOption string
-
-func (o buttonupreliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-buttonuprelief %s`, tclSafeString(string(o)))
-}
-
-// The relief to be used for the lower spin button.
-//
-// Note: This option applies to Spinbox.
-func Buttonuprelief(value string) Option {
-	return buttonupreliefOption(value)
-}
-
-type classOption string
-
-func (o classOption) option(w *Window) string {
-	return fmt.Sprintf(`-class %s`, tclSafeString(string(o)))
-}
-
-// Specifies a class for the window.
-// This class will be used when querying the option database for
-// the window's other options, and it will also be used later for
-// other purposes such as bindings.
-// The '-class' option may not be changed with the 'configure'
-// widget command.
-//
-// Note: This option applies to Frame, Labelframe, Toplevel.
-func Class(value string) Option {
-	return classOption(value)
-}
-
-type closeenoughOption string
-
-func (o closeenoughOption) option(w *Window) string {
-	return fmt.Sprintf(`-closeenough %s`, tclSafeString(string(o)))
-}
-
-// Specifies a floating-point value indicating how close the mouse cursor
-// must be to an item before it is considered to be
-//
-// Note: This option applies to Canvas.
-func Closeenough(value string) Option {
-	return closeenoughOption(value)
-}
-
-type colormapOption string
-
-func (o colormapOption) option(w *Window) string {
-	return fmt.Sprintf(`-colormap %s`, tclSafeString(string(o)))
-}
-
-// Specifies a colormap to use for the window.
-// The value may be either 'new', in which case a new colormap is
-// created for the window and its children, or the name of another
-// window (which must be on the same screen and have the same visual
-// as 'pathName'), in which case the new window will use the colormap
-// from the specified window.
-// If the '-colormap' option is not specified, the new window
-// uses the same colormap as its parent.
-// This option may not be changed with the 'configure'
-// widget command.
-//
-// Note: This option applies to Frame, Labelframe, Toplevel.
-func Colormap(value string) Option {
-	return colormapOption(value)
-}
-
-type columnsOption string
-
-func (o columnsOption) option(w *Window) string {
-	return fmt.Sprintf(`-columns %s`, tclSafeString(string(o)))
-}
-
-// A list of column identifiers,
-// specifying the number of columns and their names.
-//
-// Note: This option applies to TTreeview.
-func Columns(value string) Option {
-	return columnsOption(value)
-}
-
-type confineOption bool
-
-func (o confineOption) option(w *Window) string {
-	return fmt.Sprintf(`-confine %v`, o)
-}
-
-// Specifies a boolean value that indicates whether or not it should be
-// allowable to set the canvas's view outside the region defined by the
-// 'scrollRegion' argument.
-// Defaults to true, which means that the view will
-// be constrained within the scroll region.
-//
-// Note: This option applies to Canvas.
-func Confine(value bool) Option {
-	return confineOption(value)
-}
-
-type containerOption string
-
-func (o containerOption) option(w *Window) string {
-	return fmt.Sprintf(`-container %s`, tclSafeString(string(o)))
-}
-
-// The value must be a boolean.  If true, it means that this window will
-// be used as a container in which some other application will be embedded
-// (for example, a Tk toplevel can be embedded using the '-use' option).
-// The window will support the appropriate window manager protocols for
-// things like geometry requests.  The window should not have any
-// children of its own in this application.
-// This option may not be changed with the 'configure'
-// widget command.
-// Note that '-borderwidth', '-padx' and '-pady' are ignored when
-// configured as a container since a container has no border.
-//
-// Note: This option applies to Frame, Toplevel.
-func Container(value string) Option {
-	return containerOption(value)
-}
-
-type defaultOption string
-
-func (o defaultOption) option(w *Window) string {
-	return fmt.Sprintf(`-default %s`, tclSafeString(string(o)))
-}
-
-// Specifies one of three states for the default ring: 'normal',
-// 'active', or 'disabled'.  In active state, the button is drawn
-// with the platform specific appearance for a default button.  In normal
-// state, the button is drawn with the platform specific appearance for a
-// non-default button, leaving enough space to draw the default button
-// appearance.  The normal and active states will result in buttons of
-// the same size.  In disabled state, the button is drawn with the
-// non-default button appearance without leaving space for the default
-// appearance.  The disabled state may result in a smaller button than
-// the active state.
-//
-// Note: This option applies to Button, TButton.
-func Default(value string) Option {
-	return defaultOption(value)
-}
-
-type digitsOption int
-
-func (o digitsOption) option(w *Window) string {
-	return fmt.Sprintf(`-digits %v`, o)
-}
-
-// An integer specifying how many significant digits should be retained
-// when converting the value of the scale to a string.
-// If the number is less than or equal to zero, then the scale picks
-// the smallest value that guarantees that every possible slider
-// position prints as a different string.
-//
-// Note: This option applies to Scale.
-func Digits(value int) Option {
-	return digitsOption(value)
-}
-
-type directionOption string
-
-func (o directionOption) option(w *Window) string {
-	return fmt.Sprintf(`-direction %s`, tclSafeString(string(o)))
-}
-
-// Specifies where the menu is going to be popup up. 'above' tries to
-// pop the menu above the menubutton. 'below' tries to pop the menu
-// below the menubutton. 'left' tries to pop the menu to the left of
-// the menubutton. 'right' tries to pop the menu to the right of the
-// menu button. 'flush' pops the menu directly over the menubutton.
-// In the case of 'above' or 'below', the direction will be
-// reversed if the menu would show offscreen.
-//
-// Note: This option applies to Menubutton, TMenubutton.
-func Direction(value string) Option {
-	return directionOption(value)
-}
-
-type disabledbackgroundOption string
-
-func (o disabledbackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-disabledbackground %s`, tclSafeString(string(o)))
-}
-
-// Specifies the background color to use when the entry is disabled.  If
-// this option is the empty string, the normal background color is used.
-//
-// Note: This option applies to Entry, Spinbox.
-func Disabledbackground(value string) Option {
-	return disabledbackgroundOption(value)
-}
-
-type displaycolumnsOption int
-
-func (o displaycolumnsOption) option(w *Window) string {
-	return fmt.Sprintf(`-displaycolumns %v`, o)
-}
-
-// A list of column identifiers
-// (either symbolic names or integer indices)
-// specifying which data columns are displayed
-// and the order in which they appear,
-// or the string '#all\fP.
-// If set to '#all\fP (the default),
-// all columns are shown in the order given.
-//
-// Note: This option applies to TTreeview.
-func Displaycolumns(value int) Option {
-	return displaycolumnsOption(value)
-}
-
-type elementborderwidthOption string
-
-func (o elementborderwidthOption) option(w *Window) string {
-	return fmt.Sprintf(`-elementborderwidth %s`, tclSafeString(string(o)))
-}
-
-// Specifies the width of borders drawn around the internal elements
-// of the scrollbar (the two arrows and the slider).  The value may
-// have any of the forms acceptable to 'Tk_GetPixels'.
-// If this value is less than zero, the value of the '-borderwidth'
-// option is used in its place.
-//
-// Note: This option applies to Scrollbar.
-func Elementborderwidth(value string) Option {
-	return elementborderwidthOption(value)
-}
-
-type endlineOption int
-
-func (o endlineOption) option(w *Window) string {
-	return fmt.Sprintf(`-endline %v`, o)
-}
-
-// Specifies an integer line index representing the line of the underlying
-// textual data store that should be just after the last line contained in
-// the widget. This allows a text widget to reflect only a portion of a
-// larger piece of text. Instead of an integer, the empty string can be
-// provided to this configuration option, which will configure the widget
-// to end at the very last line in the textual data store.
-//
-// Note: This option applies to Text.
-func Endline(value int) Option {
-	return endlineOption(value)
-}
-
-type formatOption string
-
-func (o formatOption) option(w *Window) string {
-	return fmt.Sprintf(`-format %s`, tclSafeString(string(o)))
-}
-
-// Specifies an alternate format to use when setting the string value
-// when using the '-from' and '-to' range.
-// This must be a format specifier of the form '%<pad>.<pad>f',
-// as it will format a floating-point number.
-//
-// Note: This option applies to Spinbox, TSpinbox.
-func Format(value string) Option {
-	return formatOption(value)
-}
-
-type fromOption string
-
-func (o fromOption) option(w *Window) string {
-	return fmt.Sprintf(`-from %s`, tclSafeString(string(o)))
-}
-
-// A real value corresponding to the left or top end of the scale.
-//
-// Note: This option applies to Scale, Spinbox, TScale, TSpinbox.
-func From(value string) Option {
-	return fromOption(value)
-}
-
-type handlepadOption string
-
-func (o handlepadOption) option(w *Window) string {
-	return fmt.Sprintf(`-handlepad %s`, tclSafeString(string(o)))
-}
-
-// When sash handles are drawn, specifies the distance from the top or
-// left end of the sash (depending on the orientation of the widget) at
-// which to draw the handle.  May be any value accepted by 'Tk_GetPixels'.
-//
-// Note: This option applies to Panedwindow.
-func Handlepad(value string) Option {
-	return handlepadOption(value)
-}
-
-type handlesizeOption string
-
-func (o handlesizeOption) option(w *Window) string {
-	return fmt.Sprintf(`-handlesize %s`, tclSafeString(string(o)))
-}
-
-// Specifies the side length of a sash handle.  Handles are always
-// drawn as squares.  May be any value accepted by 'Tk_GetPixels'.
-//
-// Note: This option applies to Panedwindow.
-func Handlesize(value string) Option {
-	return handlesizeOption(value)
-}
-
-type heightOption string
-
-func (o heightOption) option(w *Window) string {
-	return fmt.Sprintf(`-height %s`, tclSafeString(string(o)))
-}
-
-// Specifies a desired height for the button.
-// If an image or bitmap is being displayed in the button then the value is in
-// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
-// for text it is in lines of text.
-// If this option is not specified, the button's desired height is computed
-// from the size of the image or bitmap or text being displayed in it.
-//
-// Note: This option applies to Button, Canvas, Checkbutton, Frame, Label, Labelframe, Listbox, Menubutton, Panedwindow, Radiobutton, Text, Toplevel, TCombobox, TFrame, TLabelframe, TNotebook, TPanedwindow, TTreeview.
-func Height(value string) Option {
-	return heightOption(value)
-}
-
-type inactiveselectbackgroundOption string
-
-func (o inactiveselectbackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-inactiveselectbackground %s`, tclSafeString(string(o)))
-}
-
-// Specifies the colour to use for the selection (the 'sel' tag) when the
-// window does not have the input focus. If empty, '{}', then no selection is
-// shown when the window does not have the focus.
-//
-// Note: This option applies to Text.
-func Inactiveselectbackground(value string) Option {
-	return inactiveselectbackgroundOption(value)
-}
-
-type incrementOption string
-
-func (o incrementOption) option(w *Window) string {
-	return fmt.Sprintf(`-increment %s`, tclSafeString(string(o)))
-}
-
-// A floating-point value specifying the increment.  When used with
-// '-from' and '-to', the value in the widget will be adjusted by
-// '-increment' when a spin button is pressed (up adds the value,
-// down subtracts the value).
-//
-// Note: This option applies to Spinbox, TSpinbox.
-func Increment(value string) Option {
-	return incrementOption(value)
-}
-
-type indicatoronOption bool
-
-func (o indicatoronOption) option(w *Window) string {
-	return fmt.Sprintf(`-indicatoron %v`, o)
-}
-
-// Specifies whether or not the indicator should be drawn.  Must be a
-// proper boolean value.  If false, the '-relief' option is
-// ignored and the widget's relief is always sunken if the widget is
-// selected and raised otherwise.
-//
-// Note: This option applies to Checkbutton, Menubutton, Radiobutton.
-func Indicatoron(value bool) Option {
-	return indicatoronOption(value)
-}
-
-type insertunfocussedOption string
-
-func (o insertunfocussedOption) option(w *Window) string {
-	return fmt.Sprintf(`-insertunfocussed %s`, tclSafeString(string(o)))
-}
-
-// 8.6
-//
-// Note: This option applies to Text.
-func Insertunfocussed(value string) Option {
-	return insertunfocussedOption(value)
-}
-
-type labelOption string
-
-func (o labelOption) option(w *Window) string {
-	return fmt.Sprintf(`-label %s`, tclSafeString(string(o)))
-}
-
-// A string to display as a label for the scale.  For
-// vertical scales the label is displayed just to the right of the
-// top end of the scale.  For horizontal scales the label is displayed
-// just above the left end of the scale.  If the option is specified
-// as an empty string, no label is displayed.
-//
-// Note: This option applies to Scale.
-func Lbl(value string) Option {
-	return labelOption(value)
-}
-
-type labelanchorOption string
-
-func (o labelanchorOption) option(w *Window) string {
-	return fmt.Sprintf(`-labelanchor %s`, tclSafeString(string(o)))
-}
-
-// Specifies where to place the label. A label is only displayed if the
-// '-text' option is not the empty string.
-// Valid values for this option are (listing them clockwise)
-// 'nw', 'n', 'ne', 'en', 'e', 'es',
-// 'se', 's','sw', 'ws', 'w' and 'wn'.
-// The default value is 'nw'.
-//
-// Note: This option applies to Labelframe, TLabelframe.
-func Labelanchor(value string) Option {
-	return labelanchorOption(value)
-}
-
-type labelwidgetOption string
-
-func (o labelwidgetOption) option(w *Window) string {
-	return fmt.Sprintf(`-labelwidget %s`, tclSafeString(string(o)))
-}
-
-// Specifies a widget to use as label. This overrides any '-text'
-// option. The widget must exist before being used as '-labelwidget'
-// and if it is not a descendant of this window, it will be raised
-// above it in the stacking order.
-//
-// Note: This option applies to Labelframe, TLabelframe.
-func Labelwidget(value string) Option {
-	return labelwidgetOption(value)
-}
-
-type lengthOption string
-
-func (o lengthOption) option(w *Window) string {
-	return fmt.Sprintf(`-length %s`, tclSafeString(string(o)))
-}
-
-// Specifies the desired long dimension of the scale in screen units
-// (i.e. any of the forms acceptable to 'Tk_GetPixels').
-// For vertical scales this is the scale's height;  for horizontal scales
-// it is the scale's width.
-//
-// Note: This option applies to Scale, TProgressbar, TScale.
-func Length(value string) Option {
-	return lengthOption(value)
-}
-
-type listvariableOption string
-
-func (o listvariableOption) option(w *Window) string {
-	return fmt.Sprintf(`-listvariable %s`, tclSafeString(string(o)))
-}
-
-// Specifies the name of a global variable.  The value of the variable is a list to
-// be displayed inside the widget; if the variable value changes then the
-// widget will automatically update itself to reflect the new value.  Attempts
-// to assign a variable with an invalid list value to '-listvariable'
-// will cause an error.  Attempts to unset a variable in use as a
-// '-listvariable' will fail but will not generate an error.
-//
-// Note: This option applies to Listbox.
-func Listvariable(value string) Option {
-	return listvariableOption(value)
-}
-
-type maximumOption string
-
-func (o maximumOption) option(w *Window) string {
-	return fmt.Sprintf(`-maximum %s`, tclSafeString(string(o)))
-}
-
-// A floating point number specifying the maximum '-value'.
-// Defaults to 100.
-//
-// Note: This option applies to TProgressbar.
-func Maximum(value string) Option {
-	return maximumOption(value)
-}
-
-type maxundoOption string
-
-func (o maxundoOption) option(w *Window) string {
-	return fmt.Sprintf(`-maxundo %s`, tclSafeString(string(o)))
-}
-
-// Specifies the maximum number of compound undo actions on the undo stack. A
-// zero or a negative value imply an unlimited undo stack.
-//
-// Note: This option applies to Text.
-func Maxundo(value string) Option {
-	return maxundoOption(value)
-}
-
-type menuOption string
-
-func (o menuOption) option(w *Window) string {
-	return fmt.Sprintf(`-menu %s`, tclSafeString(string(o)))
-}
-
-// Specifies the path name of the menu associated with this menubutton.
-// The menu must be a child of the menubutton.
-//
-// Note: This option applies to Menubutton, Toplevel, TMenubutton.
-func Mnu(value string) Option {
-	return menuOption(value)
-}
-
-type modeOption string
-
-func (o modeOption) option(w *Window) string {
-	return fmt.Sprintf(`-mode %s`, tclSafeString(string(o)))
-}
-
-// One of 'determinate' or 'indeterminate'.
-//
-// Note: This option applies to TProgressbar.
-func Mode(value string) Option {
-	return modeOption(value)
-}
-
-type offreliefOption string
-
-func (o offreliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-offrelief %s`, tclSafeString(string(o)))
-}
-
-// Specifies the relief for the checkbutton when the indicator is not drawn and
-// the checkbutton is off.  The default value is
-//
-// Note: This option applies to Checkbutton, Radiobutton.
-func Offrelief(value string) Option {
-	return offreliefOption(value)
-}
-
-type offvalueOption string
-
-func (o offvalueOption) option(w *Window) string {
-	return fmt.Sprintf(`-offvalue %s`, tclSafeString(string(o)))
-}
-
-// Specifies value to store in the button's associated variable whenever
-// this button is deselected.  Defaults to
-//
-// Note: This option applies to Checkbutton, TCheckbutton.
-func Offvalue(value string) Option {
-	return offvalueOption(value)
-}
-
-type onvalueOption string
-
-func (o onvalueOption) option(w *Window) string {
-	return fmt.Sprintf(`-onvalue %s`, tclSafeString(string(o)))
-}
-
-// Specifies value to store in the button's associated variable whenever
-// this button is selected.  Defaults to
-//
-// Note: This option applies to Checkbutton, TCheckbutton.
-func Onvalue(value string) Option {
-	return onvalueOption(value)
-}
-
-type opaqueresizeOption string
-
-func (o opaqueresizeOption) option(w *Window) string {
-	return fmt.Sprintf(`-opaqueresize %s`, tclSafeString(string(o)))
-}
-
-// Specifies whether panes should be resized as a sash is moved (true),
-// or if resizing should be deferred until the sash is placed (false).
-// In the latter case, a
-//
-// Note: This option applies to Panedwindow.
-func Opaqueresize(value string) Option {
-	return opaqueresizeOption(value)
-}
-
-type overreliefOption string
-
-func (o overreliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-overrelief %s`, tclSafeString(string(o)))
-}
-
-// Specifies an alternative relief for the button, to be used when the
-// mouse cursor is over the widget.  This option can be used to make
-// toolbar buttons, by configuring '-relief flat -overrelief
-// raised'.  If the value of this option is the empty string, then no
-// alternative relief is used when the mouse cursor is over the button.
-// The empty string is the default value.
-//
-// Note: This option applies to Button, Checkbutton, Radiobutton.
-func Overrelief(value string) Option {
-	return overreliefOption(value)
-}
-
-type paddingOption string
-
-func (o paddingOption) option(w *Window) string {
-	return fmt.Sprintf(`-padding %s`, tclSafeString(string(o)))
-}
-
-// Specifies the amount of extra space to add around the outside
-// of the notebook.
-// The padding is a list of up to four length specifications
-// 'left top right bottom'.
-// If fewer than four elements are specified,
-// 'bottom' defaults to 'top',
-// 'right' defaults to 'left', and
-// 'top' defaults to 'left'.
-// In other words, a list of three numbers specify the left, vertical, and right
-// padding; a list of two numbers specify the horizontal and the vertical padding;
-// a single number specifies the same padding all the way around the widget.
-//
-// Note: This option applies to TNotebook, TNotebook.
-func Padding(value string) Option {
-	return paddingOption(value)
-}
-
-type phaseOption string
-
-func (o phaseOption) option(w *Window) string {
-	return fmt.Sprintf(`-phase %s`, tclSafeString(string(o)))
-}
-
-// Read-only option.
-// The widget periodically increments the value of this option
-// whenever the '-value' is greater than 0 and,
-// in 'determinate' mode, less than '-maximum'.
-// This option may be used by the current theme
-// to provide additional animation effects.
-//
-// Note: This option applies to TProgressbar.
-func Phase(value string) Option {
-	return phaseOption(value)
-}
-
-type proxybackgroundOption string
-
-func (o proxybackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-proxybackground %s`, tclSafeString(string(o)))
-}
-
-// Background color to use when drawing the proxy. If an empty string, the
-// value of the '-background' option will be used.
-//
-// Note: This option applies to Panedwindow.
-func Proxybackground(value string) Option {
-	return proxybackgroundOption(value)
-}
-
-type proxyborderwidthOption string
-
-func (o proxyborderwidthOption) option(w *Window) string {
-	return fmt.Sprintf(`-proxyborderwidth %s`, tclSafeString(string(o)))
-}
-
-// Specifies the borderwidth of the proxy. May be any value accepted by
-// 'Tk_GetPixels'.
-//
-// Note: This option applies to Panedwindow.
-func Proxyborderwidth(value string) Option {
-	return proxyborderwidthOption(value)
-}
-
-type proxyreliefOption string
-
-func (o proxyreliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-proxyrelief %s`, tclSafeString(string(o)))
-}
-
-// Relief to use when drawing the proxy. May be any of the standard Tk
-// relief values. If an empty string, the value of the '-sashrelief'
-// option will be used.
-//
-// Note: This option applies to Panedwindow.
-func Proxyrelief(value string) Option {
-	return proxyreliefOption(value)
-}
-
-type readonlybackgroundOption string
-
-func (o readonlybackgroundOption) option(w *Window) string {
-	return fmt.Sprintf(`-readonlybackground %s`, tclSafeString(string(o)))
-}
-
-// Specifies the background color to use when the entry is readonly.  If
-// this option is the empty string, the normal background color is used.
-//
-// Note: This option applies to Entry, Spinbox.
-func Readonlybackground(value string) Option {
-	return readonlybackgroundOption(value)
-}
-
-type resolutionOption string
-
-func (o resolutionOption) option(w *Window) string {
-	return fmt.Sprintf(`-resolution %s`, tclSafeString(string(o)))
-}
-
-// A real value specifying the resolution for the scale.
-// If this value is greater than zero then the scale's value will always be
-// rounded to an even multiple of this value, as will
-// the endpoints of the scale.  If the value is less than zero then no
-// rounding occurs.  Defaults to 1 (i.e., the value will be integral).
-//
-// Note: This option applies to Scale.
-func Resolution(value string) Option {
-	return resolutionOption(value)
-}
-
-type sashcursorOption string
-
-func (o sashcursorOption) option(w *Window) string {
-	return fmt.Sprintf(`-sashcursor %s`, tclSafeString(string(o)))
-}
-
-// Mouse cursor to use when over a sash.  If null,
-// 'sb_h_double_arrow' will be used for horizontal panedwindows, and
-// 'sb_v_double_arrow' will be used for vertical panedwindows.
-//
-// Note: This option applies to Panedwindow.
-func Sashcursor(value string) Option {
-	return sashcursorOption(value)
-}
-
-type sashpadOption string
-
-func (o sashpadOption) option(w *Window) string {
-	return fmt.Sprintf(`-sashpad %s`, tclSafeString(string(o)))
-}
-
-// Specifies the amount of padding to leave of each side of a sash.  May
-// be any value accepted by 'Tk_GetPixels'.
-//
-// Note: This option applies to Panedwindow.
-func Sashpad(value string) Option {
-	return sashpadOption(value)
-}
-
-type sashreliefOption string
-
-func (o sashreliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-sashrelief %s`, tclSafeString(string(o)))
-}
-
-// Relief to use when drawing a sash.  May be any of the standard Tk
-// relief values.
-//
-// Note: This option applies to Panedwindow.
-func Sashrelief(value string) Option {
-	return sashreliefOption(value)
-}
-
-type sashwidthOption string
-
-func (o sashwidthOption) option(w *Window) string {
-	return fmt.Sprintf(`-sashwidth %s`, tclSafeString(string(o)))
-}
-
-// Specifies the width of each sash.  May be any value accepted by
-// 'Tk_GetPixels'.
-//
-// Note: This option applies to Panedwindow.
-func Sashwidth(value string) Option {
-	return sashwidthOption(value)
-}
-
-type screenOption string
-
-func (o screenOption) option(w *Window) string {
-	return fmt.Sprintf(`-screen %s`, tclSafeString(string(o)))
-}
-
-// Specifies the screen on which to place the new window.
-// Any valid screen name may be used, even one associated with a
-// different display.
-// Defaults to the same screen as its parent.
-// This option is special in that it may not be specified via the option
-// database, and it may not be modified with the 'configure'
-// widget command.
-//
-// Note: This option applies to Toplevel.
-func Screen(value string) Option {
-	return screenOption(value)
-}
-
-type scrollregionOption string
-
-func (o scrollregionOption) option(w *Window) string {
-	return fmt.Sprintf(`-scrollregion %s`, tclSafeString(string(o)))
-}
-
-// Specifies a list with four coordinates describing the left, top, right, and
-// bottom coordinates of a rectangular region.
-// This region is used for scrolling purposes and is considered to be
-// the boundary of the information in the canvas.
-// Each of the coordinates may be specified
-// in any of the forms given in the 'COORDINATES' section below.
-//
-// Note: This option applies to Canvas.
-func Scrollregion(value string) Option {
-	return scrollregionOption(value)
-}
-
-type selectcolorOption string
-
-func (o selectcolorOption) option(w *Window) string {
-	return fmt.Sprintf(`-selectcolor %s`, tclSafeString(string(o)))
-}
-
-// Specifies a background color to use when the button is selected.
-// If 'indicatorOn' is true then the color is used as the background for
-// the indicator regardless of the select state.
-// If 'indicatorOn' is false, this color is used as the background
-// for the entire widget, in place of 'background' or 'activeBackground',
-// whenever the widget is selected.
-// If specified as an empty string then no special color is used for
-// displaying when the widget is selected.
-//
-// Note: This option applies to Checkbutton, Menu, Radiobutton.
-func Selectcolor(value string) Option {
-	return selectcolorOption(value)
-}
-
-type selectimageOption string
-
-func (o selectimageOption) option(w *Window) string {
-	return fmt.Sprintf(`-selectimage %s`, tclSafeString(string(o)))
-}
-
-// Specifies an image to display (in place of the '-image' option)
-// when the checkbutton is selected.
-// This option is ignored unless the '-image' option has been
-// specified.
-//
-// Note: This option applies to Checkbutton, Radiobutton.
-func Selectimage(value string) Option {
-	return selectimageOption(value)
-}
-
-type selectmodeOption string
-
-func (o selectmodeOption) option(w *Window) string {
-	return fmt.Sprintf(`-selectmode %s`, tclSafeString(string(o)))
-}
-
-// Specifies one of several styles for manipulating the selection.
-// The value of the option may be arbitrary, but the default bindings
-// expect it to be either 'single', 'browse', 'multiple',
-// or 'extended';  the default value is 'browse'.
-//
-// Note: This option applies to Listbox, TTreeview.
-func Selectmode(value string) Option {
-	return selectmodeOption(value)
-}
-
-type selecttypeOption string
-
-func (o selecttypeOption) option(w *Window) string {
-	return fmt.Sprintf(`-selecttype %s`, tclSafeString(string(o)))
-}
-
-// Controls how the built-in class bindings manage the selection.
-// One of 'item' or 'cell'.
-//
-// Note: This option applies to TTreeview.
-func Selecttype(value string) Option {
-	return selecttypeOption(value)
-}
-
-type showOption string
-
-func (o showOption) option(w *Window) string {
-	return fmt.Sprintf(`-show %s`, tclSafeString(string(o)))
-}
-
-// If this option is specified, then the true contents of the entry
-// are not displayed in the window.
-// Instead, each character in the entry's value will be displayed as
-// the first character in the value of this option, such as
-//
-// Note: This option applies to Entry, TEntry, TTreeview.
-func Show(value string) Option {
-	return showOption(value)
-}
-
-type showhandleOption string
-
-func (o showhandleOption) option(w *Window) string {
-	return fmt.Sprintf(`-showhandle %s`, tclSafeString(string(o)))
-}
-
-// Specifies whether sash handles should be shown.  May be any valid Tcl
-// boolean value.
-//
-// Note: This option applies to Panedwindow.
-func Showhandle(value string) Option {
-	return showhandleOption(value)
-}
-
-type showvalueOption bool
-
-func (o showvalueOption) option(w *Window) string {
-	return fmt.Sprintf(`-showvalue %v`, o)
-}
-
-// Specifies a boolean value indicating whether or not the current
-// value of the scale is to be displayed.
-//
-// Note: This option applies to Scale.
-func Showvalue(value bool) Option {
-	return showvalueOption(value)
-}
-
-type sliderlengthOption string
-
-func (o sliderlengthOption) option(w *Window) string {
-	return fmt.Sprintf(`-sliderlength %s`, tclSafeString(string(o)))
-}
-
-// Specifies the size of the slider, measured in screen units along the slider's
-// long dimension.  The value may be specified in any of the forms acceptable
-// to 'Tk_GetPixels'.
-//
-// Note: This option applies to Scale.
-func Sliderlength(value string) Option {
-	return sliderlengthOption(value)
-}
-
-type sliderreliefOption string
-
-func (o sliderreliefOption) option(w *Window) string {
-	return fmt.Sprintf(`-sliderrelief %s`, tclSafeString(string(o)))
-}
-
-// Specifies the relief to use when drawing the slider, such as 'raised'
-// or 'sunken'.
-//
-// Note: This option applies to Scale.
-func Sliderrelief(value string) Option {
-	return sliderreliefOption(value)
-}
-
-type spacing1Option string
-
-func (o spacing1Option) option(w *Window) string {
-	return fmt.Sprintf(`-spacing1 %s`, tclSafeString(string(o)))
-}
-
-// Requests additional space above each text line in the widget, using any of the
-// standard forms for screen distances. If a line wraps, this option only applies
-// to the first line on the display. This option may be overridden with
-// '-spacing1' options in tags.
-//
-// Note: This option applies to Text.
-func Spacing1(value string) Option {
-	return spacing1Option(value)
-}
-
-type spacing2Option string
-
-func (o spacing2Option) option(w *Window) string {
-	return fmt.Sprintf(`-spacing2 %s`, tclSafeString(string(o)))
-}
-
-// For lines that wrap (so that they cover more than one line on the display)
-// this option specifies additional space to provide between the display lines
-// that represent a single line of text. The value may have any of the standard
-// forms for screen distances. This option may be overridden with
-// '-spacing2' options in tags.
-//
-// Note: This option applies to Text.
-func Spacing2(value string) Option {
-	return spacing2Option(value)
-}
-
-type spacing3Option string
-
-func (o spacing3Option) option(w *Window) string {
-	return fmt.Sprintf(`-spacing3 %s`, tclSafeString(string(o)))
-}
-
-// Requests additional space below each text line in the widget, using any of the
-// standard forms for screen distances. If a line wraps, this option only applies
-// to the last line on the display. This option may be overridden with
-// '-spacing3' options in tags.
-//
-// Note: This option applies to Text.
-func Spacing3(value string) Option {
-	return spacing3Option(value)
-}
-
-type startlineOption int
-
-func (o startlineOption) option(w *Window) string {
-	return fmt.Sprintf(`-startline %v`, o)
-}
-
-// Specifies an integer line index representing the first line of the underlying
-// textual data store that should be contained in the widget. This allows a text
-// widget to reflect only a portion of a larger piece of text. Instead of an
-// integer, the empty string can be provided to this configuration option, which
-// will configure the widget to start at the very first line in the textual data
-// store.
-//
-// Note: This option applies to Text.
-func Startline(value int) Option {
-	return startlineOption(value)
-}
-
-type stateOption string
-
-func (o stateOption) option(w *Window) string {
-	return fmt.Sprintf(`-state %s`, tclSafeString(string(o)))
-}
-
-// Specifies one of three states for the button:  'normal', 'active',
-// or 'disabled'.  In normal state the button is displayed using the
-// '-foreground' and '-background' options.  The active state is
-// typically used when the pointer is over the button.  In active state
-// the button is displayed using the '-activeforeground' and
-// '-activebackground' options.  Disabled state means that the button
-// should be insensitive:  the default bindings will refuse to activate
-// the widget and will ignore mouse button presses.
-// In this state the '-disabledforeground' and
-// '-background' options determine how the button is displayed.
-//
-// Note: This option applies to Button, Canvas, Checkbutton, Entry, Label, Listbox, Menubutton, Radiobutton, Scale, Spinbox, Text, TCombobox, TEntry, TNotebook.
-func State(value string) Option {
-	return stateOption(value)
-}
-
-type stickyOption string
-
-func (o stickyOption) option(w *Window) string {
-	return fmt.Sprintf(`-sticky %s`, tclSafeString(string(o)))
-}
-
-// Specifies how the content window is positioned within the pane area.
-// Value is a string containing zero or more of the characters
-// 'n, s, e,' or 'w'.
-// Each letter refers to a side (north, south, east, or west)
-// that the content window will
-//
-// Note: This option applies to TNotebook.
-func Sticky(value string) Option {
-	return stickyOption(value)
-}
-
-type stripedOption string
-
-func (o stripedOption) option(w *Window) string {
-	return fmt.Sprintf(`-striped %s`, tclSafeString(string(o)))
-}
-
-// Boolean specifying zebra striped item coloring.
-// Note that
-// striped items uses the '-stripedbackground' option if set by the theme or
-// a tag. If not supported by the current theme, it will not show.
-//
-// Note: This option applies to TTreeview.
-func Striped(value string) Option {
-	return stripedOption(value)
-}
-
-type tabsOption string
-
-func (o tabsOption) option(w *Window) string {
-	return fmt.Sprintf(`-tabs %s`, tclSafeString(string(o)))
-}
-
-// Specifies a set of tab stops for the window. The option's value consists of a
-// list of screen distances giving the positions of the tab stops, each of which
-// is a distance relative to the left edge of the widget (excluding borders,
-// padding, etc). Each position may optionally be followed in the next list
-// element by one of the keywords 'left', 'right', 'center', or
-// 'numeric', which specifies how to justify text relative to the tab stop.
-// 'Left' is the default; it causes the text following the tab character to
-// be positioned with its left edge at the tab position. 'Right' means that
-// the right edge of the text following the tab character is positioned at the
-// tab position, and 'center' means that the text is centered at the tab
-// position. 'Numeric' means that the decimal point in the text is positioned
-// at the tab position; if there is no decimal point then the least significant
-// digit of the number is positioned just to the left of the tab position; if
-// there is no number in the text then the text is right-justified at the tab
-// position. For example,
-//
-// Note: This option applies to Text.
-func Tabs(value string) Option {
-	return tabsOption(value)
-}
-
-type tabstyleOption string
-
-func (o tabstyleOption) option(w *Window) string {
-	return fmt.Sprintf(`-tabstyle %s`, tclSafeString(string(o)))
-}
-
-// Specifies how to interpret the relationship between tab stops on a line and
-// tabs in the text of that line. The value must be 'tabular' (the default)
-// or 'wordprocessor'. Note that tabs are interpreted as they are encountered
-// in the text. If the tab style is 'tabular' then the 'n”th tab
-// character in the line's text will be associated with the 'n”th tab stop
-// defined for that line. If the tab character's x coordinate falls to the right
-// of the 'n”th tab stop, then a gap of a single space will be inserted as a
-// fallback. If the tab style is 'wordprocessor' then any tab character being
-// laid out will use (and be defined by) the first tab stop to the right of the
-// preceding characters already laid out on that line. The value of the
-// '-tabstyle' option may be overridden by '-tabstyle' options in tags.
-//
-// Note: This option applies to Text.
-func Tabstyle(value string) Option {
-	return tabstyleOption(value)
-}
-
-type tearoffOption bool
-
-func (o tearoffOption) option(w *Window) string {
-	return fmt.Sprintf(`-tearoff %v`, o)
-}
-
-// This option must have a proper boolean value (default is false),
-// which specifies whether or not the menu should include a tear-off
-// entry at the top.  If so, it will exist as entry 0 of the menu and
-// the other entries will number starting at 1.  The default menu
-// bindings arrange for the menu to be torn off when the tear-off entry
-// is invoked.
-// This option is ignored under Aqua/MacOS, where menus cannot
-// be torn off.
-//
-// Note: This option applies to Menu.
-func Tearoff(value bool) Option {
-	return tearoffOption(value)
-}
-
-type tickintervalOption string
-
-func (o tickintervalOption) option(w *Window) string {
-	return fmt.Sprintf(`-tickinterval %s`, tclSafeString(string(o)))
-}
-
-// Must be a real value.
-// Determines the spacing between numerical
-// tick marks displayed below or to the left of the slider. The values will all
-// be displayed with the same number of decimal places, which will be enough to
-// ensure they are all accurate to within 20% of a tick interval.
-// If 0, no tick marks will be displayed.
-//
-// Note: This option applies to Scale.
-func Tickinterval(value string) Option {
-	return tickintervalOption(value)
-}
-
-type tileOption string
-
-func (o tileOption) option(w *Window) string {
-	return fmt.Sprintf(`-tile %s`, tclSafeString(string(o)))
-}
-
-// "8.7, TIP262"
-//
-// Note: This option applies to Frame, Toplevel.
-func Tile(value string) Option {
-	return tileOption(value)
-}
-
-type titleOption string
-
-func (o titleOption) option(w *Window) string {
-	return fmt.Sprintf(`-title %s`, tclSafeString(string(o)))
-}
-
-// The string will be used to title the window created when this menu is
-// torn off. If the title is NULL, then the window will have the title
-// of the menubutton or the text of the cascade item from which this menu
-// was invoked.
-//
-// Note: This option applies to Menu.
-func Title(value string) Option {
-	return titleOption(value)
-}
-
-type titlecolumnsOption string
-
-func (o titlecolumnsOption) option(w *Window) string {
-	return fmt.Sprintf(`-titlecolumns %s`, tclSafeString(string(o)))
-}
-
-// Number of display columns at the left that should not be scrolled. The tree
-// column counts, even if '-show tree' is not specified. Thus for value N of
-// this option, column #N is the first one that is scrollable. Default is 0.
-//
-// Note: This option applies to TTreeview.
-func Titlecolumns(value string) Option {
-	return titlecolumnsOption(value)
-}
-
-type titleitemsOption string
-
-func (o titleitemsOption) option(w *Window) string {
-	return fmt.Sprintf(`-titleitems %s`, tclSafeString(string(o)))
-}
-
-// Number of items at the top that should not be vertically scrolled. Default is 0.
-//
-// Note: This option applies to TTreeview.
-func Titleitems(value string) Option {
-	return titleitemsOption(value)
-}
-
-type toOption string
-
-func (o toOption) option(w *Window) string {
-	return fmt.Sprintf(`-to %s`, tclSafeString(string(o)))
-}
-
-// Specifies a real value corresponding
-// to the right or bottom end of the scale.
-// This value may be either less than or greater than the '-from' option.
-//
-// Note: This option applies to Scale, Spinbox, TScale, TSpinbox.
-func To(value string) Option {
-	return toOption(value)
-}
-
-type tristateimageOption string
-
-func (o tristateimageOption) option(w *Window) string {
-	return fmt.Sprintf(`-tristateimage %s`, tclSafeString(string(o)))
-}
-
-// Specifies an image to display (in place of the '-image' option)
-// when the checkbutton is in tri-state mode.
-// This option is ignored unless the '-image' option has been
-// specified.
-//
-// Note: This option applies to Checkbutton, Radiobutton.
-func Tristateimage(value string) Option {
-	return tristateimageOption(value)
-}
-
-type tristatevalueOption string
-
-func (o tristatevalueOption) option(w *Window) string {
-	return fmt.Sprintf(`-tristatevalue %s`, tclSafeString(string(o)))
-}
-
-// Specifies the value that causes the checkbutton to display the multi-value
-// selection, also known as the tri-state mode.  Defaults to
-//
-// Note: This option applies to Checkbutton, Radiobutton.
-func Tristatevalue(value string) Option {
-	return tristatevalueOption(value)
-}
-
-type typeOption string
-
-func (o typeOption) option(w *Window) string {
-	return fmt.Sprintf(`-type %s`, tclSafeString(string(o)))
-}
-
-// This option can be one of 'menubar', 'tearoff', or
-// 'normal', and is set when the menu is created. While the string
-// returned by the configuration database will change if this option is
-// changed, this does not affect the menu widget's behavior. This is used
-// by the cloning mechanism and is not normally set outside of the Tk
-// library.
-//
-// Note: This option applies to Menu.
-func Type(value string) Option {
-	return typeOption(value)
-}
-
-type undoOption bool
-
-func (o undoOption) option(w *Window) string {
-	return fmt.Sprintf(`-undo %v`, o)
-}
-
-// Specifies a boolean that says whether the undo mechanism is active or not.
-//
-// Note: This option applies to Text.
-func Undo(value bool) Option {
-	return undoOption(value)
-}
-
-type useOption string
-
-func (o useOption) option(w *Window) string {
-	return fmt.Sprintf(`-use %s`, tclSafeString(string(o)))
-}
-
-// This option is used for embedding. If the value is not an empty string,
-// it must be the window identifier of a container window, specified as
-// a hexadecimal string like the ones returned by the 'winfo id'
-// command. The toplevel widget will be created as a child of the given
-// container instead of the root window for the screen.  If the container
-// window is in a Tk application, it must be a frame or toplevel widget for
-// which the '-container' option was specified.
-// This option may not be changed with the 'configure'
-// widget command.
-//
-// Note: This option applies to Toplevel.
-func Use(value string) Option {
-	return useOption(value)
-}
-
-type validateOption string
-
-func (o validateOption) option(w *Window) string {
-	return fmt.Sprintf(`-validate %s`, tclSafeString(string(o)))
-}
-
-// Specifies the mode in which validation should operate: 'none',
-// 'focus', 'focusin', 'focusout', 'key', or 'all'.
-// It defaults to 'none'.  When you want validation, you must explicitly
-// state which mode you wish to use.  See 'VALIDATION' below for more.
-//
-// Note: This option applies to Entry, Spinbox, TEntry.
-func Validate(value string) Option {
-	return validateOption(value)
-}
-
-type valueOption string
-
-func (o valueOption) option(w *Window) string {
-	return fmt.Sprintf(`-value %s`, tclSafeString(string(o)))
-}
-
-// Specifies value to store in the button's associated variable whenever
-// this button is selected.
-//
-// Note: This option applies to Radiobutton, TProgressbar, TRadiobutton, TScale.
-func Value(value string) Option {
-	return valueOption(value)
-}
-
-type valuesOption string
-
-func (o valuesOption) option(w *Window) string {
-	return fmt.Sprintf(`-values %s`, tclSafeString(string(o)))
-}
-
-// Must be a proper list value.  If specified, the spinbox will use these
-// values as to control its contents, starting with the first value.  This
-// option has precedence over the '-from' and '-to' range.
-//
-// Note: This option applies to Spinbox, TCombobox, TSpinbox.
-func Values(value string) Option {
-	return valuesOption(value)
-}
-
-type variableOption string
-
-func (o variableOption) option(w *Window) string {
-	return fmt.Sprintf(`-variable %s`, tclSafeString(string(o)))
-}
-
-// Specifies the name of a global variable to set to indicate whether
-// or not this button is selected.  Defaults to the name of the
-// button within its parent (i.e. the last element of the button
-// window's path name).
-//
-// Note: This option applies to Checkbutton, Radiobutton, Scale, TCheckbutton, TProgressbar, TRadiobutton, TScale.
-func Variable(value string) Option {
-	return variableOption(value)
-}
-
-type visualOption string
-
-func (o visualOption) option(w *Window) string {
-	return fmt.Sprintf(`-visual %s`, tclSafeString(string(o)))
-}
-
-// Specifies visual information for the new window in any of the
-// forms accepted by 'Tk_GetVisual'.
-// If this option is not specified, the new window will use the same
-// visual as its parent.
-// The '-visual' option may not be modified with the 'configure'
-// widget command.
-//
-// Note: This option applies to Frame, Labelframe, Toplevel.
-func Visual(value string) Option {
-	return visualOption(value)
-}
-
-type weightOption int
-
-func (o weightOption) option(w *Window) string {
-	return fmt.Sprintf(`-weight %v`, o)
-}
-
-// An integer specifying the relative stretchability of the pane.
-// When the paned window is resized, the extra space is added
-// or subtracted to each pane proportionally to its '-weight'.
-//
-// Note: This option applies to TPanedwindow.
-func Weight(value int) Option {
-	return weightOption(value)
-}
-
-type widthOption string
-
-func (o widthOption) option(w *Window) string {
-	return fmt.Sprintf(`-width %s`, tclSafeString(string(o)))
-}
-
-// Specifies a desired width for the button.
-// If an image or bitmap is being displayed in the button then the value is in
-// screen units (i.e. any of the forms acceptable to 'Tk_GetPixels').
-// For a text button (no image or with '-compound none') then the width
-// specifies how much space in characters to allocate for the text label.
-// If the width is negative then this specifies a minimum width.
-// If this option is not specified, the button's desired width is computed
-// from the size of the image or bitmap or text being displayed in it.
-//
-// Note: This option applies to Button, Canvas, Checkbutton, Entry, Frame, Label, Labelframe, Listbox, Menubutton, Message, Panedwindow, Radiobutton, Scale, Scrollbar, Spinbox, Text, Toplevel, TCombobox, TEntry, TFrame, TLabelframe, TNotebook, TPanedwindow.
-func Width(value string) Option {
-	return widthOption(value)
-}
-
-type wrapOption bool
-
-func (o wrapOption) option(w *Window) string {
-	return fmt.Sprintf(`-wrap %v`, o)
-}
-
-// Must be a proper boolean value.  If on, the spinbox will wrap around the
-// values of data in the widget.
-//
-// Note: This option applies to Spinbox, Text, TSpinbox.
-func Wrap(value bool) Option {
-	return wrapOption(value)
-}
-
-type xscrollincrementOption string
-
-func (o xscrollincrementOption) option(w *Window) string {
-	return fmt.Sprintf(`-xscrollincrement %s`, tclSafeString(string(o)))
-}
-
 // Specifies an increment for horizontal scrolling, in any of the usual forms
 // permitted for screen distances. If the value of this option is greater
 // than zero, the horizontal view in the window will be constrained so that
@@ -3001,18 +4010,32 @@ func (o xscrollincrementOption) option(w *Window) string {
 // are selected) will also be 'xScrollIncrement'. If the value of
 // this option is less than or equal to zero, then horizontal scrolling
 // is unconstrained.
+func Xscrollincrement(value any) option {
+	return xscrollincrementOption{value}
+}
+
+// See also [Event handlers]
 //
-// Note: This option applies to Canvas.
-func Xscrollincrement(value string) Option {
-	return xscrollincrementOption(value)
+// Specifies the prefix for a command used to communicate with vertical
+// scrollbars.  This option is treated in the same way as the
+// '-xscrollcommand' option, except that it is used for vertical
+// scrollbars and is provided by widgets that support vertical scrolling.
+// See the description of '-xscrollcommand' for details
+// on how this option is used.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Yscrollcommand(args ...any) option {
+	return newEventHandler("-yscrollcommand", args...)
 }
 
-type yscrollincrementOption string
+type yscrollincrementOption struct{ v any }
 
-func (o yscrollincrementOption) option(w *Window) string {
-	return fmt.Sprintf(`-yscrollincrement %s`, tclSafeString(string(o)))
+func (o yscrollincrementOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-yscrollincrement %s`, optionString(o.v))
 }
 
+// # Canvas yscrollincrement
+//
 // Specifies an increment for vertical scrolling, in any of the usual forms
 // permitted for screen distances. If the value of this option is greater
 // than zero, the vertical view in the window will be constrained so that
@@ -3022,8 +4045,6 @@ func (o yscrollincrementOption) option(w *Window) string {
 // are selected) will also be 'yScrollIncrement'. If the value of
 // this option is less than or equal to zero, then vertical scrolling
 // is unconstrained.
-//
-// Note: This option applies to Canvas.
-func Yscrollincrement(value string) Option {
-	return yscrollincrementOption(value)
+func Yscrollincrement(value any) option {
+	return yscrollincrementOption{value}
 }
