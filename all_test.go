@@ -47,7 +47,7 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	b := TButton(Txt("{[Close\nMe]}"), Underline(2), Command(func() { Inter.eval("destroy .") }))
+	b := Button(Txt("{[Close\nMe]}"), Underline(2), Overrelief("flat"), Command(func() { Inter.eval("destroy .") }))
 	Inter.eval(fmt.Sprintf(`
 ttk::style theme use clam
 . configure -pady 10

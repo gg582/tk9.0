@@ -79,13 +79,55 @@ func generated(fn string, docs []document) {
 		default:
 			nm := tclName2GoName(nm0)
 			if _, ok := doc["IsWindow"].(bool); ok {
+				var description string
+				var a []string
+				switch x := doc["Options"].(type) {
+				case []any:
+					for _, v := range x {
+						v := v.(map[string]any)
+						if len(a) == 0 {
+							a = append(a, "")
+						}
+						s := v["Name"].(string)
+						b := strings.Fields(s)
+						switch len(b) {
+						case 3:
+							a = append(a, "", fmt.Sprintf("# %s(%s(...))", nm, export(b[0][1:])), "")
+						default:
+							onms := optionNames(s)
+							var c []string
+							for _, onm := range onms {
+								c = append(c, fmt.Sprintf("%s(%s(...))", nm, export(onm[1:])))
+							}
+							a = append(a, "", fmt.Sprintf("# %s", strings.Join(c, " or ")), "")
+						}
+						// a = append(a, "", "\t"+v["Name"].(string), "")
+						a = append(a, strings.Split(v["Docs"].(string), "\n")...)
+					}
+				}
+				switch x := doc["Description"].(type) {
+				case []any:
+					if len(a) != 0 {
+						a = append(a, "", "# Description")
+					}
+					for _, v := range x {
+						if len(a) == 0 {
+							a = append(a, "")
+						}
+						a = append(a, "")
+						a = append(a, strings.Split(v.(string), "\n")...)
+					}
+				}
+				description = strings.Join(a, "\n// ")
 				fmt.Fprintf(w, "\n\n// %v", doc["Name"])
+				fmt.Fprintf(w, "%s", description)
 				fmt.Fprintf(w, "\n//\n// The resulting Window is a child of 'w'.")
 				fmt.Fprintf(w, "\nfunc (w *Window) %s(options ...option) *Window {", nm)
 				fmt.Fprintf(w, "\n\treturn w.newChild(%q, options...)", nm0)
 				fmt.Fprintf(w, "\n}")
 
 				fmt.Fprintf(w, "\n\n// %v", doc["Name"])
+				fmt.Fprintf(w, "%s", description)
 				fmt.Fprintf(w, "\nfunc %s(options ...option) *Window {", nm)
 				fmt.Fprintf(w, "\n\treturn Inter.%s(options...)", nm)
 				fmt.Fprintf(w, "\n}")
@@ -161,7 +203,7 @@ func option(w io.Writer, nm string, docsv []*optionDocs) {
 				if i != 0 {
 					fmt.Fprintf(w, "\n//")
 				}
-				fmt.Fprintf(w, "\n// # %s %s\n//", tclName2GoName(docs.page), nm2)
+				fmt.Fprintf(w, "\n// # %s(%s(...))\n//", tclName2GoName(docs.page), export(nm2))
 			}
 			d := strings.Split(strings.TrimSpace(docs.docs), "\n")
 			fmt.Fprintf(w, "\n// %s", strings.Join(d, "\n// "))

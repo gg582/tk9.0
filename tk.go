@@ -5,24 +5,25 @@
 // Package tk9.0 is an idiomatic Go wrapper for [libtk9.0]. It is similar to
 // Python's tkinter.
 //
-// # Overview
+// # The options pattern
 //
-// At least some minimal knowledge of Tcl/Tk is required for using this
-// package. However you will not need to write any Tcl code and you do not need
-// to care about the grammar of Tcl words/strings and how it differs from Go.
+// Zero or more options can be specified when creating a widget. For example
+//
+//	b := Button(Text("Hello"), OverRelief("flat"))
+//
+// or
+//
+//	lbl := myFrame.Label(State("disabled"), Width(200))
+//
+// # Widget path names
+//
+// Tcl/Tk uses widget pathnames explicitly set by user code. This package
+// generates pathnames automatically.
 //
 // # OS thread
 //
 // This package should be used from the same goroutine that initialized the
 // package. Package initialization performs a runtime.LockOSThread.
-//
-// # time.Duration
-//
-// When passing an argument of type time.Durarion to a function accepting
-// 'any', the duration is converted to an integer number of milliseconds.
-//
-// There are several Tcl/Tk tutorials available, for example at
-// [tutorialspoint].
 //
 // # Event handlers
 //
@@ -43,11 +44,34 @@
 // as an EventDetacher if that was not yet specified. The second instance is
 // used as an EventDetacher if that was not yet specified.
 //
-// Note: Parts of the documentation are copied and/or modified from [TkDocs],
-// see the LICENSE-TKDOCS file for details.
+// # time.Duration
 //
-// Note: Parts of the documentation are copied and/or modified from the [tcl.tk
+// When passing an argument of type time.Durarion to a function accepting
+// 'any', the duration is converted to an integer number of milliseconds.
+//
+// # Tcl/Tk code
+//
+// At least some minimal knowledge of Tcl/Tk is required for using this
+// package. However you will not need to write any Tcl code and you do not need
+// to care about the grammar of Tcl words/string literals and how it differs
+// from Go.
+//
+// There are several Tcl/Tk tutorials available, for example at
+// [tutorialspoint].
+//
+// # Notes
+//
+// Most of the documentation comments are generated directly from the Tcl/Tk
+// documentation and may not be entirely correct for the Go package. They serve
+// more as a quick/offline Tcl/Tk reference.
+//
+// # Additional copyrights
+//
+// Parts of the documentation are copied and/or modified from the [tcl.tk
 // site], see the LICENSE-TCLTK file for details.
+//
+// Parts of the documentation are copied and/or modified from [TkDocs],
+// see the LICENSE-TKDOCS file for details.
 //
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
 // [TkDocs]: https://tkdocs.com/about.html
