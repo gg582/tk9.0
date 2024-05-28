@@ -6,16 +6,18 @@ import (
 	"fmt"
 )
 
+
+
 // button - Create and manipulate 'button' action widgets
-//
+// 
 // # Button(Command(...))
-//
+// 
 // Specifies a Tcl command to associate with the button.  This command
 // is typically invoked when mouse button 1 is released over the button
 // window.
-//
+// 
 // # Button(Default(...))
-//
+// 
 // Specifies one of three states for the default ring: 'normal',
 // 'active', or 'disabled'.  In active state, the button is drawn
 // with the platform specific appearance for a default button.  In normal
@@ -26,27 +28,27 @@ import (
 // non-default button appearance without leaving space for the default
 // appearance.  The disabled state may result in a smaller button than
 // the active state.
-//
+// 
 // # Button(Height(...))
-//
+// 
 // Specifies a desired height for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the button's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Button(Overrelief(...))
-//
+// 
 // Specifies an alternative relief for the button, to be used when the
 // mouse cursor is over the widget.  This option can be used to make
 // toolbar buttons, by configuring '-relief flat -overrelief
 // raised'.  If the value of this option is the empty string, then no
 // alternative relief is used when the mouse cursor is over the button.
 // The empty string is the default value.
-//
+// 
 // # Button(State(...))
-//
+// 
 // Specifies one of three states for the button:  'normal', 'active',
 // or 'disabled'.  In normal state the button is displayed using the
 // '-foreground' and '-background' options.  The active state is
@@ -57,9 +59,9 @@ import (
 // the widget and will ignore mouse button presses.
 // In this state the '-disabledforeground' and
 // '-background' options determine how the button is displayed.
-//
+// 
 // # Button(Width(...))
-//
+// 
 // Specifies a desired width for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels').
@@ -68,34 +70,6 @@ import (
 // If the width is negative then this specifies a minimum width.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
-// # Description
-//
-// The button command creates a new window (given by the
-// pathName argument) and makes it into a button widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the button such as its colors, font,
-// text, and initial relief.  The button command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A button is a widget that displays a textual string, bitmap or image.
-// If text is displayed, it must all be in a single font, but it
-// can occupy multiple lines on the screen (if it contains newlines
-// or if wrapping occurs because of the -wraplength option) and
-// one of the characters may optionally be underlined using the
-// -underline option.
-// It can display itself in either of three different ways, according
-// to
-// the -state option;
-// it can be made to appear raised, sunken, or flat;
-// and it can be made to flash.  When a user invokes the
-// button (by pressing mouse button 1 with the cursor over the
-// button), then the Tcl command specified in the -command
-// option is invoked.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Button(options ...option) *Window {
@@ -103,15 +77,15 @@ func (w *Window) Button(options ...option) *Window {
 }
 
 // button - Create and manipulate 'button' action widgets
-//
+// 
 // # Button(Command(...))
-//
+// 
 // Specifies a Tcl command to associate with the button.  This command
 // is typically invoked when mouse button 1 is released over the button
 // window.
-//
+// 
 // # Button(Default(...))
-//
+// 
 // Specifies one of three states for the default ring: 'normal',
 // 'active', or 'disabled'.  In active state, the button is drawn
 // with the platform specific appearance for a default button.  In normal
@@ -122,27 +96,27 @@ func (w *Window) Button(options ...option) *Window {
 // non-default button appearance without leaving space for the default
 // appearance.  The disabled state may result in a smaller button than
 // the active state.
-//
+// 
 // # Button(Height(...))
-//
+// 
 // Specifies a desired height for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the button's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Button(Overrelief(...))
-//
+// 
 // Specifies an alternative relief for the button, to be used when the
 // mouse cursor is over the widget.  This option can be used to make
 // toolbar buttons, by configuring '-relief flat -overrelief
 // raised'.  If the value of this option is the empty string, then no
 // alternative relief is used when the mouse cursor is over the button.
 // The empty string is the default value.
-//
+// 
 // # Button(State(...))
-//
+// 
 // Specifies one of three states for the button:  'normal', 'active',
 // or 'disabled'.  In normal state the button is displayed using the
 // '-foreground' and '-background' options.  The active state is
@@ -153,9 +127,9 @@ func (w *Window) Button(options ...option) *Window {
 // the widget and will ignore mouse button presses.
 // In this state the '-disabledforeground' and
 // '-background' options determine how the button is displayed.
-//
+// 
 // # Button(Width(...))
-//
+// 
 // Specifies a desired width for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels').
@@ -164,70 +138,42 @@ func (w *Window) Button(options ...option) *Window {
 // If the width is negative then this specifies a minimum width.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
-// # Description
-//
-// The button command creates a new window (given by the
-// pathName argument) and makes it into a button widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the button such as its colors, font,
-// text, and initial relief.  The button command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A button is a widget that displays a textual string, bitmap or image.
-// If text is displayed, it must all be in a single font, but it
-// can occupy multiple lines on the screen (if it contains newlines
-// or if wrapping occurs because of the -wraplength option) and
-// one of the characters may optionally be underlined using the
-// -underline option.
-// It can display itself in either of three different ways, according
-// to
-// the -state option;
-// it can be made to appear raised, sunken, or flat;
-// and it can be made to flash.  When a user invokes the
-// button (by pressing mouse button 1 with the cursor over the
-// button), then the Tcl command specified in the -command
-// option is invoked.
 func Button(options ...option) *Window {
 	return Inter.Button(options...)
 }
 
 // canvas - Create and manipulate 'canvas' hypergraphics drawing surface widgets
-//
+// 
 // # Canvas(Closeenough(...))
-//
+// 
 // Specifies a floating-point value indicating how close the mouse cursor
 // must be to an item before it is considered to be
-//
+// 
 // # Canvas(Confine(...))
-//
+// 
 // Specifies a boolean value that indicates whether or not it should be
 // allowable to set the canvas's view outside the region defined by the
 // 'scrollRegion' argument.
 // Defaults to true, which means that the view will
 // be constrained within the scroll region.
-//
+// 
 // # Canvas(Height(...))
-//
+// 
 // Specifies a desired window height that the canvas widget should request from
 // its geometry manager. The value may be specified in any
 // of the forms described in the 'COORDINATES' section below.
-//
+// 
 // # Canvas(Scrollregion(...))
-//
+// 
 // Specifies a list with four coordinates describing the left, top, right, and
 // bottom coordinates of a rectangular region.
 // This region is used for scrolling purposes and is considered to be
 // the boundary of the information in the canvas.
 // Each of the coordinates may be specified
 // in any of the forms given in the 'COORDINATES' section below.
-//
+// 
 // # Canvas(State(...))
-//
+// 
 // Modifies the default state of the canvas where 'state' may be set to
 // one of: 'normal', 'disabled', or 'hidden'. Individual canvas
 // objects all have their own state option which may override the default
@@ -237,15 +183,15 @@ func Button(options ...option) *Window {
 // pointer is over it, while the option starting with 'disabled' controls
 // the appearance when the state is disabled. Canvas items which are
 // 'disabled' will not react to canvas bindings.
-//
+// 
 // # Canvas(Width(...))
-//
+// 
 // Specifies a desired window width that the canvas widget should request from
 // its geometry manager. The value may be specified in any
 // of the forms described in the 'COORDINATES' section below.
-//
+// 
 // # Canvas(Xscrollincrement(...))
-//
+// 
 // Specifies an increment for horizontal scrolling, in any of the usual forms
 // permitted for screen distances. If the value of this option is greater
 // than zero, the horizontal view in the window will be constrained so that
@@ -255,9 +201,9 @@ func Button(options ...option) *Window {
 // are selected) will also be 'xScrollIncrement'. If the value of
 // this option is less than or equal to zero, then horizontal scrolling
 // is unconstrained.
-//
+// 
 // # Canvas(Yscrollincrement(...))
-//
+// 
 // Specifies an increment for vertical scrolling, in any of the usual forms
 // permitted for screen distances. If the value of this option is greater
 // than zero, the vertical view in the window will be constrained so that
@@ -274,37 +220,37 @@ func (w *Window) Canvas(options ...option) *Window {
 }
 
 // canvas - Create and manipulate 'canvas' hypergraphics drawing surface widgets
-//
+// 
 // # Canvas(Closeenough(...))
-//
+// 
 // Specifies a floating-point value indicating how close the mouse cursor
 // must be to an item before it is considered to be
-//
+// 
 // # Canvas(Confine(...))
-//
+// 
 // Specifies a boolean value that indicates whether or not it should be
 // allowable to set the canvas's view outside the region defined by the
 // 'scrollRegion' argument.
 // Defaults to true, which means that the view will
 // be constrained within the scroll region.
-//
+// 
 // # Canvas(Height(...))
-//
+// 
 // Specifies a desired window height that the canvas widget should request from
 // its geometry manager. The value may be specified in any
 // of the forms described in the 'COORDINATES' section below.
-//
+// 
 // # Canvas(Scrollregion(...))
-//
+// 
 // Specifies a list with four coordinates describing the left, top, right, and
 // bottom coordinates of a rectangular region.
 // This region is used for scrolling purposes and is considered to be
 // the boundary of the information in the canvas.
 // Each of the coordinates may be specified
 // in any of the forms given in the 'COORDINATES' section below.
-//
+// 
 // # Canvas(State(...))
-//
+// 
 // Modifies the default state of the canvas where 'state' may be set to
 // one of: 'normal', 'disabled', or 'hidden'. Individual canvas
 // objects all have their own state option which may override the default
@@ -314,15 +260,15 @@ func (w *Window) Canvas(options ...option) *Window {
 // pointer is over it, while the option starting with 'disabled' controls
 // the appearance when the state is disabled. Canvas items which are
 // 'disabled' will not react to canvas bindings.
-//
+// 
 // # Canvas(Width(...))
-//
+// 
 // Specifies a desired window width that the canvas widget should request from
 // its geometry manager. The value may be specified in any
 // of the forms described in the 'COORDINATES' section below.
-//
+// 
 // # Canvas(Xscrollincrement(...))
-//
+// 
 // Specifies an increment for horizontal scrolling, in any of the usual forms
 // permitted for screen distances. If the value of this option is greater
 // than zero, the horizontal view in the window will be constrained so that
@@ -332,9 +278,9 @@ func (w *Window) Canvas(options ...option) *Window {
 // are selected) will also be 'xScrollIncrement'. If the value of
 // this option is less than or equal to zero, then horizontal scrolling
 // is unconstrained.
-//
+// 
 // # Canvas(Yscrollincrement(...))
-//
+// 
 // Specifies an increment for vertical scrolling, in any of the usual forms
 // permitted for screen distances. If the value of this option is greater
 // than zero, the vertical view in the window will be constrained so that
@@ -349,56 +295,56 @@ func Canvas(options ...option) *Window {
 }
 
 // checkbutton - Create and manipulate 'checkbutton' boolean selection widgets
-//
+// 
 // # Checkbutton(Command(...))
-//
+// 
 // Specifies a Tcl command to associate with the button.  This command
 // is typically invoked when mouse button 1 is released over the button
 // window.  The button's global variable ('-variable' option) will
 // be updated before the command is invoked.
-//
+// 
 // # Checkbutton(Height(...))
-//
+// 
 // Specifies a desired height for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the button's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Checkbutton(Indicatoron(...))
-//
+// 
 // Specifies whether or not the indicator should be drawn.  Must be a
 // proper boolean value.  If false, the '-relief' option is
 // ignored and the widget's relief is always sunken if the widget is
 // selected and raised otherwise.
-//
+// 
 // # Checkbutton(Offrelief(...))
-//
+// 
 // Specifies the relief for the checkbutton when the indicator is not drawn and
 // the checkbutton is off.  The default value is
-//
+// 
 // # Checkbutton(Offvalue(...))
-//
+// 
 // Specifies value to store in the button's associated variable whenever
 // this button is deselected.  Defaults to
-//
+// 
 // # Checkbutton(Onvalue(...))
-//
+// 
 // Specifies value to store in the button's associated variable whenever
 // this button is selected.  Defaults to
-//
+// 
 // # Checkbutton(Overrelief(...))
-//
+// 
 // Specifies an alternative relief for the checkbutton, to be used when the
 // mouse cursor is over the widget.  This option can be used to make
 // toolbar buttons, by configuring '-relief flat -overrelief
 // raised'.  If the value of this option is the empty string, then no
 // alternative relief is used when the mouse cursor is over the checkbutton.
 // The empty string is the default value.
-//
+// 
 // # Checkbutton(Selectcolor(...))
-//
+// 
 // Specifies a background color to use when the button is selected.
 // If 'indicatorOn' is true then the color is used as the background for
 // the indicator regardless of the select state.
@@ -407,16 +353,16 @@ func Canvas(options ...option) *Window {
 // whenever the widget is selected.
 // If specified as an empty string then no special color is used for
 // displaying when the widget is selected.
-//
+// 
 // # Checkbutton(Selectimage(...))
-//
+// 
 // Specifies an image to display (in place of the '-image' option)
 // when the checkbutton is selected.
 // This option is ignored unless the '-image' option has been
 // specified.
-//
+// 
 // # Checkbutton(State(...))
-//
+// 
 // Specifies one of three states for the checkbutton:  'normal', 'active',
 // or 'disabled'.  In normal state the checkbutton is displayed using the
 // '-foreground' and '-background' options.  The active state is
@@ -427,102 +373,34 @@ func Canvas(options ...option) *Window {
 // the widget and will ignore mouse button presses.
 // In this state the '-disabledforeground' and
 // '-background' options determine how the checkbutton is displayed.
-//
+// 
 // # Checkbutton(Tristateimage(...))
-//
+// 
 // Specifies an image to display (in place of the '-image' option)
 // when the checkbutton is in tri-state mode.
 // This option is ignored unless the '-image' option has been
 // specified.
-//
+// 
 // # Checkbutton(Tristatevalue(...))
-//
+// 
 // Specifies the value that causes the checkbutton to display the multi-value
 // selection, also known as the tri-state mode.  Defaults to
-//
+// 
 // # Checkbutton(Variable(...))
-//
+// 
 // Specifies the name of a global variable to set to indicate whether
 // or not this button is selected.  Defaults to the name of the
 // button within its parent (i.e. the last element of the button
 // window's path name).
-//
+// 
 // # Checkbutton(Width(...))
-//
+// 
 // Specifies a desired width for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in characters.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
-// # Description
-//
-// The checkbutton command creates a new window (given by the
-// pathName argument) and makes it into a checkbutton widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the checkbutton such as its colors, font,
-// text, and initial relief.  The checkbutton command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A checkbutton is a widget
-// that displays a textual string, bitmap or image
-// and a square called an indicator.
-// If text is displayed, it must all be in a single font, but it
-// can occupy multiple lines on the screen (if it contains newlines
-// or if wrapping occurs because of the -wraplength option) and
-// one of the characters may optionally be underlined using the
-// -underline option.
-// A checkbutton has
-// all of the behavior of a simple button, including the
-// following: it can display itself in either of three different
-// ways, according to the -state option;
-// it can be made to appear
-// raised, sunken, or flat; it can be made to flash; and it invokes
-// a Tcl command whenever mouse button 1 is clicked over the
-// checkbutton.
-//
-// In addition, checkbuttons can be selected.
-// If a checkbutton is selected then the indicator is normally
-// drawn with a selected appearance, and
-// a Tcl variable associated with the checkbutton is set to a particular
-// value (normally 1).
-// The indicator is drawn with a check mark inside.
-// If the checkbutton is not selected, then the indicator is drawn with a
-// deselected appearance, and the associated variable is
-// set to a different value (typically 0).
-// The indicator is drawn without a check mark inside.  In the special case
-// where the variable (if specified) has a value that matches the tristatevalue,
-// the indicator is drawn with a tri-state appearance and is in the tri-state
-// mode indicating mixed or multiple values.  (This is used when the check
-// box represents the state of multiple items.)
-// The indicator is drawn in a platform dependent manner.  Under Unix and
-// Windows, the background interior of the box is
-//
-// Under Mac, the indicator is drawn with a dash mark inside.
-// By default, the name of the variable associated with a checkbutton is the
-// same as the name used to create the checkbutton.
-// The variable name, and the
-//
-// and
-//
-// values stored in it, may be modified with options on the command line
-// or in the option database.
-// Configuration options may also be used to modify the way the
-// indicator is displayed (or whether it is displayed at all).
-// By default a checkbutton is configured to select and deselect
-// itself on alternate button clicks.
-// In addition, each checkbutton monitors its associated variable and
-// automatically selects and deselects itself when the variables value
-// changes to and from the button's
-//
-// and
-//
-// values.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Checkbutton(options ...option) *Window {
@@ -530,56 +408,56 @@ func (w *Window) Checkbutton(options ...option) *Window {
 }
 
 // checkbutton - Create and manipulate 'checkbutton' boolean selection widgets
-//
+// 
 // # Checkbutton(Command(...))
-//
+// 
 // Specifies a Tcl command to associate with the button.  This command
 // is typically invoked when mouse button 1 is released over the button
 // window.  The button's global variable ('-variable' option) will
 // be updated before the command is invoked.
-//
+// 
 // # Checkbutton(Height(...))
-//
+// 
 // Specifies a desired height for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the button's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Checkbutton(Indicatoron(...))
-//
+// 
 // Specifies whether or not the indicator should be drawn.  Must be a
 // proper boolean value.  If false, the '-relief' option is
 // ignored and the widget's relief is always sunken if the widget is
 // selected and raised otherwise.
-//
+// 
 // # Checkbutton(Offrelief(...))
-//
+// 
 // Specifies the relief for the checkbutton when the indicator is not drawn and
 // the checkbutton is off.  The default value is
-//
+// 
 // # Checkbutton(Offvalue(...))
-//
+// 
 // Specifies value to store in the button's associated variable whenever
 // this button is deselected.  Defaults to
-//
+// 
 // # Checkbutton(Onvalue(...))
-//
+// 
 // Specifies value to store in the button's associated variable whenever
 // this button is selected.  Defaults to
-//
+// 
 // # Checkbutton(Overrelief(...))
-//
+// 
 // Specifies an alternative relief for the checkbutton, to be used when the
 // mouse cursor is over the widget.  This option can be used to make
 // toolbar buttons, by configuring '-relief flat -overrelief
 // raised'.  If the value of this option is the empty string, then no
 // alternative relief is used when the mouse cursor is over the checkbutton.
 // The empty string is the default value.
-//
+// 
 // # Checkbutton(Selectcolor(...))
-//
+// 
 // Specifies a background color to use when the button is selected.
 // If 'indicatorOn' is true then the color is used as the background for
 // the indicator regardless of the select state.
@@ -588,16 +466,16 @@ func (w *Window) Checkbutton(options ...option) *Window {
 // whenever the widget is selected.
 // If specified as an empty string then no special color is used for
 // displaying when the widget is selected.
-//
+// 
 // # Checkbutton(Selectimage(...))
-//
+// 
 // Specifies an image to display (in place of the '-image' option)
 // when the checkbutton is selected.
 // This option is ignored unless the '-image' option has been
 // specified.
-//
+// 
 // # Checkbutton(State(...))
-//
+// 
 // Specifies one of three states for the checkbutton:  'normal', 'active',
 // or 'disabled'.  In normal state the checkbutton is displayed using the
 // '-foreground' and '-background' options.  The active state is
@@ -608,139 +486,71 @@ func (w *Window) Checkbutton(options ...option) *Window {
 // the widget and will ignore mouse button presses.
 // In this state the '-disabledforeground' and
 // '-background' options determine how the checkbutton is displayed.
-//
+// 
 // # Checkbutton(Tristateimage(...))
-//
+// 
 // Specifies an image to display (in place of the '-image' option)
 // when the checkbutton is in tri-state mode.
 // This option is ignored unless the '-image' option has been
 // specified.
-//
+// 
 // # Checkbutton(Tristatevalue(...))
-//
+// 
 // Specifies the value that causes the checkbutton to display the multi-value
 // selection, also known as the tri-state mode.  Defaults to
-//
+// 
 // # Checkbutton(Variable(...))
-//
+// 
 // Specifies the name of a global variable to set to indicate whether
 // or not this button is selected.  Defaults to the name of the
 // button within its parent (i.e. the last element of the button
 // window's path name).
-//
+// 
 // # Checkbutton(Width(...))
-//
+// 
 // Specifies a desired width for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in characters.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
-// # Description
-//
-// The checkbutton command creates a new window (given by the
-// pathName argument) and makes it into a checkbutton widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the checkbutton such as its colors, font,
-// text, and initial relief.  The checkbutton command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A checkbutton is a widget
-// that displays a textual string, bitmap or image
-// and a square called an indicator.
-// If text is displayed, it must all be in a single font, but it
-// can occupy multiple lines on the screen (if it contains newlines
-// or if wrapping occurs because of the -wraplength option) and
-// one of the characters may optionally be underlined using the
-// -underline option.
-// A checkbutton has
-// all of the behavior of a simple button, including the
-// following: it can display itself in either of three different
-// ways, according to the -state option;
-// it can be made to appear
-// raised, sunken, or flat; it can be made to flash; and it invokes
-// a Tcl command whenever mouse button 1 is clicked over the
-// checkbutton.
-//
-// In addition, checkbuttons can be selected.
-// If a checkbutton is selected then the indicator is normally
-// drawn with a selected appearance, and
-// a Tcl variable associated with the checkbutton is set to a particular
-// value (normally 1).
-// The indicator is drawn with a check mark inside.
-// If the checkbutton is not selected, then the indicator is drawn with a
-// deselected appearance, and the associated variable is
-// set to a different value (typically 0).
-// The indicator is drawn without a check mark inside.  In the special case
-// where the variable (if specified) has a value that matches the tristatevalue,
-// the indicator is drawn with a tri-state appearance and is in the tri-state
-// mode indicating mixed or multiple values.  (This is used when the check
-// box represents the state of multiple items.)
-// The indicator is drawn in a platform dependent manner.  Under Unix and
-// Windows, the background interior of the box is
-//
-// Under Mac, the indicator is drawn with a dash mark inside.
-// By default, the name of the variable associated with a checkbutton is the
-// same as the name used to create the checkbutton.
-// The variable name, and the
-//
-// and
-//
-// values stored in it, may be modified with options on the command line
-// or in the option database.
-// Configuration options may also be used to modify the way the
-// indicator is displayed (or whether it is displayed at all).
-// By default a checkbutton is configured to select and deselect
-// itself on alternate button clicks.
-// In addition, each checkbutton monitors its associated variable and
-// automatically selects and deselects itself when the variables value
-// changes to and from the button's
-//
-// and
-//
-// values.
 func Checkbutton(options ...option) *Window {
 	return Inter.Checkbutton(options...)
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
-//
+// 
 // # Entry(Disabledbackground(...))
-//
+// 
 // Specifies the background color to use when the entry is disabled.  If
 // this option is the empty string, the normal background color is used.
-//
+// 
 // # Entry(Disabledforeground(...))
-//
+// 
 // Specifies the foreground color to use when the entry is disabled.  If
 // this option is the empty string, the normal foreground color is used.
-//
+// 
 // # Entry(Invalidcommand(...)) or Entry(Invcmd(...))
-//
+// 
 // Specifies a script to eval when '-validatecommand' returns 0.
 // Setting it to {} disables this feature (the default).  The best use
 // of this option is to set it to 'bell'.  See 'VALIDATION'
 // below for more information.
-//
+// 
 // # Entry(Readonlybackground(...))
-//
+// 
 // Specifies the background color to use when the entry is readonly.  If
 // this option is the empty string, the normal background color is used.
-//
+// 
 // # Entry(Show(...))
-//
+// 
 // If this option is specified, then the true contents of the entry
 // are not displayed in the window.
 // Instead, each character in the entry's value will be displayed as
 // the first character in the value of this option, such as
-//
+// 
 // # Entry(State(...))
-//
+// 
 // Specifies one of three states for the entry:  'normal',
 // 'disabled', or 'readonly'.  If the entry is readonly, then the
 // value may not be changed using widget commands and no insertion cursor
@@ -750,16 +560,16 @@ func Checkbutton(options ...option) *Window {
 // displayed, the contents will not be selectable, and the entry may
 // be displayed in a different color, depending on the values of the
 // '-disabledforeground' and '-disabledbackground' options.
-//
+// 
 // # Entry(Validate(...))
-//
+// 
 // Specifies the mode in which validation should operate: 'none',
 // 'focus', 'focusin', 'focusout', 'key', or 'all'.
 // It defaults to 'none'.  When you want validation, you must explicitly
 // state which mode you wish to use.  See 'VALIDATION' below for more.
-//
+// 
 // # Entry(Validatecommand(...)) or Entry(Vcmd(...))
-//
+// 
 // Specifies a script to eval when you want to validate the input into
 // the entry widget.  Setting it to {} disables this feature (the default).
 // This command must return a valid Tcl boolean value.  If it returns 0 (or
@@ -767,46 +577,13 @@ func Checkbutton(options ...option) *Window {
 // and it will not occur and the '-invalidcommand' will be evaluated if it
 // is set. If it returns 1, then the new edition occurs.
 // See 'VALIDATION' below for more information.
-//
+// 
 // # Entry(Width(...))
-//
+// 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
 // If the value is less than or equal to zero, the widget picks a
 // size just large enough to hold its current text.
-//
-// # Description
-//
-// The entry command creates a new window (given by the
-// pathName argument) and makes it into an entry widget.
-// Additional options, described above, may be specified on the
-// command line or in the option database
-// to configure aspects of the entry such as its colors, font,
-// and relief.  The entry command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// An entry is a widget that displays a one-line text string and
-// allows that string to be edited using widget commands described below, which
-// are typically bound to keystrokes and mouse actions.
-// When first created, an entry's string is empty.
-// A portion of the entry may be selected as described below.
-// If an entry is exporting its selection (see the -exportselection
-// option), then it will observe the standard X11 protocols for handling the
-// selection;  entry selections are available as type STRING.
-// Entries also observe the standard Tk rules for dealing with the
-// input focus.  When an entry has the input focus it displays an
-// insertion cursor to indicate where new characters will be
-// inserted.
-//
-// Entries are capable of displaying strings that are too long to
-// fit entirely within the widget's window.  In this case, only a
-// portion of the string will be displayed;  commands described below
-// may be used to change the view in the window.  Entries use
-// the standard -xscrollcommand mechanism for interacting with
-// scrollbars (see the description of the -xscrollcommand option
-// for details).  They also support scanning, as described below.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Entry(options ...option) *Window {
@@ -814,38 +591,38 @@ func (w *Window) Entry(options ...option) *Window {
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
-//
+// 
 // # Entry(Disabledbackground(...))
-//
+// 
 // Specifies the background color to use when the entry is disabled.  If
 // this option is the empty string, the normal background color is used.
-//
+// 
 // # Entry(Disabledforeground(...))
-//
+// 
 // Specifies the foreground color to use when the entry is disabled.  If
 // this option is the empty string, the normal foreground color is used.
-//
+// 
 // # Entry(Invalidcommand(...)) or Entry(Invcmd(...))
-//
+// 
 // Specifies a script to eval when '-validatecommand' returns 0.
 // Setting it to {} disables this feature (the default).  The best use
 // of this option is to set it to 'bell'.  See 'VALIDATION'
 // below for more information.
-//
+// 
 // # Entry(Readonlybackground(...))
-//
+// 
 // Specifies the background color to use when the entry is readonly.  If
 // this option is the empty string, the normal background color is used.
-//
+// 
 // # Entry(Show(...))
-//
+// 
 // If this option is specified, then the true contents of the entry
 // are not displayed in the window.
 // Instead, each character in the entry's value will be displayed as
 // the first character in the value of this option, such as
-//
+// 
 // # Entry(State(...))
-//
+// 
 // Specifies one of three states for the entry:  'normal',
 // 'disabled', or 'readonly'.  If the entry is readonly, then the
 // value may not be changed using widget commands and no insertion cursor
@@ -855,16 +632,16 @@ func (w *Window) Entry(options ...option) *Window {
 // displayed, the contents will not be selectable, and the entry may
 // be displayed in a different color, depending on the values of the
 // '-disabledforeground' and '-disabledbackground' options.
-//
+// 
 // # Entry(Validate(...))
-//
+// 
 // Specifies the mode in which validation should operate: 'none',
 // 'focus', 'focusin', 'focusout', 'key', or 'all'.
 // It defaults to 'none'.  When you want validation, you must explicitly
 // state which mode you wish to use.  See 'VALIDATION' below for more.
-//
+// 
 // # Entry(Validatecommand(...)) or Entry(Vcmd(...))
-//
+// 
 // Specifies a script to eval when you want to validate the input into
 // the entry widget.  Setting it to {} disables this feature (the default).
 // This command must return a valid Tcl boolean value.  If it returns 0 (or
@@ -872,80 +649,47 @@ func (w *Window) Entry(options ...option) *Window {
 // and it will not occur and the '-invalidcommand' will be evaluated if it
 // is set. If it returns 1, then the new edition occurs.
 // See 'VALIDATION' below for more information.
-//
+// 
 // # Entry(Width(...))
-//
+// 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
 // If the value is less than or equal to zero, the widget picks a
 // size just large enough to hold its current text.
-//
-// # Description
-//
-// The entry command creates a new window (given by the
-// pathName argument) and makes it into an entry widget.
-// Additional options, described above, may be specified on the
-// command line or in the option database
-// to configure aspects of the entry such as its colors, font,
-// and relief.  The entry command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// An entry is a widget that displays a one-line text string and
-// allows that string to be edited using widget commands described below, which
-// are typically bound to keystrokes and mouse actions.
-// When first created, an entry's string is empty.
-// A portion of the entry may be selected as described below.
-// If an entry is exporting its selection (see the -exportselection
-// option), then it will observe the standard X11 protocols for handling the
-// selection;  entry selections are available as type STRING.
-// Entries also observe the standard Tk rules for dealing with the
-// input focus.  When an entry has the input focus it displays an
-// insertion cursor to indicate where new characters will be
-// inserted.
-//
-// Entries are capable of displaying strings that are too long to
-// fit entirely within the widget's window.  In this case, only a
-// portion of the string will be displayed;  commands described below
-// may be used to change the view in the window.  Entries use
-// the standard -xscrollcommand mechanism for interacting with
-// scrollbars (see the description of the -xscrollcommand option
-// for details).  They also support scanning, as described below.
 func Entry(options ...option) *Window {
 	return Inter.Entry(options...)
 }
 
 // frame - Create and manipulate 'frame' simple container widgets
-//
+// 
 // # Frame(Background(...))
-//
+// 
 // This option is the same as the standard '-background' option
 // except that its value may also be specified as an empty string.
 // In this case, the widget will display no background or border, and
 // no colors will be consumed from its colormap for its background
 // and border.
-//
+// 
 // # Frame(Backgroundimage(...))
-//
+// 
 // This specifies an image to display on the frame's background within
 // the border of the frame (i.e., the image will be clipped by the
 // frame's highlight ring and border, if either are present); subwidgets
 // of the frame will be drawn on top. The image must have been created
 // with the 'image create' command. If specified as the empty string,
 // no image will be displayed.
-//
+// 
 // # Frame(Class(...))
-//
+// 
 // Specifies a class for the window.
 // This class will be used when querying the option database for
 // the window's other options, and it will also be used later for
 // other purposes such as bindings.
 // The '-class' option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Frame(Colormap(...))
-//
+// 
 // Specifies a colormap to use for the window.
 // The value may be either 'new', in which case a new colormap is
 // created for the window and its children, or the name of another
@@ -956,9 +700,9 @@ func Entry(options ...option) *Window {
 // uses the same colormap as its parent.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Frame(Container(...))
-//
+// 
 // The value must be a boolean.  If true, it means that this window will
 // be used as a container in which some other application will be embedded
 // (for example, a Tk toplevel can be embedded using the '-use' option).
@@ -969,9 +713,9 @@ func Entry(options ...option) *Window {
 // widget command.
 // Note that '-borderwidth', '-padx' and '-pady' are ignored when
 // configured as a container since a container has no border.
-//
+// 
 // # Frame(Height(...))
-//
+// 
 // Specifies the desired height for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.  If this option is less than or equal
 // to zero then the window will not request any size at all.  Note that this
@@ -979,22 +723,22 @@ func Entry(options ...option) *Window {
 // not added.  Normally '-height' should not be used if a propagating
 // geometry manager, such as 'grid' or 'pack', is used within the
 // frame since the geometry manager will override the height of the frame.
-//
+// 
 // # Frame(Tile(...))
-//
-//	"8.7, TIP262"
-//
+// 
+//  "8.7, TIP262"
+// 
 // # Frame(Visual(...))
-//
+// 
 // Specifies visual information for the new window in any of the
 // forms accepted by 'Tk_GetVisual'.
 // If this option is not specified, the new window will use the same
 // visual as its parent.
 // The '-visual' option may not be modified with the 'configure'
 // widget command.
-//
+// 
 // # Frame(Width(...))
-//
+// 
 // Specifies the desired width for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.  If this option is less than or equal
 // to zero then the window will not request any size at all.  Note that this
@@ -1002,22 +746,6 @@ func Entry(options ...option) *Window {
 // not added.  Normally '-width' should not be used if a propagating
 // geometry manager, such as 'grid' or 'pack', is used within the
 // frame since the geometry manager will override the width of the frame.
-//
-// # Description
-//
-// The frame command creates a new window (given by the
-// pathName argument) and makes it into a frame widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the frame such as its background color
-// and relief.  The frame command returns the
-// path name of the new window.
-//
-// A frame is a simple widget.  Its primary purpose is to act as a
-// spacer or container for complex window layouts.  The only features
-// of a frame are its background and an optional 3-D border to make the
-// frame appear raised or sunken.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Frame(options ...option) *Window {
@@ -1025,35 +753,35 @@ func (w *Window) Frame(options ...option) *Window {
 }
 
 // frame - Create and manipulate 'frame' simple container widgets
-//
+// 
 // # Frame(Background(...))
-//
+// 
 // This option is the same as the standard '-background' option
 // except that its value may also be specified as an empty string.
 // In this case, the widget will display no background or border, and
 // no colors will be consumed from its colormap for its background
 // and border.
-//
+// 
 // # Frame(Backgroundimage(...))
-//
+// 
 // This specifies an image to display on the frame's background within
 // the border of the frame (i.e., the image will be clipped by the
 // frame's highlight ring and border, if either are present); subwidgets
 // of the frame will be drawn on top. The image must have been created
 // with the 'image create' command. If specified as the empty string,
 // no image will be displayed.
-//
+// 
 // # Frame(Class(...))
-//
+// 
 // Specifies a class for the window.
 // This class will be used when querying the option database for
 // the window's other options, and it will also be used later for
 // other purposes such as bindings.
 // The '-class' option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Frame(Colormap(...))
-//
+// 
 // Specifies a colormap to use for the window.
 // The value may be either 'new', in which case a new colormap is
 // created for the window and its children, or the name of another
@@ -1064,9 +792,9 @@ func (w *Window) Frame(options ...option) *Window {
 // uses the same colormap as its parent.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Frame(Container(...))
-//
+// 
 // The value must be a boolean.  If true, it means that this window will
 // be used as a container in which some other application will be embedded
 // (for example, a Tk toplevel can be embedded using the '-use' option).
@@ -1077,9 +805,9 @@ func (w *Window) Frame(options ...option) *Window {
 // widget command.
 // Note that '-borderwidth', '-padx' and '-pady' are ignored when
 // configured as a container since a container has no border.
-//
+// 
 // # Frame(Height(...))
-//
+// 
 // Specifies the desired height for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.  If this option is less than or equal
 // to zero then the window will not request any size at all.  Note that this
@@ -1087,22 +815,22 @@ func (w *Window) Frame(options ...option) *Window {
 // not added.  Normally '-height' should not be used if a propagating
 // geometry manager, such as 'grid' or 'pack', is used within the
 // frame since the geometry manager will override the height of the frame.
-//
+// 
 // # Frame(Tile(...))
-//
-//	"8.7, TIP262"
-//
+// 
+//  "8.7, TIP262"
+// 
 // # Frame(Visual(...))
-//
+// 
 // Specifies visual information for the new window in any of the
 // forms accepted by 'Tk_GetVisual'.
 // If this option is not specified, the new window will use the same
 // visual as its parent.
 // The '-visual' option may not be modified with the 'configure'
 // widget command.
-//
+// 
 // # Frame(Width(...))
-//
+// 
 // Specifies the desired width for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.  If this option is less than or equal
 // to zero then the window will not request any size at all.  Note that this
@@ -1110,39 +838,23 @@ func (w *Window) Frame(options ...option) *Window {
 // not added.  Normally '-width' should not be used if a propagating
 // geometry manager, such as 'grid' or 'pack', is used within the
 // frame since the geometry manager will override the width of the frame.
-//
-// # Description
-//
-// The frame command creates a new window (given by the
-// pathName argument) and makes it into a frame widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the frame such as its background color
-// and relief.  The frame command returns the
-// path name of the new window.
-//
-// A frame is a simple widget.  Its primary purpose is to act as a
-// spacer or container for complex window layouts.  The only features
-// of a frame are its background and an optional 3-D border to make the
-// frame appear raised or sunken.
 func Frame(options ...option) *Window {
 	return Inter.Frame(options...)
 }
 
 // label - Create and manipulate 'label' non-interactive text or image widgets
-//
+// 
 // # Label(Height(...))
-//
+// 
 // Specifies a desired height for the label.
 // If an image or bitmap is being displayed in the label then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the label's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Label(State(...))
-//
+// 
 // Specifies one of three states for the label:  'normal', 'active',
 // or 'disabled'.  In normal state the button is displayed using the
 // '-foreground' and '-background' options.  In active state
@@ -1150,37 +862,15 @@ func Frame(options ...option) *Window {
 // '-activebackground' options.  In the disabled state the
 // '-disabledforeground' and '-background' options determine how
 // the button is displayed.
-//
+// 
 // # Label(Width(...))
-//
+// 
 // Specifies a desired width for the label.
 // If an image or bitmap is being displayed in the label then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in characters.
 // If this option is not specified, the label's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
-// # Description
-//
-// The label command creates a new window (given by the
-// pathName argument) and makes it into a label widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the label such as its colors, font,
-// text, and initial relief.  The label command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A label is a widget that displays a textual string, bitmap or image.
-// If text is displayed, it must all be in a single font, but it
-// can occupy multiple lines on the screen (if it contains newlines
-// or if wrapping occurs because of the -wraplength option) and
-// one of the characters may optionally be underlined using the
-// -underline option.
-// The label can be manipulated in a few simple ways, such as
-// changing its relief or text, using the commands described below.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Label(options ...option) *Window {
@@ -1188,18 +878,18 @@ func (w *Window) Label(options ...option) *Window {
 }
 
 // label - Create and manipulate 'label' non-interactive text or image widgets
-//
+// 
 // # Label(Height(...))
-//
+// 
 // Specifies a desired height for the label.
 // If an image or bitmap is being displayed in the label then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the label's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Label(State(...))
-//
+// 
 // Specifies one of three states for the label:  'normal', 'active',
 // or 'disabled'.  In normal state the button is displayed using the
 // '-foreground' and '-background' options.  In active state
@@ -1207,62 +897,40 @@ func (w *Window) Label(options ...option) *Window {
 // '-activebackground' options.  In the disabled state the
 // '-disabledforeground' and '-background' options determine how
 // the button is displayed.
-//
+// 
 // # Label(Width(...))
-//
+// 
 // Specifies a desired width for the label.
 // If an image or bitmap is being displayed in the label then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in characters.
 // If this option is not specified, the label's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
-// # Description
-//
-// The label command creates a new window (given by the
-// pathName argument) and makes it into a label widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the label such as its colors, font,
-// text, and initial relief.  The label command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A label is a widget that displays a textual string, bitmap or image.
-// If text is displayed, it must all be in a single font, but it
-// can occupy multiple lines on the screen (if it contains newlines
-// or if wrapping occurs because of the -wraplength option) and
-// one of the characters may optionally be underlined using the
-// -underline option.
-// The label can be manipulated in a few simple ways, such as
-// changing its relief or text, using the commands described below.
 func Label(options ...option) *Window {
 	return Inter.Label(options...)
 }
 
 // labelframe - Create and manipulate 'labelframe' labelled container widgets
-//
+// 
 // # Labelframe(Background(...))
-//
+// 
 // This option is the same as the standard '-background' option
 // except that its value may also be specified as an empty string.
 // In this case, the widget will display no background or border, and
 // no colors will be consumed from its colormap for its background
 // and border.
-//
+// 
 // # Labelframe(Class(...))
-//
+// 
 // Specifies a class for the window.
 // This class will be used when querying the option database for
 // the window's other options, and it will also be used later for
 // other purposes such as bindings.
 // The '-class' option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Labelframe(Colormap(...))
-//
+// 
 // Specifies a colormap to use for the window.
 // The value may be either 'new', in which case a new colormap is
 // created for the window and its children, or the name of another
@@ -1273,60 +941,45 @@ func Label(options ...option) *Window {
 // uses the same colormap as its parent.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Labelframe(Height(...))
-//
+// 
 // Specifies the desired height for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
-//
+// 
 // # Labelframe(Labelanchor(...))
-//
+// 
 // Specifies where to place the label. A label is only displayed if the
 // '-text' option is not the empty string.
 // Valid values for this option are (listing them clockwise)
 // 'nw', 'n', 'ne', 'en', 'e', 'es',
 // 'se', 's','sw', 'ws', 'w' and 'wn'.
 // The default value is 'nw'.
-//
+// 
 // # Labelframe(Labelwidget(...))
-//
+// 
 // Specifies a widget to use as label. This overrides any '-text'
 // option. The widget must exist before being used as '-labelwidget'
 // and if it is not a descendant of this window, it will be raised
 // above it in the stacking order.
-//
+// 
 // # Labelframe(Visual(...))
-//
+// 
 // Specifies visual information for the new window in any of the
 // forms accepted by 'Tk_GetVisual'.
 // If this option is not specified, the new window will use the same
 // visual as its parent.
 // The '-visual' option may not be modified with the 'configure'
 // widget command.
-//
+// 
 // # Labelframe(Width(...))
-//
+// 
 // Specifies the desired width for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
-//
-// # Description
-//
-// The labelframe command creates a new window (given by the
-// pathName argument) and makes it into a labelframe widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the labelframe such as its background color
-// and relief.  The labelframe command returns the
-// path name of the new window.
-//
-// A labelframe is a simple widget.  Its primary purpose is to act as a
-// spacer or container for complex window layouts.  It has the features
-// of a frame plus the ability to display a label.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Labelframe(options ...option) *Window {
@@ -1334,26 +987,26 @@ func (w *Window) Labelframe(options ...option) *Window {
 }
 
 // labelframe - Create and manipulate 'labelframe' labelled container widgets
-//
+// 
 // # Labelframe(Background(...))
-//
+// 
 // This option is the same as the standard '-background' option
 // except that its value may also be specified as an empty string.
 // In this case, the widget will display no background or border, and
 // no colors will be consumed from its colormap for its background
 // and border.
-//
+// 
 // # Labelframe(Class(...))
-//
+// 
 // Specifies a class for the window.
 // This class will be used when querying the option database for
 // the window's other options, and it will also be used later for
 // other purposes such as bindings.
 // The '-class' option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Labelframe(Colormap(...))
-//
+// 
 // Specifies a colormap to use for the window.
 // The value may be either 'new', in which case a new colormap is
 // created for the window and its children, or the name of another
@@ -1364,139 +1017,92 @@ func (w *Window) Labelframe(options ...option) *Window {
 // uses the same colormap as its parent.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Labelframe(Height(...))
-//
+// 
 // Specifies the desired height for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
-//
+// 
 // # Labelframe(Labelanchor(...))
-//
+// 
 // Specifies where to place the label. A label is only displayed if the
 // '-text' option is not the empty string.
 // Valid values for this option are (listing them clockwise)
 // 'nw', 'n', 'ne', 'en', 'e', 'es',
 // 'se', 's','sw', 'ws', 'w' and 'wn'.
 // The default value is 'nw'.
-//
+// 
 // # Labelframe(Labelwidget(...))
-//
+// 
 // Specifies a widget to use as label. This overrides any '-text'
 // option. The widget must exist before being used as '-labelwidget'
 // and if it is not a descendant of this window, it will be raised
 // above it in the stacking order.
-//
+// 
 // # Labelframe(Visual(...))
-//
+// 
 // Specifies visual information for the new window in any of the
 // forms accepted by 'Tk_GetVisual'.
 // If this option is not specified, the new window will use the same
 // visual as its parent.
 // The '-visual' option may not be modified with the 'configure'
 // widget command.
-//
+// 
 // # Labelframe(Width(...))
-//
+// 
 // Specifies the desired width for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
-//
-// # Description
-//
-// The labelframe command creates a new window (given by the
-// pathName argument) and makes it into a labelframe widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the labelframe such as its background color
-// and relief.  The labelframe command returns the
-// path name of the new window.
-//
-// A labelframe is a simple widget.  Its primary purpose is to act as a
-// spacer or container for complex window layouts.  It has the features
-// of a frame plus the ability to display a label.
 func Labelframe(options ...option) *Window {
 	return Inter.Labelframe(options...)
 }
 
 // listbox - Create and manipulate 'listbox' item list widgets
-//
+// 
 // # Listbox(Activestyle(...))
-//
+// 
 // Specifies the style in which to draw the active element.  This must be
 // one of 'dotbox' (show a focus ring around the active element),
 // 'none' (no special indication of active element) or
 // 'underline' (underline the active element).
 // The default is 'underline' on Windows, and 'dotbox' elsewhere.
-//
+// 
 // # Listbox(Height(...))
-//
+// 
 // Specifies the desired height for the window, in lines.
 // If zero or less, then the desired height for the window is made just
 // large enough to hold all the elements in the listbox.
-//
+// 
 // # Listbox(Listvariable(...))
-//
+// 
 // Specifies the name of a global variable.  The value of the variable is a list to
 // be displayed inside the widget; if the variable value changes then the
 // widget will automatically update itself to reflect the new value.  Attempts
 // to assign a variable with an invalid list value to '-listvariable'
 // will cause an error.  Attempts to unset a variable in use as a
 // '-listvariable' will fail but will not generate an error.
-//
+// 
 // # Listbox(Selectmode(...))
-//
+// 
 // Specifies one of several styles for manipulating the selection.
 // The value of the option may be arbitrary, but the default bindings
 // expect it to be either 'single', 'browse', 'multiple',
 // or 'extended';  the default value is 'browse'.
-//
+// 
 // # Listbox(State(...))
-//
+// 
 // Specifies one of two states for the listbox:  'normal' or 'disabled'.
 // If the listbox is disabled then items may not be inserted or deleted,
 // items are drawn in the '-disabledforeground' color, and selection
 // cannot be modified and is not shown (though selection information is retained).
-//
+// 
 // # Listbox(Width(...))
-//
+// 
 // Specifies the desired width for the window in characters.
 // If the font does not have a uniform width then the width of the character
-//
-// # Description
-//
-// The listbox command creates a new window (given by the
-// pathName argument) and makes it into a listbox widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the listbox such as its colors, font,
-// text, and relief.  The listbox command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A listbox is a widget that displays a list of strings, one per line.
-// When first created, a new listbox has no elements.
-// Elements may be added or deleted using widget commands described
-// below.  In addition, one or more elements may be selected as described
-// below.
-// If a listbox is exporting its selection (see -exportselection
-// option), then it will observe the standard X11 protocols
-// for handling the selection.
-// Listbox selections are available as type STRING;
-// the value of the selection will be the text of the selected elements, with
-// newlines separating the elements.
-//
-// It is not necessary for all the elements to be
-// displayed in the listbox window at once;  commands described below
-// may be used to change the view in the window.  Listboxes allow
-// scrolling in both directions using the standard -xscrollcommand
-// and -yscrollcommand options.
-// They also support scanning, as described below.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Listbox(options ...option) *Window {
@@ -1504,103 +1110,71 @@ func (w *Window) Listbox(options ...option) *Window {
 }
 
 // listbox - Create and manipulate 'listbox' item list widgets
-//
+// 
 // # Listbox(Activestyle(...))
-//
+// 
 // Specifies the style in which to draw the active element.  This must be
 // one of 'dotbox' (show a focus ring around the active element),
 // 'none' (no special indication of active element) or
 // 'underline' (underline the active element).
 // The default is 'underline' on Windows, and 'dotbox' elsewhere.
-//
+// 
 // # Listbox(Height(...))
-//
+// 
 // Specifies the desired height for the window, in lines.
 // If zero or less, then the desired height for the window is made just
 // large enough to hold all the elements in the listbox.
-//
+// 
 // # Listbox(Listvariable(...))
-//
+// 
 // Specifies the name of a global variable.  The value of the variable is a list to
 // be displayed inside the widget; if the variable value changes then the
 // widget will automatically update itself to reflect the new value.  Attempts
 // to assign a variable with an invalid list value to '-listvariable'
 // will cause an error.  Attempts to unset a variable in use as a
 // '-listvariable' will fail but will not generate an error.
-//
+// 
 // # Listbox(Selectmode(...))
-//
+// 
 // Specifies one of several styles for manipulating the selection.
 // The value of the option may be arbitrary, but the default bindings
 // expect it to be either 'single', 'browse', 'multiple',
 // or 'extended';  the default value is 'browse'.
-//
+// 
 // # Listbox(State(...))
-//
+// 
 // Specifies one of two states for the listbox:  'normal' or 'disabled'.
 // If the listbox is disabled then items may not be inserted or deleted,
 // items are drawn in the '-disabledforeground' color, and selection
 // cannot be modified and is not shown (though selection information is retained).
-//
+// 
 // # Listbox(Width(...))
-//
+// 
 // Specifies the desired width for the window in characters.
 // If the font does not have a uniform width then the width of the character
-//
-// # Description
-//
-// The listbox command creates a new window (given by the
-// pathName argument) and makes it into a listbox widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the listbox such as its colors, font,
-// text, and relief.  The listbox command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A listbox is a widget that displays a list of strings, one per line.
-// When first created, a new listbox has no elements.
-// Elements may be added or deleted using widget commands described
-// below.  In addition, one or more elements may be selected as described
-// below.
-// If a listbox is exporting its selection (see -exportselection
-// option), then it will observe the standard X11 protocols
-// for handling the selection.
-// Listbox selections are available as type STRING;
-// the value of the selection will be the text of the selected elements, with
-// newlines separating the elements.
-//
-// It is not necessary for all the elements to be
-// displayed in the listbox window at once;  commands described below
-// may be used to change the view in the window.  Listboxes allow
-// scrolling in both directions using the standard -xscrollcommand
-// and -yscrollcommand options.
-// They also support scanning, as described below.
 func Listbox(options ...option) *Window {
 	return Inter.Listbox(options...)
 }
 
 // menu, tk_menuSetFocus - Create and manipulate 'menu' widgets and menubars
-//
+// 
 // # Menu(Postcommand(...))
-//
+// 
 // If this option is specified then it provides a Tcl command to execute
 // each time the menu is posted.  The command is invoked by the 'post'
 // widget command before posting the menu. Note that in Tk 8.0 on Macintosh
 // and Windows, all post-commands in a system of menus are executed before any
 // of those menus are posted.
 // This is due to the limitations in the individual platforms' menu managers.
-//
+// 
 // # Menu(Selectcolor(...))
-//
+// 
 // For menu entries that are check buttons or radio buttons, this option
 // specifies the color to display in the indicator when the check button
 // or radio button is selected.
-//
+// 
 // # Menu(Tearoff(...))
-//
+// 
 // This option must have a proper boolean value (default is false),
 // which specifies whether or not the menu should include a tear-off
 // entry at the top.  If so, it will exist as entry 0 of the menu and
@@ -1609,25 +1183,25 @@ func Listbox(options ...option) *Window {
 // is invoked.
 // This option is ignored under Aqua/MacOS, where menus cannot
 // be torn off.
-//
+// 
 // # Menu(Tearoffcommand(...))
-//
+// 
 // If this option has a non-empty value, then it specifies a Tcl command
 // to invoke whenever the menu is torn off.  The actual command will
 // consist of the value of this option, followed by a space, followed
 // by the name of the menu window, followed by a space, followed by
 // the name of the name of the torn off menu window.  For example, if
 // the option's value is
-//
+// 
 // # Menu(Title(...))
-//
+// 
 // The string will be used to title the window created when this menu is
 // torn off. If the title is NULL, then the window will have the title
 // of the menubutton or the text of the cascade item from which this menu
 // was invoked.
-//
+// 
 // # Menu(Type(...))
-//
+// 
 // This option can be one of 'menubar', 'tearoff', or
 // 'normal', and is set when the menu is created. While the string
 // returned by the configuration database will change if this option is
@@ -1641,24 +1215,24 @@ func (w *Window) Menu(options ...option) *Window {
 }
 
 // menu, tk_menuSetFocus - Create and manipulate 'menu' widgets and menubars
-//
+// 
 // # Menu(Postcommand(...))
-//
+// 
 // If this option is specified then it provides a Tcl command to execute
 // each time the menu is posted.  The command is invoked by the 'post'
 // widget command before posting the menu. Note that in Tk 8.0 on Macintosh
 // and Windows, all post-commands in a system of menus are executed before any
 // of those menus are posted.
 // This is due to the limitations in the individual platforms' menu managers.
-//
+// 
 // # Menu(Selectcolor(...))
-//
+// 
 // For menu entries that are check buttons or radio buttons, this option
 // specifies the color to display in the indicator when the check button
 // or radio button is selected.
-//
+// 
 // # Menu(Tearoff(...))
-//
+// 
 // This option must have a proper boolean value (default is false),
 // which specifies whether or not the menu should include a tear-off
 // entry at the top.  If so, it will exist as entry 0 of the menu and
@@ -1667,25 +1241,25 @@ func (w *Window) Menu(options ...option) *Window {
 // is invoked.
 // This option is ignored under Aqua/MacOS, where menus cannot
 // be torn off.
-//
+// 
 // # Menu(Tearoffcommand(...))
-//
+// 
 // If this option has a non-empty value, then it specifies a Tcl command
 // to invoke whenever the menu is torn off.  The actual command will
 // consist of the value of this option, followed by a space, followed
 // by the name of the menu window, followed by a space, followed by
 // the name of the name of the torn off menu window.  For example, if
 // the option's value is
-//
+// 
 // # Menu(Title(...))
-//
+// 
 // The string will be used to title the window created when this menu is
 // torn off. If the title is NULL, then the window will have the title
 // of the menubutton or the text of the cascade item from which this menu
 // was invoked.
-//
+// 
 // # Menu(Type(...))
-//
+// 
 // This option can be one of 'menubar', 'tearoff', or
 // 'normal', and is set when the menu is created. While the string
 // returned by the configuration database will change if this option is
@@ -1697,9 +1271,9 @@ func Menu(options ...option) *Window {
 }
 
 // menubutton - Create and manipulate 'menubutton' pop-up menu indicator widgets
-//
+// 
 // # Menubutton(Direction(...))
-//
+// 
 // Specifies where the menu is going to be popup up. 'above' tries to
 // pop the menu above the menubutton. 'below' tries to pop the menu
 // below the menubutton. 'left' tries to pop the menu to the left of
@@ -1707,31 +1281,31 @@ func Menu(options ...option) *Window {
 // menu button. 'flush' pops the menu directly over the menubutton.
 // In the case of 'above' or 'below', the direction will be
 // reversed if the menu would show offscreen.
-//
+// 
 // # Menubutton(Height(...))
-//
+// 
 // Specifies a desired height for the menubutton.
 // If an image or bitmap is being displayed in the menubutton then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the menubutton's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Menubutton(Indicatoron(...))
-//
+// 
 // The value must be a proper boolean value.  If it is true then
 // a small indicator rectangle will be displayed on the right side
 // of the menubutton and the default menu bindings will treat this
 // as an option menubutton.  If false then no indicator will be
 // displayed.
-//
+// 
 // # Menubutton(Menu(...))
-//
+// 
 // Specifies the path name of the menu associated with this menubutton.
 // The menu must be a child of the menubutton.
-//
+// 
 // # Menubutton(State(...))
-//
+// 
 // Specifies one of three states for the menubutton:  'normal', 'active',
 // or 'disabled'.  In normal state the menubutton is displayed using the
 // 'foreground' and 'background' options.  The active state is
@@ -1742,9 +1316,9 @@ func Menu(options ...option) *Window {
 // the widget and will ignore mouse button presses.
 // In this state the '-disabledforeground' and
 // '-background' options determine how the button is displayed.
-//
+// 
 // # Menubutton(Width(...))
-//
+// 
 // Specifies a desired width for the menubutton.
 // If an image or bitmap is being displayed in the menubutton then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
@@ -1758,9 +1332,9 @@ func (w *Window) Menubutton(options ...option) *Window {
 }
 
 // menubutton - Create and manipulate 'menubutton' pop-up menu indicator widgets
-//
+// 
 // # Menubutton(Direction(...))
-//
+// 
 // Specifies where the menu is going to be popup up. 'above' tries to
 // pop the menu above the menubutton. 'below' tries to pop the menu
 // below the menubutton. 'left' tries to pop the menu to the left of
@@ -1768,31 +1342,31 @@ func (w *Window) Menubutton(options ...option) *Window {
 // menu button. 'flush' pops the menu directly over the menubutton.
 // In the case of 'above' or 'below', the direction will be
 // reversed if the menu would show offscreen.
-//
+// 
 // # Menubutton(Height(...))
-//
+// 
 // Specifies a desired height for the menubutton.
 // If an image or bitmap is being displayed in the menubutton then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the menubutton's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Menubutton(Indicatoron(...))
-//
+// 
 // The value must be a proper boolean value.  If it is true then
 // a small indicator rectangle will be displayed on the right side
 // of the menubutton and the default menu bindings will treat this
 // as an option menubutton.  If false then no indicator will be
 // displayed.
-//
+// 
 // # Menubutton(Menu(...))
-//
+// 
 // Specifies the path name of the menu associated with this menubutton.
 // The menu must be a child of the menubutton.
-//
+// 
 // # Menubutton(State(...))
-//
+// 
 // Specifies one of three states for the menubutton:  'normal', 'active',
 // or 'disabled'.  In normal state the menubutton is displayed using the
 // 'foreground' and 'background' options.  The active state is
@@ -1803,9 +1377,9 @@ func (w *Window) Menubutton(options ...option) *Window {
 // the widget and will ignore mouse button presses.
 // In this state the '-disabledforeground' and
 // '-background' options determine how the button is displayed.
-//
+// 
 // # Menubutton(Width(...))
-//
+// 
 // Specifies a desired width for the menubutton.
 // If an image or bitmap is being displayed in the menubutton then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
@@ -1817,9 +1391,9 @@ func Menubutton(options ...option) *Window {
 }
 
 // message - Create and manipulate 'message' non-interactive text widgets
-//
+// 
 // # Message(Aspect(...))
-//
+// 
 // Specifies a non-negative integer value indicating desired
 // aspect ratio for the text.  The aspect ratio is specified as
 // 100*width/height.  100 means the text should
@@ -1829,9 +1403,9 @@ func Menubutton(options ...option) *Window {
 // Used to choose line length for text if '-width' option
 // is not specified.
 // Defaults to 150.
-//
+// 
 // # Message(Justify(...))
-//
+// 
 // Specifies how to justify lines of text.
 // Must be one of 'left', 'center', or 'right'.  Defaults
 // to 'left'.
@@ -1851,9 +1425,9 @@ func Menubutton(options ...option) *Window {
 // line up and the right edge of the longest line is '-padx' from
 // the right side of the window;  the entire text block will be centered
 // in the vertical span of the window.
-//
+// 
 // # Message(Width(...))
-//
+// 
 // Specifies the length of lines in the window.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
 // If this option has a value greater than zero then the '-aspect'
@@ -1861,46 +1435,6 @@ func Menubutton(options ...option) *Window {
 // length.
 // If this option has a value less than or equal to zero, then
 // the '-aspect' option determines the line length.
-//
-// # Description
-//
-// The message command creates a new window (given by the
-// pathName argument) and makes it into a message widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the message such as its colors, font,
-// text, and initial relief.  The message command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A message is a widget that displays a textual string.  A message
-// widget has three special features that differentiate it from a
-// label widget.  First, it breaks up
-// its string into lines in order to produce a given aspect ratio
-// for the window.  The line breaks are chosen at word boundaries
-// wherever possible (if not even a single word would fit on a
-// line, then the word will be split across lines).  Newline characters
-// in the string will force line breaks;  they can be used, for example,
-// to leave blank lines in the display.
-//
-// The second feature of a message widget is justification.  The text
-// may be displayed left-justified (each line starts at the left side of
-// the window), centered on a line-by-line basis, or right-justified
-// (each line ends at the right side of the window).
-//
-// The third feature of a message widget is that it handles control
-// characters and non-printing characters specially.  Tab characters
-// are replaced with enough blank space to line up on the next
-// 8-character boundary.  Newlines cause line breaks.  Other control
-// characters (ASCII code less than 0x20) and characters not defined
-// in the font are displayed as a four-character sequence \exhh where
-// hh is the two-digit hexadecimal number corresponding to
-// the character.  In the unusual case where the font does not contain
-// all of the characters in
-//
-// then control characters and undefined characters are not displayed at all.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Message(options ...option) *Window {
@@ -1908,9 +1442,9 @@ func (w *Window) Message(options ...option) *Window {
 }
 
 // message - Create and manipulate 'message' non-interactive text widgets
-//
+// 
 // # Message(Aspect(...))
-//
+// 
 // Specifies a non-negative integer value indicating desired
 // aspect ratio for the text.  The aspect ratio is specified as
 // 100*width/height.  100 means the text should
@@ -1920,9 +1454,9 @@ func (w *Window) Message(options ...option) *Window {
 // Used to choose line length for text if '-width' option
 // is not specified.
 // Defaults to 150.
-//
+// 
 // # Message(Justify(...))
-//
+// 
 // Specifies how to justify lines of text.
 // Must be one of 'left', 'center', or 'right'.  Defaults
 // to 'left'.
@@ -1942,9 +1476,9 @@ func (w *Window) Message(options ...option) *Window {
 // line up and the right edge of the longest line is '-padx' from
 // the right side of the window;  the entire text block will be centered
 // in the vertical span of the window.
-//
+// 
 // # Message(Width(...))
-//
+// 
 // Specifies the length of lines in the window.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
 // If this option has a value greater than zero then the '-aspect'
@@ -1952,68 +1486,11 @@ func (w *Window) Message(options ...option) *Window {
 // length.
 // If this option has a value less than or equal to zero, then
 // the '-aspect' option determines the line length.
-//
-// # Description
-//
-// The message command creates a new window (given by the
-// pathName argument) and makes it into a message widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the message such as its colors, font,
-// text, and initial relief.  The message command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A message is a widget that displays a textual string.  A message
-// widget has three special features that differentiate it from a
-// label widget.  First, it breaks up
-// its string into lines in order to produce a given aspect ratio
-// for the window.  The line breaks are chosen at word boundaries
-// wherever possible (if not even a single word would fit on a
-// line, then the word will be split across lines).  Newline characters
-// in the string will force line breaks;  they can be used, for example,
-// to leave blank lines in the display.
-//
-// The second feature of a message widget is justification.  The text
-// may be displayed left-justified (each line starts at the left side of
-// the window), centered on a line-by-line basis, or right-justified
-// (each line ends at the right side of the window).
-//
-// The third feature of a message widget is that it handles control
-// characters and non-printing characters specially.  Tab characters
-// are replaced with enough blank space to line up on the next
-// 8-character boundary.  Newlines cause line breaks.  Other control
-// characters (ASCII code less than 0x20) and characters not defined
-// in the font are displayed as a four-character sequence \exhh where
-// hh is the two-digit hexadecimal number corresponding to
-// the character.  In the unusual case where the font does not contain
-// all of the characters in
-//
-// then control characters and undefined characters are not displayed at all.
 func Message(options ...option) *Window {
 	return Inter.Message(options...)
 }
 
 // tk_optionMenu - Create an option menubutton and its menu
-//
-// This procedure creates an option menubutton whose name is pathName,
-// plus an associated menu.
-// Together they allow the user to select one of the values
-// given by the value arguments.
-// The current value will be stored in the global variable whose
-// name is given by varName and it will also be displayed as the label
-// in the option menubutton.
-// The user can click on the menubutton to display a menu containing
-// all of the values and thereby select a new value.
-// Once a new value is selected, it will be stored in the variable
-// and appear in the option menubutton.
-// The current value can also be changed by setting the variable.
-//
-// The return value from tk_optionMenu is the name of the menu
-// associated with pathName, so that the caller can change its
-// configuration options or manipulate it in other ways.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) OptionMenu(options ...option) *Window {
@@ -2021,114 +1498,82 @@ func (w *Window) OptionMenu(options ...option) *Window {
 }
 
 // tk_optionMenu - Create an option menubutton and its menu
-//
-// This procedure creates an option menubutton whose name is pathName,
-// plus an associated menu.
-// Together they allow the user to select one of the values
-// given by the value arguments.
-// The current value will be stored in the global variable whose
-// name is given by varName and it will also be displayed as the label
-// in the option menubutton.
-// The user can click on the menubutton to display a menu containing
-// all of the values and thereby select a new value.
-// Once a new value is selected, it will be stored in the variable
-// and appear in the option menubutton.
-// The current value can also be changed by setting the variable.
-//
-// The return value from tk_optionMenu is the name of the menu
-// associated with pathName, so that the caller can change its
-// configuration options or manipulate it in other ways.
 func OptionMenu(options ...option) *Window {
 	return Inter.OptionMenu(options...)
 }
 
 // panedwindow - Create and manipulate 'panedwindow' split container widgets
-//
+// 
 // # Panedwindow(Handlepad(...))
-//
+// 
 // When sash handles are drawn, specifies the distance from the top or
 // left end of the sash (depending on the orientation of the widget) at
 // which to draw the handle.  May be any value accepted by 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Handlesize(...))
-//
+// 
 // Specifies the side length of a sash handle.  Handles are always
 // drawn as squares.  May be any value accepted by 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Height(...))
-//
+// 
 // Specifies a desired height for the overall panedwindow widget. May be any
 // value accepted by 'Tk_GetPixels'. If an empty string, the widget will be
 // made high enough to allow all contained widgets to have their natural height.
-//
+// 
 // # Panedwindow(Opaqueresize(...))
-//
+// 
 // Specifies whether panes should be resized as a sash is moved (true),
 // or if resizing should be deferred until the sash is placed (false).
 // In the latter case, a
-//
+// 
 // # Panedwindow(Proxybackground(...))
-//
+// 
 // Background color to use when drawing the proxy. If an empty string, the
 // value of the '-background' option will be used.
-//
+// 
 // # Panedwindow(Proxyborderwidth(...))
-//
+// 
 // Specifies the borderwidth of the proxy. May be any value accepted by
 // 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Proxyrelief(...))
-//
+// 
 // Relief to use when drawing the proxy. May be any of the standard Tk
 // relief values. If an empty string, the value of the '-sashrelief'
 // option will be used.
-//
+// 
 // # Panedwindow(Sashcursor(...))
-//
+// 
 // Mouse cursor to use when over a sash.  If null,
 // 'sb_h_double_arrow' will be used for horizontal panedwindows, and
 // 'sb_v_double_arrow' will be used for vertical panedwindows.
-//
+// 
 // # Panedwindow(Sashpad(...))
-//
+// 
 // Specifies the amount of padding to leave of each side of a sash.  May
 // be any value accepted by 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Sashrelief(...))
-//
+// 
 // Relief to use when drawing a sash.  May be any of the standard Tk
 // relief values.
-//
+// 
 // # Panedwindow(Sashwidth(...))
-//
+// 
 // Specifies the width of each sash.  May be any value accepted by
 // 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Showhandle(...))
-//
+// 
 // Specifies whether sash handles should be shown.  May be any valid Tcl
 // boolean value.
-//
+// 
 // # Panedwindow(Width(...))
-//
+// 
 // Specifies a desired width for the overall panedwindow widget. May be any
 // value accepted by 'Tk_GetPixels'. If an empty string, the widget will be
 // made wide enough to allow all contained widgets to have their natural width.
-//
-// # Description
-//
-// The panedwindow command creates a new window (given by the
-// pathName argument) and makes it into a panedwindow widget.
-// Additional options, described above, may be specified on the command
-// line or in the option database to configure aspects of the panedwindow
-// such as its default background color and relief.  The
-// panedwindow command returns the path name of the new window.
-//
-// A panedwindow widget contains any number of panes, arranged
-// horizontally or vertically, according to the value of the
-// -orient option.  Each pane contains one widget, and each pair of
-// panes is separated by a moveable (via mouse movements) sash.  Moving a
-// sash causes the widgets on either side of the sash to be resized.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Panedwindow(options ...option) *Window {
@@ -2136,137 +1581,122 @@ func (w *Window) Panedwindow(options ...option) *Window {
 }
 
 // panedwindow - Create and manipulate 'panedwindow' split container widgets
-//
+// 
 // # Panedwindow(Handlepad(...))
-//
+// 
 // When sash handles are drawn, specifies the distance from the top or
 // left end of the sash (depending on the orientation of the widget) at
 // which to draw the handle.  May be any value accepted by 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Handlesize(...))
-//
+// 
 // Specifies the side length of a sash handle.  Handles are always
 // drawn as squares.  May be any value accepted by 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Height(...))
-//
+// 
 // Specifies a desired height for the overall panedwindow widget. May be any
 // value accepted by 'Tk_GetPixels'. If an empty string, the widget will be
 // made high enough to allow all contained widgets to have their natural height.
-//
+// 
 // # Panedwindow(Opaqueresize(...))
-//
+// 
 // Specifies whether panes should be resized as a sash is moved (true),
 // or if resizing should be deferred until the sash is placed (false).
 // In the latter case, a
-//
+// 
 // # Panedwindow(Proxybackground(...))
-//
+// 
 // Background color to use when drawing the proxy. If an empty string, the
 // value of the '-background' option will be used.
-//
+// 
 // # Panedwindow(Proxyborderwidth(...))
-//
+// 
 // Specifies the borderwidth of the proxy. May be any value accepted by
 // 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Proxyrelief(...))
-//
+// 
 // Relief to use when drawing the proxy. May be any of the standard Tk
 // relief values. If an empty string, the value of the '-sashrelief'
 // option will be used.
-//
+// 
 // # Panedwindow(Sashcursor(...))
-//
+// 
 // Mouse cursor to use when over a sash.  If null,
 // 'sb_h_double_arrow' will be used for horizontal panedwindows, and
 // 'sb_v_double_arrow' will be used for vertical panedwindows.
-//
+// 
 // # Panedwindow(Sashpad(...))
-//
+// 
 // Specifies the amount of padding to leave of each side of a sash.  May
 // be any value accepted by 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Sashrelief(...))
-//
+// 
 // Relief to use when drawing a sash.  May be any of the standard Tk
 // relief values.
-//
+// 
 // # Panedwindow(Sashwidth(...))
-//
+// 
 // Specifies the width of each sash.  May be any value accepted by
 // 'Tk_GetPixels'.
-//
+// 
 // # Panedwindow(Showhandle(...))
-//
+// 
 // Specifies whether sash handles should be shown.  May be any valid Tcl
 // boolean value.
-//
+// 
 // # Panedwindow(Width(...))
-//
+// 
 // Specifies a desired width for the overall panedwindow widget. May be any
 // value accepted by 'Tk_GetPixels'. If an empty string, the widget will be
 // made wide enough to allow all contained widgets to have their natural width.
-//
-// # Description
-//
-// The panedwindow command creates a new window (given by the
-// pathName argument) and makes it into a panedwindow widget.
-// Additional options, described above, may be specified on the command
-// line or in the option database to configure aspects of the panedwindow
-// such as its default background color and relief.  The
-// panedwindow command returns the path name of the new window.
-//
-// A panedwindow widget contains any number of panes, arranged
-// horizontally or vertically, according to the value of the
-// -orient option.  Each pane contains one widget, and each pair of
-// panes is separated by a moveable (via mouse movements) sash.  Moving a
-// sash causes the widgets on either side of the sash to be resized.
 func Panedwindow(options ...option) *Window {
 	return Inter.Panedwindow(options...)
 }
 
 // radiobutton - Create and manipulate 'radiobutton' pick-one widgets
-//
+// 
 // # Radiobutton(Command(...))
-//
+// 
 // Specifies a Tcl command to associate with the button.  This command
 // is typically invoked when mouse button 1 is released over the button
 // window.  The button's global variable ('-variable' option) will
 // be updated before the command is invoked.
-//
+// 
 // # Radiobutton(Height(...))
-//
+// 
 // Specifies a desired height for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the button's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Radiobutton(Indicatoron(...))
-//
+// 
 // Specifies whether or not the indicator should be drawn.  Must be a
 // proper boolean value.  If false, the '-relief' option is
 // ignored and the widget's relief is always sunken if the widget is
 // selected and raised otherwise.
-//
+// 
 // # Radiobutton(Offrelief(...))
-//
+// 
 // Specifies the relief for the checkbutton when the indicator is not drawn and
 // the checkbutton is off.  The default value is
-//
+// 
 // # Radiobutton(Overrelief(...))
-//
+// 
 // Specifies an alternative relief for the radiobutton, to be used when the
 // mouse cursor is over the widget.  This option can be used to make
 // toolbar buttons, by configuring '-relief flat -overrelief
 // raised'.  If the value of this option is the empty string, then no
 // alternative relief is used when the mouse cursor is over the radiobutton.
 // The empty string is the default value.
-//
+// 
 // # Radiobutton(Selectcolor(...))
-//
+// 
 // Specifies a background color to use when the button is selected.
 // If 'indicatorOn' is true then the color is used as the background for
 // the indicator regardless of the select state.
@@ -2275,16 +1705,16 @@ func Panedwindow(options ...option) *Window {
 // whenever the widget is selected.
 // If specified as an empty string then no special color is used for
 // displaying when the widget is selected.
-//
+// 
 // # Radiobutton(Selectimage(...))
-//
+// 
 // Specifies an image to display (in place of the '-image' option)
 // when the radiobutton is selected.
 // This option is ignored unless the '-image' option has been
 // specified.
-//
+// 
 // # Radiobutton(State(...))
-//
+// 
 // Specifies one of three states for the radiobutton:  'normal', 'active',
 // or 'disabled'.  In normal state the radiobutton is displayed using the
 // '-foreground' and '-background' options.  The active state is
@@ -2295,98 +1725,39 @@ func Panedwindow(options ...option) *Window {
 // the widget and will ignore mouse button presses.
 // In this state the '-disabledforeground' and
 // '-background' options determine how the radiobutton is displayed.
-//
+// 
 // # Radiobutton(Tristateimage(...))
-//
+// 
 // Specifies an image to display (in place of the '-image' option)
 // when the radiobutton is selected.
 // This option is ignored unless the '-image' option has been
 // specified.
-//
+// 
 // # Radiobutton(Tristatevalue(...))
-//
+// 
 // Specifies the value that causes the radiobutton to display the multi-value
 // selection, also known as the tri-state mode.  Defaults to
-//
+// 
 // # Radiobutton(Value(...))
-//
+// 
 // Specifies value to store in the button's associated variable whenever
 // this button is selected.
-//
+// 
 // # Radiobutton(Variable(...))
-//
+// 
 // Specifies the name of a global variable to set whenever this button is
 // selected.  Changes in this variable also cause the button to select
 // or deselect itself.
 // Defaults to the value 'selectedButton'.
-//
+// 
 // # Radiobutton(Width(...))
-//
+// 
 // Specifies a desired width for the button.
 // If an image or bitmap is being displayed in the button, the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in characters.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
-// # Description
-//
-// The radiobutton command creates a new window (given by the
-// pathName argument) and makes it into a radiobutton widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the radiobutton such as its colors, font,
-// text, and initial relief.  The radiobutton command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A radiobutton is a widget that displays a textual string, bitmap or image
-// and a diamond or circle called an indicator.
-// If text is displayed, it must all be in a single font, but it
-// can occupy multiple lines on the screen (if it contains newlines
-// or if wrapping occurs because of the -wraplength option) and
-// one of the characters may optionally be underlined using the
-// -underline option.  A radiobutton has
-// all of the behavior of a simple button: it can display itself in either
-// of three different ways, according to the -state option;
-// it can be made to appear
-// raised, sunken, or flat; it can be made to flash; and it invokes
-// a Tcl command whenever mouse button 1 is clicked over the
-// check button.
-//
-// In addition, radiobuttons can be selected.
-// If a radiobutton is selected, the indicator is normally
-// drawn with a selected appearance, and
-// a Tcl variable associated with the radiobutton is set to a particular
-// value (normally 1).
-// Under Unix, the indicator is drawn with a sunken relief and a special
-// color.  Under Windows, the indicator is drawn with a round mark inside.
-// If the radiobutton is not selected, then the indicator is drawn with a
-// deselected appearance, and the associated variable is
-// set to a different value (typically 0).
-// The indicator is drawn without a round mark inside.
-// Typically, several radiobuttons share a single variable and the
-// value of the variable indicates which radiobutton is to be selected.
-// When a radiobutton is selected it sets the value of the variable to
-// indicate that fact;  each radiobutton also monitors the value of
-// the variable and automatically selects and deselects itself when the
-// variable's value changes.
-// If the variable's value matches the -tristatevalue, then the radiobutton
-// is drawn using the tri-state mode.  This mode is used to indicate mixed or
-// multiple values.  (This is used when the radiobutton represents the state
-// of multiple items.)
-// By default the variable selectedButton
-// is used;  its contents give the name of the button that is
-// selected, or the empty string if no button associated with that
-// variable is selected.
-// The name of the variable for a radiobutton,
-// plus the variable to be stored into it, may be modified with options
-// on the command line or in the option database.
-// Configuration options may also be used to modify the way the
-// indicator is displayed (or whether it is displayed at all).
-// By default a radiobutton is configured to select itself on button clicks.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Radiobutton(options ...option) *Window {
@@ -2394,46 +1765,46 @@ func (w *Window) Radiobutton(options ...option) *Window {
 }
 
 // radiobutton - Create and manipulate 'radiobutton' pick-one widgets
-//
+// 
 // # Radiobutton(Command(...))
-//
+// 
 // Specifies a Tcl command to associate with the button.  This command
 // is typically invoked when mouse button 1 is released over the button
 // window.  The button's global variable ('-variable' option) will
 // be updated before the command is invoked.
-//
+// 
 // # Radiobutton(Height(...))
-//
+// 
 // Specifies a desired height for the button.
 // If an image or bitmap is being displayed in the button then the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in lines of text.
 // If this option is not specified, the button's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
+// 
 // # Radiobutton(Indicatoron(...))
-//
+// 
 // Specifies whether or not the indicator should be drawn.  Must be a
 // proper boolean value.  If false, the '-relief' option is
 // ignored and the widget's relief is always sunken if the widget is
 // selected and raised otherwise.
-//
+// 
 // # Radiobutton(Offrelief(...))
-//
+// 
 // Specifies the relief for the checkbutton when the indicator is not drawn and
 // the checkbutton is off.  The default value is
-//
+// 
 // # Radiobutton(Overrelief(...))
-//
+// 
 // Specifies an alternative relief for the radiobutton, to be used when the
 // mouse cursor is over the widget.  This option can be used to make
 // toolbar buttons, by configuring '-relief flat -overrelief
 // raised'.  If the value of this option is the empty string, then no
 // alternative relief is used when the mouse cursor is over the radiobutton.
 // The empty string is the default value.
-//
+// 
 // # Radiobutton(Selectcolor(...))
-//
+// 
 // Specifies a background color to use when the button is selected.
 // If 'indicatorOn' is true then the color is used as the background for
 // the indicator regardless of the select state.
@@ -2442,16 +1813,16 @@ func (w *Window) Radiobutton(options ...option) *Window {
 // whenever the widget is selected.
 // If specified as an empty string then no special color is used for
 // displaying when the widget is selected.
-//
+// 
 // # Radiobutton(Selectimage(...))
-//
+// 
 // Specifies an image to display (in place of the '-image' option)
 // when the radiobutton is selected.
 // This option is ignored unless the '-image' option has been
 // specified.
-//
+// 
 // # Radiobutton(State(...))
-//
+// 
 // Specifies one of three states for the radiobutton:  'normal', 'active',
 // or 'disabled'.  In normal state the radiobutton is displayed using the
 // '-foreground' and '-background' options.  The active state is
@@ -2462,241 +1833,146 @@ func (w *Window) Radiobutton(options ...option) *Window {
 // the widget and will ignore mouse button presses.
 // In this state the '-disabledforeground' and
 // '-background' options determine how the radiobutton is displayed.
-//
+// 
 // # Radiobutton(Tristateimage(...))
-//
+// 
 // Specifies an image to display (in place of the '-image' option)
 // when the radiobutton is selected.
 // This option is ignored unless the '-image' option has been
 // specified.
-//
+// 
 // # Radiobutton(Tristatevalue(...))
-//
+// 
 // Specifies the value that causes the radiobutton to display the multi-value
 // selection, also known as the tri-state mode.  Defaults to
-//
+// 
 // # Radiobutton(Value(...))
-//
+// 
 // Specifies value to store in the button's associated variable whenever
 // this button is selected.
-//
+// 
 // # Radiobutton(Variable(...))
-//
+// 
 // Specifies the name of a global variable to set whenever this button is
 // selected.  Changes in this variable also cause the button to select
 // or deselect itself.
 // Defaults to the value 'selectedButton'.
-//
+// 
 // # Radiobutton(Width(...))
-//
+// 
 // Specifies a desired width for the button.
 // If an image or bitmap is being displayed in the button, the value is in
 // screen units (i.e. any of the forms acceptable to 'Tk_GetPixels');
 // for text it is in characters.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
-//
-// # Description
-//
-// The radiobutton command creates a new window (given by the
-// pathName argument) and makes it into a radiobutton widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the radiobutton such as its colors, font,
-// text, and initial relief.  The radiobutton command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A radiobutton is a widget that displays a textual string, bitmap or image
-// and a diamond or circle called an indicator.
-// If text is displayed, it must all be in a single font, but it
-// can occupy multiple lines on the screen (if it contains newlines
-// or if wrapping occurs because of the -wraplength option) and
-// one of the characters may optionally be underlined using the
-// -underline option.  A radiobutton has
-// all of the behavior of a simple button: it can display itself in either
-// of three different ways, according to the -state option;
-// it can be made to appear
-// raised, sunken, or flat; it can be made to flash; and it invokes
-// a Tcl command whenever mouse button 1 is clicked over the
-// check button.
-//
-// In addition, radiobuttons can be selected.
-// If a radiobutton is selected, the indicator is normally
-// drawn with a selected appearance, and
-// a Tcl variable associated with the radiobutton is set to a particular
-// value (normally 1).
-// Under Unix, the indicator is drawn with a sunken relief and a special
-// color.  Under Windows, the indicator is drawn with a round mark inside.
-// If the radiobutton is not selected, then the indicator is drawn with a
-// deselected appearance, and the associated variable is
-// set to a different value (typically 0).
-// The indicator is drawn without a round mark inside.
-// Typically, several radiobuttons share a single variable and the
-// value of the variable indicates which radiobutton is to be selected.
-// When a radiobutton is selected it sets the value of the variable to
-// indicate that fact;  each radiobutton also monitors the value of
-// the variable and automatically selects and deselects itself when the
-// variable's value changes.
-// If the variable's value matches the -tristatevalue, then the radiobutton
-// is drawn using the tri-state mode.  This mode is used to indicate mixed or
-// multiple values.  (This is used when the radiobutton represents the state
-// of multiple items.)
-// By default the variable selectedButton
-// is used;  its contents give the name of the button that is
-// selected, or the empty string if no button associated with that
-// variable is selected.
-// The name of the variable for a radiobutton,
-// plus the variable to be stored into it, may be modified with options
-// on the command line or in the option database.
-// Configuration options may also be used to modify the way the
-// indicator is displayed (or whether it is displayed at all).
-// By default a radiobutton is configured to select itself on button clicks.
 func Radiobutton(options ...option) *Window {
 	return Inter.Radiobutton(options...)
 }
 
 // scale - Create and manipulate 'scale' value-controlled slider widgets
-//
+// 
 // # Scale(Bigincrement(...))
-//
-// # Some interactions with the scale cause its value to change by
-//
+// 
+// Some interactions with the scale cause its value to change by
+// 
 // # Scale(Command(...))
-//
+// 
 // Specifies the prefix of a Tcl command to invoke whenever the scale's
 // value is changed via a widget command.
 // The actual command consists
 // of this option followed by a space and a real number indicating the
 // new value of the scale.
-//
+// 
 // # Scale(Digits(...))
-//
+// 
 // An integer specifying how many significant digits should be retained
 // when converting the value of the scale to a string.
 // If the number is less than or equal to zero, then the scale picks
 // the smallest value that guarantees that every possible slider
 // position prints as a different string.
-//
+// 
 // # Scale(From(...))
-//
+// 
 // A real value corresponding to the left or top end of the scale.
-//
+// 
 // # Scale(Label(...))
-//
+// 
 // A string to display as a label for the scale.  For
 // vertical scales the label is displayed just to the right of the
 // top end of the scale.  For horizontal scales the label is displayed
 // just above the left end of the scale.  If the option is specified
 // as an empty string, no label is displayed.
-//
+// 
 // # Scale(Length(...))
-//
+// 
 // Specifies the desired long dimension of the scale in screen units
 // (i.e. any of the forms acceptable to 'Tk_GetPixels').
 // For vertical scales this is the scale's height;  for horizontal scales
 // it is the scale's width.
-//
+// 
 // # Scale(Resolution(...))
-//
+// 
 // A real value specifying the resolution for the scale.
 // If this value is greater than zero then the scale's value will always be
 // rounded to an even multiple of this value, as will
 // the endpoints of the scale.  If the value is less than zero then no
 // rounding occurs.  Defaults to 1 (i.e., the value will be integral).
-//
+// 
 // # Scale(Showvalue(...))
-//
+// 
 // Specifies a boolean value indicating whether or not the current
 // value of the scale is to be displayed.
-//
+// 
 // # Scale(Sliderlength(...))
-//
+// 
 // Specifies the size of the slider, measured in screen units along the slider's
 // long dimension.  The value may be specified in any of the forms acceptable
 // to 'Tk_GetPixels'.
-//
+// 
 // # Scale(Sliderrelief(...))
-//
+// 
 // Specifies the relief to use when drawing the slider, such as 'raised'
 // or 'sunken'.
-//
+// 
 // # Scale(State(...))
-//
+// 
 // Specifies one of three states for the scale:  'normal',
 // 'active', or 'disabled'.
 // If the scale is disabled then the value may not be changed and the scale
 // will not activate.
 // If the scale is active, the slider is displayed using the color
 // specified by the '-activebackground' option.
-//
+// 
 // # Scale(Tickinterval(...))
-//
+// 
 // Must be a real value.
 // Determines the spacing between numerical
 // tick marks displayed below or to the left of the slider. The values will all
 // be displayed with the same number of decimal places, which will be enough to
 // ensure they are all accurate to within 20% of a tick interval.
 // If 0, no tick marks will be displayed.
-//
+// 
 // # Scale(To(...))
-//
+// 
 // Specifies a real value corresponding
 // to the right or bottom end of the scale.
 // This value may be either less than or greater than the '-from' option.
-//
+// 
 // # Scale(Variable(...))
-//
+// 
 // Specifies the name of a global variable to link to the scale.  Whenever the
 // value of the variable changes, the scale will update to reflect this
 // value.
 // Whenever the scale is manipulated interactively, the variable
 // will be modified to reflect the scale's new value.
-//
+// 
 // # Scale(Width(...))
-//
+// 
 // Specifies the desired narrow dimension of the scale in screen units
 // (i.e. any of the forms acceptable to 'Tk_GetPixels').
 // For vertical scales this is the scale's width;  for horizontal scales
 // this is the scale's height.
-//
-// # Description
-//
-// The scale command creates a new window (given by the
-// pathName argument) and makes it into a scale widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the scale such as its colors, orientation,
-// and relief.  The scale command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A scale is a widget that displays a rectangular trough and a
-// small slider.  The trough corresponds to a range
-// of real values (determined by the -from, -to, and
-// -resolution options),
-// and the position of the slider selects a particular real value.
-// The slider's position (and hence the scale's value) may be adjusted
-// with the mouse or keyboard as described in the BINDINGS
-// section below.  Whenever the scale's value is changed, a Tcl
-// command is invoked (using the -command option) to notify
-// other interested widgets of the change.
-// In addition, the value
-// of the scale can be linked to a Tcl variable (using the -variable
-// option), so that changes in either are reflected in the other.
-//
-// Three annotations may be displayed in a scale widget:  a label
-// appearing at the top right of the widget (top left for horizontal
-// scales), a number displayed just to the left of the slider
-// (just above the slider for horizontal scales), and a collection
-// of numerical tick marks just to the left of the current value
-// (just below the trough for horizontal scales).  Each of these three
-// annotations may be enabled or disabled using the
-// configuration options.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Scale(options ...option) *Window {
@@ -2704,159 +1980,123 @@ func (w *Window) Scale(options ...option) *Window {
 }
 
 // scale - Create and manipulate 'scale' value-controlled slider widgets
-//
+// 
 // # Scale(Bigincrement(...))
-//
-// # Some interactions with the scale cause its value to change by
-//
+// 
+// Some interactions with the scale cause its value to change by
+// 
 // # Scale(Command(...))
-//
+// 
 // Specifies the prefix of a Tcl command to invoke whenever the scale's
 // value is changed via a widget command.
 // The actual command consists
 // of this option followed by a space and a real number indicating the
 // new value of the scale.
-//
+// 
 // # Scale(Digits(...))
-//
+// 
 // An integer specifying how many significant digits should be retained
 // when converting the value of the scale to a string.
 // If the number is less than or equal to zero, then the scale picks
 // the smallest value that guarantees that every possible slider
 // position prints as a different string.
-//
+// 
 // # Scale(From(...))
-//
+// 
 // A real value corresponding to the left or top end of the scale.
-//
+// 
 // # Scale(Label(...))
-//
+// 
 // A string to display as a label for the scale.  For
 // vertical scales the label is displayed just to the right of the
 // top end of the scale.  For horizontal scales the label is displayed
 // just above the left end of the scale.  If the option is specified
 // as an empty string, no label is displayed.
-//
+// 
 // # Scale(Length(...))
-//
+// 
 // Specifies the desired long dimension of the scale in screen units
 // (i.e. any of the forms acceptable to 'Tk_GetPixels').
 // For vertical scales this is the scale's height;  for horizontal scales
 // it is the scale's width.
-//
+// 
 // # Scale(Resolution(...))
-//
+// 
 // A real value specifying the resolution for the scale.
 // If this value is greater than zero then the scale's value will always be
 // rounded to an even multiple of this value, as will
 // the endpoints of the scale.  If the value is less than zero then no
 // rounding occurs.  Defaults to 1 (i.e., the value will be integral).
-//
+// 
 // # Scale(Showvalue(...))
-//
+// 
 // Specifies a boolean value indicating whether or not the current
 // value of the scale is to be displayed.
-//
+// 
 // # Scale(Sliderlength(...))
-//
+// 
 // Specifies the size of the slider, measured in screen units along the slider's
 // long dimension.  The value may be specified in any of the forms acceptable
 // to 'Tk_GetPixels'.
-//
+// 
 // # Scale(Sliderrelief(...))
-//
+// 
 // Specifies the relief to use when drawing the slider, such as 'raised'
 // or 'sunken'.
-//
+// 
 // # Scale(State(...))
-//
+// 
 // Specifies one of three states for the scale:  'normal',
 // 'active', or 'disabled'.
 // If the scale is disabled then the value may not be changed and the scale
 // will not activate.
 // If the scale is active, the slider is displayed using the color
 // specified by the '-activebackground' option.
-//
+// 
 // # Scale(Tickinterval(...))
-//
+// 
 // Must be a real value.
 // Determines the spacing between numerical
 // tick marks displayed below or to the left of the slider. The values will all
 // be displayed with the same number of decimal places, which will be enough to
 // ensure they are all accurate to within 20% of a tick interval.
 // If 0, no tick marks will be displayed.
-//
+// 
 // # Scale(To(...))
-//
+// 
 // Specifies a real value corresponding
 // to the right or bottom end of the scale.
 // This value may be either less than or greater than the '-from' option.
-//
+// 
 // # Scale(Variable(...))
-//
+// 
 // Specifies the name of a global variable to link to the scale.  Whenever the
 // value of the variable changes, the scale will update to reflect this
 // value.
 // Whenever the scale is manipulated interactively, the variable
 // will be modified to reflect the scale's new value.
-//
+// 
 // # Scale(Width(...))
-//
+// 
 // Specifies the desired narrow dimension of the scale in screen units
 // (i.e. any of the forms acceptable to 'Tk_GetPixels').
 // For vertical scales this is the scale's width;  for horizontal scales
 // this is the scale's height.
-//
-// # Description
-//
-// The scale command creates a new window (given by the
-// pathName argument) and makes it into a scale widget.
-// Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the scale such as its colors, orientation,
-// and relief.  The scale command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A scale is a widget that displays a rectangular trough and a
-// small slider.  The trough corresponds to a range
-// of real values (determined by the -from, -to, and
-// -resolution options),
-// and the position of the slider selects a particular real value.
-// The slider's position (and hence the scale's value) may be adjusted
-// with the mouse or keyboard as described in the BINDINGS
-// section below.  Whenever the scale's value is changed, a Tcl
-// command is invoked (using the -command option) to notify
-// other interested widgets of the change.
-// In addition, the value
-// of the scale can be linked to a Tcl variable (using the -variable
-// option), so that changes in either are reflected in the other.
-//
-// Three annotations may be displayed in a scale widget:  a label
-// appearing at the top right of the widget (top left for horizontal
-// scales), a number displayed just to the left of the slider
-// (just above the slider for horizontal scales), and a collection
-// of numerical tick marks just to the left of the current value
-// (just below the trough for horizontal scales).  Each of these three
-// annotations may be enabled or disabled using the
-// configuration options.
 func Scale(options ...option) *Window {
 	return Inter.Scale(options...)
 }
 
 // scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
-//
+// 
 // # Scrollbar(Activerelief(...))
-//
+// 
 // Specifies the relief to use when displaying the element that is
 // active, if any.
 // Elements other than the active element are always displayed with
 // a raised relief.
-//
+// 
 // # Scrollbar(Command(...))
-//
+// 
 // Specifies the prefix of a Tcl command to invoke to change the view
 // in the widget associated with the scrollbar.  When a user requests
 // a view change by manipulating the scrollbar, a Tcl command is
@@ -2868,49 +2108,22 @@ func Scale(options ...option) *Window {
 // All scrollable widgets have 'xview' and 'yview' commands
 // that take exactly the additional arguments appended by the scrollbar
 // as described in 'SCROLLING COMMANDS' below.
-//
+// 
 // # Scrollbar(Elementborderwidth(...))
-//
+// 
 // Specifies the width of borders drawn around the internal elements
 // of the scrollbar (the two arrows and the slider).  The value may
 // have any of the forms acceptable to 'Tk_GetPixels'.
 // If this value is less than zero, the value of the '-borderwidth'
 // option is used in its place.
-//
+// 
 // # Scrollbar(Width(...))
-//
+// 
 // Specifies the desired narrow dimension of the scrollbar window,
 // not including 3-D border, if any.  For vertical
 // scrollbars this will be the width and for horizontal scrollbars
 // this will be the height.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
-//
-// # Description
-//
-// The scrollbar command creates a new window (given by the
-// pathName argument) and makes it into a scrollbar widget.
-// Additional options, described above, may be specified on the command
-// line or in the option database to configure aspects of the scrollbar
-// such as its colors, orientation, and relief.
-// The scrollbar command returns its pathName argument.
-// At the time this command is invoked, there must not exist a window
-// named pathName, but pathName's parent must exist.
-//
-// A scrollbar is a widget that displays two arrows, one at each end of
-// the scrollbar, and a slider in the middle portion of the
-// scrollbar.
-// It provides information about what is visible in an associated window
-// that displays a document of some sort (such as a file being edited or
-// a drawing).
-// The position and size of the slider indicate which portion of the
-// document is visible in the associated window.  For example, if the
-// slider in a vertical scrollbar covers the top third of the area
-// between the two arrows, it means that the associated window displays
-// the top third of its document.
-//
-// Scrollbars can be used to adjust the view in the associated window
-// by clicking or dragging with the mouse.  See the BINDINGS section
-// below for details.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Scrollbar(options ...option) *Window {
@@ -2918,16 +2131,16 @@ func (w *Window) Scrollbar(options ...option) *Window {
 }
 
 // scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
-//
+// 
 // # Scrollbar(Activerelief(...))
-//
+// 
 // Specifies the relief to use when displaying the element that is
 // active, if any.
 // Elements other than the active element are always displayed with
 // a raised relief.
-//
+// 
 // # Scrollbar(Command(...))
-//
+// 
 // Specifies the prefix of a Tcl command to invoke to change the view
 // in the widget associated with the scrollbar.  When a user requests
 // a view change by manipulating the scrollbar, a Tcl command is
@@ -2939,126 +2152,99 @@ func (w *Window) Scrollbar(options ...option) *Window {
 // All scrollable widgets have 'xview' and 'yview' commands
 // that take exactly the additional arguments appended by the scrollbar
 // as described in 'SCROLLING COMMANDS' below.
-//
+// 
 // # Scrollbar(Elementborderwidth(...))
-//
+// 
 // Specifies the width of borders drawn around the internal elements
 // of the scrollbar (the two arrows and the slider).  The value may
 // have any of the forms acceptable to 'Tk_GetPixels'.
 // If this value is less than zero, the value of the '-borderwidth'
 // option is used in its place.
-//
+// 
 // # Scrollbar(Width(...))
-//
+// 
 // Specifies the desired narrow dimension of the scrollbar window,
 // not including 3-D border, if any.  For vertical
 // scrollbars this will be the width and for horizontal scrollbars
 // this will be the height.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
-//
-// # Description
-//
-// The scrollbar command creates a new window (given by the
-// pathName argument) and makes it into a scrollbar widget.
-// Additional options, described above, may be specified on the command
-// line or in the option database to configure aspects of the scrollbar
-// such as its colors, orientation, and relief.
-// The scrollbar command returns its pathName argument.
-// At the time this command is invoked, there must not exist a window
-// named pathName, but pathName's parent must exist.
-//
-// A scrollbar is a widget that displays two arrows, one at each end of
-// the scrollbar, and a slider in the middle portion of the
-// scrollbar.
-// It provides information about what is visible in an associated window
-// that displays a document of some sort (such as a file being edited or
-// a drawing).
-// The position and size of the slider indicate which portion of the
-// document is visible in the associated window.  For example, if the
-// slider in a vertical scrollbar covers the top third of the area
-// between the two arrows, it means that the associated window displays
-// the top third of its document.
-//
-// Scrollbars can be used to adjust the view in the associated window
-// by clicking or dragging with the mouse.  See the BINDINGS section
-// below for details.
 func Scrollbar(options ...option) *Window {
 	return Inter.Scrollbar(options...)
 }
 
 // spinbox - Create and manipulate 'spinbox' value spinner widgets
-//
+// 
 // # Spinbox(Buttonbackground(...))
-//
+// 
 // The background color to be used for the spin buttons.
-//
+// 
 // # Spinbox(Buttoncursor(...))
-//
+// 
 // The cursor to be used when over the spin buttons.  If this is empty
 // (the default), a default cursor will be used.
-//
+// 
 // # Spinbox(Buttondownrelief(...))
-//
+// 
 // The relief to be used for the upper spin button.
-//
+// 
 // # Spinbox(Buttonuprelief(...))
-//
+// 
 // The relief to be used for the lower spin button.
-//
+// 
 // # Spinbox(Command(...))
-//
+// 
 // Specifies a Tcl command to invoke whenever a spinbutton is invoked.
 // The command recognizes several percent substitutions: '%W' for
 // the widget path, '%s' for the current value of the widget, and
 // '%d' for the direction of the button pressed ('up' or 'down').
-//
+// 
 // # Spinbox(Disabledbackground(...))
-//
+// 
 // Specifies the background color to use when the spinbox is disabled.  If
 // this option is the empty string, the normal background color is used.
-//
+// 
 // # Spinbox(Disabledforeground(...))
-//
+// 
 // Specifies the foreground color to use when the spinbox is disabled.  If
 // this option is the empty string, the normal foreground color is used.
-//
+// 
 // # Spinbox(Format(...))
-//
+// 
 // Specifies an alternate format to use when setting the string value
 // when using the '-from' and '-to' range.
 // This must be a format specifier of the form '%<pad>.<pad>f',
 // as it will format a floating-point number.
-//
+// 
 // # Spinbox(From(...))
-//
+// 
 // A floating-point value corresponding to the lowest value for a spinbox, to
 // be used in conjunction with '-to' and '-increment'.  When all
 // are specified correctly, the spinbox will use these values to control its
 // contents. If this value is greater than the '-to' option, then
 // '-from' and '-to' values are automatically swapped.
 // If '-values' is specified, it supersedes this option.
-//
+// 
 // # Spinbox(Invalidcommand(...)) or Spinbox(Invcmd(...))
-//
+// 
 // Specifies a script to eval when '-validatecommand' returns 0.  Setting
 // it to an empty string disables this feature (the default).  The best use of
 // this option is to set it to 'bell'.  See 'VALIDATION' below for
 // more information.
-//
+// 
 // # Spinbox(Increment(...))
-//
+// 
 // A floating-point value specifying the increment.  When used with
 // '-from' and '-to', the value in the widget will be adjusted by
 // '-increment' when a spin button is pressed (up adds the value,
 // down subtracts the value).
-//
+// 
 // # Spinbox(Readonlybackground(...))
-//
+// 
 // Specifies the background color to use when the spinbox is readonly.  If
 // this option is the empty string, the normal background color is used.
-//
+// 
 // # Spinbox(State(...))
-//
+// 
 // Specifies one of three states for the spinbox:  'normal',
 // 'disabled', or 'readonly'.  If the spinbox is readonly, then the
 // value may not be changed using widget commands and no insertion cursor
@@ -3068,25 +2254,25 @@ func Scrollbar(options ...option) *Window {
 // displayed, the contents will not be selectable, and the spinbox may
 // be displayed in a different color, depending on the values of the
 // '-disabledforeground' and '-disabledbackground' options.
-//
+// 
 // # Spinbox(To(...))
-//
+// 
 // A floating-point value corresponding to the highest value for the spinbox,
 // to be used in conjunction with '-from' and '-increment'.  When
 // all are specified correctly, the spinbox will use these values to control
 // its contents. If this value is less than the '-from' option, then
 // '-from' and '-to' values are automatically swapped.
 // If '-values' is specified, it supersedes this option.
-//
+// 
 // # Spinbox(Validate(...))
-//
+// 
 // Specifies the mode in which validation should operate: 'none',
 // 'focus', 'focusin', 'focusout', 'key', or 'all'.
 // It defaults to 'none'.  When you want validation, you must explicitly
 // state which mode you wish to use.  See 'VALIDATION' below for more.
-//
+// 
 // # Spinbox(Validatecommand(...)) or Spinbox(Vcmd(...))
-//
+// 
 // Specifies a script to evaluate when you want to validate the input in the
 // widget.  Setting it to an empty string disables this feature (the default).
 // Validation occurs according to the value of '-validate'.
@@ -3095,57 +2281,24 @@ func Scrollbar(options ...option) *Window {
 // change and the '-invalidcommand' will be evaluated if it is set.  If it
 // returns 1, then value will be changed.
 // See 'VALIDATION' below for more information.
-//
+// 
 // # Spinbox(Values(...))
-//
+// 
 // Must be a proper list value.  If specified, the spinbox will use these
 // values as to control its contents, starting with the first value.  This
 // option has precedence over the '-from' and '-to' range.
-//
+// 
 // # Spinbox(Width(...))
-//
+// 
 // Specifies an integer value indicating the desired width of the spinbox window,
 // in average-size characters of the widget's font.
 // If the value is less than or equal to zero, the widget picks a
 // size just large enough to hold its current text.
-//
+// 
 // # Spinbox(Wrap(...))
-//
+// 
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
-//
-// # Description
-//
-// The spinbox command creates a new window (given by the
-// pathName argument) and makes it into a spinbox widget.
-// Additional options, described above, may be specified on the
-// command line or in the option database
-// to configure aspects of the spinbox such as its colors, font,
-// and relief.  The spinbox command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A spinbox is an extended entry widget that allows he user
-// to move, or spin, through a fixed set of ascending or descending values
-// such as times or dates in addition to editing the value as in an
-// entry.  When first created, a spinbox's string is empty.
-// A portion of the spinbox may be selected as described below.
-// If a spinbox is exporting its selection (see the -exportselection
-// option), then it will observe the standard protocols for handling the
-// selection;  spinbox selections are available as type STRING.
-// Spinboxes also observe the standard Tk rules for dealing with the
-// input focus.  When a spinbox has the input focus it displays an
-// insertion cursor to indicate where new characters will be
-// inserted.
-//
-// Spinboxes are capable of displaying strings that are too long to
-// fit entirely within the widget's window.  In this case, only a
-// portion of the string will be displayed; commands described below
-// may be used to change the view in the window.  Spinboxes use
-// the standard -xscrollcommand mechanism for interacting with
-// scrollbars (see the description of the -xscrollcommand option
-// for details).  They also support scanning, as described below.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Spinbox(options ...option) *Window {
@@ -3153,78 +2306,78 @@ func (w *Window) Spinbox(options ...option) *Window {
 }
 
 // spinbox - Create and manipulate 'spinbox' value spinner widgets
-//
+// 
 // # Spinbox(Buttonbackground(...))
-//
+// 
 // The background color to be used for the spin buttons.
-//
+// 
 // # Spinbox(Buttoncursor(...))
-//
+// 
 // The cursor to be used when over the spin buttons.  If this is empty
 // (the default), a default cursor will be used.
-//
+// 
 // # Spinbox(Buttondownrelief(...))
-//
+// 
 // The relief to be used for the upper spin button.
-//
+// 
 // # Spinbox(Buttonuprelief(...))
-//
+// 
 // The relief to be used for the lower spin button.
-//
+// 
 // # Spinbox(Command(...))
-//
+// 
 // Specifies a Tcl command to invoke whenever a spinbutton is invoked.
 // The command recognizes several percent substitutions: '%W' for
 // the widget path, '%s' for the current value of the widget, and
 // '%d' for the direction of the button pressed ('up' or 'down').
-//
+// 
 // # Spinbox(Disabledbackground(...))
-//
+// 
 // Specifies the background color to use when the spinbox is disabled.  If
 // this option is the empty string, the normal background color is used.
-//
+// 
 // # Spinbox(Disabledforeground(...))
-//
+// 
 // Specifies the foreground color to use when the spinbox is disabled.  If
 // this option is the empty string, the normal foreground color is used.
-//
+// 
 // # Spinbox(Format(...))
-//
+// 
 // Specifies an alternate format to use when setting the string value
 // when using the '-from' and '-to' range.
 // This must be a format specifier of the form '%<pad>.<pad>f',
 // as it will format a floating-point number.
-//
+// 
 // # Spinbox(From(...))
-//
+// 
 // A floating-point value corresponding to the lowest value for a spinbox, to
 // be used in conjunction with '-to' and '-increment'.  When all
 // are specified correctly, the spinbox will use these values to control its
 // contents. If this value is greater than the '-to' option, then
 // '-from' and '-to' values are automatically swapped.
 // If '-values' is specified, it supersedes this option.
-//
+// 
 // # Spinbox(Invalidcommand(...)) or Spinbox(Invcmd(...))
-//
+// 
 // Specifies a script to eval when '-validatecommand' returns 0.  Setting
 // it to an empty string disables this feature (the default).  The best use of
 // this option is to set it to 'bell'.  See 'VALIDATION' below for
 // more information.
-//
+// 
 // # Spinbox(Increment(...))
-//
+// 
 // A floating-point value specifying the increment.  When used with
 // '-from' and '-to', the value in the widget will be adjusted by
 // '-increment' when a spin button is pressed (up adds the value,
 // down subtracts the value).
-//
+// 
 // # Spinbox(Readonlybackground(...))
-//
+// 
 // Specifies the background color to use when the spinbox is readonly.  If
 // this option is the empty string, the normal background color is used.
-//
+// 
 // # Spinbox(State(...))
-//
+// 
 // Specifies one of three states for the spinbox:  'normal',
 // 'disabled', or 'readonly'.  If the spinbox is readonly, then the
 // value may not be changed using widget commands and no insertion cursor
@@ -3234,25 +2387,25 @@ func (w *Window) Spinbox(options ...option) *Window {
 // displayed, the contents will not be selectable, and the spinbox may
 // be displayed in a different color, depending on the values of the
 // '-disabledforeground' and '-disabledbackground' options.
-//
+// 
 // # Spinbox(To(...))
-//
+// 
 // A floating-point value corresponding to the highest value for the spinbox,
 // to be used in conjunction with '-from' and '-increment'.  When
 // all are specified correctly, the spinbox will use these values to control
 // its contents. If this value is less than the '-from' option, then
 // '-from' and '-to' values are automatically swapped.
 // If '-values' is specified, it supersedes this option.
-//
+// 
 // # Spinbox(Validate(...))
-//
+// 
 // Specifies the mode in which validation should operate: 'none',
 // 'focus', 'focusin', 'focusout', 'key', or 'all'.
 // It defaults to 'none'.  When you want validation, you must explicitly
 // state which mode you wish to use.  See 'VALIDATION' below for more.
-//
+// 
 // # Spinbox(Validatecommand(...)) or Spinbox(Vcmd(...))
-//
+// 
 // Specifies a script to evaluate when you want to validate the input in the
 // widget.  Setting it to an empty string disables this feature (the default).
 // Validation occurs according to the value of '-validate'.
@@ -3261,142 +2414,109 @@ func (w *Window) Spinbox(options ...option) *Window {
 // change and the '-invalidcommand' will be evaluated if it is set.  If it
 // returns 1, then value will be changed.
 // See 'VALIDATION' below for more information.
-//
+// 
 // # Spinbox(Values(...))
-//
+// 
 // Must be a proper list value.  If specified, the spinbox will use these
 // values as to control its contents, starting with the first value.  This
 // option has precedence over the '-from' and '-to' range.
-//
+// 
 // # Spinbox(Width(...))
-//
+// 
 // Specifies an integer value indicating the desired width of the spinbox window,
 // in average-size characters of the widget's font.
 // If the value is less than or equal to zero, the widget picks a
 // size just large enough to hold its current text.
-//
+// 
 // # Spinbox(Wrap(...))
-//
+// 
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
-//
-// # Description
-//
-// The spinbox command creates a new window (given by the
-// pathName argument) and makes it into a spinbox widget.
-// Additional options, described above, may be specified on the
-// command line or in the option database
-// to configure aspects of the spinbox such as its colors, font,
-// and relief.  The spinbox command returns its
-// pathName argument.  At the time this command is invoked,
-// there must not exist a window named pathName, but
-// pathName's parent must exist.
-//
-// A spinbox is an extended entry widget that allows he user
-// to move, or spin, through a fixed set of ascending or descending values
-// such as times or dates in addition to editing the value as in an
-// entry.  When first created, a spinbox's string is empty.
-// A portion of the spinbox may be selected as described below.
-// If a spinbox is exporting its selection (see the -exportselection
-// option), then it will observe the standard protocols for handling the
-// selection;  spinbox selections are available as type STRING.
-// Spinboxes also observe the standard Tk rules for dealing with the
-// input focus.  When a spinbox has the input focus it displays an
-// insertion cursor to indicate where new characters will be
-// inserted.
-//
-// Spinboxes are capable of displaying strings that are too long to
-// fit entirely within the widget's window.  In this case, only a
-// portion of the string will be displayed; commands described below
-// may be used to change the view in the window.  Spinboxes use
-// the standard -xscrollcommand mechanism for interacting with
-// scrollbars (see the description of the -xscrollcommand option
-// for details).  They also support scanning, as described below.
 func Spinbox(options ...option) *Window {
 	return Inter.Spinbox(options...)
 }
 
 // text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
-//
+// 
 // # Text(Autoseparators(...))
-//
+// 
 // Specifies a boolean that says whether separators are automatically inserted in
 // the undo stack. Only meaningful when the '-undo' option is true.
-//
+// 
 // # Text(Blockcursor(...))
-//
+// 
 // Specifies a boolean that says whether the blinking insertion cursor should be
 // drawn as a character-sized rectangular block. If false (the default) a thin
 // vertical line is used for the insertion cursor.
-//
+// 
 // # Text(Endline(...))
-//
+// 
 // Specifies an integer line index representing the line of the underlying
 // textual data store that should be just after the last line contained in
 // the widget. This allows a text widget to reflect only a portion of a
 // larger piece of text. Instead of an integer, the empty string can be
 // provided to this configuration option, which will configure the widget
 // to end at the very last line in the textual data store.
-//
+// 
 // # Text(Height(...))
-//
+// 
 // Specifies the desired height for the window, in units of characters in the
 // font given by the '-font' option. Must be at least one.
-//
+// 
 // # Text(Inactiveselectbackground(...))
-//
+// 
 // Specifies the colour to use for the selection (the 'sel' tag) when the
 // window does not have the input focus. If empty, '{}', then no selection is
 // shown when the window does not have the focus.
-//
+// 
 // # Text(Insertunfocussed(...))
-//
-//	8.6
-//
+// 
+//  8.6
+// 
 // # Text(Maxundo(...))
-//
+// 
 // Specifies the maximum number of compound undo actions on the undo stack. A
 // zero or a negative value imply an unlimited undo stack.
-//
+// 
 // # Text(Spacing1(...))
-//
+// 
 // Requests additional space above each text line in the widget, using any of the
 // standard forms for screen distances. If a line wraps, this option only applies
 // to the first line on the display. This option may be overridden with
 // '-spacing1' options in tags.
-//
+// 
 // # Text(Spacing2(...))
-//
+// 
 // For lines that wrap (so that they cover more than one line on the display)
 // this option specifies additional space to provide between the display lines
 // that represent a single line of text. The value may have any of the standard
 // forms for screen distances. This option may be overridden with
 // '-spacing2' options in tags.
-//
+// 
 // # Text(Spacing3(...))
-//
+// 
 // Requests additional space below each text line in the widget, using any of the
 // standard forms for screen distances. If a line wraps, this option only applies
 // to the last line on the display. This option may be overridden with
 // '-spacing3' options in tags.
-//
+// 
 // # Text(Startline(...))
-//
+// 
 // Specifies an integer line index representing the first line of the underlying
 // textual data store that should be contained in the widget. This allows a text
 // widget to reflect only a portion of a larger piece of text. Instead of an
 // integer, the empty string can be provided to this configuration option, which
 // will configure the widget to start at the very first line in the textual data
 // store.
-//
+// 
 // # Text(State(...))
-//
+// 
 // Specifies one of two states for the text: 'normal' or 'disabled'. If
 // the text is disabled then characters may not be inserted or deleted and no
 // insertion cursor will be displayed, even if the input focus is in the widget.
-//
+// 
 // # Text(Tabs(...))
-//
+// 
 // Specifies a set of tab stops for the window. The option's value consists of a
 // list of screen distances giving the positions of the tab stops, each of which
 // is a distance relative to the left edge of the widget (excluding borders,
@@ -3412,33 +2532,33 @@ func Spinbox(options ...option) *Window {
 // digit of the number is positioned just to the left of the tab position; if
 // there is no number in the text then the text is right-justified at the tab
 // position. For example,
-//
+// 
 // # Text(Tabstyle(...))
-//
+// 
 // Specifies how to interpret the relationship between tab stops on a line and
 // tabs in the text of that line. The value must be 'tabular' (the default)
 // or 'wordprocessor'. Note that tabs are interpreted as they are encountered
-// in the text. If the tab style is 'tabular' then the 'n”th tab
-// character in the line's text will be associated with the 'n”th tab stop
+// in the text. If the tab style is 'tabular' then the 'n''th tab
+// character in the line's text will be associated with the 'n''th tab stop
 // defined for that line. If the tab character's x coordinate falls to the right
-// of the 'n”th tab stop, then a gap of a single space will be inserted as a
+// of the 'n''th tab stop, then a gap of a single space will be inserted as a
 // fallback. If the tab style is 'wordprocessor' then any tab character being
 // laid out will use (and be defined by) the first tab stop to the right of the
 // preceding characters already laid out on that line. The value of the
 // '-tabstyle' option may be overridden by '-tabstyle' options in tags.
-//
+// 
 // # Text(Undo(...))
-//
+// 
 // Specifies a boolean that says whether the undo mechanism is active or not.
-//
+// 
 // # Text(Width(...))
-//
+// 
 // Specifies the desired width for the window in units of characters in the font
 // given by the '-font' option. If the font does not have a uniform width
 // then the width of the character
-//
+// 
 // # Text(Wrap(...))
-//
+// 
 // Specifies how to handle lines in the text that are too long to be displayed in
 // a single line of the text's window. The value must be 'none' or 'char'
 // or 'word'. A wrap mode of 'none' means that each line of text appears
@@ -3447,40 +2567,6 @@ func Spinbox(options ...option) *Window {
 // up into several screen lines if necessary to keep all the characters visible.
 // In 'char' mode a screen line break may occur after any character; in
 // 'word' mode a line break will only be made at word boundaries.
-//
-// # Description
-//
-// The text command creates a new window (given by the pathName
-// argument) and makes it into a text widget. Additional options, described
-// above, may be specified on the command line or in the option database to
-// configure aspects of the text such as its default background color and relief.
-// The text command returns the path name of the new window.
-//
-// A text widget displays one or more lines of text and allows that text to be
-// edited. Text widgets support four different kinds of annotations on the text,
-// called tags, marks, embedded windows or embedded images. Tags allow different
-// portions of the text to be displayed with different fonts and colors. In
-// addition, Tcl commands can be associated with tags so that scripts are invoked
-// when particular actions such as keystrokes and mouse button presses occur in
-// particular ranges of the text. See TAGS below for more details.
-//
-// # The second form of annotation consists of floating markers in the text called
-//
-// Marks are used to keep track of various interesting positions in the text as
-// it is edited. See MARKS below for more details.
-//
-// The third form of annotation allows arbitrary windows to be embedded in a text
-// widget. See EMBEDDED WINDOWS below for more details.
-//
-// The fourth form of annotation allows Tk images to be embedded in a text
-// widget. See EMBEDDED IMAGES below for more details.
-//
-// The text widget also has a built-in undo/redo mechanism. See
-// THE UNDO MECHANISM below for more details.
-//
-// The text widget allows for the creation of peer widgets. These are other text
-// widgets which share the same underlying data (text, marks, tags, images, etc).
-// See PEER WIDGETS below for more details.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Text(options ...option) *Window {
@@ -3488,86 +2574,86 @@ func (w *Window) Text(options ...option) *Window {
 }
 
 // text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
-//
+// 
 // # Text(Autoseparators(...))
-//
+// 
 // Specifies a boolean that says whether separators are automatically inserted in
 // the undo stack. Only meaningful when the '-undo' option is true.
-//
+// 
 // # Text(Blockcursor(...))
-//
+// 
 // Specifies a boolean that says whether the blinking insertion cursor should be
 // drawn as a character-sized rectangular block. If false (the default) a thin
 // vertical line is used for the insertion cursor.
-//
+// 
 // # Text(Endline(...))
-//
+// 
 // Specifies an integer line index representing the line of the underlying
 // textual data store that should be just after the last line contained in
 // the widget. This allows a text widget to reflect only a portion of a
 // larger piece of text. Instead of an integer, the empty string can be
 // provided to this configuration option, which will configure the widget
 // to end at the very last line in the textual data store.
-//
+// 
 // # Text(Height(...))
-//
+// 
 // Specifies the desired height for the window, in units of characters in the
 // font given by the '-font' option. Must be at least one.
-//
+// 
 // # Text(Inactiveselectbackground(...))
-//
+// 
 // Specifies the colour to use for the selection (the 'sel' tag) when the
 // window does not have the input focus. If empty, '{}', then no selection is
 // shown when the window does not have the focus.
-//
+// 
 // # Text(Insertunfocussed(...))
-//
-//	8.6
-//
+// 
+//  8.6
+// 
 // # Text(Maxundo(...))
-//
+// 
 // Specifies the maximum number of compound undo actions on the undo stack. A
 // zero or a negative value imply an unlimited undo stack.
-//
+// 
 // # Text(Spacing1(...))
-//
+// 
 // Requests additional space above each text line in the widget, using any of the
 // standard forms for screen distances. If a line wraps, this option only applies
 // to the first line on the display. This option may be overridden with
 // '-spacing1' options in tags.
-//
+// 
 // # Text(Spacing2(...))
-//
+// 
 // For lines that wrap (so that they cover more than one line on the display)
 // this option specifies additional space to provide between the display lines
 // that represent a single line of text. The value may have any of the standard
 // forms for screen distances. This option may be overridden with
 // '-spacing2' options in tags.
-//
+// 
 // # Text(Spacing3(...))
-//
+// 
 // Requests additional space below each text line in the widget, using any of the
 // standard forms for screen distances. If a line wraps, this option only applies
 // to the last line on the display. This option may be overridden with
 // '-spacing3' options in tags.
-//
+// 
 // # Text(Startline(...))
-//
+// 
 // Specifies an integer line index representing the first line of the underlying
 // textual data store that should be contained in the widget. This allows a text
 // widget to reflect only a portion of a larger piece of text. Instead of an
 // integer, the empty string can be provided to this configuration option, which
 // will configure the widget to start at the very first line in the textual data
 // store.
-//
+// 
 // # Text(State(...))
-//
+// 
 // Specifies one of two states for the text: 'normal' or 'disabled'. If
 // the text is disabled then characters may not be inserted or deleted and no
 // insertion cursor will be displayed, even if the input focus is in the widget.
-//
+// 
 // # Text(Tabs(...))
-//
+// 
 // Specifies a set of tab stops for the window. The option's value consists of a
 // list of screen distances giving the positions of the tab stops, each of which
 // is a distance relative to the left edge of the widget (excluding borders,
@@ -3583,33 +2669,33 @@ func (w *Window) Text(options ...option) *Window {
 // digit of the number is positioned just to the left of the tab position; if
 // there is no number in the text then the text is right-justified at the tab
 // position. For example,
-//
+// 
 // # Text(Tabstyle(...))
-//
+// 
 // Specifies how to interpret the relationship between tab stops on a line and
 // tabs in the text of that line. The value must be 'tabular' (the default)
 // or 'wordprocessor'. Note that tabs are interpreted as they are encountered
-// in the text. If the tab style is 'tabular' then the 'n”th tab
-// character in the line's text will be associated with the 'n”th tab stop
+// in the text. If the tab style is 'tabular' then the 'n''th tab
+// character in the line's text will be associated with the 'n''th tab stop
 // defined for that line. If the tab character's x coordinate falls to the right
-// of the 'n”th tab stop, then a gap of a single space will be inserted as a
+// of the 'n''th tab stop, then a gap of a single space will be inserted as a
 // fallback. If the tab style is 'wordprocessor' then any tab character being
 // laid out will use (and be defined by) the first tab stop to the right of the
 // preceding characters already laid out on that line. The value of the
 // '-tabstyle' option may be overridden by '-tabstyle' options in tags.
-//
+// 
 // # Text(Undo(...))
-//
+// 
 // Specifies a boolean that says whether the undo mechanism is active or not.
-//
+// 
 // # Text(Width(...))
-//
+// 
 // Specifies the desired width for the window in units of characters in the font
 // given by the '-font' option. If the font does not have a uniform width
 // then the width of the character
-//
+// 
 // # Text(Wrap(...))
-//
+// 
 // Specifies how to handle lines in the text that are too long to be displayed in
 // a single line of the text's window. The value must be 'none' or 'char'
 // or 'word'. A wrap mode of 'none' means that each line of text appears
@@ -3618,56 +2704,22 @@ func (w *Window) Text(options ...option) *Window {
 // up into several screen lines if necessary to keep all the characters visible.
 // In 'char' mode a screen line break may occur after any character; in
 // 'word' mode a line break will only be made at word boundaries.
-//
-// # Description
-//
-// The text command creates a new window (given by the pathName
-// argument) and makes it into a text widget. Additional options, described
-// above, may be specified on the command line or in the option database to
-// configure aspects of the text such as its default background color and relief.
-// The text command returns the path name of the new window.
-//
-// A text widget displays one or more lines of text and allows that text to be
-// edited. Text widgets support four different kinds of annotations on the text,
-// called tags, marks, embedded windows or embedded images. Tags allow different
-// portions of the text to be displayed with different fonts and colors. In
-// addition, Tcl commands can be associated with tags so that scripts are invoked
-// when particular actions such as keystrokes and mouse button presses occur in
-// particular ranges of the text. See TAGS below for more details.
-//
-// # The second form of annotation consists of floating markers in the text called
-//
-// Marks are used to keep track of various interesting positions in the text as
-// it is edited. See MARKS below for more details.
-//
-// The third form of annotation allows arbitrary windows to be embedded in a text
-// widget. See EMBEDDED WINDOWS below for more details.
-//
-// The fourth form of annotation allows Tk images to be embedded in a text
-// widget. See EMBEDDED IMAGES below for more details.
-//
-// The text widget also has a built-in undo/redo mechanism. See
-// THE UNDO MECHANISM below for more details.
-//
-// The text widget allows for the creation of peer widgets. These are other text
-// widgets which share the same underlying data (text, marks, tags, images, etc).
-// See PEER WIDGETS below for more details.
 func Text(options ...option) *Window {
 	return Inter.Text(options...)
 }
 
 // toplevel - Create and manipulate 'toplevel' main and popup window widgets
-//
+// 
 // # Toplevel(Background(...))
-//
+// 
 // This option is the same as the standard '-background' option
 // except that its value may also be specified as an empty string.
 // In this case, the widget will display no background or border, and
 // no colors will be consumed from its colormap for its background
 // and border.
-//
+// 
 // # Toplevel(Backgroundimage(...))
-//
+// 
 // This specifies an image to display on the toplevel's background within
 // the border of the toplevel (i.e., the image will be clipped by the
 // toplevel's highlight ring and border, if either are present) on top of
@@ -3675,9 +2727,9 @@ func Text(options ...option) *Window {
 // subwidgets of the toplevel will be drawn on top. The image must have
 // been created with the 'image create' command. If specified as the
 // empty string, no image will be displayed.
-//
+// 
 // # Toplevel(Class(...))
-//
+// 
 // Specifies a class for the window.
 // This class will be used when querying the option database for
 // the window's other options, and it will also be used later for
@@ -3686,9 +2738,9 @@ func Text(options ...option) *Window {
 // window title.
 // The '-class' option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Colormap(...))
-//
+// 
 // Specifies a colormap to use for the window.
 // The value may be either 'new', in which case a new colormap is
 // created for the window and its children, or the name of another
@@ -3699,9 +2751,9 @@ func Text(options ...option) *Window {
 // uses the default colormap of its screen.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Container(...))
-//
+// 
 // The value must be a boolean.  If true, it means that this window will
 // be used as a container in which some other application will be embedded
 // (for example, a Tk toplevel can be embedded using the '-use' option).
@@ -3710,24 +2762,24 @@ func Text(options ...option) *Window {
 // children of its own in this application.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Height(...))
-//
+// 
 // Specifies the desired height for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
-//
+// 
 // # Toplevel(Menu(...))
-//
+// 
 // Specifies a menu widget to be used as a menubar. On the Macintosh, the
 // menubar will be displayed across the top of the main monitor. On
 // Microsoft Windows and all UNIX platforms, the menu will appear across
 // the toplevel window as part of the window dressing maintained by the
 // window manager.
-//
+// 
 // # Toplevel(Screen(...))
-//
+// 
 // Specifies the screen on which to place the new window.
 // Any valid screen name may be used, even one associated with a
 // different display.
@@ -3735,13 +2787,13 @@ func Text(options ...option) *Window {
 // This option is special in that it may not be specified via the option
 // database, and it may not be modified with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Tile(...))
-//
-//	"8.7, TIP262"
-//
+// 
+//  "8.7, TIP262"
+// 
 // # Toplevel(Use(...))
-//
+// 
 // This option is used for embedding. If the value is not an empty string,
 // it must be the window identifier of a container window, specified as
 // a hexadecimal string like the ones returned by the 'winfo id'
@@ -3751,40 +2803,22 @@ func Text(options ...option) *Window {
 // which the '-container' option was specified.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Visual(...))
-//
+// 
 // Specifies visual information for the new window in any of the
 // forms accepted by 'Tk_GetVisual'.
 // If this option is not specified, the new window will use the default
 // visual for its screen.
 // The '-visual' option may not be modified with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Width(...))
-//
+// 
 // Specifies the desired width for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
-//
-// # Description
-//
-// The toplevel command creates a new toplevel widget (given
-// by the pathName argument).  Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the toplevel such as its background color
-// and relief.  The toplevel command returns the
-// path name of the new window.
-//
-// A toplevel is similar to a frame except that it is created as a
-// top-level window:  its X parent is the root window of a screen
-// rather than the logical parent from its Tk path name.  The primary
-// purpose of a toplevel is to serve as a container for dialog boxes
-// and other collections of widgets.  The only visible features
-// of a toplevel are its background and an optional 3-D border
-// to make the toplevel appear raised or sunken.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Toplevel(options ...option) *Window {
@@ -3792,17 +2826,17 @@ func (w *Window) Toplevel(options ...option) *Window {
 }
 
 // toplevel - Create and manipulate 'toplevel' main and popup window widgets
-//
+// 
 // # Toplevel(Background(...))
-//
+// 
 // This option is the same as the standard '-background' option
 // except that its value may also be specified as an empty string.
 // In this case, the widget will display no background or border, and
 // no colors will be consumed from its colormap for its background
 // and border.
-//
+// 
 // # Toplevel(Backgroundimage(...))
-//
+// 
 // This specifies an image to display on the toplevel's background within
 // the border of the toplevel (i.e., the image will be clipped by the
 // toplevel's highlight ring and border, if either are present) on top of
@@ -3810,9 +2844,9 @@ func (w *Window) Toplevel(options ...option) *Window {
 // subwidgets of the toplevel will be drawn on top. The image must have
 // been created with the 'image create' command. If specified as the
 // empty string, no image will be displayed.
-//
+// 
 // # Toplevel(Class(...))
-//
+// 
 // Specifies a class for the window.
 // This class will be used when querying the option database for
 // the window's other options, and it will also be used later for
@@ -3821,9 +2855,9 @@ func (w *Window) Toplevel(options ...option) *Window {
 // window title.
 // The '-class' option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Colormap(...))
-//
+// 
 // Specifies a colormap to use for the window.
 // The value may be either 'new', in which case a new colormap is
 // created for the window and its children, or the name of another
@@ -3834,9 +2868,9 @@ func (w *Window) Toplevel(options ...option) *Window {
 // uses the default colormap of its screen.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Container(...))
-//
+// 
 // The value must be a boolean.  If true, it means that this window will
 // be used as a container in which some other application will be embedded
 // (for example, a Tk toplevel can be embedded using the '-use' option).
@@ -3845,24 +2879,24 @@ func (w *Window) Toplevel(options ...option) *Window {
 // children of its own in this application.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Height(...))
-//
+// 
 // Specifies the desired height for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
-//
+// 
 // # Toplevel(Menu(...))
-//
+// 
 // Specifies a menu widget to be used as a menubar. On the Macintosh, the
 // menubar will be displayed across the top of the main monitor. On
 // Microsoft Windows and all UNIX platforms, the menu will appear across
 // the toplevel window as part of the window dressing maintained by the
 // window manager.
-//
+// 
 // # Toplevel(Screen(...))
-//
+// 
 // Specifies the screen on which to place the new window.
 // Any valid screen name may be used, even one associated with a
 // different display.
@@ -3870,13 +2904,13 @@ func (w *Window) Toplevel(options ...option) *Window {
 // This option is special in that it may not be specified via the option
 // database, and it may not be modified with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Tile(...))
-//
-//	"8.7, TIP262"
-//
+// 
+//  "8.7, TIP262"
+// 
 // # Toplevel(Use(...))
-//
+// 
 // This option is used for embedding. If the value is not an empty string,
 // it must be the window identifier of a container window, specified as
 // a hexadecimal string like the ones returned by the 'winfo id'
@@ -3886,59 +2920,36 @@ func (w *Window) Toplevel(options ...option) *Window {
 // which the '-container' option was specified.
 // This option may not be changed with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Visual(...))
-//
+// 
 // Specifies visual information for the new window in any of the
 // forms accepted by 'Tk_GetVisual'.
 // If this option is not specified, the new window will use the default
 // visual for its screen.
 // The '-visual' option may not be modified with the 'configure'
 // widget command.
-//
+// 
 // # Toplevel(Width(...))
-//
+// 
 // Specifies the desired width for the window in any of the forms
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
-//
-// # Description
-//
-// The toplevel command creates a new toplevel widget (given
-// by the pathName argument).  Additional
-// options, described above, may be specified on the command line
-// or in the option database
-// to configure aspects of the toplevel such as its background color
-// and relief.  The toplevel command returns the
-// path name of the new window.
-//
-// A toplevel is similar to a frame except that it is created as a
-// top-level window:  its X parent is the root window of a screen
-// rather than the logical parent from its Tk path name.  The primary
-// purpose of a toplevel is to serve as a container for dialog boxes
-// and other collections of widgets.  The only visible features
-// of a toplevel are its background and an optional 3-D border
-// to make the toplevel appear raised or sunken.
 func Toplevel(options ...option) *Window {
 	return Inter.Toplevel(options...)
 }
 
 // ttk::button - Widget that issues a command when pressed
-//
+// 
 // # TButton(Command(...))
-//
+// 
 // A script to evaluate when the widget is invoked.
-//
+// 
 // # TButton(Default(...))
-//
+// 
 // May be set to one of  'normal', 'active', or 'disabled'.
 // In a dialog box, one button may be designated the
-//
-// # Description
-//
-// A ttk::button widget displays a textual label and/or image,
-// and evaluates a command when pressed.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TButton(options ...option) *Window {
@@ -3946,50 +2957,39 @@ func (w *Window) TButton(options ...option) *Window {
 }
 
 // ttk::button - Widget that issues a command when pressed
-//
+// 
 // # TButton(Command(...))
-//
+// 
 // A script to evaluate when the widget is invoked.
-//
+// 
 // # TButton(Default(...))
-//
+// 
 // May be set to one of  'normal', 'active', or 'disabled'.
 // In a dialog box, one button may be designated the
-//
-// # Description
-//
-// A ttk::button widget displays a textual label and/or image,
-// and evaluates a command when pressed.
 func TButton(options ...option) *Window {
 	return Inter.TButton(options...)
 }
 
 // ttk::checkbutton - On/off widget
-//
+// 
 // # TCheckbutton(Command(...))
-//
+// 
 // A Tcl script to execute whenever the widget is invoked.
-//
+// 
 // # TCheckbutton(Offvalue(...))
-//
+// 
 // The value to store in the associated '-variable'
 // when the widget is deselected.  Defaults to '0'.
-//
+// 
 // # TCheckbutton(Onvalue(...))
-//
+// 
 // The value to store in the associated '-variable'
 // when the widget is selected.  Defaults to '1'.
-//
+// 
 // # TCheckbutton(Variable(...))
-//
+// 
 // The name of a global variable whose value is linked to the widget.
 // Defaults to the widget pathname if not specified.
-//
-// # Description
-//
-// A ttk::checkbutton widget is used to show or change a setting.
-// It has two states, selected and deselected.
-// The state of the checkbutton may be linked to a Tcl variable.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TCheckbutton(options ...option) *Window {
@@ -3997,58 +2997,52 @@ func (w *Window) TCheckbutton(options ...option) *Window {
 }
 
 // ttk::checkbutton - On/off widget
-//
+// 
 // # TCheckbutton(Command(...))
-//
+// 
 // A Tcl script to execute whenever the widget is invoked.
-//
+// 
 // # TCheckbutton(Offvalue(...))
-//
+// 
 // The value to store in the associated '-variable'
 // when the widget is deselected.  Defaults to '0'.
-//
+// 
 // # TCheckbutton(Onvalue(...))
-//
+// 
 // The value to store in the associated '-variable'
 // when the widget is selected.  Defaults to '1'.
-//
+// 
 // # TCheckbutton(Variable(...))
-//
+// 
 // The name of a global variable whose value is linked to the widget.
 // Defaults to the widget pathname if not specified.
-//
-// # Description
-//
-// A ttk::checkbutton widget is used to show or change a setting.
-// It has two states, selected and deselected.
-// The state of the checkbutton may be linked to a Tcl variable.
 func TCheckbutton(options ...option) *Window {
 	return Inter.TCheckbutton(options...)
 }
 
 // ttk::combobox - text field with popdown selection list
-//
+// 
 // # TCombobox(Exportselection(...))
-//
+// 
 // Boolean value.
 // If set, the widget selection is linked to the X selection.
-//
+// 
 // # TCombobox(Justify(...))
-//
+// 
 // Specifies how the text is aligned within the widget.
 // Must be one of 'left', 'center', or 'right'.
-//
+// 
 // # TCombobox(Height(...))
-//
+// 
 // Specifies the height of the pop-down listbox, in rows.
-//
+// 
 // # TCombobox(Postcommand(...))
-//
+// 
 // A Tcl script to evaluate immediately before displaying the listbox.
 // The '-postcommand' script may specify the '-values' to display.
-//
+// 
 // # TCombobox(State(...))
-//
+// 
 // One of 'normal', 'readonly', or 'disabled'.
 // In the 'readonly' state,
 // the value may not be edited directly, and
@@ -4057,28 +3051,22 @@ func TCheckbutton(options ...option) *Window {
 // In the 'normal' state,
 // the text field is directly editable.
 // In the 'disabled' state, no interaction is possible.
-//
+// 
 // # TCombobox(Textvariable(...))
-//
+// 
 // Specifies the name of a global variable whose value is linked
 // to the widget value.
 // Whenever the variable changes value the widget value is updated,
 // and vice versa.
-//
+// 
 // # TCombobox(Values(...))
-//
+// 
 // Specifies the list of values to display in the drop-down listbox.
-//
+// 
 // # TCombobox(Width(...))
-//
+// 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
-//
-// # Description
-//
-// A ttk::combobox combines a text field with a pop-down list of values;
-// the user may select the value of the text field from among the
-// values in the list.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TCombobox(options ...option) *Window {
@@ -4086,28 +3074,28 @@ func (w *Window) TCombobox(options ...option) *Window {
 }
 
 // ttk::combobox - text field with popdown selection list
-//
+// 
 // # TCombobox(Exportselection(...))
-//
+// 
 // Boolean value.
 // If set, the widget selection is linked to the X selection.
-//
+// 
 // # TCombobox(Justify(...))
-//
+// 
 // Specifies how the text is aligned within the widget.
 // Must be one of 'left', 'center', or 'right'.
-//
+// 
 // # TCombobox(Height(...))
-//
+// 
 // Specifies the height of the pop-down listbox, in rows.
-//
+// 
 // # TCombobox(Postcommand(...))
-//
+// 
 // A Tcl script to evaluate immediately before displaying the listbox.
 // The '-postcommand' script may specify the '-values' to display.
-//
+// 
 // # TCombobox(State(...))
-//
+// 
 // One of 'normal', 'readonly', or 'disabled'.
 // In the 'readonly' state,
 // the value may not be edited directly, and
@@ -4116,101 +3104,86 @@ func (w *Window) TCombobox(options ...option) *Window {
 // In the 'normal' state,
 // the text field is directly editable.
 // In the 'disabled' state, no interaction is possible.
-//
+// 
 // # TCombobox(Textvariable(...))
-//
+// 
 // Specifies the name of a global variable whose value is linked
 // to the widget value.
 // Whenever the variable changes value the widget value is updated,
 // and vice versa.
-//
+// 
 // # TCombobox(Values(...))
-//
+// 
 // Specifies the list of values to display in the drop-down listbox.
-//
+// 
 // # TCombobox(Width(...))
-//
+// 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
-//
-// # Description
-//
-// A ttk::combobox combines a text field with a pop-down list of values;
-// the user may select the value of the text field from among the
-// values in the list.
 func TCombobox(options ...option) *Window {
 	return Inter.TCombobox(options...)
 }
 
 // ttk::entry - Editable text field widget
-//
+// 
 // # TEntry(Exportselection(...))
-//
+// 
 // A boolean value specifying whether or not
 // a selection in the widget should be linked to the X selection.
 // If the selection is exported, then selecting in the widget deselects
 // the current X selection, selecting outside the widget deselects any
 // widget selection, and the widget will respond to selection retrieval
 // requests when it has a selection.
-//
+// 
 // # TEntry(Invalidcommand(...))
-//
+// 
 // A script template to evaluate whenever the '-validatecommand' returns 0.
 // See 'VALIDATION' below for more information.
-//
+// 
 // # TEntry(Justify(...))
-//
+// 
 // Specifies how the text is aligned within the entry widget.
 // One of 'left', 'center', or 'right'.
-//
+// 
 // # TEntry(Show(...))
-//
+// 
 // If this option is specified, then the true contents of the entry
 // are not displayed in the window.
 // Instead, each character in the entry's value will be displayed as
 // the first character in the value of this option, such as
-//
+// 
 // # TEntry(State(...))
-//
+// 
 // Compatibility option; see 'ttk::widget(n)' for details.
 // Specifies one of three states for the entry,
 // 'normal', 'disabled', or 'readonly'.
 // See 'WIDGET STATES', below.
-//
+// 
 // # TEntry(Textvariable(...))
-//
+// 
 // Specifies the name of a global variable whose value is linked
 // to the entry widget's contents.
 // Whenever the variable changes value, the widget's contents are updated,
 // and vice versa.
-//
+// 
 // # TEntry(Validate(...))
-//
+// 
 // Specifies the mode in which validation should operate:
 // 'none', 'focus', 'focusin', 'focusout', 'key', or 'all'.
 // Default is 'none', meaning that validation is disabled.
 // See 'VALIDATION' below.
-//
+// 
 // # TEntry(Validatecommand(...))
-//
+// 
 // A script template to evaluate whenever validation is triggered.
 // If set to the empty string (the default), validation is disabled.
 // The script must return a boolean value.
 // See 'VALIDATION' below.
-//
+// 
 // # TEntry(Width(...))
-//
+// 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
-//
-// # Description
-//
-// An ttk::entry widget displays a one-line text string and
-// allows that string to be edited by the user.
-// The value of the string may be linked to a Tcl variable
-// with the -textvariable option.
-// Entry widgets support horizontal scrolling with the
-// standard -xscrollcommand option and xview widget command.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TEntry(options ...option) *Window {
@@ -4218,104 +3191,90 @@ func (w *Window) TEntry(options ...option) *Window {
 }
 
 // ttk::entry - Editable text field widget
-//
+// 
 // # TEntry(Exportselection(...))
-//
+// 
 // A boolean value specifying whether or not
 // a selection in the widget should be linked to the X selection.
 // If the selection is exported, then selecting in the widget deselects
 // the current X selection, selecting outside the widget deselects any
 // widget selection, and the widget will respond to selection retrieval
 // requests when it has a selection.
-//
+// 
 // # TEntry(Invalidcommand(...))
-//
+// 
 // A script template to evaluate whenever the '-validatecommand' returns 0.
 // See 'VALIDATION' below for more information.
-//
+// 
 // # TEntry(Justify(...))
-//
+// 
 // Specifies how the text is aligned within the entry widget.
 // One of 'left', 'center', or 'right'.
-//
+// 
 // # TEntry(Show(...))
-//
+// 
 // If this option is specified, then the true contents of the entry
 // are not displayed in the window.
 // Instead, each character in the entry's value will be displayed as
 // the first character in the value of this option, such as
-//
+// 
 // # TEntry(State(...))
-//
+// 
 // Compatibility option; see 'ttk::widget(n)' for details.
 // Specifies one of three states for the entry,
 // 'normal', 'disabled', or 'readonly'.
 // See 'WIDGET STATES', below.
-//
+// 
 // # TEntry(Textvariable(...))
-//
+// 
 // Specifies the name of a global variable whose value is linked
 // to the entry widget's contents.
 // Whenever the variable changes value, the widget's contents are updated,
 // and vice versa.
-//
+// 
 // # TEntry(Validate(...))
-//
+// 
 // Specifies the mode in which validation should operate:
 // 'none', 'focus', 'focusin', 'focusout', 'key', or 'all'.
 // Default is 'none', meaning that validation is disabled.
 // See 'VALIDATION' below.
-//
+// 
 // # TEntry(Validatecommand(...))
-//
+// 
 // A script template to evaluate whenever validation is triggered.
 // If set to the empty string (the default), validation is disabled.
 // The script must return a boolean value.
 // See 'VALIDATION' below.
-//
+// 
 // # TEntry(Width(...))
-//
+// 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
-//
-// # Description
-//
-// An ttk::entry widget displays a one-line text string and
-// allows that string to be edited by the user.
-// The value of the string may be linked to a Tcl variable
-// with the -textvariable option.
-// Entry widgets support horizontal scrolling with the
-// standard -xscrollcommand option and xview widget command.
 func TEntry(options ...option) *Window {
 	return Inter.TEntry(options...)
 }
 
 // ttk::frame - Simple container widget
-//
+// 
 // # TFrame(Borderwidth(...))
-//
+// 
 // The desired width of the widget border.  Defaults to 0.
 // May be ignored depending on the theme used.
-//
+// 
 // # TFrame(Relief(...))
-//
+// 
 // One of the standard Tk border styles:
 // 'flat', 'groove', 'raised', 'ridge',
 // 'solid', or 'sunken'.
 // Defaults to 'flat'.
-//
+// 
 // # TFrame(Width(...))
-//
+// 
 // If specified, the widget's requested width in pixels.
-//
+// 
 // # TFrame(Height(...))
-//
+// 
 // If specified, the widget's requested height in pixels.
-//
-// # Description
-//
-// A ttk::frame widget is a container, used to group other widgets
-// together.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TFrame(options ...option) *Window {
@@ -4323,59 +3282,48 @@ func (w *Window) TFrame(options ...option) *Window {
 }
 
 // ttk::frame - Simple container widget
-//
+// 
 // # TFrame(Borderwidth(...))
-//
+// 
 // The desired width of the widget border.  Defaults to 0.
 // May be ignored depending on the theme used.
-//
+// 
 // # TFrame(Relief(...))
-//
+// 
 // One of the standard Tk border styles:
 // 'flat', 'groove', 'raised', 'ridge',
 // 'solid', or 'sunken'.
 // Defaults to 'flat'.
-//
+// 
 // # TFrame(Width(...))
-//
+// 
 // If specified, the widget's requested width in pixels.
-//
+// 
 // # TFrame(Height(...))
-//
+// 
 // If specified, the widget's requested height in pixels.
-//
-// # Description
-//
-// A ttk::frame widget is a container, used to group other widgets
-// together.
 func TFrame(options ...option) *Window {
 	return Inter.TFrame(options...)
 }
 
 // ttk::label - Display a text string and/or image
-//
+// 
 // # TLabel(Background(...))
-//
+// 
 // The widget's background color.
 // If unspecified, the theme default is used.
-//
+// 
 // # TLabel(Relief(...))
-//
+// 
 // \" Rewrite this:
-//
+// 
 // # TLabel(Wraplength(...))
-//
+// 
 // Specifies the maximum line length (in pixels).
 // If this option is less than or equal to zero,
 // then automatic wrapping is not performed; otherwise
 // the text is split into lines such that no line is longer
 // than the specified value.
-//
-// # Description
-//
-// A ttk::label widget displays a textual label and/or image.
-// The label may be linked to a Tcl variable
-// to automatically change the displayed text.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TLabel(options ...option) *Window {
@@ -4383,78 +3331,66 @@ func (w *Window) TLabel(options ...option) *Window {
 }
 
 // ttk::label - Display a text string and/or image
-//
+// 
 // # TLabel(Background(...))
-//
+// 
 // The widget's background color.
 // If unspecified, the theme default is used.
-//
+// 
 // # TLabel(Relief(...))
-//
+// 
 // \" Rewrite this:
-//
+// 
 // # TLabel(Wraplength(...))
-//
+// 
 // Specifies the maximum line length (in pixels).
 // If this option is less than or equal to zero,
 // then automatic wrapping is not performed; otherwise
 // the text is split into lines such that no line is longer
 // than the specified value.
-//
-// # Description
-//
-// A ttk::label widget displays a textual label and/or image.
-// The label may be linked to a Tcl variable
-// to automatically change the displayed text.
 func TLabel(options ...option) *Window {
 	return Inter.TLabel(options...)
 }
 
 // ttk::labelframe - Container widget with optional label
-//
+// 
 // # TLabelframe(Height(...))
-//
+// 
 // If specified, the widget's requested height in pixels.
 // (See 'ttk::frame(n)' for further notes on '-width' and
 // '-height').
-//
+// 
 // # TLabelframe(Labelanchor(...))
-//
+// 
 // Specifies where to place the label.
 // Allowed values are (clockwise from the top upper left corner):
 // 'nw', 'n', 'ne', 'en', 'e', 'es',
 // 'se', 's','sw', 'ws', 'w' and 'wn'.
 // The default value is theme-dependent.
-//
+// 
 // # TLabelframe(Labelwidget(...))
-//
+// 
 // The name of a widget to use for the label.
 // If set, overrides the '-text' option.
 // The '-labelwidget' must be a child of the 'labelframe' widget
-// or one of the 'labelframe”s ancestors, and must belong to the
+// or one of the 'labelframe''s ancestors, and must belong to the
 // same top-level widget as the 'labelframe'.
-//
+// 
 // # TLabelframe(Text(...))
-//
+// 
 // Specifies the text of the label.
-//
+// 
 // # TLabelframe(Underline(...))
-//
+// 
 // If set, specifies the integer index (0-based) of a character to
 // underline in the text string.
 // The underlined character is used for mnemonic activation.
 // Mnemonic activation for a 'ttk::labelframe'
 // sets the keyboard focus to the first child of the 'ttk::labelframe' widget.
-//
+// 
 // # TLabelframe(Width(...))
-//
+// 
 // If specified, the widget's requested width in pixels.
-//
-// # Description
-//
-// A ttk::labelframe widget is a container used to group other widgets
-// together.  It has an optional label, which may be a plain text string or
-// another widget.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TLabelframe(options ...option) *Window {
@@ -4462,74 +3398,63 @@ func (w *Window) TLabelframe(options ...option) *Window {
 }
 
 // ttk::labelframe - Container widget with optional label
-//
+// 
 // # TLabelframe(Height(...))
-//
+// 
 // If specified, the widget's requested height in pixels.
 // (See 'ttk::frame(n)' for further notes on '-width' and
 // '-height').
-//
+// 
 // # TLabelframe(Labelanchor(...))
-//
+// 
 // Specifies where to place the label.
 // Allowed values are (clockwise from the top upper left corner):
 // 'nw', 'n', 'ne', 'en', 'e', 'es',
 // 'se', 's','sw', 'ws', 'w' and 'wn'.
 // The default value is theme-dependent.
-//
+// 
 // # TLabelframe(Labelwidget(...))
-//
+// 
 // The name of a widget to use for the label.
 // If set, overrides the '-text' option.
 // The '-labelwidget' must be a child of the 'labelframe' widget
-// or one of the 'labelframe”s ancestors, and must belong to the
+// or one of the 'labelframe''s ancestors, and must belong to the
 // same top-level widget as the 'labelframe'.
-//
+// 
 // # TLabelframe(Text(...))
-//
+// 
 // Specifies the text of the label.
-//
+// 
 // # TLabelframe(Underline(...))
-//
+// 
 // If set, specifies the integer index (0-based) of a character to
 // underline in the text string.
 // The underlined character is used for mnemonic activation.
 // Mnemonic activation for a 'ttk::labelframe'
 // sets the keyboard focus to the first child of the 'ttk::labelframe' widget.
-//
+// 
 // # TLabelframe(Width(...))
-//
+// 
 // If specified, the widget's requested width in pixels.
-//
-// # Description
-//
-// A ttk::labelframe widget is a container used to group other widgets
-// together.  It has an optional label, which may be a plain text string or
-// another widget.
 func TLabelframe(options ...option) *Window {
 	return Inter.TLabelframe(options...)
 }
 
 // ttk::menubutton - Widget that pops down a menu when pressed
-//
+// 
 // # TMenubutton(Direction(...))
-//
+// 
 // Specifies where the menu is to be popped up relative
 // to the menubutton.
 // One of: 'above', 'below', 'left', 'right',
 // or 'flush'.  The default is 'below'.
 // 'flush' pops the menu up directly over the menubutton.
-//
+// 
 // # TMenubutton(Menu(...))
-//
+// 
 // Specifies the path name of the menu associated with the menubutton.
 // To be on the safe side, the menu ought to be a direct child of the
 // menubutton.
-//
-// # Description
-//
-// A ttk::menubutton widget displays a textual label and/or image,
-// and displays a menu when pressed.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TMenubutton(options ...option) *Window {
@@ -4537,40 +3462,35 @@ func (w *Window) TMenubutton(options ...option) *Window {
 }
 
 // ttk::menubutton - Widget that pops down a menu when pressed
-//
+// 
 // # TMenubutton(Direction(...))
-//
+// 
 // Specifies where the menu is to be popped up relative
 // to the menubutton.
 // One of: 'above', 'below', 'left', 'right',
 // or 'flush'.  The default is 'below'.
 // 'flush' pops the menu up directly over the menubutton.
-//
+// 
 // # TMenubutton(Menu(...))
-//
+// 
 // Specifies the path name of the menu associated with the menubutton.
 // To be on the safe side, the menu ought to be a direct child of the
 // menubutton.
-//
-// # Description
-//
-// A ttk::menubutton widget displays a textual label and/or image,
-// and displays a menu when pressed.
 func TMenubutton(options ...option) *Window {
 	return Inter.TMenubutton(options...)
 }
 
 // ttk::notebook - Multi-paned container widget
-//
+// 
 // # TNotebook(Height(...))
-//
+// 
 // If present and greater than zero,
 // specifies the desired height of the pane area
 // (not including internal padding or tabs).
 // Otherwise, the maximum height of all panes is used.
-//
+// 
 // # TNotebook(Padding(...))
-//
+// 
 // Specifies the amount of extra space to add around the outside
 // of the notebook.
 // The padding is a list of up to four length specifications
@@ -4582,61 +3502,54 @@ func TMenubutton(options ...option) *Window {
 // In other words, a list of three numbers specify the left, vertical, and right
 // padding; a list of two numbers specify the horizontal and the vertical padding;
 // a single number specifies the same padding all the way around the widget.
-//
+// 
 // # TNotebook(Width(...))
-//
+// 
 // If present and greater than zero,
 // specifies the desired width of the pane area
 // (not including internal padding).
 // Otherwise, the maximum width of all panes is used.
-//
+// 
 // # TNotebook(State(...))
-//
+// 
 // Either 'normal', 'disabled' or 'hidden'.
 // If 'disabled', then the tab is not selectable.
 // If 'hidden', then the tab is not shown.
-//
+// 
 // # TNotebook(Sticky(...))
-//
+// 
 // Specifies how the content window is positioned within the pane area.
 // Value is a string containing zero or more of the characters
 // 'n, s, e,' or 'w'.
 // Each letter refers to a side (north, south, east, or west)
 // that the content window will
-//
+// 
 // # TNotebook(Padding(...))
-//
+// 
 // Specifies the amount of extra space to add between the notebook and this pane.
 // Syntax is the same as for the widget '-padding' option.
-//
+// 
 // # TNotebook(Text(...))
-//
+// 
 // Specifies a string to be displayed in the tab.
-//
+// 
 // # TNotebook(Image(...))
-//
+// 
 // Specifies an image to display in the tab.
 // See 'ttk_widget(n)' for details.
-//
+// 
 // # TNotebook(Compound(...))
-//
+// 
 // Specifies how to display the image relative to the text,
 // in the case both '-text' and '-image' are present.
 // See 'label(n)' for legal values.
-//
+// 
 // # TNotebook(Underline(...))
-//
+// 
 // Specifies the integer index (0-based) of a character to underline
 // in the text string.
 // The underlined character is used for mnemonic activation
 // if 'ttk::notebook::enableTraversal' is called.
-//
-// # Description
-//
-// A ttk::notebook widget manages a collection of windows
-// and displays a single one at a time.
-// Each content window is associated with a tab,
-// which the user may select to change the currently-displayed window.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TNotebook(options ...option) *Window {
@@ -4644,16 +3557,16 @@ func (w *Window) TNotebook(options ...option) *Window {
 }
 
 // ttk::notebook - Multi-paned container widget
-//
+// 
 // # TNotebook(Height(...))
-//
+// 
 // If present and greater than zero,
 // specifies the desired height of the pane area
 // (not including internal padding or tabs).
 // Otherwise, the maximum height of all panes is used.
-//
+// 
 // # TNotebook(Padding(...))
-//
+// 
 // Specifies the amount of extra space to add around the outside
 // of the notebook.
 // The padding is a list of up to four length specifications
@@ -4665,99 +3578,85 @@ func (w *Window) TNotebook(options ...option) *Window {
 // In other words, a list of three numbers specify the left, vertical, and right
 // padding; a list of two numbers specify the horizontal and the vertical padding;
 // a single number specifies the same padding all the way around the widget.
-//
+// 
 // # TNotebook(Width(...))
-//
+// 
 // If present and greater than zero,
 // specifies the desired width of the pane area
 // (not including internal padding).
 // Otherwise, the maximum width of all panes is used.
-//
+// 
 // # TNotebook(State(...))
-//
+// 
 // Either 'normal', 'disabled' or 'hidden'.
 // If 'disabled', then the tab is not selectable.
 // If 'hidden', then the tab is not shown.
-//
+// 
 // # TNotebook(Sticky(...))
-//
+// 
 // Specifies how the content window is positioned within the pane area.
 // Value is a string containing zero or more of the characters
 // 'n, s, e,' or 'w'.
 // Each letter refers to a side (north, south, east, or west)
 // that the content window will
-//
+// 
 // # TNotebook(Padding(...))
-//
+// 
 // Specifies the amount of extra space to add between the notebook and this pane.
 // Syntax is the same as for the widget '-padding' option.
-//
+// 
 // # TNotebook(Text(...))
-//
+// 
 // Specifies a string to be displayed in the tab.
-//
+// 
 // # TNotebook(Image(...))
-//
+// 
 // Specifies an image to display in the tab.
 // See 'ttk_widget(n)' for details.
-//
+// 
 // # TNotebook(Compound(...))
-//
+// 
 // Specifies how to display the image relative to the text,
 // in the case both '-text' and '-image' are present.
 // See 'label(n)' for legal values.
-//
+// 
 // # TNotebook(Underline(...))
-//
+// 
 // Specifies the integer index (0-based) of a character to underline
 // in the text string.
 // The underlined character is used for mnemonic activation
 // if 'ttk::notebook::enableTraversal' is called.
-//
-// # Description
-//
-// A ttk::notebook widget manages a collection of windows
-// and displays a single one at a time.
-// Each content window is associated with a tab,
-// which the user may select to change the currently-displayed window.
 func TNotebook(options ...option) *Window {
 	return Inter.TNotebook(options...)
 }
 
 // ttk::panedwindow - Multi-pane container window
-//
+// 
 // # TPanedwindow(Orient(...))
-//
+// 
 // Specifies the orientation of the window.
 // If 'vertical', subpanes are stacked top-to-bottom;
 // if 'horizontal', subpanes are stacked left-to-right.
-//
+// 
 // # TPanedwindow(Width(...))
-//
+// 
 // If present and greater than zero,
 // specifies the desired width of the widget in pixels.
 // Otherwise, the requested width is determined by the width
 // of the managed windows.
-//
+// 
 // # TPanedwindow(Height(...))
-//
+// 
 // If present and greater than zero,
 // specifies the desired height of the widget in pixels.
 // Otherwise, the requested height is determined by the height
 // of the managed windows.
-//
+// 
 // # TPanedwindow(Weight(...))
-//
+// 
 // An integer specifying the relative stretchability of the pane.
 // When the paned window is resized, the extra space is added
 // or subtracted to each pane proportionally to its '-weight'.
-//
-// # Description
-//
-// A ttk::panedwindow widget displays a number of subwindows,
-// stacked either vertically or horizontally.
-// The user may adjust the relative sizes of the subwindows
-// by dragging the sash between panes.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TPanedwindow(options ...option) *Window {
@@ -4765,101 +3664,80 @@ func (w *Window) TPanedwindow(options ...option) *Window {
 }
 
 // ttk::panedwindow - Multi-pane container window
-//
+// 
 // # TPanedwindow(Orient(...))
-//
+// 
 // Specifies the orientation of the window.
 // If 'vertical', subpanes are stacked top-to-bottom;
 // if 'horizontal', subpanes are stacked left-to-right.
-//
+// 
 // # TPanedwindow(Width(...))
-//
+// 
 // If present and greater than zero,
 // specifies the desired width of the widget in pixels.
 // Otherwise, the requested width is determined by the width
 // of the managed windows.
-//
+// 
 // # TPanedwindow(Height(...))
-//
+// 
 // If present and greater than zero,
 // specifies the desired height of the widget in pixels.
 // Otherwise, the requested height is determined by the height
 // of the managed windows.
-//
+// 
 // # TPanedwindow(Weight(...))
-//
+// 
 // An integer specifying the relative stretchability of the pane.
 // When the paned window is resized, the extra space is added
 // or subtracted to each pane proportionally to its '-weight'.
-//
-// # Description
-//
-// A ttk::panedwindow widget displays a number of subwindows,
-// stacked either vertically or horizontally.
-// The user may adjust the relative sizes of the subwindows
-// by dragging the sash between panes.
 func TPanedwindow(options ...option) *Window {
 	return Inter.TPanedwindow(options...)
 }
 
 // ttk::progressbar - Provide progress feedback
-//
+// 
 // # TProgressbar(Length(...))
-//
+// 
 // Specifies the length of the long axis of the progress bar
 // (width if horizontal, height if vertical). The value may have any of the forms
 // acceptable to 'Tk_GetPixels'.
-//
+// 
 // # TProgressbar(Maximum(...))
-//
+// 
 // A floating point number specifying the maximum '-value'.
 // Defaults to 100.
-//
+// 
 // # TProgressbar(Mode(...))
-//
+// 
 // One of 'determinate' or 'indeterminate'.
-//
+// 
 // # TProgressbar(Orient(...))
-//
+// 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the progress bar.
-//
+// 
 // # TProgressbar(Phase(...))
-//
+// 
 // Read-only option.
 // The widget periodically increments the value of this option
 // whenever the '-value' is greater than 0 and,
 // in 'determinate' mode, less than '-maximum'.
 // This option may be used by the current theme
 // to provide additional animation effects.
-//
+// 
 // # TProgressbar(Value(...))
-//
+// 
 // The current value of the progress bar.
 // In 'determinate' mode, this represents the amount of work completed.
 // In 'indeterminate' mode, it is interpreted modulo '-maximum';
 // that is, the progress bar completes one
-//
+// 
 // # TProgressbar(Variable(...))
-//
+// 
 // The name of a global Tcl variable which is linked to the '-value'.
 // If specified to an existing variable, the '-value' of the progress bar is
 // automatically set to the value of the variable whenever
 // the latter is modified.
-//
-// # Description
-//
-// A ttk::progressbar widget shows the status of a long-running
-// operation.  They can operate in two modes: determinate mode shows the
-// amount completed relative to the total amount of work to be done, and
-// indeterminate mode provides an animated display to let the user know
-// that something is happening.
-//
-// If the value of -orient is horizontal a text string can be
-// displayed inside the progressbar. This string can be configured using
-// the -anchor, -font, -foreground, -justify,
-// -text and -wraplength options. If the value of -orient
-// is vertical then these options are ignored.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TProgressbar(options ...option) *Window {
@@ -4867,90 +3745,68 @@ func (w *Window) TProgressbar(options ...option) *Window {
 }
 
 // ttk::progressbar - Provide progress feedback
-//
+// 
 // # TProgressbar(Length(...))
-//
+// 
 // Specifies the length of the long axis of the progress bar
 // (width if horizontal, height if vertical). The value may have any of the forms
 // acceptable to 'Tk_GetPixels'.
-//
+// 
 // # TProgressbar(Maximum(...))
-//
+// 
 // A floating point number specifying the maximum '-value'.
 // Defaults to 100.
-//
+// 
 // # TProgressbar(Mode(...))
-//
+// 
 // One of 'determinate' or 'indeterminate'.
-//
+// 
 // # TProgressbar(Orient(...))
-//
+// 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the progress bar.
-//
+// 
 // # TProgressbar(Phase(...))
-//
+// 
 // Read-only option.
 // The widget periodically increments the value of this option
 // whenever the '-value' is greater than 0 and,
 // in 'determinate' mode, less than '-maximum'.
 // This option may be used by the current theme
 // to provide additional animation effects.
-//
+// 
 // # TProgressbar(Value(...))
-//
+// 
 // The current value of the progress bar.
 // In 'determinate' mode, this represents the amount of work completed.
 // In 'indeterminate' mode, it is interpreted modulo '-maximum';
 // that is, the progress bar completes one
-//
+// 
 // # TProgressbar(Variable(...))
-//
+// 
 // The name of a global Tcl variable which is linked to the '-value'.
 // If specified to an existing variable, the '-value' of the progress bar is
 // automatically set to the value of the variable whenever
 // the latter is modified.
-//
-// # Description
-//
-// A ttk::progressbar widget shows the status of a long-running
-// operation.  They can operate in two modes: determinate mode shows the
-// amount completed relative to the total amount of work to be done, and
-// indeterminate mode provides an animated display to let the user know
-// that something is happening.
-//
-// If the value of -orient is horizontal a text string can be
-// displayed inside the progressbar. This string can be configured using
-// the -anchor, -font, -foreground, -justify,
-// -text and -wraplength options. If the value of -orient
-// is vertical then these options are ignored.
 func TProgressbar(options ...option) *Window {
 	return Inter.TProgressbar(options...)
 }
 
 // ttk::radiobutton - Mutually exclusive option widget
-//
+// 
 // # TRadiobutton(Command(...))
-//
+// 
 // A Tcl script to evaluate whenever the widget is invoked.
-//
+// 
 // # TRadiobutton(Value(...))
-//
+// 
 // The value to store in the associated '-variable'
 // when the widget is selected.
-//
+// 
 // # TRadiobutton(Variable(...))
-//
+// 
 // The name of a global variable whose value is linked to the widget.
 // Default value is '::selectedButton'.
-//
-// # Description
-//
-// ttk::radiobutton widgets are used in groups to show or change
-// a set of mutually-exclusive options.
-// Radiobuttons are linked to a Tcl variable,
-// and have an associated value; when a radiobutton is clicked,
-// it sets the variable to its associated value.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TRadiobutton(options ...option) *Window {
@@ -4958,80 +3814,65 @@ func (w *Window) TRadiobutton(options ...option) *Window {
 }
 
 // ttk::radiobutton - Mutually exclusive option widget
-//
+// 
 // # TRadiobutton(Command(...))
-//
+// 
 // A Tcl script to evaluate whenever the widget is invoked.
-//
+// 
 // # TRadiobutton(Value(...))
-//
+// 
 // The value to store in the associated '-variable'
 // when the widget is selected.
-//
+// 
 // # TRadiobutton(Variable(...))
-//
+// 
 // The name of a global variable whose value is linked to the widget.
 // Default value is '::selectedButton'.
-//
-// # Description
-//
-// ttk::radiobutton widgets are used in groups to show or change
-// a set of mutually-exclusive options.
-// Radiobuttons are linked to a Tcl variable,
-// and have an associated value; when a radiobutton is clicked,
-// it sets the variable to its associated value.
 func TRadiobutton(options ...option) *Window {
 	return Inter.TRadiobutton(options...)
 }
 
 // ttk::scale - Create and manipulate a scale widget
-//
+// 
 // # TScale(Command(...))
-//
+// 
 // Specifies the prefix of a Tcl command to invoke whenever the scale's value is
 // changed via a widget command. The actual command consists of this option
 // followed by a space and a real number indicating the new value of the scale.
-//
+// 
 // # TScale(From(...))
-//
+// 
 // A real value corresponding to the left or top end of the scale.
-//
+// 
 // # TScale(Length(...))
-//
+// 
 // Specifies the desired long dimension of the scale in screen units (i.e. any of
 // the forms acceptable to 'Tk_GetPixels'). For vertical scales this is the
 // scale's height; for horizontal scales it is the scale's width.
-//
+// 
 // # TScale(Orient(...))
-//
+// 
 // Specifies which orientation whether the widget should be laid out horizontally
 // or vertically. Must be either 'horizontal' or 'vertical' or an
 // abbreviation of one of these.
-//
+// 
 // # TScale(To(...))
-//
+// 
 // Specifies a real value corresponding to the right or bottom end of the scale.
 // This value may be either less than or greater than the '-from' option.
-//
+// 
 // # TScale(Value(...))
-//
+// 
 // Specifies the current floating-point value of the variable.
 // If '-variable' is set to an existing variable, specifying '-value'
 // has no effect (the variable value takes precedence).
-//
+// 
 // # TScale(Variable(...))
-//
+// 
 // Specifies the name of a global variable to link to the scale. Whenever the
 // value of the variable changes, the scale will update to reflect this value.
 // Whenever the scale is manipulated interactively, the variable will be modified
 // to reflect the scale's new value.
-//
-// # Description
-//
-// A ttk::scale widget is typically used to control the numeric value of a
-// linked variable that varies uniformly over some range. A scale displays a
-// slider that can be moved along over a trough, with the relative
-// position of the slider over the trough indicating the value of the variable.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TScale(options ...option) *Window {
@@ -5039,83 +3880,64 @@ func (w *Window) TScale(options ...option) *Window {
 }
 
 // ttk::scale - Create and manipulate a scale widget
-//
+// 
 // # TScale(Command(...))
-//
+// 
 // Specifies the prefix of a Tcl command to invoke whenever the scale's value is
 // changed via a widget command. The actual command consists of this option
 // followed by a space and a real number indicating the new value of the scale.
-//
+// 
 // # TScale(From(...))
-//
+// 
 // A real value corresponding to the left or top end of the scale.
-//
+// 
 // # TScale(Length(...))
-//
+// 
 // Specifies the desired long dimension of the scale in screen units (i.e. any of
 // the forms acceptable to 'Tk_GetPixels'). For vertical scales this is the
 // scale's height; for horizontal scales it is the scale's width.
-//
+// 
 // # TScale(Orient(...))
-//
+// 
 // Specifies which orientation whether the widget should be laid out horizontally
 // or vertically. Must be either 'horizontal' or 'vertical' or an
 // abbreviation of one of these.
-//
+// 
 // # TScale(To(...))
-//
+// 
 // Specifies a real value corresponding to the right or bottom end of the scale.
 // This value may be either less than or greater than the '-from' option.
-//
+// 
 // # TScale(Value(...))
-//
+// 
 // Specifies the current floating-point value of the variable.
 // If '-variable' is set to an existing variable, specifying '-value'
 // has no effect (the variable value takes precedence).
-//
+// 
 // # TScale(Variable(...))
-//
+// 
 // Specifies the name of a global variable to link to the scale. Whenever the
 // value of the variable changes, the scale will update to reflect this value.
 // Whenever the scale is manipulated interactively, the variable will be modified
 // to reflect the scale's new value.
-//
-// # Description
-//
-// A ttk::scale widget is typically used to control the numeric value of a
-// linked variable that varies uniformly over some range. A scale displays a
-// slider that can be moved along over a trough, with the relative
-// position of the slider over the trough indicating the value of the variable.
 func TScale(options ...option) *Window {
 	return Inter.TScale(options...)
 }
 
 // ttk::scrollbar - Control the viewport of a scrollable widget
-//
+// 
 // # TScrollbar(Command(...))
-//
+// 
 // A Tcl script prefix to evaluate
 // to change the view in the widget associated with the scrollbar.
 // Additional arguments are appended to the value of this option,
 // as described in 'SCROLLING COMMANDS' below,
 // whenever the user requests a view change by manipulating the scrollbar.
-//
+// 
 // # TScrollbar(Orient(...))
-//
+// 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the scrollbar.
-//
-// # Description
-//
-// ttk::scrollbar widgets are typically linked to an associated window
-// that displays a document of some sort, such as a file being edited or a
-// drawing.
-// A scrollbar displays a thumb in the middle portion of the scrollbar,
-// whose position and size provides information about the portion of the
-// document visible in the associated window.
-// The thumb may be dragged by the user to control the visible region.
-// Depending on the theme, two or more arrow buttons may also be present;
-// these are used to scroll the visible region in discrete units.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TScrollbar(options ...option) *Window {
@@ -5123,46 +3945,29 @@ func (w *Window) TScrollbar(options ...option) *Window {
 }
 
 // ttk::scrollbar - Control the viewport of a scrollable widget
-//
+// 
 // # TScrollbar(Command(...))
-//
+// 
 // A Tcl script prefix to evaluate
 // to change the view in the widget associated with the scrollbar.
 // Additional arguments are appended to the value of this option,
 // as described in 'SCROLLING COMMANDS' below,
 // whenever the user requests a view change by manipulating the scrollbar.
-//
+// 
 // # TScrollbar(Orient(...))
-//
+// 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the scrollbar.
-//
-// # Description
-//
-// ttk::scrollbar widgets are typically linked to an associated window
-// that displays a document of some sort, such as a file being edited or a
-// drawing.
-// A scrollbar displays a thumb in the middle portion of the scrollbar,
-// whose position and size provides information about the portion of the
-// document visible in the associated window.
-// The thumb may be dragged by the user to control the visible region.
-// Depending on the theme, two or more arrow buttons may also be present;
-// these are used to scroll the visible region in discrete units.
 func TScrollbar(options ...option) *Window {
 	return Inter.TScrollbar(options...)
 }
 
 // ttk::separator - Separator bar
-//
+// 
 // # TSeparator(Orient(...))
-//
+// 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the separator.
-//
-// # Description
-//
-// A ttk::separator widget displays a horizontal or vertical separator
-// bar.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TSeparator(options ...option) *Window {
@@ -5170,25 +3975,16 @@ func (w *Window) TSeparator(options ...option) *Window {
 }
 
 // ttk::separator - Separator bar
-//
+// 
 // # TSeparator(Orient(...))
-//
+// 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the separator.
-//
-// # Description
-//
-// A ttk::separator widget displays a horizontal or vertical separator
-// bar.
 func TSeparator(options ...option) *Window {
 	return Inter.TSeparator(options...)
 }
 
 // ttk::sizegrip - Bottom-right corner resize widget
-//
-// A ttk::sizegrip widget (also known as a grow box)
-// allows the user to resize the containing toplevel window
-// by pressing and dragging the grip.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TSizegrip(options ...option) *Window {
@@ -5196,65 +3992,52 @@ func (w *Window) TSizegrip(options ...option) *Window {
 }
 
 // ttk::sizegrip - Bottom-right corner resize widget
-//
-// A ttk::sizegrip widget (also known as a grow box)
-// allows the user to resize the containing toplevel window
-// by pressing and dragging the grip.
 func TSizegrip(options ...option) *Window {
 	return Inter.TSizegrip(options...)
 }
 
 // ttk::spinbox - Selecting text field widget
-//
+// 
 // # TSpinbox(Command(...))
-//
+// 
 // Specifies a Tcl command to be invoked whenever a spinbutton is invoked.
-//
+// 
 // # TSpinbox(Format(...))
-//
+// 
 // Specifies an alternate format to use when setting the string value
 // when using the '-from' and '-to' range.
 // This must be a format specifier of the form '%<pad>.<pad>f',
 // as it will format a floating-point number.
-//
+// 
 // # TSpinbox(From(...))
-//
+// 
 // A floating-point value specifying the lowest value for the spinbox. This is
 // used in conjunction with '-to' and '-increment' to set a numerical
 // range.
-//
+// 
 // # TSpinbox(Increment(...))
-//
+// 
 // A floating-point value specifying the change in value to be applied each
 // time one of the widget spin buttons is pressed. The up button applies a
 // positive increment, the down button applies a negative increment.
-//
+// 
 // # TSpinbox(To(...))
-//
+// 
 // A floating-point value specifying the highest permissible value for the
 // widget. See also '-from' and '-increment'.
 // range.
-//
+// 
 // # TSpinbox(Values(...))
-//
+// 
 // This must be a Tcl list of values. If this option is set then this will
 // override any range set using the '-from', '-to' and
 // '-increment' options. The widget will instead use the values
 // specified beginning with the first value.
-//
+// 
 // # TSpinbox(Wrap(...))
-//
+// 
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
-//
-// # Description
-//
-// A ttk::spinbox widget is a ttk::entry widget with built-in
-// up and down buttons that are used to either modify a numeric value or
-// to select among a set of values. The widget implements all the features
-// of the ttk::entry widget including support of the
-// -textvariable option to link the value displayed by the widget
-// to a Tcl variable.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TSpinbox(options ...option) *Window {
@@ -5262,69 +4045,60 @@ func (w *Window) TSpinbox(options ...option) *Window {
 }
 
 // ttk::spinbox - Selecting text field widget
-//
+// 
 // # TSpinbox(Command(...))
-//
+// 
 // Specifies a Tcl command to be invoked whenever a spinbutton is invoked.
-//
+// 
 // # TSpinbox(Format(...))
-//
+// 
 // Specifies an alternate format to use when setting the string value
 // when using the '-from' and '-to' range.
 // This must be a format specifier of the form '%<pad>.<pad>f',
 // as it will format a floating-point number.
-//
+// 
 // # TSpinbox(From(...))
-//
+// 
 // A floating-point value specifying the lowest value for the spinbox. This is
 // used in conjunction with '-to' and '-increment' to set a numerical
 // range.
-//
+// 
 // # TSpinbox(Increment(...))
-//
+// 
 // A floating-point value specifying the change in value to be applied each
 // time one of the widget spin buttons is pressed. The up button applies a
 // positive increment, the down button applies a negative increment.
-//
+// 
 // # TSpinbox(To(...))
-//
+// 
 // A floating-point value specifying the highest permissible value for the
 // widget. See also '-from' and '-increment'.
 // range.
-//
+// 
 // # TSpinbox(Values(...))
-//
+// 
 // This must be a Tcl list of values. If this option is set then this will
 // override any range set using the '-from', '-to' and
 // '-increment' options. The widget will instead use the values
 // specified beginning with the first value.
-//
+// 
 // # TSpinbox(Wrap(...))
-//
+// 
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
-//
-// # Description
-//
-// A ttk::spinbox widget is a ttk::entry widget with built-in
-// up and down buttons that are used to either modify a numeric value or
-// to select among a set of values. The widget implements all the features
-// of the ttk::entry widget including support of the
-// -textvariable option to link the value displayed by the widget
-// to a Tcl variable.
 func TSpinbox(options ...option) *Window {
 	return Inter.TSpinbox(options...)
 }
 
 // ttk::treeview - hierarchical multicolumn data display widget
-//
+// 
 // # TTreeview(Columns(...))
-//
+// 
 // A list of column identifiers,
 // specifying the number of columns and their names.
-//
+// 
 // # TTreeview(Displaycolumns(...))
-//
+// 
 // A list of column identifiers
 // (either symbolic names or integer indices)
 // specifying which data columns are displayed
@@ -5332,73 +4106,44 @@ func TSpinbox(options ...option) *Window {
 // or the string '#all\fP.
 // If set to '#all\fP (the default),
 // all columns are shown in the order given.
-//
+// 
 // # TTreeview(Height(...))
-//
+// 
 // Specifies the number of rows which should be visible.
 // Note that
 // the requested width is determined from the sum of the column widths.
-//
+// 
 // # TTreeview(Selectmode(...))
-//
+// 
 // Controls how the built-in class bindings manage the selection.
 // One of 'extended', 'browse', or 'none'.
-//
+// 
 // # TTreeview(Selecttype(...))
-//
+// 
 // Controls how the built-in class bindings manage the selection.
 // One of 'item' or 'cell'.
-//
+// 
 // # TTreeview(Show(...))
-//
+// 
 // A list containing zero or more of the following values, specifying
 // which elements of the tree to display.
-//
+// 
 // # TTreeview(Striped(...))
-//
+// 
 // Boolean specifying zebra striped item coloring.
 // Note that
 // striped items uses the '-stripedbackground' option if set by the theme or
 // a tag. If not supported by the current theme, it will not show.
-//
+// 
 // # TTreeview(Titlecolumns(...))
-//
+// 
 // Number of display columns at the left that should not be scrolled. The tree
 // column counts, even if '-show tree' is not specified. Thus for value N of
 // this option, column #N is the first one that is scrollable. Default is 0.
-//
+// 
 // # TTreeview(Titleitems(...))
-//
+// 
 // Number of items at the top that should not be vertically scrolled. Default is 0.
-//
-// # Description
-//
-// The ttk::treeview widget displays a hierarchical collection of items.
-// Each item has a textual label, an optional image,
-// and an optional list of data values.
-// The data values are displayed in successive columns after
-// the tree label.
-//
-// The order in which data values are displayed may be controlled
-// by setting the -displaycolumns widget option.
-// The tree widget can also display column headings.
-// Columns may be accessed by number or by symbolic names
-// listed in the -columns widget option;
-// see COLUMN IDENTIFIERS.
-//
-// Each item is identified by a unique name.
-// The widget will generate item IDs if they are not supplied by the caller.
-// There is a distinguished root item, named {}.
-// The root item itself is not displayed;
-// its children appear at the top level of the hierarchy.
-//
-// Each item also has a list of tags,
-// which can be used to associate event bindings with individual items
-// and control the appearance of the item.
-//
-// Treeview widgets support horizontal and vertical scrolling with the
-// standard -[xy]scrollcommand options
-// and [xy]view widget commands.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TTreeview(options ...option) *Window {
@@ -5406,14 +4151,14 @@ func (w *Window) TTreeview(options ...option) *Window {
 }
 
 // ttk::treeview - hierarchical multicolumn data display widget
-//
+// 
 // # TTreeview(Columns(...))
-//
+// 
 // A list of column identifiers,
 // specifying the number of columns and their names.
-//
+// 
 // # TTreeview(Displaycolumns(...))
-//
+// 
 // A list of column identifiers
 // (either symbolic names or integer indices)
 // specifying which data columns are displayed
@@ -5421,82 +4166,54 @@ func (w *Window) TTreeview(options ...option) *Window {
 // or the string '#all\fP.
 // If set to '#all\fP (the default),
 // all columns are shown in the order given.
-//
+// 
 // # TTreeview(Height(...))
-//
+// 
 // Specifies the number of rows which should be visible.
 // Note that
 // the requested width is determined from the sum of the column widths.
-//
+// 
 // # TTreeview(Selectmode(...))
-//
+// 
 // Controls how the built-in class bindings manage the selection.
 // One of 'extended', 'browse', or 'none'.
-//
+// 
 // # TTreeview(Selecttype(...))
-//
+// 
 // Controls how the built-in class bindings manage the selection.
 // One of 'item' or 'cell'.
-//
+// 
 // # TTreeview(Show(...))
-//
+// 
 // A list containing zero or more of the following values, specifying
 // which elements of the tree to display.
-//
+// 
 // # TTreeview(Striped(...))
-//
+// 
 // Boolean specifying zebra striped item coloring.
 // Note that
 // striped items uses the '-stripedbackground' option if set by the theme or
 // a tag. If not supported by the current theme, it will not show.
-//
+// 
 // # TTreeview(Titlecolumns(...))
-//
+// 
 // Number of display columns at the left that should not be scrolled. The tree
 // column counts, even if '-show tree' is not specified. Thus for value N of
 // this option, column #N is the first one that is scrollable. Default is 0.
-//
+// 
 // # TTreeview(Titleitems(...))
-//
+// 
 // Number of items at the top that should not be vertically scrolled. Default is 0.
-//
-// # Description
-//
-// The ttk::treeview widget displays a hierarchical collection of items.
-// Each item has a textual label, an optional image,
-// and an optional list of data values.
-// The data values are displayed in successive columns after
-// the tree label.
-//
-// The order in which data values are displayed may be controlled
-// by setting the -displaycolumns widget option.
-// The tree widget can also display column headings.
-// Columns may be accessed by number or by symbolic names
-// listed in the -columns widget option;
-// see COLUMN IDENTIFIERS.
-//
-// Each item is identified by a unique name.
-// The widget will generate item IDs if they are not supplied by the caller.
-// There is a distinguished root item, named {}.
-// The root item itself is not displayed;
-// its children appear at the top level of the hierarchy.
-//
-// Each item also has a list of tags,
-// which can be used to associate event bindings with individual items
-// and control the appearance of the item.
-//
-// Treeview widgets support horizontal and vertical scrolling with the
-// standard -[xy]scrollcommand options
-// and [xy]view widget commands.
 func TTreeview(options ...option) *Window {
 	return Inter.TTreeview(options...)
 }
 
-type activebackgroundOption struct{ v any }
+type activebackgroundOption struct { v any }
 
 func (o activebackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-activebackground %s`, optionString(o.v))
 }
+
 
 // Specifies background color to use when drawing active elements.
 // An element (a widget or portion of a widget) is active if the
@@ -5511,11 +4228,12 @@ func Activebackground(value any) option {
 	return activebackgroundOption{value}
 }
 
-type activeborderwidthOption struct{ v any }
+type activeborderwidthOption struct { v any }
 
 func (o activeborderwidthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-activeborderwidth %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative value indicating
 // the width of the 3-D border drawn around active elements.  See above for
@@ -5527,11 +4245,12 @@ func Activeborderwidth(value any) option {
 	return activeborderwidthOption{value}
 }
 
-type activeforegroundOption struct{ v any }
+type activeforegroundOption struct { v any }
 
 func (o activeforegroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-activeforeground %s`, optionString(o.v))
 }
+
 
 // Specifies foreground color to use when drawing active elements.
 // See above for definition of active elements.
@@ -5539,11 +4258,12 @@ func Activeforeground(value any) option {
 	return activeforegroundOption{value}
 }
 
-type activereliefOption struct{ v any }
+type activereliefOption struct { v any }
 
 func (o activereliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-activerelief %s`, optionString(o.v))
 }
+
 
 // Specifies the 3-D effect desired for the active item of the widget.
 // See the '-relief' option for details.
@@ -5558,11 +4278,12 @@ func Activerelief(value any) option {
 	return activereliefOption{value}
 }
 
-type activestyleOption struct{ v any }
+type activestyleOption struct { v any }
 
 func (o activestyleOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-activestyle %s`, optionString(o.v))
 }
+
 
 // # Listbox(Activestyle(...))
 //
@@ -5575,11 +4296,12 @@ func Activestyle(value any) option {
 	return activestyleOption{value}
 }
 
-type anchorOption struct{ v any }
+type anchorOption struct { v any }
 
 func (o anchorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-anchor %s`, optionString(o.v))
 }
+
 
 // Specifies how the information in a widget (e.g. text or a bitmap)
 // is to be displayed in the widget.
@@ -5591,11 +4313,12 @@ func Anchor(value any) option {
 	return anchorOption{value}
 }
 
-type aspectOption struct{ v any }
+type aspectOption struct { v any }
 
 func (o aspectOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-aspect %s`, optionString(o.v))
 }
+
 
 // # Message(Aspect(...))
 //
@@ -5612,11 +4335,12 @@ func Aspect(value any) option {
 	return aspectOption{value}
 }
 
-type autoseparatorsOption struct{ v any }
+type autoseparatorsOption struct { v any }
 
 func (o autoseparatorsOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-autoseparators %s`, optionString(o.v))
 }
+
 
 // # Text(Autoseparators(...))
 //
@@ -5626,11 +4350,12 @@ func Autoseparators(value any) option {
 	return autoseparatorsOption{value}
 }
 
-type backgroundOption struct{ v any }
+type backgroundOption struct { v any }
 
 func (o backgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-background %s`, optionString(o.v))
 }
+
 
 // Specifies the normal background color to use when displaying the
 // widget.
@@ -5667,11 +4392,12 @@ func Background(value any) option {
 	return backgroundOption{value}
 }
 
-type backgroundimageOption struct{ v any }
+type backgroundimageOption struct { v any }
 
 func (o backgroundimageOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-backgroundimage %s`, optionString(o.v))
 }
+
 
 // # Frame(Backgroundimage(...))
 //
@@ -5695,11 +4421,12 @@ func Backgroundimage(value any) option {
 	return backgroundimageOption{value}
 }
 
-type bdOption struct{ v any }
+type bdOption struct { v any }
 
 func (o bdOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-bd %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative value indicating the width
 // of the 3-D border to draw around the outside of the widget (if such a
@@ -5711,11 +4438,12 @@ func Bd(value any) option {
 	return bdOption{value}
 }
 
-type bgOption struct{ v any }
+type bgOption struct { v any }
 
 func (o bgOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-bg %s`, optionString(o.v))
 }
+
 
 // Specifies the normal background color to use when displaying the
 // widget.
@@ -5723,11 +4451,12 @@ func Bg(value any) option {
 	return bgOption{value}
 }
 
-type bigincrementOption struct{ v any }
+type bigincrementOption struct { v any }
 
 func (o bigincrementOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-bigincrement %s`, optionString(o.v))
 }
+
 
 // # Scale(Bigincrement(...))
 //
@@ -5736,11 +4465,12 @@ func Bigincrement(value any) option {
 	return bigincrementOption{value}
 }
 
-type bitmapOption struct{ v any }
+type bitmapOption struct { v any }
 
 func (o bitmapOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-bitmap %s`, optionString(o.v))
 }
+
 
 // Specifies a bitmap to display in the widget, in any of the forms
 // acceptable to 'Tk_GetBitmap'.
@@ -5757,11 +4487,12 @@ func Bitmap(value any) option {
 	return bitmapOption{value}
 }
 
-type blockcursorOption struct{ v any }
+type blockcursorOption struct { v any }
 
 func (o blockcursorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-blockcursor %s`, optionString(o.v))
 }
+
 
 // # Text(Blockcursor(...))
 //
@@ -5772,11 +4503,12 @@ func Blockcursor(value any) option {
 	return blockcursorOption{value}
 }
 
-type borderwidthOption struct{ v any }
+type borderwidthOption struct { v any }
 
 func (o borderwidthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-borderwidth %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative value indicating the width
 // of the 3-D border to draw around the outside of the widget (if such a
@@ -5793,11 +4525,12 @@ func Borderwidth(value any) option {
 	return borderwidthOption{value}
 }
 
-type buttonbackgroundOption struct{ v any }
+type buttonbackgroundOption struct { v any }
 
 func (o buttonbackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-buttonbackground %s`, optionString(o.v))
 }
+
 
 // # Spinbox(Buttonbackground(...))
 //
@@ -5806,11 +4539,12 @@ func Buttonbackground(value any) option {
 	return buttonbackgroundOption{value}
 }
 
-type buttoncursorOption struct{ v any }
+type buttoncursorOption struct { v any }
 
 func (o buttoncursorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-buttoncursor %s`, optionString(o.v))
 }
+
 
 // # Spinbox(Buttoncursor(...))
 //
@@ -5820,11 +4554,12 @@ func Buttoncursor(value any) option {
 	return buttoncursorOption{value}
 }
 
-type buttondownreliefOption struct{ v any }
+type buttondownreliefOption struct { v any }
 
 func (o buttondownreliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-buttondownrelief %s`, optionString(o.v))
 }
+
 
 // # Spinbox(Buttondownrelief(...))
 //
@@ -5833,11 +4568,12 @@ func Buttondownrelief(value any) option {
 	return buttondownreliefOption{value}
 }
 
-type buttonupreliefOption struct{ v any }
+type buttonupreliefOption struct { v any }
 
 func (o buttonupreliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-buttonuprelief %s`, optionString(o.v))
 }
+
 
 // # Spinbox(Buttonuprelief(...))
 //
@@ -5846,11 +4582,12 @@ func Buttonuprelief(value any) option {
 	return buttonupreliefOption{value}
 }
 
-type classOption struct{ v any }
+type classOption struct { v any }
 
 func (o classOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-class %s`, optionString(o.v))
 }
+
 
 // # Frame(Class(...))
 //
@@ -5884,11 +4621,12 @@ func Class(value any) option {
 	return classOption{value}
 }
 
-type closeenoughOption struct{ v any }
+type closeenoughOption struct { v any }
 
 func (o closeenoughOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-closeenough %s`, optionString(o.v))
 }
+
 
 // # Canvas(Closeenough(...))
 //
@@ -5898,11 +4636,12 @@ func Closeenough(value any) option {
 	return closeenoughOption{value}
 }
 
-type colormapOption struct{ v any }
+type colormapOption struct { v any }
 
 func (o colormapOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-colormap %s`, optionString(o.v))
 }
+
 
 // # Frame(Colormap(...))
 //
@@ -5946,11 +4685,12 @@ func Colormap(value any) option {
 	return colormapOption{value}
 }
 
-type columnsOption struct{ v any }
+type columnsOption struct { v any }
 
 func (o columnsOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-columns %s`, optionString(o.v))
 }
+
 
 // # TTreeview(Columns(...))
 //
@@ -5959,6 +4699,7 @@ func (o columnsOption) optionString(w *Window) string {
 func Columns(value any) option {
 	return columnsOption{value}
 }
+
 
 // See also [Event handlers]
 //
@@ -6046,11 +4787,12 @@ func Command(args ...any) option {
 	return newEventHandler("-command", args...)
 }
 
-type compoundOption struct{ v any }
+type compoundOption struct { v any }
 
 func (o compoundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-compound %s`, optionString(o.v))
 }
+
 
 // Specifies if the widget should display text and bitmaps/images at the
 // same time, and if so, where the bitmap/image should be placed relative
@@ -6071,11 +4813,12 @@ func Compound(value any) option {
 	return compoundOption{value}
 }
 
-type confineOption struct{ v any }
+type confineOption struct { v any }
 
 func (o confineOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-confine %s`, optionString(o.v))
 }
+
 
 // # Canvas(Confine(...))
 //
@@ -6088,11 +4831,12 @@ func Confine(value any) option {
 	return confineOption{value}
 }
 
-type containerOption struct{ v any }
+type containerOption struct { v any }
 
 func (o containerOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-container %s`, optionString(o.v))
 }
+
 
 // # Frame(Container(...))
 //
@@ -6121,11 +4865,12 @@ func Container(value any) option {
 	return containerOption{value}
 }
 
-type cursorOption struct{ v any }
+type cursorOption struct { v any }
 
 func (o cursorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-cursor %s`, optionString(o.v))
 }
+
 
 // Specifies the mouse cursor to be used for the widget.
 // The value may have any of the forms acceptable to 'Tk_GetCursor'.
@@ -6135,11 +4880,12 @@ func Cursor(value any) option {
 	return cursorOption{value}
 }
 
-type defaultOption struct{ v any }
+type defaultOption struct { v any }
 
 func (o defaultOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-default %s`, optionString(o.v))
 }
+
 
 // # Button(Default(...))
 //
@@ -6162,11 +4908,12 @@ func Default(value any) option {
 	return defaultOption{value}
 }
 
-type digitsOption struct{ v any }
+type digitsOption struct { v any }
 
 func (o digitsOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-digits %s`, optionString(o.v))
 }
+
 
 // # Scale(Digits(...))
 //
@@ -6179,11 +4926,12 @@ func Digits(value any) option {
 	return digitsOption{value}
 }
 
-type directionOption struct{ v any }
+type directionOption struct { v any }
 
 func (o directionOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-direction %s`, optionString(o.v))
 }
+
 
 // # Menubutton(Direction(...))
 //
@@ -6206,11 +4954,12 @@ func Direction(value any) option {
 	return directionOption{value}
 }
 
-type disabledbackgroundOption struct{ v any }
+type disabledbackgroundOption struct { v any }
 
 func (o disabledbackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-disabledbackground %s`, optionString(o.v))
 }
+
 
 // # Entry(Disabledbackground(...))
 //
@@ -6225,11 +4974,12 @@ func Disabledbackground(value any) option {
 	return disabledbackgroundOption{value}
 }
 
-type disabledforegroundOption struct{ v any }
+type disabledforegroundOption struct { v any }
 
 func (o disabledforegroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-disabledforeground %s`, optionString(o.v))
 }
+
 
 // Specifies foreground color to use when drawing a disabled element.
 // If the option is specified as an empty string (which is typically the
@@ -6250,11 +5000,12 @@ func Disabledforeground(value any) option {
 	return disabledforegroundOption{value}
 }
 
-type displaycolumnsOption struct{ v any }
+type displaycolumnsOption struct { v any }
 
 func (o displaycolumnsOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-displaycolumns %s`, optionString(o.v))
 }
+
 
 // # TTreeview(Displaycolumns(...))
 //
@@ -6269,11 +5020,12 @@ func Displaycolumns(value any) option {
 	return displaycolumnsOption{value}
 }
 
-type elementborderwidthOption struct{ v any }
+type elementborderwidthOption struct { v any }
 
 func (o elementborderwidthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-elementborderwidth %s`, optionString(o.v))
 }
+
 
 // # Scrollbar(Elementborderwidth(...))
 //
@@ -6286,11 +5038,12 @@ func Elementborderwidth(value any) option {
 	return elementborderwidthOption{value}
 }
 
-type endlineOption struct{ v any }
+type endlineOption struct { v any }
 
 func (o endlineOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-endline %s`, optionString(o.v))
 }
+
 
 // # Text(Endline(...))
 //
@@ -6304,11 +5057,12 @@ func Endline(value any) option {
 	return endlineOption{value}
 }
 
-type exportselectionOption struct{ v any }
+type exportselectionOption struct { v any }
 
 func (o exportselectionOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-exportselection %s`, optionString(o.v))
 }
+
 
 // Specifies whether or not a selection in the widget should also be
 // the X selection.
@@ -6337,22 +5091,24 @@ func Exportselection(value any) option {
 	return exportselectionOption{value}
 }
 
-type fgOption struct{ v any }
+type fgOption struct { v any }
 
 func (o fgOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-fg %s`, optionString(o.v))
 }
+
 
 // Specifies the normal foreground color to use when displaying the widget.
 func Fg(value any) option {
 	return fgOption{value}
 }
 
-type fontOption struct{ v any }
+type fontOption struct { v any }
 
 func (o fontOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-font %s`, optionString(o.v))
 }
+
 
 // Specifies the font to use when drawing text inside the widget.
 // The value may have any of the forms described in the 'font' manual
@@ -6361,22 +5117,24 @@ func Font(value any) option {
 	return fontOption{value}
 }
 
-type foregroundOption struct{ v any }
+type foregroundOption struct { v any }
 
 func (o foregroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-foreground %s`, optionString(o.v))
 }
+
 
 // Specifies the normal foreground color to use when displaying the widget.
 func Foreground(value any) option {
 	return foregroundOption{value}
 }
 
-type formatOption struct{ v any }
+type formatOption struct { v any }
 
 func (o formatOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-format %s`, optionString(o.v))
 }
+
 
 // # Spinbox(Format(...))
 //
@@ -6395,11 +5153,12 @@ func Format(value any) option {
 	return formatOption{value}
 }
 
-type fromOption struct{ v any }
+type fromOption struct { v any }
 
 func (o fromOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-from %s`, optionString(o.v))
 }
+
 
 // # Scale(From(...))
 //
@@ -6427,11 +5186,12 @@ func From(value any) option {
 	return fromOption{value}
 }
 
-type handlepadOption struct{ v any }
+type handlepadOption struct { v any }
 
 func (o handlepadOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-handlepad %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Handlepad(...))
 //
@@ -6442,11 +5202,12 @@ func Handlepad(value any) option {
 	return handlepadOption{value}
 }
 
-type handlesizeOption struct{ v any }
+type handlesizeOption struct { v any }
 
 func (o handlesizeOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-handlesize %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Handlesize(...))
 //
@@ -6456,11 +5217,12 @@ func Handlesize(value any) option {
 	return handlesizeOption{value}
 }
 
-type heightOption struct{ v any }
+type heightOption struct { v any }
 
 func (o heightOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-height %s`, optionString(o.v))
 }
+
 
 // # Button(Height(...))
 //
@@ -6591,11 +5353,12 @@ func Height(value any) option {
 	return heightOption{value}
 }
 
-type highlightbackgroundOption struct{ v any }
+type highlightbackgroundOption struct { v any }
 
 func (o highlightbackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-highlightbackground %s`, optionString(o.v))
 }
+
 
 // Specifies the color to display in the traversal highlight region when
 // the widget does not have the input focus.
@@ -6603,11 +5366,12 @@ func Highlightbackground(value any) option {
 	return highlightbackgroundOption{value}
 }
 
-type highlightcolorOption struct{ v any }
+type highlightcolorOption struct { v any }
 
 func (o highlightcolorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-highlightcolor %s`, optionString(o.v))
 }
+
 
 // Specifies the color to use for the traversal highlight rectangle that is
 // drawn around the widget when it has the input focus.
@@ -6615,11 +5379,12 @@ func Highlightcolor(value any) option {
 	return highlightcolorOption{value}
 }
 
-type highlightthicknessOption struct{ v any }
+type highlightthicknessOption struct { v any }
 
 func (o highlightthicknessOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-highlightthickness %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative value indicating the width of the highlight
 // rectangle to draw around the outside of the widget when it has the
@@ -6630,11 +5395,12 @@ func Highlightthickness(value any) option {
 	return highlightthicknessOption{value}
 }
 
-type imageOption struct{ v any }
+type imageOption struct { v any }
 
 func (o imageOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-image %s`, optionString(o.v))
 }
+
 
 // Specifies an image to display in the widget, which must have been
 // created with the 'image create' command.
@@ -6652,11 +5418,12 @@ func Image(value any) option {
 	return imageOption{value}
 }
 
-type inactiveselectbackgroundOption struct{ v any }
+type inactiveselectbackgroundOption struct { v any }
 
 func (o inactiveselectbackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-inactiveselectbackground %s`, optionString(o.v))
 }
+
 
 // # Text(Inactiveselectbackground(...))
 //
@@ -6667,11 +5434,12 @@ func Inactiveselectbackground(value any) option {
 	return inactiveselectbackgroundOption{value}
 }
 
-type incrementOption struct{ v any }
+type incrementOption struct { v any }
 
 func (o incrementOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-increment %s`, optionString(o.v))
 }
+
 
 // # Spinbox(Increment(...))
 //
@@ -6689,11 +5457,12 @@ func Increment(value any) option {
 	return incrementOption{value}
 }
 
-type indicatoronOption struct{ v any }
+type indicatoronOption struct { v any }
 
 func (o indicatoronOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-indicatoron %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Indicatoron(...))
 //
@@ -6720,11 +5489,12 @@ func Indicatoron(value any) option {
 	return indicatoronOption{value}
 }
 
-type insertbackgroundOption struct{ v any }
+type insertbackgroundOption struct { v any }
 
 func (o insertbackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-insertbackground %s`, optionString(o.v))
 }
+
 
 // Specifies the color to use as background in the area covered by the
 // insertion cursor.  This color will normally override either the normal
@@ -6734,11 +5504,12 @@ func Insertbackground(value any) option {
 	return insertbackgroundOption{value}
 }
 
-type insertborderwidthOption struct{ v any }
+type insertborderwidthOption struct { v any }
 
 func (o insertborderwidthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-insertborderwidth %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative value indicating the width
 // of the 3-D border to draw around the insertion cursor.
@@ -6747,11 +5518,12 @@ func Insertborderwidth(value any) option {
 	return insertborderwidthOption{value}
 }
 
-type insertofftimeOption struct{ v any }
+type insertofftimeOption struct { v any }
 
 func (o insertofftimeOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-insertofftime %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative integer value indicating the number of
 // milliseconds the insertion cursor should remain
@@ -6759,11 +5531,12 @@ func Insertofftime(value any) option {
 	return insertofftimeOption{value}
 }
 
-type insertontimeOption struct{ v any }
+type insertontimeOption struct { v any }
 
 func (o insertontimeOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-insertontime %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative integer value indicating the number of
 // milliseconds the insertion cursor should remain
@@ -6771,11 +5544,12 @@ func Insertontime(value any) option {
 	return insertontimeOption{value}
 }
 
-type insertunfocussedOption struct{ v any }
+type insertunfocussedOption struct { v any }
 
 func (o insertunfocussedOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-insertunfocussed %s`, optionString(o.v))
 }
+
 
 // # Text(Insertunfocussed(...))
 //
@@ -6784,11 +5558,12 @@ func Insertunfocussed(value any) option {
 	return insertunfocussedOption{value}
 }
 
-type insertwidthOption struct{ v any }
+type insertwidthOption struct { v any }
 
 func (o insertwidthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-insertwidth %s`, optionString(o.v))
 }
+
 
 // Specifies a  value indicating the total width of the insertion cursor.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
@@ -6799,6 +5574,7 @@ func (o insertwidthOption) optionString(w *Window) string {
 func Insertwidth(value any) option {
 	return insertwidthOption{value}
 }
+
 
 // See also [Event handlers]
 //
@@ -6826,6 +5602,7 @@ func Invalidcommand(args ...any) option {
 	return newEventHandler("-invalidcommand", args...)
 }
 
+
 // See also [Event handlers]
 //
 // # Entry(Invcmd(...))
@@ -6847,11 +5624,12 @@ func Invcmd(args ...any) option {
 	return newEventHandler("-invcmd", args...)
 }
 
-type jumpOption struct{ v any }
+type jumpOption struct { v any }
 
 func (o jumpOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-jump %s`, optionString(o.v))
 }
+
 
 // For widgets with a slider that can be dragged to adjust a value,
 // such as scrollbars, this option determines when
@@ -6867,11 +5645,12 @@ func Jump(value any) option {
 	return jumpOption{value}
 }
 
-type justifyOption struct{ v any }
+type justifyOption struct { v any }
 
 func (o justifyOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-justify %s`, optionString(o.v))
 }
+
 
 // When there are multiple lines of text displayed in a widget, this
 // option determines how the lines line up with each other.
@@ -6915,11 +5694,12 @@ func Justify(value any) option {
 	return justifyOption{value}
 }
 
-type labelOption struct{ v any }
+type labelOption struct { v any }
 
 func (o labelOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-label %s`, optionString(o.v))
 }
+
 
 // # Scale(Lbl(...))
 //
@@ -6932,11 +5712,12 @@ func Lbl(value any) option {
 	return labelOption{value}
 }
 
-type labelanchorOption struct{ v any }
+type labelanchorOption struct { v any }
 
 func (o labelanchorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-labelanchor %s`, optionString(o.v))
 }
+
 
 // # Labelframe(Labelanchor(...))
 //
@@ -6958,11 +5739,12 @@ func Labelanchor(value any) option {
 	return labelanchorOption{value}
 }
 
-type labelwidgetOption struct{ v any }
+type labelwidgetOption struct { v any }
 
 func (o labelwidgetOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-labelwidget %s`, optionString(o.v))
 }
+
 
 // # Labelframe(Labelwidget(...))
 //
@@ -6976,17 +5758,18 @@ func (o labelwidgetOption) optionString(w *Window) string {
 // The name of a widget to use for the label.
 // If set, overrides the '-text' option.
 // The '-labelwidget' must be a child of the 'labelframe' widget
-// or one of the 'labelframe”s ancestors, and must belong to the
+// or one of the 'labelframe''s ancestors, and must belong to the
 // same top-level widget as the 'labelframe'.
 func Labelwidget(value any) option {
 	return labelwidgetOption{value}
 }
 
-type lengthOption struct{ v any }
+type lengthOption struct { v any }
 
 func (o lengthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-length %s`, optionString(o.v))
 }
+
 
 // # Scale(Length(...))
 //
@@ -7010,11 +5793,12 @@ func Length(value any) option {
 	return lengthOption{value}
 }
 
-type listvariableOption struct{ v any }
+type listvariableOption struct { v any }
 
 func (o listvariableOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-listvariable %s`, optionString(o.v))
 }
+
 
 // # Listbox(Listvariable(...))
 //
@@ -7028,11 +5812,12 @@ func Listvariable(value any) option {
 	return listvariableOption{value}
 }
 
-type maximumOption struct{ v any }
+type maximumOption struct { v any }
 
 func (o maximumOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-maximum %s`, optionString(o.v))
 }
+
 
 // # TProgressbar(Maximum(...))
 //
@@ -7042,11 +5827,12 @@ func Maximum(value any) option {
 	return maximumOption{value}
 }
 
-type maxundoOption struct{ v any }
+type maxundoOption struct { v any }
 
 func (o maxundoOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-maxundo %s`, optionString(o.v))
 }
+
 
 // # Text(Maxundo(...))
 //
@@ -7056,11 +5842,12 @@ func Maxundo(value any) option {
 	return maxundoOption{value}
 }
 
-type menuOption struct{ v any }
+type menuOption struct { v any }
 
 func (o menuOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-menu %s`, optionString(o.v))
 }
+
 
 // # Menubutton(Mnu(...))
 //
@@ -7084,11 +5871,12 @@ func Mnu(value any) option {
 	return menuOption{value}
 }
 
-type modeOption struct{ v any }
+type modeOption struct { v any }
 
 func (o modeOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-mode %s`, optionString(o.v))
 }
+
 
 // # TProgressbar(Mode(...))
 //
@@ -7097,11 +5885,12 @@ func Mode(value any) option {
 	return modeOption{value}
 }
 
-type offreliefOption struct{ v any }
+type offreliefOption struct { v any }
 
 func (o offreliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-offrelief %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Offrelief(...))
 //
@@ -7116,11 +5905,12 @@ func Offrelief(value any) option {
 	return offreliefOption{value}
 }
 
-type offvalueOption struct{ v any }
+type offvalueOption struct { v any }
 
 func (o offvalueOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-offvalue %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Offvalue(...))
 //
@@ -7135,11 +5925,12 @@ func Offvalue(value any) option {
 	return offvalueOption{value}
 }
 
-type onvalueOption struct{ v any }
+type onvalueOption struct { v any }
 
 func (o onvalueOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-onvalue %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Onvalue(...))
 //
@@ -7154,11 +5945,12 @@ func Onvalue(value any) option {
 	return onvalueOption{value}
 }
 
-type opaqueresizeOption struct{ v any }
+type opaqueresizeOption struct { v any }
 
 func (o opaqueresizeOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-opaqueresize %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Opaqueresize(...))
 //
@@ -7169,11 +5961,12 @@ func Opaqueresize(value any) option {
 	return opaqueresizeOption{value}
 }
 
-type orientOption struct{ v any }
+type orientOption struct { v any }
 
 func (o orientOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-orient %s`, optionString(o.v))
 }
+
 
 // For widgets that can lay themselves out with either a horizontal
 // or vertical orientation, such as scrollbars, this option specifies
@@ -7210,11 +6003,12 @@ func Orient(value any) option {
 	return orientOption{value}
 }
 
-type overreliefOption struct{ v any }
+type overreliefOption struct { v any }
 
 func (o overreliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-overrelief %s`, optionString(o.v))
 }
+
 
 // # Button(Overrelief(...))
 //
@@ -7246,11 +6040,12 @@ func Overrelief(value any) option {
 	return overreliefOption{value}
 }
 
-type paddingOption struct{ v any }
+type paddingOption struct { v any }
 
 func (o paddingOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-padding %s`, optionString(o.v))
 }
+
 
 // # TNotebook(Padding(...))
 //
@@ -7274,11 +6069,12 @@ func Padding(value any) option {
 	return paddingOption{value}
 }
 
-type padxOption struct{ v any }
+type padxOption struct { v any }
 
 func (o padxOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-padx %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative value indicating how much extra space
 // to request for the widget in the X-direction.
@@ -7295,11 +6091,12 @@ func Padx(value any) option {
 	return padxOption{value}
 }
 
-type padyOption struct{ v any }
+type padyOption struct { v any }
 
 func (o padyOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-pady %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative value indicating how much extra space
 // to request for the widget in the Y-direction.
@@ -7316,11 +6113,12 @@ func Pady(value any) option {
 	return padyOption{value}
 }
 
-type phaseOption struct{ v any }
+type phaseOption struct { v any }
 
 func (o phaseOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-phase %s`, optionString(o.v))
 }
+
 
 // # TProgressbar(Phase(...))
 //
@@ -7334,11 +6132,12 @@ func Phase(value any) option {
 	return phaseOption{value}
 }
 
-type placeholderOption struct{ v any }
+type placeholderOption struct { v any }
 
 func (o placeholderOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-placeholder %s`, optionString(o.v))
 }
+
 
 // Specifies a help text string to display if no text is otherwise displayed,
 // that is when the widget is empty. The placeholder text is displayed using
@@ -7347,17 +6146,19 @@ func Placeholder(value any) option {
 	return placeholderOption{value}
 }
 
-type placeholderforegroundOption struct{ v any }
+type placeholderforegroundOption struct { v any }
 
 func (o placeholderforegroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-placeholderforeground %s`, optionString(o.v))
 }
+
 
 // Specifies the foreground color to use when the placeholder text is
 // displayed. The default color is platform-specific.
 func Placeholderforeground(value any) option {
 	return placeholderforegroundOption{value}
 }
+
 
 // See also [Event handlers]
 //
@@ -7380,11 +6181,12 @@ func Postcommand(args ...any) option {
 	return newEventHandler("-postcommand", args...)
 }
 
-type proxybackgroundOption struct{ v any }
+type proxybackgroundOption struct { v any }
 
 func (o proxybackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-proxybackground %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Proxybackground(...))
 //
@@ -7394,11 +6196,12 @@ func Proxybackground(value any) option {
 	return proxybackgroundOption{value}
 }
 
-type proxyborderwidthOption struct{ v any }
+type proxyborderwidthOption struct { v any }
 
 func (o proxyborderwidthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-proxyborderwidth %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Proxyborderwidth(...))
 //
@@ -7408,11 +6211,12 @@ func Proxyborderwidth(value any) option {
 	return proxyborderwidthOption{value}
 }
 
-type proxyreliefOption struct{ v any }
+type proxyreliefOption struct { v any }
 
 func (o proxyreliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-proxyrelief %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Proxyrelief(...))
 //
@@ -7423,11 +6227,12 @@ func Proxyrelief(value any) option {
 	return proxyreliefOption{value}
 }
 
-type readonlybackgroundOption struct{ v any }
+type readonlybackgroundOption struct { v any }
 
 func (o readonlybackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-readonlybackground %s`, optionString(o.v))
 }
+
 
 // # Entry(Readonlybackground(...))
 //
@@ -7442,11 +6247,12 @@ func Readonlybackground(value any) option {
 	return readonlybackgroundOption{value}
 }
 
-type reliefOption struct{ v any }
+type reliefOption struct { v any }
 
 func (o reliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-relief %s`, optionString(o.v))
 }
+
 
 // Specifies the 3-D effect desired for the widget.  Acceptable
 // values are 'raised', 'sunken', 'flat', 'ridge',
@@ -7471,11 +6277,12 @@ func Relief(value any) option {
 	return reliefOption{value}
 }
 
-type repeatdelayOption struct{ v any }
+type repeatdelayOption struct { v any }
 
 func (o repeatdelayOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-repeatdelay %s`, optionString(o.v))
 }
+
 
 // Specifies the number of milliseconds a button or key must be held
 // down before it begins to auto-repeat.  Used, for example, on the
@@ -7484,11 +6291,12 @@ func Repeatdelay(value any) option {
 	return repeatdelayOption{value}
 }
 
-type repeatintervalOption struct{ v any }
+type repeatintervalOption struct { v any }
 
 func (o repeatintervalOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-repeatinterval %s`, optionString(o.v))
 }
+
 
 // Used in conjunction with '-repeatdelay':  once auto-repeat
 // begins, this option determines the number of milliseconds between
@@ -7497,11 +6305,12 @@ func Repeatinterval(value any) option {
 	return repeatintervalOption{value}
 }
 
-type resolutionOption struct{ v any }
+type resolutionOption struct { v any }
 
 func (o resolutionOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-resolution %s`, optionString(o.v))
 }
+
 
 // # Scale(Resolution(...))
 //
@@ -7514,11 +6323,12 @@ func Resolution(value any) option {
 	return resolutionOption{value}
 }
 
-type sashcursorOption struct{ v any }
+type sashcursorOption struct { v any }
 
 func (o sashcursorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-sashcursor %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Sashcursor(...))
 //
@@ -7529,11 +6339,12 @@ func Sashcursor(value any) option {
 	return sashcursorOption{value}
 }
 
-type sashpadOption struct{ v any }
+type sashpadOption struct { v any }
 
 func (o sashpadOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-sashpad %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Sashpad(...))
 //
@@ -7543,11 +6354,12 @@ func Sashpad(value any) option {
 	return sashpadOption{value}
 }
 
-type sashreliefOption struct{ v any }
+type sashreliefOption struct { v any }
 
 func (o sashreliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-sashrelief %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Sashrelief(...))
 //
@@ -7557,11 +6369,12 @@ func Sashrelief(value any) option {
 	return sashreliefOption{value}
 }
 
-type sashwidthOption struct{ v any }
+type sashwidthOption struct { v any }
 
 func (o sashwidthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-sashwidth %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Sashwidth(...))
 //
@@ -7571,11 +6384,12 @@ func Sashwidth(value any) option {
 	return sashwidthOption{value}
 }
 
-type screenOption struct{ v any }
+type screenOption struct { v any }
 
 func (o screenOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-screen %s`, optionString(o.v))
 }
+
 
 // # Toplevel(Screen(...))
 //
@@ -7590,11 +6404,12 @@ func Screen(value any) option {
 	return screenOption{value}
 }
 
-type scrollregionOption struct{ v any }
+type scrollregionOption struct { v any }
 
 func (o scrollregionOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-scrollregion %s`, optionString(o.v))
 }
+
 
 // # Canvas(Scrollregion(...))
 //
@@ -7608,11 +6423,12 @@ func Scrollregion(value any) option {
 	return scrollregionOption{value}
 }
 
-type selectbackgroundOption struct{ v any }
+type selectbackgroundOption struct { v any }
 
 func (o selectbackgroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-selectbackground %s`, optionString(o.v))
 }
+
 
 // Specifies the background color to use when displaying selected
 // items.
@@ -7620,11 +6436,12 @@ func Selectbackground(value any) option {
 	return selectbackgroundOption{value}
 }
 
-type selectborderwidthOption struct{ v any }
+type selectborderwidthOption struct { v any }
 
 func (o selectborderwidthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-selectborderwidth %s`, optionString(o.v))
 }
+
 
 // Specifies a non-negative value indicating the width
 // of the 3-D border to draw around selected items.
@@ -7633,11 +6450,12 @@ func Selectborderwidth(value any) option {
 	return selectborderwidthOption{value}
 }
 
-type selectcolorOption struct{ v any }
+type selectcolorOption struct { v any }
 
 func (o selectcolorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-selectcolor %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Selectcolor(...))
 //
@@ -7670,11 +6488,12 @@ func Selectcolor(value any) option {
 	return selectcolorOption{value}
 }
 
-type selectforegroundOption struct{ v any }
+type selectforegroundOption struct { v any }
 
 func (o selectforegroundOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-selectforeground %s`, optionString(o.v))
 }
+
 
 // Specifies the foreground color to use when displaying selected
 // items.
@@ -7682,11 +6501,12 @@ func Selectforeground(value any) option {
 	return selectforegroundOption{value}
 }
 
-type selectimageOption struct{ v any }
+type selectimageOption struct { v any }
 
 func (o selectimageOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-selectimage %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Selectimage(...))
 //
@@ -7705,11 +6525,12 @@ func Selectimage(value any) option {
 	return selectimageOption{value}
 }
 
-type selectmodeOption struct{ v any }
+type selectmodeOption struct { v any }
 
 func (o selectmodeOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-selectmode %s`, optionString(o.v))
 }
+
 
 // # Listbox(Selectmode(...))
 //
@@ -7726,11 +6547,12 @@ func Selectmode(value any) option {
 	return selectmodeOption{value}
 }
 
-type selecttypeOption struct{ v any }
+type selecttypeOption struct { v any }
 
 func (o selecttypeOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-selecttype %s`, optionString(o.v))
 }
+
 
 // # TTreeview(Selecttype(...))
 //
@@ -7740,11 +6562,12 @@ func Selecttype(value any) option {
 	return selecttypeOption{value}
 }
 
-type setgridOption struct{ v any }
+type setgridOption struct { v any }
 
 func (o setgridOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-setgrid %s`, optionString(o.v))
 }
+
 
 // Specifies a boolean value that determines whether this widget controls the
 // resizing grid for its top-level window.
@@ -7763,11 +6586,12 @@ func Setgrid(value any) option {
 	return setgridOption{value}
 }
 
-type showOption struct{ v any }
+type showOption struct { v any }
 
 func (o showOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-show %s`, optionString(o.v))
 }
+
 
 // # Entry(Show(...))
 //
@@ -7791,11 +6615,12 @@ func Show(value any) option {
 	return showOption{value}
 }
 
-type showhandleOption struct{ v any }
+type showhandleOption struct { v any }
 
 func (o showhandleOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-showhandle %s`, optionString(o.v))
 }
+
 
 // # Panedwindow(Showhandle(...))
 //
@@ -7805,11 +6630,12 @@ func Showhandle(value any) option {
 	return showhandleOption{value}
 }
 
-type showvalueOption struct{ v any }
+type showvalueOption struct { v any }
 
 func (o showvalueOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-showvalue %s`, optionString(o.v))
 }
+
 
 // # Scale(Showvalue(...))
 //
@@ -7819,11 +6645,12 @@ func Showvalue(value any) option {
 	return showvalueOption{value}
 }
 
-type sliderlengthOption struct{ v any }
+type sliderlengthOption struct { v any }
 
 func (o sliderlengthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-sliderlength %s`, optionString(o.v))
 }
+
 
 // # Scale(Sliderlength(...))
 //
@@ -7834,11 +6661,12 @@ func Sliderlength(value any) option {
 	return sliderlengthOption{value}
 }
 
-type sliderreliefOption struct{ v any }
+type sliderreliefOption struct { v any }
 
 func (o sliderreliefOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-sliderrelief %s`, optionString(o.v))
 }
+
 
 // # Scale(Sliderrelief(...))
 //
@@ -7848,11 +6676,12 @@ func Sliderrelief(value any) option {
 	return sliderreliefOption{value}
 }
 
-type spacing1Option struct{ v any }
+type spacing1Option struct { v any }
 
 func (o spacing1Option) optionString(w *Window) string {
 	return fmt.Sprintf(`-spacing1 %s`, optionString(o.v))
 }
+
 
 // # Text(Spacing1(...))
 //
@@ -7864,11 +6693,12 @@ func Spacing1(value any) option {
 	return spacing1Option{value}
 }
 
-type spacing2Option struct{ v any }
+type spacing2Option struct { v any }
 
 func (o spacing2Option) optionString(w *Window) string {
 	return fmt.Sprintf(`-spacing2 %s`, optionString(o.v))
 }
+
 
 // # Text(Spacing2(...))
 //
@@ -7881,11 +6711,12 @@ func Spacing2(value any) option {
 	return spacing2Option{value}
 }
 
-type spacing3Option struct{ v any }
+type spacing3Option struct { v any }
 
 func (o spacing3Option) optionString(w *Window) string {
 	return fmt.Sprintf(`-spacing3 %s`, optionString(o.v))
 }
+
 
 // # Text(Spacing3(...))
 //
@@ -7897,11 +6728,12 @@ func Spacing3(value any) option {
 	return spacing3Option{value}
 }
 
-type startlineOption struct{ v any }
+type startlineOption struct { v any }
 
 func (o startlineOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-startline %s`, optionString(o.v))
 }
+
 
 // # Text(Startline(...))
 //
@@ -7915,11 +6747,12 @@ func Startline(value any) option {
 	return startlineOption{value}
 }
 
-type stateOption struct{ v any }
+type stateOption struct { v any }
 
 func (o stateOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-state %s`, optionString(o.v))
 }
+
 
 // # Button(State(...))
 //
@@ -8068,11 +6901,12 @@ func State(value any) option {
 	return stateOption{value}
 }
 
-type stickyOption struct{ v any }
+type stickyOption struct { v any }
 
 func (o stickyOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-sticky %s`, optionString(o.v))
 }
+
 
 // # TNotebook(Sticky(...))
 //
@@ -8085,11 +6919,12 @@ func Sticky(value any) option {
 	return stickyOption{value}
 }
 
-type stripedOption struct{ v any }
+type stripedOption struct { v any }
 
 func (o stripedOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-striped %s`, optionString(o.v))
 }
+
 
 // # TTreeview(Striped(...))
 //
@@ -8101,11 +6936,12 @@ func Striped(value any) option {
 	return stripedOption{value}
 }
 
-type tabsOption struct{ v any }
+type tabsOption struct { v any }
 
 func (o tabsOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-tabs %s`, optionString(o.v))
 }
+
 
 // # Text(Tabs(...))
 //
@@ -8128,21 +6964,22 @@ func Tabs(value any) option {
 	return tabsOption{value}
 }
 
-type tabstyleOption struct{ v any }
+type tabstyleOption struct { v any }
 
 func (o tabstyleOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-tabstyle %s`, optionString(o.v))
 }
+
 
 // # Text(Tabstyle(...))
 //
 // Specifies how to interpret the relationship between tab stops on a line and
 // tabs in the text of that line. The value must be 'tabular' (the default)
 // or 'wordprocessor'. Note that tabs are interpreted as they are encountered
-// in the text. If the tab style is 'tabular' then the 'n”th tab
-// character in the line's text will be associated with the 'n”th tab stop
+// in the text. If the tab style is 'tabular' then the 'n''th tab
+// character in the line's text will be associated with the 'n''th tab stop
 // defined for that line. If the tab character's x coordinate falls to the right
-// of the 'n”th tab stop, then a gap of a single space will be inserted as a
+// of the 'n''th tab stop, then a gap of a single space will be inserted as a
 // fallback. If the tab style is 'wordprocessor' then any tab character being
 // laid out will use (and be defined by) the first tab stop to the right of the
 // preceding characters already laid out on that line. The value of the
@@ -8151,11 +6988,12 @@ func Tabstyle(value any) option {
 	return tabstyleOption{value}
 }
 
-type takefocusOption struct{ v any }
+type takefocusOption struct { v any }
 
 func (o takefocusOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-takefocus %s`, optionString(o.v))
 }
+
 
 // Determines whether the window accepts the focus during keyboard
 // traversal (e.g., Tab and Shift-Tab).
@@ -8184,11 +7022,12 @@ func Takefocus(value any) option {
 	return takefocusOption{value}
 }
 
-type tearoffOption struct{ v any }
+type tearoffOption struct { v any }
 
 func (o tearoffOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-tearoff %s`, optionString(o.v))
 }
+
 
 // # Menu(Tearoff(...))
 //
@@ -8203,6 +7042,7 @@ func (o tearoffOption) optionString(w *Window) string {
 func Tearoff(value any) option {
 	return tearoffOption{value}
 }
+
 
 // See also [Event handlers]
 //
@@ -8220,11 +7060,12 @@ func Tearoffcommand(args ...any) option {
 	return newEventHandler("-tearoffcommand", args...)
 }
 
-type textOption struct{ v any }
+type textOption struct { v any }
 
 func (o textOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-text %s`, optionString(o.v))
 }
+
 
 // Specifies a string to be displayed inside the widget.  The way in which
 // the string is displayed depends on the particular widget and may be
@@ -8240,6 +7081,7 @@ func (o textOption) optionString(w *Window) string {
 func Txt(value any) option {
 	return textOption{value}
 }
+
 
 // See also [Event handlers]
 //
@@ -8269,11 +7111,12 @@ func Textvariable(args ...any) option {
 	return newEventHandler("-textvariable", args...)
 }
 
-type tickintervalOption struct{ v any }
+type tickintervalOption struct { v any }
 
 func (o tickintervalOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-tickinterval %s`, optionString(o.v))
 }
+
 
 // # Scale(Tickinterval(...))
 //
@@ -8287,11 +7130,12 @@ func Tickinterval(value any) option {
 	return tickintervalOption{value}
 }
 
-type tileOption struct{ v any }
+type tileOption struct { v any }
 
 func (o tileOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-tile %s`, optionString(o.v))
 }
+
 
 // # Frame(Tile(...))
 //
@@ -8304,11 +7148,12 @@ func Tile(value any) option {
 	return tileOption{value}
 }
 
-type titleOption struct{ v any }
+type titleOption struct { v any }
 
 func (o titleOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-title %s`, optionString(o.v))
 }
+
 
 // # Menu(Title(...))
 //
@@ -8320,11 +7165,12 @@ func Title(value any) option {
 	return titleOption{value}
 }
 
-type titlecolumnsOption struct{ v any }
+type titlecolumnsOption struct { v any }
 
 func (o titlecolumnsOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-titlecolumns %s`, optionString(o.v))
 }
+
 
 // # TTreeview(Titlecolumns(...))
 //
@@ -8335,11 +7181,12 @@ func Titlecolumns(value any) option {
 	return titlecolumnsOption{value}
 }
 
-type titleitemsOption struct{ v any }
+type titleitemsOption struct { v any }
 
 func (o titleitemsOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-titleitems %s`, optionString(o.v))
 }
+
 
 // # TTreeview(Titleitems(...))
 //
@@ -8348,11 +7195,12 @@ func Titleitems(value any) option {
 	return titleitemsOption{value}
 }
 
-type toOption struct{ v any }
+type toOption struct { v any }
 
 func (o toOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-to %s`, optionString(o.v))
 }
+
 
 // # Scale(To(...))
 //
@@ -8383,11 +7231,12 @@ func To(value any) option {
 	return toOption{value}
 }
 
-type tristateimageOption struct{ v any }
+type tristateimageOption struct { v any }
 
 func (o tristateimageOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-tristateimage %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Tristateimage(...))
 //
@@ -8406,11 +7255,12 @@ func Tristateimage(value any) option {
 	return tristateimageOption{value}
 }
 
-type tristatevalueOption struct{ v any }
+type tristatevalueOption struct { v any }
 
 func (o tristatevalueOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-tristatevalue %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Tristatevalue(...))
 //
@@ -8425,11 +7275,12 @@ func Tristatevalue(value any) option {
 	return tristatevalueOption{value}
 }
 
-type troughcolorOption struct{ v any }
+type troughcolorOption struct { v any }
 
 func (o troughcolorOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-troughcolor %s`, optionString(o.v))
 }
+
 
 // Specifies the color to use for the rectangular trough areas
 // in widgets such as scrollbars and scales.  This option is ignored for
@@ -8438,11 +7289,12 @@ func Troughcolor(value any) option {
 	return troughcolorOption{value}
 }
 
-type typeOption struct{ v any }
+type typeOption struct { v any }
 
 func (o typeOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-type %s`, optionString(o.v))
 }
+
 
 // # Menu(Type(...))
 //
@@ -8456,11 +7308,12 @@ func Type(value any) option {
 	return typeOption{value}
 }
 
-type underlineOption struct{ v any }
+type underlineOption struct { v any }
 
 func (o underlineOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-underline %s`, optionString(o.v))
 }
+
 
 // Specifies the integer index of a character to underline in the widget.
 // This option is used by the default bindings to implement keyboard
@@ -8487,11 +7340,12 @@ func Underline(value any) option {
 	return underlineOption{value}
 }
 
-type undoOption struct{ v any }
+type undoOption struct { v any }
 
 func (o undoOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-undo %s`, optionString(o.v))
 }
+
 
 // # Text(Undo(...))
 //
@@ -8500,11 +7354,12 @@ func Undo(value any) option {
 	return undoOption{value}
 }
 
-type useOption struct{ v any }
+type useOption struct { v any }
 
 func (o useOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-use %s`, optionString(o.v))
 }
+
 
 // # Toplevel(Use(...))
 //
@@ -8521,11 +7376,12 @@ func Use(value any) option {
 	return useOption{value}
 }
 
-type validateOption struct{ v any }
+type validateOption struct { v any }
 
 func (o validateOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-validate %s`, optionString(o.v))
 }
+
 
 // # Entry(Validate(...))
 //
@@ -8550,6 +7406,7 @@ func (o validateOption) optionString(w *Window) string {
 func Validate(value any) option {
 	return validateOption{value}
 }
+
 
 // See also [Event handlers]
 //
@@ -8586,11 +7443,12 @@ func Validatecommand(args ...any) option {
 	return newEventHandler("-validatecommand", args...)
 }
 
-type valueOption struct{ v any }
+type valueOption struct { v any }
 
 func (o valueOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-value %s`, optionString(o.v))
 }
+
 
 // # Radiobutton(Value(...))
 //
@@ -8618,11 +7476,12 @@ func Value(value any) option {
 	return valueOption{value}
 }
 
-type valuesOption struct{ v any }
+type valuesOption struct { v any }
 
 func (o valuesOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-values %s`, optionString(o.v))
 }
+
 
 // # Spinbox(Values(...))
 //
@@ -8644,11 +7503,12 @@ func Values(value any) option {
 	return valuesOption{value}
 }
 
-type variableOption struct{ v any }
+type variableOption struct { v any }
 
 func (o variableOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-variable %s`, optionString(o.v))
 }
+
 
 // # Checkbutton(Variable(...))
 //
@@ -8699,6 +7559,7 @@ func Variable(value any) option {
 	return variableOption{value}
 }
 
+
 // See also [Event handlers]
 //
 // # Entry(Vcmd(...))
@@ -8727,11 +7588,12 @@ func Vcmd(args ...any) option {
 	return newEventHandler("-vcmd", args...)
 }
 
-type visualOption struct{ v any }
+type visualOption struct { v any }
 
 func (o visualOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-visual %s`, optionString(o.v))
 }
+
 
 // # Frame(Visual(...))
 //
@@ -8763,11 +7625,12 @@ func Visual(value any) option {
 	return visualOption{value}
 }
 
-type weightOption struct{ v any }
+type weightOption struct { v any }
 
 func (o weightOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-weight %s`, optionString(o.v))
 }
+
 
 // # TPanedwindow(Weight(...))
 //
@@ -8778,11 +7641,12 @@ func Weight(value any) option {
 	return weightOption{value}
 }
 
-type widthOption struct{ v any }
+type widthOption struct { v any }
 
 func (o widthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-width %s`, optionString(o.v))
 }
+
 
 // # Button(Width(...))
 //
@@ -8952,11 +7816,12 @@ func Width(value any) option {
 	return widthOption{value}
 }
 
-type wrapOption struct{ v any }
+type wrapOption struct { v any }
 
 func (o wrapOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-wrap %s`, optionString(o.v))
 }
+
 
 // # Spinbox(Wrap(...))
 //
@@ -8982,11 +7847,12 @@ func Wrap(value any) option {
 	return wrapOption{value}
 }
 
-type wraplengthOption struct{ v any }
+type wraplengthOption struct { v any }
 
 func (o wraplengthOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-wraplength %s`, optionString(o.v))
 }
+
 
 // For widgets that can perform word-wrapping, this option specifies
 // the maximum line length.
@@ -9007,6 +7873,7 @@ func (o wraplengthOption) optionString(w *Window) string {
 func Wraplength(value any) option {
 	return wraplengthOption{value}
 }
+
 
 // See also [Event handlers]
 //
@@ -9035,11 +7902,12 @@ func Xscrollcommand(args ...any) option {
 	return newEventHandler("-xscrollcommand", args...)
 }
 
-type xscrollincrementOption struct{ v any }
+type xscrollincrementOption struct { v any }
 
 func (o xscrollincrementOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-xscrollincrement %s`, optionString(o.v))
 }
+
 
 // # Canvas(Xscrollincrement(...))
 //
@@ -9056,6 +7924,7 @@ func Xscrollincrement(value any) option {
 	return xscrollincrementOption{value}
 }
 
+
 // See also [Event handlers]
 //
 // Specifies the prefix for a command used to communicate with vertical
@@ -9070,11 +7939,12 @@ func Yscrollcommand(args ...any) option {
 	return newEventHandler("-yscrollcommand", args...)
 }
 
-type yscrollincrementOption struct{ v any }
+type yscrollincrementOption struct { v any }
 
 func (o yscrollincrementOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-yscrollincrement %s`, optionString(o.v))
 }
+
 
 // # Canvas(Yscrollincrement(...))
 //

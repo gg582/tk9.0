@@ -9,7 +9,7 @@
 //
 // Zero or more options can be specified when creating a widget. For example
 //
-//	b := Button(Text("Hello"), OverRelief("flat"))
+//	b := Button(Txt("Hello"), OverRelief("flat"))
 //
 // or
 //
