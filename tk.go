@@ -184,18 +184,18 @@ func (w *Window) path() (r string) {
 	return r
 }
 
+func (w *Window) optionString(_ *Window) string {
+	return w.path()
+}
+
 func (w *Window) newChild(nm string, options ...option) *Window {
-	cls := strings.Replace(nm, "ttk_", "ttk::", 1)
+	class := strings.Replace(nm, "ttk_", "ttk::", 1)
 	nm = strings.Replace(nm, "ttk_", "t", 1)
 	if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
 		nm += "_"
 	}
 	path := fmt.Sprintf("%s.%s%v", w.path(), nm, id.Add(1))
-	var a []string
-	for _, v := range options {
-		a = append(a, v.optionString(w))
-	}
-	code := fmt.Sprintf("%s %s %s", cls, path, strings.Join(a, " "))
+	code := fmt.Sprintf("%s %s %s", class, path, winCollect(w, options...))
 	r, err := Inter.eval(code)
 	if err != nil {
 		Inter.fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
@@ -203,9 +203,31 @@ func (w *Window) newChild(nm string, options ...option) *Window {
 	return &Window{fpath: r}
 }
 
+func winCollect(w *Window, options ...option) string {
+	var a []string
+	for _, v := range options {
+		a = append(a, v.optionString(w))
+	}
+	return strings.Join(a, " ")
+}
+
+func collect(options ...option) string {
+	var a []string
+	for _, v := range options {
+		a = append(a, v.optionString(nil))
+	}
+	return strings.Join(a, " ")
+}
+
 // option represents an optional argument.
 type option interface {
 	optionString(w *Window) string
+}
+
+type stringOption string
+
+func (s stringOption) optionString(w *Window) string {
+	return tclSafeString(string(s))
 }
 
 // Tk represents the main window of an application. It has an associated Tcl
@@ -483,98 +505,19 @@ func Finalize() (err error) {
 
 // bell — Ring a display's bell
 //
+// This command rings the bell on the display for window and returns an empty
+// string. If the -displayof option is omitted, the display of the
+// application's main window is used by default. The command uses the current
+// bell-related settings for the display, which may be modified with programs
+// such as xset.
+//
+// If -nice is not specified, this command also resets the screen saver for the
+// screen. Some screen savers will ignore this, but others will reset so that
+// the screen becomes visible again.
+//
 // bell ?-displayof window? ?-nice?
+//
 // func Bell(opts ...option) {
 // }
 
 // Displayof
-
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/bell.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/bind.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/bindtags.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/bitmap.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/busy.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/button.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/canvas.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/clipboard.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/colors.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/console.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/cursors.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/destroy.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/dialog.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/entry.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/event.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/focus.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/focusNext.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/fontchooser.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/font.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/frame.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/getOpenFile.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/grab.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/grid.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/checkbutton.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/chooseColor.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/chooseDirectory.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/image.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/keysyms.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/labelframe.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/label.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/listbox.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/loadTk.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/lower.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/menubutton.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/menu.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/messageBox.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/message.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/nsimage.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/optionMenu.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/option.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/options.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/pack.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/palette.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/panedwindow.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/photo.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/place.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/popup.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/print.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/radiobutton.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/raise.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/scale.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/scrollbar.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/selection.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/send.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/spinbox.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/sysnotify.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/systray.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/text.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tkerror.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tk_mac.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tk.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tkvars.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/tkwait.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/toplevel.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_button.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_combobox.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_entry.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_frame.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_checkbutton.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_image.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_intro.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_labelframe.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_label.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_menubutton.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_notebook.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_panedwindow.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_progressbar.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_radiobutton.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_scale.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_scrollbar.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_separator.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_sizegrip.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_spinbox.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_style.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_treeview.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_vsapi.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/ttk_widget.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/winfo.n
-//TODO ~/.config/ccgo/v4/libtk9.0/linux/amd64/tk9.0b2/doc/wm.n

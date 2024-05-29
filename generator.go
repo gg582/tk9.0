@@ -78,7 +78,8 @@ func generated(fn string, docs []document) {
 			}
 		default:
 			nm := tclName2GoName(nm0)
-			if _, ok := doc["IsWindow"].(bool); ok {
+			isWindow := false
+			if _, isWindow = doc["IsWindow"].(bool); isWindow {
 				var description string
 				var a []string
 				switch x := doc["Options"].(type) {
@@ -101,7 +102,6 @@ func generated(fn string, docs []document) {
 							}
 							a = append(a, "", fmt.Sprintf("# %s", strings.Join(c, " or ")), "")
 						}
-						// a = append(a, "", "\t"+v["Name"].(string), "")
 						a = append(a, strings.Split(v["Docs"].(string), "\n")...)
 					}
 				}
@@ -141,13 +141,24 @@ func generated(fn string, docs []document) {
 						}
 					}
 				}
-				break
 			}
 
-			//TODO- v := doc["Synopsis"]
-			//TODO- if v != nil {
-			//TODO- 	commandFromSynopsis(w, doc)
-			//TODO- }
+			synops := doc["Synopsis"]
+			methods := doc["Methods"]
+			switch {
+			case synops == nil && methods == nil:
+				// nop
+			case !isWindow && synops != nil && methods == nil:
+				nonWinOnlySynops(w, doc)
+			case !isWindow && synops != nil && methods != nil:
+				//TODO nonWinSynopsAndMethods(w, doc)
+			case isWindow && synops != nil && methods != nil:
+				//TODO winSynopsAndMethods(w, doc)
+			case isWindow && synops != nil && methods == nil:
+				//TODO winOnlySynops(w, doc)
+			default:
+				fmt.Printf("TODO page=%s isWindow=%v synops=%v methods=%v\n", page, isWindow, synops != nil, methods != nil)
+			}
 		}
 	}
 	var onms []string
@@ -160,6 +171,8 @@ func generated(fn string, docs []document) {
 		slices.SortFunc(docsv, func(a, b *optionDocs) int { return strings.Compare(a.page, b.page) })
 		option(w, onm, docsv)
 	}
+
+	moreOptions(w, optionsNeeded)
 
 	if err := os.WriteFile(fn, w.Bytes(), 0660); err != nil {
 		panic(err)
@@ -178,6 +191,8 @@ func optionNames(nm string) (r []string) {
 	}
 	return r[:x]
 }
+
+var optionsGenerated = map[string]struct{}{} // Key = Go name.
 
 func option(w io.Writer, nm string, docsv []*optionDocs) {
 	nm = strings.ReplaceAll(nm, `"`, "")
@@ -208,14 +223,19 @@ func option(w io.Writer, nm string, docsv []*optionDocs) {
 			d := strings.Split(strings.TrimSpace(docs.docs), "\n")
 			fmt.Fprintf(w, "\n// %s", strings.Join(d, "\n// "))
 		}
+		enm := export(nm2)
+		if _, ok := optionsGenerated[enm]; ok {
+			panic(fmt.Sprintf("option %q already generated", enm))
+		}
+
 		switch {
 		case isCommand[nm]:
 			fmt.Fprintf(w, "\n//\n// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers")
-			fmt.Fprintf(w, "\nfunc %s(args ...any) option {", export(nm2))
+			fmt.Fprintf(w, "\nfunc %s(args ...any) option {", enm)
 			fmt.Fprintf(w, "\n\treturn newEventHandler(%q, args...)", "-"+nm)
 			fmt.Fprintf(w, "\n}")
 		default:
-			fmt.Fprintf(w, "\nfunc %s(value any) option {", export(nm2))
+			fmt.Fprintf(w, "\nfunc %s(value any) option {", enm)
 			fmt.Fprintf(w, "\n\treturn %sOption{value}", nm)
 			fmt.Fprintf(w, "\n}")
 		}
@@ -258,93 +278,228 @@ func export(s string) (r string) {
 	return strings.Join(a, "")
 }
 
-//TODO- func commandFromSynopsis(w io.Writer, doc document) {
-//TODO- 	page := doc["Page"].(string)
-//TODO- 	for _, v := range doc["Synopsis"].([]any) {
-//TODO- 		syn := parseSyn(v.(string))
-//TODO- 		if len(syn) == 0 {
-//TODO- 			continue
-//TODO- 		}
-//TODO-
-//TODO- 		var head []synTok
-//TODO- 		for _, v := range syn {
-//TODO- 			if x, ok := v.(synTok); ok {
-//TODO- 				head = append(head, x)
-//TODO- 				continue
-//TODO- 			}
-//TODO-
-//TODO- 			break
-//TODO- 		}
-//TODO- 		if len(head) == 0 || head[0].tok != page {
-//TODO- 			continue
-//TODO- 		}
-//TODO-
-//TODO- 		if len(head) == 1 {
-//TODO- 			fmt.Fprintf(w, "\n\n// %s", doc["Name"])
-//TODO- 			fmt.Fprintf(w, "\nfunc %s() {} // SYN", export(page))
-//TODO- 			continue
-//TODO- 		}
-//TODO- 	}
-//TODO- }
-//TODO-
-//TODO- type synTok struct {
-//TODO- 	tok string
-//TODO-
-//TODO- 	variadic bool
-//TODO- }
-//TODO-
-//TODO- func (s synTok) String() string {
-//TODO- 	return fmt.Sprintf("%q%s", s.tok, vari(s.variadic))
-//TODO- }
-//TODO-
-//TODO- func vari(b bool) string {
-//TODO- 	if b {
-//TODO- 		return "..."
-//TODO- 	}
-//TODO-
-//TODO- 	return ""
-//TODO- }
-//TODO-
-//TODO- type synOpt struct {
-//TODO- 	opt []string
-//TODO-
-//TODO- 	variadic bool
-//TODO- }
-//TODO-
-//TODO- func (s synOpt) String() string {
-//TODO- 	return fmt.Sprintf("%q%s", s.opt, vari(s.variadic))
-//TODO- }
-//TODO-
-//TODO- func parseSyn(line string) (r []any) {
-//TODO- 	line = strings.TrimSpace(line)
-//TODO- 	if line == "." {
-//TODO- 		return nil
-//TODO- 	}
-//TODO- 	line = strings.ReplaceAll(line, "??", "")
-//TODO- 	for {
-//TODO- 		line = strings.TrimSpace(line)
-//TODO- 		switch {
-//TODO- 		case line == "":
-//TODO- 			return r
-//TODO- 		case line[0] == '?':
-//TODO- 			x := strings.IndexByte(line[1:], '?')
-//TODO- 			opt := synOpt{opt: strings.Fields(line[1 : x+1])}
-//TODO- 			if n := len(opt.opt); opt.opt[n-1] == "..." {
-//TODO- 				opt.opt = opt.opt[:n-1]
-//TODO- 				opt.variadic = true
-//TODO- 			}
-//TODO- 			r = append(r, opt)
-//TODO- 			line = line[x+2:]
-//TODO- 		default:
-//TODO- 			x := strings.IndexByte(line, ' ')
-//TODO- 			switch {
-//TODO- 			case x < 0:
-//TODO- 				r = append(r, synTok{tok: line})
-//TODO- 				return
-//TODO- 			default:
-//TODO- 				r = append(r, synTok{tok: line[:x]})
-//TODO- 				line = line[x+1:]
-//TODO- 			}
-//TODO- 		}
-//TODO- 	}
-//TODO- }
+type synTok struct {
+	tok string
+
+	variadic bool
+}
+
+func (s synTok) String() string {
+	return fmt.Sprintf("%s%s", s.tok, vari(s.variadic))
+}
+
+func vari(b bool) string {
+	if b {
+		return "..."
+	}
+
+	return ""
+}
+
+type synOpt struct {
+	opt []string
+
+	variadic bool
+}
+
+func (s synOpt) String() string {
+	return fmt.Sprintf("%s%s", s.opt, vari(s.variadic))
+}
+
+func parseSynopsisLine(line string) (r []any) {
+	line = strings.TrimSpace(line)
+	if line == "." {
+		return nil
+	}
+	line = strings.ReplaceAll(line, "??", "")
+	for {
+		line = strings.TrimSpace(line)
+		switch {
+		case line == "":
+			return r
+		case line[0] == '?':
+			x := strings.IndexByte(line[1:], '?')
+			opt := synOpt{opt: strings.Fields(line[1 : x+1])}
+			if n := len(opt.opt); opt.opt[n-1] == "..." {
+				opt.opt = opt.opt[:n-1]
+				opt.variadic = true
+			}
+			r = append(r, opt)
+			line = line[x+2:]
+		default:
+			x := strings.IndexByte(line, ' ')
+			switch {
+			case x < 0:
+				r = append(r, synTok{tok: line})
+				return
+			default:
+				r = append(r, synTok{tok: line[:x]})
+				line = line[x+1:]
+			}
+		}
+	}
+}
+
+func nonWinOnlySynops(w io.Writer, doc document) {
+	page := doc["Page"].(string)
+	for _, v := range doc["Synopsis"].([]any) {
+		syn := parseSynopsisLine(v.(string))
+		switch page {
+		case "bell":
+			command0(w, comment(doc["Name"], doc["Description"]), syn[0], winOpt{syn[1]}, syn[2])
+		case "destroy":
+			command0(w, comment(doc["Name"], doc["Description"]), syn[0], wins0Opt{})
+		default:
+			fmt.Printf("TODO nonWinOnlySynopsManual: page=%s non-win only synops=%v\n", page, syn)
+		}
+	}
+}
+
+func winOnlySynops(w io.Writer, doc document) {
+	page := doc["Page"].(string)
+	for _, v := range doc["Synopsis"].([]any) {
+		syn := parseSynopsisLine(v.(string))
+		fmt.Printf("TODO winOnlySynopsManual: page=%s win only synops=%v\n", page, syn)
+	}
+}
+
+func nonWinSynopsAndMethods(w io.Writer, doc document) {
+	page := doc["Page"].(string)
+	for _, v := range doc["Synopsis"].([]any) {
+		syn := parseSynopsisLine(v.(string))
+		fmt.Printf("TODO nonWinSynopsAndMethods: page=%s non-win synops=%v\n", page, syn)
+	}
+	for _, v := range doc["Methods"].([]any) {
+		m := v.(map[string]any)
+		fmt.Printf("TODO nonWinSynopsAndMethods: page=%s non-win method=%v\n", page, m["Name"])
+	}
+}
+
+func winSynopsAndMethods(w io.Writer, doc document) {
+	page := doc["Page"].(string)
+	for _, v := range doc["Synopsis"].([]any) {
+		syn := parseSynopsisLine(v.(string))
+		fmt.Printf("TODO winSynopsAndMethods: page=%s win synops=%v\n", page, syn)
+	}
+	for _, v := range doc["Methods"].([]any) {
+		m := v.(map[string]any)
+		fmt.Printf("TODO winSynopsAndMethods: page=%s win method=%v\n", page, m["Name"])
+	}
+}
+
+type winOpt struct {
+	opt any
+}
+
+type wins0Opt struct{}
+
+func comment(descriptionShort, descriptionLong any) string {
+	var a []string
+	switch x := descriptionShort.(type) {
+	case string:
+		a = append(a, x)
+	default:
+		panic(fmt.Sprintf("%T", x))
+	}
+	switch x := descriptionLong.(type) {
+	case []any:
+		for _, v := range x {
+			a = append(a, "")
+			a = append(a, strings.Split(v.(string), "\n")...)
+		}
+	default:
+		panic(fmt.Sprintf("%T", x))
+	}
+	if len(a) != 0 {
+		return "// " + strings.Join(a, "\n// ")
+	}
+
+	return ""
+}
+
+func params(syns []any) (r []string) {
+	opts := false
+	for _, v := range syns {
+		switch x := v.(type) {
+		case winOpt, synOpt, wins0Opt:
+			opts = true
+		default:
+			panic(fmt.Sprintf("%T", x))
+		}
+	}
+	if opts {
+		r = append(r, "options ...option")
+	}
+	return r
+}
+
+var optionsNeeded = map[string][]any{} // Key = Go name
+
+func registerOptions(syns []any) {
+	for _, v := range syns {
+		switch x := v.(type) {
+		case winOpt:
+			switch y := x.opt.(type) {
+			case synOpt:
+				enm := export(y.opt[0][1:])
+				optionsNeeded[enm] = append(optionsNeeded[enm], x)
+			default:
+				panic(fmt.Sprintf("%T %v", y, y))
+			}
+		case wins0Opt:
+			// nop
+		case synOpt:
+			enm := export(x.opt[0][1:])
+			optionsNeeded[enm] = append(optionsNeeded[enm], x)
+		default:
+			panic(fmt.Sprintf("%T %v", x, x))
+		}
+	}
+}
+
+func command0(w io.Writer, comment string, syns ...any) {
+	fmt.Fprintf(w, "\n\n%s", comment)
+	params := params(syns[1:])
+	registerOptions(syns[1:])
+	fmt.Fprintf(w, "\nfunc %s(%s) {", export(fmt.Sprint(syns[0])), strings.Join(params, ", "))
+	fmt.Fprintf(w, "\n\tInter.eval(fmt.Sprintf(`%s %%s`, collect(options...)))", syns[0])
+	fmt.Fprintf(w, "\n}")
+}
+
+func moreOptions(w io.Writer, m map[string][]any) {
+	var names []string
+	for k := range m {
+		names = append(names, k)
+	}
+	slices.Sort(names)
+	for _, enm := range names {
+		if _, ok := optionsGenerated[enm]; ok {
+			continue
+		}
+
+		syn := m[enm][0]
+		switch x := syn.(type) {
+		case winOpt:
+			switch y := x.opt.(type) {
+			case synOpt:
+				fmt.Fprintf(w, "\n\nfunc %s(w *Window) option {", enm)
+				fmt.Fprintf(w, "\n\treturn stringOption(fmt.Sprintf(`%s %%ss`, w.path()))", y.opt[0])
+				fmt.Fprintf(w, "\n}")
+			default:
+				panic(fmt.Sprintf("%T %v", y, y))
+			}
+		case synOpt:
+			switch len(x.opt) {
+			case 1: // Boolean option
+				fmt.Fprintf(w, "\n\nfunc %s() option {", enm)
+				fmt.Fprintf(w, "\n\treturn stringOption(fmt.Sprintf(`%s`))", x.opt[0])
+				fmt.Fprintf(w, "\n}")
+			default:
+				panic(fmt.Sprint(x))
+			}
+		default:
+			// fmt.Fprintf(w, "\n\n//TODO func %s(...) {}", enm)
+			panic(fmt.Sprintf("%T %v", x, x))
+		}
+	}
+}

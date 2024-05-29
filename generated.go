@@ -8,6 +8,22 @@ import (
 
 
 
+// bell - Ring a display's bell
+// 
+// This command rings the bell on the display for window and
+// returns an empty string.
+// If the -displayof option is omitted, the display of the
+// application's main window is used by default.
+// The command uses the current bell-related settings for the display, which
+// may be modified with programs such as xset.
+// 
+// If -nice is not specified, this command also resets the screen saver
+// for the screen.  Some screen savers will ignore this, but others will reset
+// so that the screen becomes visible again.
+func Bell(options ...option) {
+	Inter.eval(fmt.Sprintf(`bell %s`, collect(options...)))
+}
+
 // button - Create and manipulate 'button' action widgets
 // 
 // # Button(Command(...))
@@ -70,6 +86,34 @@ import (
 // If the width is negative then this specifies a minimum width.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
+// 
+// # Description
+// 
+// The button command creates a new window (given by the
+// pathName argument) and makes it into a button widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the button such as its colors, font,
+// text, and initial relief.  The button command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A button is a widget that displays a textual string, bitmap or image.
+// If text is displayed, it must all be in a single font, but it
+// can occupy multiple lines on the screen (if it contains newlines
+// or if wrapping occurs because of the -wraplength option) and
+// one of the characters may optionally be underlined using the
+// -underline option.
+// It can display itself in either of three different ways, according
+// to
+// the -state option;
+// it can be made to appear raised, sunken, or flat;
+// and it can be made to flash.  When a user invokes the
+// button (by pressing mouse button 1 with the cursor over the
+// button), then the Tcl command specified in the -command
+// option is invoked.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Button(options ...option) *Window {
@@ -138,6 +182,34 @@ func (w *Window) Button(options ...option) *Window {
 // If the width is negative then this specifies a minimum width.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
+// 
+// # Description
+// 
+// The button command creates a new window (given by the
+// pathName argument) and makes it into a button widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the button such as its colors, font,
+// text, and initial relief.  The button command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A button is a widget that displays a textual string, bitmap or image.
+// If text is displayed, it must all be in a single font, but it
+// can occupy multiple lines on the screen (if it contains newlines
+// or if wrapping occurs because of the -wraplength option) and
+// one of the characters may optionally be underlined using the
+// -underline option.
+// It can display itself in either of three different ways, according
+// to
+// the -state option;
+// it can be made to appear raised, sunken, or flat;
+// and it can be made to flash.  When a user invokes the
+// button (by pressing mouse button 1 with the cursor over the
+// button), then the Tcl command specified in the -command
+// option is invoked.
 func Button(options ...option) *Window {
 	return Inter.Button(options...)
 }
@@ -401,6 +473,74 @@ func Canvas(options ...option) *Window {
 // for text it is in characters.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
+// 
+// # Description
+// 
+// The checkbutton command creates a new window (given by the
+// pathName argument) and makes it into a checkbutton widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the checkbutton such as its colors, font,
+// text, and initial relief.  The checkbutton command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A checkbutton is a widget
+// that displays a textual string, bitmap or image
+// and a square called an indicator.
+// If text is displayed, it must all be in a single font, but it
+// can occupy multiple lines on the screen (if it contains newlines
+// or if wrapping occurs because of the -wraplength option) and
+// one of the characters may optionally be underlined using the
+// -underline option.
+// A checkbutton has
+// all of the behavior of a simple button, including the
+// following: it can display itself in either of three different
+// ways, according to the -state option;
+// it can be made to appear
+// raised, sunken, or flat; it can be made to flash; and it invokes
+// a Tcl command whenever mouse button 1 is clicked over the
+// checkbutton.
+// 
+// In addition, checkbuttons can be selected.
+// If a checkbutton is selected then the indicator is normally
+// drawn with a selected appearance, and
+// a Tcl variable associated with the checkbutton is set to a particular
+// value (normally 1).
+// The indicator is drawn with a check mark inside.
+// If the checkbutton is not selected, then the indicator is drawn with a
+// deselected appearance, and the associated variable is
+// set to a different value (typically 0).
+// The indicator is drawn without a check mark inside.  In the special case
+// where the variable (if specified) has a value that matches the tristatevalue,
+// the indicator is drawn with a tri-state appearance and is in the tri-state
+// mode indicating mixed or multiple values.  (This is used when the check
+// box represents the state of multiple items.)
+// The indicator is drawn in a platform dependent manner.  Under Unix and
+// Windows, the background interior of the box is
+// 
+// Under Mac, the indicator is drawn with a dash mark inside.
+// By default, the name of the variable associated with a checkbutton is the
+// same as the name used to create the checkbutton.
+// The variable name, and the
+// 
+// and
+// 
+// values stored in it, may be modified with options on the command line
+// or in the option database.
+// Configuration options may also be used to modify the way the
+// indicator is displayed (or whether it is displayed at all).
+// By default a checkbutton is configured to select and deselect
+// itself on alternate button clicks.
+// In addition, each checkbutton monitors its associated variable and
+// automatically selects and deselects itself when the variables value
+// changes to and from the button's
+// 
+// and
+// 
+// values.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Checkbutton(options ...option) *Window {
@@ -514,8 +654,92 @@ func (w *Window) Checkbutton(options ...option) *Window {
 // for text it is in characters.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
+// 
+// # Description
+// 
+// The checkbutton command creates a new window (given by the
+// pathName argument) and makes it into a checkbutton widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the checkbutton such as its colors, font,
+// text, and initial relief.  The checkbutton command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A checkbutton is a widget
+// that displays a textual string, bitmap or image
+// and a square called an indicator.
+// If text is displayed, it must all be in a single font, but it
+// can occupy multiple lines on the screen (if it contains newlines
+// or if wrapping occurs because of the -wraplength option) and
+// one of the characters may optionally be underlined using the
+// -underline option.
+// A checkbutton has
+// all of the behavior of a simple button, including the
+// following: it can display itself in either of three different
+// ways, according to the -state option;
+// it can be made to appear
+// raised, sunken, or flat; it can be made to flash; and it invokes
+// a Tcl command whenever mouse button 1 is clicked over the
+// checkbutton.
+// 
+// In addition, checkbuttons can be selected.
+// If a checkbutton is selected then the indicator is normally
+// drawn with a selected appearance, and
+// a Tcl variable associated with the checkbutton is set to a particular
+// value (normally 1).
+// The indicator is drawn with a check mark inside.
+// If the checkbutton is not selected, then the indicator is drawn with a
+// deselected appearance, and the associated variable is
+// set to a different value (typically 0).
+// The indicator is drawn without a check mark inside.  In the special case
+// where the variable (if specified) has a value that matches the tristatevalue,
+// the indicator is drawn with a tri-state appearance and is in the tri-state
+// mode indicating mixed or multiple values.  (This is used when the check
+// box represents the state of multiple items.)
+// The indicator is drawn in a platform dependent manner.  Under Unix and
+// Windows, the background interior of the box is
+// 
+// Under Mac, the indicator is drawn with a dash mark inside.
+// By default, the name of the variable associated with a checkbutton is the
+// same as the name used to create the checkbutton.
+// The variable name, and the
+// 
+// and
+// 
+// values stored in it, may be modified with options on the command line
+// or in the option database.
+// Configuration options may also be used to modify the way the
+// indicator is displayed (or whether it is displayed at all).
+// By default a checkbutton is configured to select and deselect
+// itself on alternate button clicks.
+// In addition, each checkbutton monitors its associated variable and
+// automatically selects and deselects itself when the variables value
+// changes to and from the button's
+// 
+// and
+// 
+// values.
 func Checkbutton(options ...option) *Window {
 	return Inter.Checkbutton(options...)
+}
+
+// destroy - Destroy one or more windows
+// 
+// This command deletes the windows given by the
+// window arguments, plus all of their descendants.
+// If a window
+// 
+// is deleted then all windows will be destroyed and the application will
+// (normally) exit.
+// The windows are destroyed in order, and if an error occurs
+// in destroying a window the command aborts without destroying the
+// remaining windows.
+// No error is returned if window does not exist.
+func Destroy(options ...option) {
+	Inter.eval(fmt.Sprintf(`destroy %s`, collect(options...)))
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
@@ -584,6 +808,39 @@ func Checkbutton(options ...option) *Window {
 // in average-size characters of the widget's font.
 // If the value is less than or equal to zero, the widget picks a
 // size just large enough to hold its current text.
+// 
+// # Description
+// 
+// The entry command creates a new window (given by the
+// pathName argument) and makes it into an entry widget.
+// Additional options, described above, may be specified on the
+// command line or in the option database
+// to configure aspects of the entry such as its colors, font,
+// and relief.  The entry command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// An entry is a widget that displays a one-line text string and
+// allows that string to be edited using widget commands described below, which
+// are typically bound to keystrokes and mouse actions.
+// When first created, an entry's string is empty.
+// A portion of the entry may be selected as described below.
+// If an entry is exporting its selection (see the -exportselection
+// option), then it will observe the standard X11 protocols for handling the
+// selection;  entry selections are available as type STRING.
+// Entries also observe the standard Tk rules for dealing with the
+// input focus.  When an entry has the input focus it displays an
+// insertion cursor to indicate where new characters will be
+// inserted.
+// 
+// Entries are capable of displaying strings that are too long to
+// fit entirely within the widget's window.  In this case, only a
+// portion of the string will be displayed;  commands described below
+// may be used to change the view in the window.  Entries use
+// the standard -xscrollcommand mechanism for interacting with
+// scrollbars (see the description of the -xscrollcommand option
+// for details).  They also support scanning, as described below.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Entry(options ...option) *Window {
@@ -656,6 +913,39 @@ func (w *Window) Entry(options ...option) *Window {
 // in average-size characters of the widget's font.
 // If the value is less than or equal to zero, the widget picks a
 // size just large enough to hold its current text.
+// 
+// # Description
+// 
+// The entry command creates a new window (given by the
+// pathName argument) and makes it into an entry widget.
+// Additional options, described above, may be specified on the
+// command line or in the option database
+// to configure aspects of the entry such as its colors, font,
+// and relief.  The entry command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// An entry is a widget that displays a one-line text string and
+// allows that string to be edited using widget commands described below, which
+// are typically bound to keystrokes and mouse actions.
+// When first created, an entry's string is empty.
+// A portion of the entry may be selected as described below.
+// If an entry is exporting its selection (see the -exportselection
+// option), then it will observe the standard X11 protocols for handling the
+// selection;  entry selections are available as type STRING.
+// Entries also observe the standard Tk rules for dealing with the
+// input focus.  When an entry has the input focus it displays an
+// insertion cursor to indicate where new characters will be
+// inserted.
+// 
+// Entries are capable of displaying strings that are too long to
+// fit entirely within the widget's window.  In this case, only a
+// portion of the string will be displayed;  commands described below
+// may be used to change the view in the window.  Entries use
+// the standard -xscrollcommand mechanism for interacting with
+// scrollbars (see the description of the -xscrollcommand option
+// for details).  They also support scanning, as described below.
 func Entry(options ...option) *Window {
 	return Inter.Entry(options...)
 }
@@ -746,6 +1036,22 @@ func Entry(options ...option) *Window {
 // not added.  Normally '-width' should not be used if a propagating
 // geometry manager, such as 'grid' or 'pack', is used within the
 // frame since the geometry manager will override the width of the frame.
+// 
+// # Description
+// 
+// The frame command creates a new window (given by the
+// pathName argument) and makes it into a frame widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the frame such as its background color
+// and relief.  The frame command returns the
+// path name of the new window.
+// 
+// A frame is a simple widget.  Its primary purpose is to act as a
+// spacer or container for complex window layouts.  The only features
+// of a frame are its background and an optional 3-D border to make the
+// frame appear raised or sunken.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Frame(options ...option) *Window {
@@ -838,6 +1144,22 @@ func (w *Window) Frame(options ...option) *Window {
 // not added.  Normally '-width' should not be used if a propagating
 // geometry manager, such as 'grid' or 'pack', is used within the
 // frame since the geometry manager will override the width of the frame.
+// 
+// # Description
+// 
+// The frame command creates a new window (given by the
+// pathName argument) and makes it into a frame widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the frame such as its background color
+// and relief.  The frame command returns the
+// path name of the new window.
+// 
+// A frame is a simple widget.  Its primary purpose is to act as a
+// spacer or container for complex window layouts.  The only features
+// of a frame are its background and an optional 3-D border to make the
+// frame appear raised or sunken.
 func Frame(options ...option) *Window {
 	return Inter.Frame(options...)
 }
@@ -871,6 +1193,28 @@ func Frame(options ...option) *Window {
 // for text it is in characters.
 // If this option is not specified, the label's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
+// 
+// # Description
+// 
+// The label command creates a new window (given by the
+// pathName argument) and makes it into a label widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the label such as its colors, font,
+// text, and initial relief.  The label command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A label is a widget that displays a textual string, bitmap or image.
+// If text is displayed, it must all be in a single font, but it
+// can occupy multiple lines on the screen (if it contains newlines
+// or if wrapping occurs because of the -wraplength option) and
+// one of the characters may optionally be underlined using the
+// -underline option.
+// The label can be manipulated in a few simple ways, such as
+// changing its relief or text, using the commands described below.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Label(options ...option) *Window {
@@ -906,6 +1250,28 @@ func (w *Window) Label(options ...option) *Window {
 // for text it is in characters.
 // If this option is not specified, the label's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
+// 
+// # Description
+// 
+// The label command creates a new window (given by the
+// pathName argument) and makes it into a label widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the label such as its colors, font,
+// text, and initial relief.  The label command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A label is a widget that displays a textual string, bitmap or image.
+// If text is displayed, it must all be in a single font, but it
+// can occupy multiple lines on the screen (if it contains newlines
+// or if wrapping occurs because of the -wraplength option) and
+// one of the characters may optionally be underlined using the
+// -underline option.
+// The label can be manipulated in a few simple ways, such as
+// changing its relief or text, using the commands described below.
 func Label(options ...option) *Window {
 	return Inter.Label(options...)
 }
@@ -980,6 +1346,21 @@ func Label(options ...option) *Window {
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
+// 
+// # Description
+// 
+// The labelframe command creates a new window (given by the
+// pathName argument) and makes it into a labelframe widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the labelframe such as its background color
+// and relief.  The labelframe command returns the
+// path name of the new window.
+// 
+// A labelframe is a simple widget.  Its primary purpose is to act as a
+// spacer or container for complex window layouts.  It has the features
+// of a frame plus the ability to display a label.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Labelframe(options ...option) *Window {
@@ -1056,6 +1437,21 @@ func (w *Window) Labelframe(options ...option) *Window {
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
+// 
+// # Description
+// 
+// The labelframe command creates a new window (given by the
+// pathName argument) and makes it into a labelframe widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the labelframe such as its background color
+// and relief.  The labelframe command returns the
+// path name of the new window.
+// 
+// A labelframe is a simple widget.  Its primary purpose is to act as a
+// spacer or container for complex window layouts.  It has the features
+// of a frame plus the ability to display a label.
 func Labelframe(options ...option) *Window {
 	return Inter.Labelframe(options...)
 }
@@ -1103,6 +1499,38 @@ func Labelframe(options ...option) *Window {
 // 
 // Specifies the desired width for the window in characters.
 // If the font does not have a uniform width then the width of the character
+// 
+// # Description
+// 
+// The listbox command creates a new window (given by the
+// pathName argument) and makes it into a listbox widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the listbox such as its colors, font,
+// text, and relief.  The listbox command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A listbox is a widget that displays a list of strings, one per line.
+// When first created, a new listbox has no elements.
+// Elements may be added or deleted using widget commands described
+// below.  In addition, one or more elements may be selected as described
+// below.
+// If a listbox is exporting its selection (see -exportselection
+// option), then it will observe the standard X11 protocols
+// for handling the selection.
+// Listbox selections are available as type STRING;
+// the value of the selection will be the text of the selected elements, with
+// newlines separating the elements.
+// 
+// It is not necessary for all the elements to be
+// displayed in the listbox window at once;  commands described below
+// may be used to change the view in the window.  Listboxes allow
+// scrolling in both directions using the standard -xscrollcommand
+// and -yscrollcommand options.
+// They also support scanning, as described below.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Listbox(options ...option) *Window {
@@ -1152,6 +1580,38 @@ func (w *Window) Listbox(options ...option) *Window {
 // 
 // Specifies the desired width for the window in characters.
 // If the font does not have a uniform width then the width of the character
+// 
+// # Description
+// 
+// The listbox command creates a new window (given by the
+// pathName argument) and makes it into a listbox widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the listbox such as its colors, font,
+// text, and relief.  The listbox command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A listbox is a widget that displays a list of strings, one per line.
+// When first created, a new listbox has no elements.
+// Elements may be added or deleted using widget commands described
+// below.  In addition, one or more elements may be selected as described
+// below.
+// If a listbox is exporting its selection (see -exportselection
+// option), then it will observe the standard X11 protocols
+// for handling the selection.
+// Listbox selections are available as type STRING;
+// the value of the selection will be the text of the selected elements, with
+// newlines separating the elements.
+// 
+// It is not necessary for all the elements to be
+// displayed in the listbox window at once;  commands described below
+// may be used to change the view in the window.  Listboxes allow
+// scrolling in both directions using the standard -xscrollcommand
+// and -yscrollcommand options.
+// They also support scanning, as described below.
 func Listbox(options ...option) *Window {
 	return Inter.Listbox(options...)
 }
@@ -1435,6 +1895,46 @@ func Menubutton(options ...option) *Window {
 // length.
 // If this option has a value less than or equal to zero, then
 // the '-aspect' option determines the line length.
+// 
+// # Description
+// 
+// The message command creates a new window (given by the
+// pathName argument) and makes it into a message widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the message such as its colors, font,
+// text, and initial relief.  The message command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A message is a widget that displays a textual string.  A message
+// widget has three special features that differentiate it from a
+// label widget.  First, it breaks up
+// its string into lines in order to produce a given aspect ratio
+// for the window.  The line breaks are chosen at word boundaries
+// wherever possible (if not even a single word would fit on a
+// line, then the word will be split across lines).  Newline characters
+// in the string will force line breaks;  they can be used, for example,
+// to leave blank lines in the display.
+// 
+// The second feature of a message widget is justification.  The text
+// may be displayed left-justified (each line starts at the left side of
+// the window), centered on a line-by-line basis, or right-justified
+// (each line ends at the right side of the window).
+// 
+// The third feature of a message widget is that it handles control
+// characters and non-printing characters specially.  Tab characters
+// are replaced with enough blank space to line up on the next
+// 8-character boundary.  Newlines cause line breaks.  Other control
+// characters (ASCII code less than 0x20) and characters not defined
+// in the font are displayed as a four-character sequence \exhh where
+// hh is the two-digit hexadecimal number corresponding to
+// the character.  In the unusual case where the font does not contain
+// all of the characters in
+// 
+// then control characters and undefined characters are not displayed at all.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Message(options ...option) *Window {
@@ -1486,11 +1986,68 @@ func (w *Window) Message(options ...option) *Window {
 // length.
 // If this option has a value less than or equal to zero, then
 // the '-aspect' option determines the line length.
+// 
+// # Description
+// 
+// The message command creates a new window (given by the
+// pathName argument) and makes it into a message widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the message such as its colors, font,
+// text, and initial relief.  The message command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A message is a widget that displays a textual string.  A message
+// widget has three special features that differentiate it from a
+// label widget.  First, it breaks up
+// its string into lines in order to produce a given aspect ratio
+// for the window.  The line breaks are chosen at word boundaries
+// wherever possible (if not even a single word would fit on a
+// line, then the word will be split across lines).  Newline characters
+// in the string will force line breaks;  they can be used, for example,
+// to leave blank lines in the display.
+// 
+// The second feature of a message widget is justification.  The text
+// may be displayed left-justified (each line starts at the left side of
+// the window), centered on a line-by-line basis, or right-justified
+// (each line ends at the right side of the window).
+// 
+// The third feature of a message widget is that it handles control
+// characters and non-printing characters specially.  Tab characters
+// are replaced with enough blank space to line up on the next
+// 8-character boundary.  Newlines cause line breaks.  Other control
+// characters (ASCII code less than 0x20) and characters not defined
+// in the font are displayed as a four-character sequence \exhh where
+// hh is the two-digit hexadecimal number corresponding to
+// the character.  In the unusual case where the font does not contain
+// all of the characters in
+// 
+// then control characters and undefined characters are not displayed at all.
 func Message(options ...option) *Window {
 	return Inter.Message(options...)
 }
 
 // tk_optionMenu - Create an option menubutton and its menu
+// 
+// This procedure creates an option menubutton whose name is pathName,
+// plus an associated menu.
+// Together they allow the user to select one of the values
+// given by the value arguments.
+// The current value will be stored in the global variable whose
+// name is given by varName and it will also be displayed as the label
+// in the option menubutton.
+// The user can click on the menubutton to display a menu containing
+// all of the values and thereby select a new value.
+// Once a new value is selected, it will be stored in the variable
+// and appear in the option menubutton.
+// The current value can also be changed by setting the variable.
+// 
+// The return value from tk_optionMenu is the name of the menu
+// associated with pathName, so that the caller can change its
+// configuration options or manipulate it in other ways.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) OptionMenu(options ...option) *Window {
@@ -1498,6 +2055,23 @@ func (w *Window) OptionMenu(options ...option) *Window {
 }
 
 // tk_optionMenu - Create an option menubutton and its menu
+// 
+// This procedure creates an option menubutton whose name is pathName,
+// plus an associated menu.
+// Together they allow the user to select one of the values
+// given by the value arguments.
+// The current value will be stored in the global variable whose
+// name is given by varName and it will also be displayed as the label
+// in the option menubutton.
+// The user can click on the menubutton to display a menu containing
+// all of the values and thereby select a new value.
+// Once a new value is selected, it will be stored in the variable
+// and appear in the option menubutton.
+// The current value can also be changed by setting the variable.
+// 
+// The return value from tk_optionMenu is the name of the menu
+// associated with pathName, so that the caller can change its
+// configuration options or manipulate it in other ways.
 func OptionMenu(options ...option) *Window {
 	return Inter.OptionMenu(options...)
 }
@@ -1574,6 +2148,21 @@ func OptionMenu(options ...option) *Window {
 // Specifies a desired width for the overall panedwindow widget. May be any
 // value accepted by 'Tk_GetPixels'. If an empty string, the widget will be
 // made wide enough to allow all contained widgets to have their natural width.
+// 
+// # Description
+// 
+// The panedwindow command creates a new window (given by the
+// pathName argument) and makes it into a panedwindow widget.
+// Additional options, described above, may be specified on the command
+// line or in the option database to configure aspects of the panedwindow
+// such as its default background color and relief.  The
+// panedwindow command returns the path name of the new window.
+// 
+// A panedwindow widget contains any number of panes, arranged
+// horizontally or vertically, according to the value of the
+// -orient option.  Each pane contains one widget, and each pair of
+// panes is separated by a moveable (via mouse movements) sash.  Moving a
+// sash causes the widgets on either side of the sash to be resized.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Panedwindow(options ...option) *Window {
@@ -1652,6 +2241,21 @@ func (w *Window) Panedwindow(options ...option) *Window {
 // Specifies a desired width for the overall panedwindow widget. May be any
 // value accepted by 'Tk_GetPixels'. If an empty string, the widget will be
 // made wide enough to allow all contained widgets to have their natural width.
+// 
+// # Description
+// 
+// The panedwindow command creates a new window (given by the
+// pathName argument) and makes it into a panedwindow widget.
+// Additional options, described above, may be specified on the command
+// line or in the option database to configure aspects of the panedwindow
+// such as its default background color and relief.  The
+// panedwindow command returns the path name of the new window.
+// 
+// A panedwindow widget contains any number of panes, arranged
+// horizontally or vertically, according to the value of the
+// -orient option.  Each pane contains one widget, and each pair of
+// panes is separated by a moveable (via mouse movements) sash.  Moving a
+// sash causes the widgets on either side of the sash to be resized.
 func Panedwindow(options ...option) *Window {
 	return Inter.Panedwindow(options...)
 }
@@ -1758,6 +2362,65 @@ func Panedwindow(options ...option) *Window {
 // for text it is in characters.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
+// 
+// # Description
+// 
+// The radiobutton command creates a new window (given by the
+// pathName argument) and makes it into a radiobutton widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the radiobutton such as its colors, font,
+// text, and initial relief.  The radiobutton command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A radiobutton is a widget that displays a textual string, bitmap or image
+// and a diamond or circle called an indicator.
+// If text is displayed, it must all be in a single font, but it
+// can occupy multiple lines on the screen (if it contains newlines
+// or if wrapping occurs because of the -wraplength option) and
+// one of the characters may optionally be underlined using the
+// -underline option.  A radiobutton has
+// all of the behavior of a simple button: it can display itself in either
+// of three different ways, according to the -state option;
+// it can be made to appear
+// raised, sunken, or flat; it can be made to flash; and it invokes
+// a Tcl command whenever mouse button 1 is clicked over the
+// check button.
+// 
+// In addition, radiobuttons can be selected.
+// If a radiobutton is selected, the indicator is normally
+// drawn with a selected appearance, and
+// a Tcl variable associated with the radiobutton is set to a particular
+// value (normally 1).
+// Under Unix, the indicator is drawn with a sunken relief and a special
+// color.  Under Windows, the indicator is drawn with a round mark inside.
+// If the radiobutton is not selected, then the indicator is drawn with a
+// deselected appearance, and the associated variable is
+// set to a different value (typically 0).
+// The indicator is drawn without a round mark inside.
+// Typically, several radiobuttons share a single variable and the
+// value of the variable indicates which radiobutton is to be selected.
+// When a radiobutton is selected it sets the value of the variable to
+// indicate that fact;  each radiobutton also monitors the value of
+// the variable and automatically selects and deselects itself when the
+// variable's value changes.
+// If the variable's value matches the -tristatevalue, then the radiobutton
+// is drawn using the tri-state mode.  This mode is used to indicate mixed or
+// multiple values.  (This is used when the radiobutton represents the state
+// of multiple items.)
+// By default the variable selectedButton
+// is used;  its contents give the name of the button that is
+// selected, or the empty string if no button associated with that
+// variable is selected.
+// The name of the variable for a radiobutton,
+// plus the variable to be stored into it, may be modified with options
+// on the command line or in the option database.
+// Configuration options may also be used to modify the way the
+// indicator is displayed (or whether it is displayed at all).
+// By default a radiobutton is configured to select itself on button clicks.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Radiobutton(options ...option) *Window {
@@ -1866,6 +2529,65 @@ func (w *Window) Radiobutton(options ...option) *Window {
 // for text it is in characters.
 // If this option is not specified, the button's desired width is computed
 // from the size of the image or bitmap or text being displayed in it.
+// 
+// # Description
+// 
+// The radiobutton command creates a new window (given by the
+// pathName argument) and makes it into a radiobutton widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the radiobutton such as its colors, font,
+// text, and initial relief.  The radiobutton command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A radiobutton is a widget that displays a textual string, bitmap or image
+// and a diamond or circle called an indicator.
+// If text is displayed, it must all be in a single font, but it
+// can occupy multiple lines on the screen (if it contains newlines
+// or if wrapping occurs because of the -wraplength option) and
+// one of the characters may optionally be underlined using the
+// -underline option.  A radiobutton has
+// all of the behavior of a simple button: it can display itself in either
+// of three different ways, according to the -state option;
+// it can be made to appear
+// raised, sunken, or flat; it can be made to flash; and it invokes
+// a Tcl command whenever mouse button 1 is clicked over the
+// check button.
+// 
+// In addition, radiobuttons can be selected.
+// If a radiobutton is selected, the indicator is normally
+// drawn with a selected appearance, and
+// a Tcl variable associated with the radiobutton is set to a particular
+// value (normally 1).
+// Under Unix, the indicator is drawn with a sunken relief and a special
+// color.  Under Windows, the indicator is drawn with a round mark inside.
+// If the radiobutton is not selected, then the indicator is drawn with a
+// deselected appearance, and the associated variable is
+// set to a different value (typically 0).
+// The indicator is drawn without a round mark inside.
+// Typically, several radiobuttons share a single variable and the
+// value of the variable indicates which radiobutton is to be selected.
+// When a radiobutton is selected it sets the value of the variable to
+// indicate that fact;  each radiobutton also monitors the value of
+// the variable and automatically selects and deselects itself when the
+// variable's value changes.
+// If the variable's value matches the -tristatevalue, then the radiobutton
+// is drawn using the tri-state mode.  This mode is used to indicate mixed or
+// multiple values.  (This is used when the radiobutton represents the state
+// of multiple items.)
+// By default the variable selectedButton
+// is used;  its contents give the name of the button that is
+// selected, or the empty string if no button associated with that
+// variable is selected.
+// The name of the variable for a radiobutton,
+// plus the variable to be stored into it, may be modified with options
+// on the command line or in the option database.
+// Configuration options may also be used to modify the way the
+// indicator is displayed (or whether it is displayed at all).
+// By default a radiobutton is configured to select itself on button clicks.
 func Radiobutton(options ...option) *Window {
 	return Inter.Radiobutton(options...)
 }
@@ -1973,6 +2695,42 @@ func Radiobutton(options ...option) *Window {
 // (i.e. any of the forms acceptable to 'Tk_GetPixels').
 // For vertical scales this is the scale's width;  for horizontal scales
 // this is the scale's height.
+// 
+// # Description
+// 
+// The scale command creates a new window (given by the
+// pathName argument) and makes it into a scale widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the scale such as its colors, orientation,
+// and relief.  The scale command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A scale is a widget that displays a rectangular trough and a
+// small slider.  The trough corresponds to a range
+// of real values (determined by the -from, -to, and
+// -resolution options),
+// and the position of the slider selects a particular real value.
+// The slider's position (and hence the scale's value) may be adjusted
+// with the mouse or keyboard as described in the BINDINGS
+// section below.  Whenever the scale's value is changed, a Tcl
+// command is invoked (using the -command option) to notify
+// other interested widgets of the change.
+// In addition, the value
+// of the scale can be linked to a Tcl variable (using the -variable
+// option), so that changes in either are reflected in the other.
+// 
+// Three annotations may be displayed in a scale widget:  a label
+// appearing at the top right of the widget (top left for horizontal
+// scales), a number displayed just to the left of the slider
+// (just above the slider for horizontal scales), and a collection
+// of numerical tick marks just to the left of the current value
+// (just below the trough for horizontal scales).  Each of these three
+// annotations may be enabled or disabled using the
+// configuration options.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Scale(options ...option) *Window {
@@ -2082,6 +2840,42 @@ func (w *Window) Scale(options ...option) *Window {
 // (i.e. any of the forms acceptable to 'Tk_GetPixels').
 // For vertical scales this is the scale's width;  for horizontal scales
 // this is the scale's height.
+// 
+// # Description
+// 
+// The scale command creates a new window (given by the
+// pathName argument) and makes it into a scale widget.
+// Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the scale such as its colors, orientation,
+// and relief.  The scale command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A scale is a widget that displays a rectangular trough and a
+// small slider.  The trough corresponds to a range
+// of real values (determined by the -from, -to, and
+// -resolution options),
+// and the position of the slider selects a particular real value.
+// The slider's position (and hence the scale's value) may be adjusted
+// with the mouse or keyboard as described in the BINDINGS
+// section below.  Whenever the scale's value is changed, a Tcl
+// command is invoked (using the -command option) to notify
+// other interested widgets of the change.
+// In addition, the value
+// of the scale can be linked to a Tcl variable (using the -variable
+// option), so that changes in either are reflected in the other.
+// 
+// Three annotations may be displayed in a scale widget:  a label
+// appearing at the top right of the widget (top left for horizontal
+// scales), a number displayed just to the left of the slider
+// (just above the slider for horizontal scales), and a collection
+// of numerical tick marks just to the left of the current value
+// (just below the trough for horizontal scales).  Each of these three
+// annotations may be enabled or disabled using the
+// configuration options.
 func Scale(options ...option) *Window {
 	return Inter.Scale(options...)
 }
@@ -2124,6 +2918,33 @@ func Scale(options ...option) *Window {
 // scrollbars this will be the width and for horizontal scrollbars
 // this will be the height.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
+// 
+// # Description
+// 
+// The scrollbar command creates a new window (given by the
+// pathName argument) and makes it into a scrollbar widget.
+// Additional options, described above, may be specified on the command
+// line or in the option database to configure aspects of the scrollbar
+// such as its colors, orientation, and relief.
+// The scrollbar command returns its pathName argument.
+// At the time this command is invoked, there must not exist a window
+// named pathName, but pathName's parent must exist.
+// 
+// A scrollbar is a widget that displays two arrows, one at each end of
+// the scrollbar, and a slider in the middle portion of the
+// scrollbar.
+// It provides information about what is visible in an associated window
+// that displays a document of some sort (such as a file being edited or
+// a drawing).
+// The position and size of the slider indicate which portion of the
+// document is visible in the associated window.  For example, if the
+// slider in a vertical scrollbar covers the top third of the area
+// between the two arrows, it means that the associated window displays
+// the top third of its document.
+// 
+// Scrollbars can be used to adjust the view in the associated window
+// by clicking or dragging with the mouse.  See the BINDINGS section
+// below for details.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Scrollbar(options ...option) *Window {
@@ -2168,6 +2989,33 @@ func (w *Window) Scrollbar(options ...option) *Window {
 // scrollbars this will be the width and for horizontal scrollbars
 // this will be the height.
 // The value may have any of the forms acceptable to 'Tk_GetPixels'.
+// 
+// # Description
+// 
+// The scrollbar command creates a new window (given by the
+// pathName argument) and makes it into a scrollbar widget.
+// Additional options, described above, may be specified on the command
+// line or in the option database to configure aspects of the scrollbar
+// such as its colors, orientation, and relief.
+// The scrollbar command returns its pathName argument.
+// At the time this command is invoked, there must not exist a window
+// named pathName, but pathName's parent must exist.
+// 
+// A scrollbar is a widget that displays two arrows, one at each end of
+// the scrollbar, and a slider in the middle portion of the
+// scrollbar.
+// It provides information about what is visible in an associated window
+// that displays a document of some sort (such as a file being edited or
+// a drawing).
+// The position and size of the slider indicate which portion of the
+// document is visible in the associated window.  For example, if the
+// slider in a vertical scrollbar covers the top third of the area
+// between the two arrows, it means that the associated window displays
+// the top third of its document.
+// 
+// Scrollbars can be used to adjust the view in the associated window
+// by clicking or dragging with the mouse.  See the BINDINGS section
+// below for details.
 func Scrollbar(options ...option) *Window {
 	return Inter.Scrollbar(options...)
 }
@@ -2299,6 +3147,39 @@ func Scrollbar(options ...option) *Window {
 // 
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
+// 
+// # Description
+// 
+// The spinbox command creates a new window (given by the
+// pathName argument) and makes it into a spinbox widget.
+// Additional options, described above, may be specified on the
+// command line or in the option database
+// to configure aspects of the spinbox such as its colors, font,
+// and relief.  The spinbox command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A spinbox is an extended entry widget that allows he user
+// to move, or spin, through a fixed set of ascending or descending values
+// such as times or dates in addition to editing the value as in an
+// entry.  When first created, a spinbox's string is empty.
+// A portion of the spinbox may be selected as described below.
+// If a spinbox is exporting its selection (see the -exportselection
+// option), then it will observe the standard protocols for handling the
+// selection;  spinbox selections are available as type STRING.
+// Spinboxes also observe the standard Tk rules for dealing with the
+// input focus.  When a spinbox has the input focus it displays an
+// insertion cursor to indicate where new characters will be
+// inserted.
+// 
+// Spinboxes are capable of displaying strings that are too long to
+// fit entirely within the widget's window.  In this case, only a
+// portion of the string will be displayed; commands described below
+// may be used to change the view in the window.  Spinboxes use
+// the standard -xscrollcommand mechanism for interacting with
+// scrollbars (see the description of the -xscrollcommand option
+// for details).  They also support scanning, as described below.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Spinbox(options ...option) *Window {
@@ -2432,6 +3313,39 @@ func (w *Window) Spinbox(options ...option) *Window {
 // 
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
+// 
+// # Description
+// 
+// The spinbox command creates a new window (given by the
+// pathName argument) and makes it into a spinbox widget.
+// Additional options, described above, may be specified on the
+// command line or in the option database
+// to configure aspects of the spinbox such as its colors, font,
+// and relief.  The spinbox command returns its
+// pathName argument.  At the time this command is invoked,
+// there must not exist a window named pathName, but
+// pathName's parent must exist.
+// 
+// A spinbox is an extended entry widget that allows he user
+// to move, or spin, through a fixed set of ascending or descending values
+// such as times or dates in addition to editing the value as in an
+// entry.  When first created, a spinbox's string is empty.
+// A portion of the spinbox may be selected as described below.
+// If a spinbox is exporting its selection (see the -exportselection
+// option), then it will observe the standard protocols for handling the
+// selection;  spinbox selections are available as type STRING.
+// Spinboxes also observe the standard Tk rules for dealing with the
+// input focus.  When a spinbox has the input focus it displays an
+// insertion cursor to indicate where new characters will be
+// inserted.
+// 
+// Spinboxes are capable of displaying strings that are too long to
+// fit entirely within the widget's window.  In this case, only a
+// portion of the string will be displayed; commands described below
+// may be used to change the view in the window.  Spinboxes use
+// the standard -xscrollcommand mechanism for interacting with
+// scrollbars (see the description of the -xscrollcommand option
+// for details).  They also support scanning, as described below.
 func Spinbox(options ...option) *Window {
 	return Inter.Spinbox(options...)
 }
@@ -2567,6 +3481,40 @@ func Spinbox(options ...option) *Window {
 // up into several screen lines if necessary to keep all the characters visible.
 // In 'char' mode a screen line break may occur after any character; in
 // 'word' mode a line break will only be made at word boundaries.
+// 
+// # Description
+// 
+// The text command creates a new window (given by the pathName
+// argument) and makes it into a text widget. Additional options, described
+// above, may be specified on the command line or in the option database to
+// configure aspects of the text such as its default background color and relief.
+// The text command returns the path name of the new window.
+// 
+// A text widget displays one or more lines of text and allows that text to be
+// edited. Text widgets support four different kinds of annotations on the text,
+// called tags, marks, embedded windows or embedded images. Tags allow different
+// portions of the text to be displayed with different fonts and colors. In
+// addition, Tcl commands can be associated with tags so that scripts are invoked
+// when particular actions such as keystrokes and mouse button presses occur in
+// particular ranges of the text. See TAGS below for more details.
+// 
+// The second form of annotation consists of floating markers in the text called
+// 
+// Marks are used to keep track of various interesting positions in the text as
+// it is edited. See MARKS below for more details.
+// 
+// The third form of annotation allows arbitrary windows to be embedded in a text
+// widget. See EMBEDDED WINDOWS below for more details.
+// 
+// The fourth form of annotation allows Tk images to be embedded in a text
+// widget. See EMBEDDED IMAGES below for more details.
+// 
+// The text widget also has a built-in undo/redo mechanism. See
+// THE UNDO MECHANISM below for more details.
+// 
+// The text widget allows for the creation of peer widgets. These are other text
+// widgets which share the same underlying data (text, marks, tags, images, etc).
+// See PEER WIDGETS below for more details.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Text(options ...option) *Window {
@@ -2704,6 +3652,40 @@ func (w *Window) Text(options ...option) *Window {
 // up into several screen lines if necessary to keep all the characters visible.
 // In 'char' mode a screen line break may occur after any character; in
 // 'word' mode a line break will only be made at word boundaries.
+// 
+// # Description
+// 
+// The text command creates a new window (given by the pathName
+// argument) and makes it into a text widget. Additional options, described
+// above, may be specified on the command line or in the option database to
+// configure aspects of the text such as its default background color and relief.
+// The text command returns the path name of the new window.
+// 
+// A text widget displays one or more lines of text and allows that text to be
+// edited. Text widgets support four different kinds of annotations on the text,
+// called tags, marks, embedded windows or embedded images. Tags allow different
+// portions of the text to be displayed with different fonts and colors. In
+// addition, Tcl commands can be associated with tags so that scripts are invoked
+// when particular actions such as keystrokes and mouse button presses occur in
+// particular ranges of the text. See TAGS below for more details.
+// 
+// The second form of annotation consists of floating markers in the text called
+// 
+// Marks are used to keep track of various interesting positions in the text as
+// it is edited. See MARKS below for more details.
+// 
+// The third form of annotation allows arbitrary windows to be embedded in a text
+// widget. See EMBEDDED WINDOWS below for more details.
+// 
+// The fourth form of annotation allows Tk images to be embedded in a text
+// widget. See EMBEDDED IMAGES below for more details.
+// 
+// The text widget also has a built-in undo/redo mechanism. See
+// THE UNDO MECHANISM below for more details.
+// 
+// The text widget allows for the creation of peer widgets. These are other text
+// widgets which share the same underlying data (text, marks, tags, images, etc).
+// See PEER WIDGETS below for more details.
 func Text(options ...option) *Window {
 	return Inter.Text(options...)
 }
@@ -2819,6 +3801,24 @@ func Text(options ...option) *Window {
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
+// 
+// # Description
+// 
+// The toplevel command creates a new toplevel widget (given
+// by the pathName argument).  Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the toplevel such as its background color
+// and relief.  The toplevel command returns the
+// path name of the new window.
+// 
+// A toplevel is similar to a frame except that it is created as a
+// top-level window:  its X parent is the root window of a screen
+// rather than the logical parent from its Tk path name.  The primary
+// purpose of a toplevel is to serve as a container for dialog boxes
+// and other collections of widgets.  The only visible features
+// of a toplevel are its background and an optional 3-D border
+// to make the toplevel appear raised or sunken.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) Toplevel(options ...option) *Window {
@@ -2936,6 +3936,24 @@ func (w *Window) Toplevel(options ...option) *Window {
 // acceptable to 'Tk_GetPixels'.
 // If this option is less than or equal to zero then the window will
 // not request any size at all.
+// 
+// # Description
+// 
+// The toplevel command creates a new toplevel widget (given
+// by the pathName argument).  Additional
+// options, described above, may be specified on the command line
+// or in the option database
+// to configure aspects of the toplevel such as its background color
+// and relief.  The toplevel command returns the
+// path name of the new window.
+// 
+// A toplevel is similar to a frame except that it is created as a
+// top-level window:  its X parent is the root window of a screen
+// rather than the logical parent from its Tk path name.  The primary
+// purpose of a toplevel is to serve as a container for dialog boxes
+// and other collections of widgets.  The only visible features
+// of a toplevel are its background and an optional 3-D border
+// to make the toplevel appear raised or sunken.
 func Toplevel(options ...option) *Window {
 	return Inter.Toplevel(options...)
 }
@@ -2950,6 +3968,11 @@ func Toplevel(options ...option) *Window {
 // 
 // May be set to one of  'normal', 'active', or 'disabled'.
 // In a dialog box, one button may be designated the
+// 
+// # Description
+// 
+// A ttk::button widget displays a textual label and/or image,
+// and evaluates a command when pressed.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TButton(options ...option) *Window {
@@ -2966,6 +3989,11 @@ func (w *Window) TButton(options ...option) *Window {
 // 
 // May be set to one of  'normal', 'active', or 'disabled'.
 // In a dialog box, one button may be designated the
+// 
+// # Description
+// 
+// A ttk::button widget displays a textual label and/or image,
+// and evaluates a command when pressed.
 func TButton(options ...option) *Window {
 	return Inter.TButton(options...)
 }
@@ -2990,6 +4018,12 @@ func TButton(options ...option) *Window {
 // 
 // The name of a global variable whose value is linked to the widget.
 // Defaults to the widget pathname if not specified.
+// 
+// # Description
+// 
+// A ttk::checkbutton widget is used to show or change a setting.
+// It has two states, selected and deselected.
+// The state of the checkbutton may be linked to a Tcl variable.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TCheckbutton(options ...option) *Window {
@@ -3016,6 +4050,12 @@ func (w *Window) TCheckbutton(options ...option) *Window {
 // 
 // The name of a global variable whose value is linked to the widget.
 // Defaults to the widget pathname if not specified.
+// 
+// # Description
+// 
+// A ttk::checkbutton widget is used to show or change a setting.
+// It has two states, selected and deselected.
+// The state of the checkbutton may be linked to a Tcl variable.
 func TCheckbutton(options ...option) *Window {
 	return Inter.TCheckbutton(options...)
 }
@@ -3067,6 +4107,12 @@ func TCheckbutton(options ...option) *Window {
 // 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
+// 
+// # Description
+// 
+// A ttk::combobox combines a text field with a pop-down list of values;
+// the user may select the value of the text field from among the
+// values in the list.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TCombobox(options ...option) *Window {
@@ -3120,6 +4166,12 @@ func (w *Window) TCombobox(options ...option) *Window {
 // 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
+// 
+// # Description
+// 
+// A ttk::combobox combines a text field with a pop-down list of values;
+// the user may select the value of the text field from among the
+// values in the list.
 func TCombobox(options ...option) *Window {
 	return Inter.TCombobox(options...)
 }
@@ -3184,6 +4236,15 @@ func TCombobox(options ...option) *Window {
 // 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
+// 
+// # Description
+// 
+// An ttk::entry widget displays a one-line text string and
+// allows that string to be edited by the user.
+// The value of the string may be linked to a Tcl variable
+// with the -textvariable option.
+// Entry widgets support horizontal scrolling with the
+// standard -xscrollcommand option and xview widget command.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TEntry(options ...option) *Window {
@@ -3250,6 +4311,15 @@ func (w *Window) TEntry(options ...option) *Window {
 // 
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
+// 
+// # Description
+// 
+// An ttk::entry widget displays a one-line text string and
+// allows that string to be edited by the user.
+// The value of the string may be linked to a Tcl variable
+// with the -textvariable option.
+// Entry widgets support horizontal scrolling with the
+// standard -xscrollcommand option and xview widget command.
 func TEntry(options ...option) *Window {
 	return Inter.TEntry(options...)
 }
@@ -3275,6 +4345,11 @@ func TEntry(options ...option) *Window {
 // # TFrame(Height(...))
 // 
 // If specified, the widget's requested height in pixels.
+// 
+// # Description
+// 
+// A ttk::frame widget is a container, used to group other widgets
+// together.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TFrame(options ...option) *Window {
@@ -3302,6 +4377,11 @@ func (w *Window) TFrame(options ...option) *Window {
 // # TFrame(Height(...))
 // 
 // If specified, the widget's requested height in pixels.
+// 
+// # Description
+// 
+// A ttk::frame widget is a container, used to group other widgets
+// together.
 func TFrame(options ...option) *Window {
 	return Inter.TFrame(options...)
 }
@@ -3324,6 +4404,12 @@ func TFrame(options ...option) *Window {
 // then automatic wrapping is not performed; otherwise
 // the text is split into lines such that no line is longer
 // than the specified value.
+// 
+// # Description
+// 
+// A ttk::label widget displays a textual label and/or image.
+// The label may be linked to a Tcl variable
+// to automatically change the displayed text.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TLabel(options ...option) *Window {
@@ -3348,6 +4434,12 @@ func (w *Window) TLabel(options ...option) *Window {
 // then automatic wrapping is not performed; otherwise
 // the text is split into lines such that no line is longer
 // than the specified value.
+// 
+// # Description
+// 
+// A ttk::label widget displays a textual label and/or image.
+// The label may be linked to a Tcl variable
+// to automatically change the displayed text.
 func TLabel(options ...option) *Window {
 	return Inter.TLabel(options...)
 }
@@ -3391,6 +4483,12 @@ func TLabel(options ...option) *Window {
 // # TLabelframe(Width(...))
 // 
 // If specified, the widget's requested width in pixels.
+// 
+// # Description
+// 
+// A ttk::labelframe widget is a container used to group other widgets
+// together.  It has an optional label, which may be a plain text string or
+// another widget.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TLabelframe(options ...option) *Window {
@@ -3436,6 +4534,12 @@ func (w *Window) TLabelframe(options ...option) *Window {
 // # TLabelframe(Width(...))
 // 
 // If specified, the widget's requested width in pixels.
+// 
+// # Description
+// 
+// A ttk::labelframe widget is a container used to group other widgets
+// together.  It has an optional label, which may be a plain text string or
+// another widget.
 func TLabelframe(options ...option) *Window {
 	return Inter.TLabelframe(options...)
 }
@@ -3455,6 +4559,11 @@ func TLabelframe(options ...option) *Window {
 // Specifies the path name of the menu associated with the menubutton.
 // To be on the safe side, the menu ought to be a direct child of the
 // menubutton.
+// 
+// # Description
+// 
+// A ttk::menubutton widget displays a textual label and/or image,
+// and displays a menu when pressed.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TMenubutton(options ...option) *Window {
@@ -3476,6 +4585,11 @@ func (w *Window) TMenubutton(options ...option) *Window {
 // Specifies the path name of the menu associated with the menubutton.
 // To be on the safe side, the menu ought to be a direct child of the
 // menubutton.
+// 
+// # Description
+// 
+// A ttk::menubutton widget displays a textual label and/or image,
+// and displays a menu when pressed.
 func TMenubutton(options ...option) *Window {
 	return Inter.TMenubutton(options...)
 }
@@ -3550,6 +4664,13 @@ func TMenubutton(options ...option) *Window {
 // in the text string.
 // The underlined character is used for mnemonic activation
 // if 'ttk::notebook::enableTraversal' is called.
+// 
+// # Description
+// 
+// A ttk::notebook widget manages a collection of windows
+// and displays a single one at a time.
+// Each content window is associated with a tab,
+// which the user may select to change the currently-displayed window.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TNotebook(options ...option) *Window {
@@ -3626,6 +4747,13 @@ func (w *Window) TNotebook(options ...option) *Window {
 // in the text string.
 // The underlined character is used for mnemonic activation
 // if 'ttk::notebook::enableTraversal' is called.
+// 
+// # Description
+// 
+// A ttk::notebook widget manages a collection of windows
+// and displays a single one at a time.
+// Each content window is associated with a tab,
+// which the user may select to change the currently-displayed window.
 func TNotebook(options ...option) *Window {
 	return Inter.TNotebook(options...)
 }
@@ -3657,6 +4785,13 @@ func TNotebook(options ...option) *Window {
 // An integer specifying the relative stretchability of the pane.
 // When the paned window is resized, the extra space is added
 // or subtracted to each pane proportionally to its '-weight'.
+// 
+// # Description
+// 
+// A ttk::panedwindow widget displays a number of subwindows,
+// stacked either vertically or horizontally.
+// The user may adjust the relative sizes of the subwindows
+// by dragging the sash between panes.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TPanedwindow(options ...option) *Window {
@@ -3690,6 +4825,13 @@ func (w *Window) TPanedwindow(options ...option) *Window {
 // An integer specifying the relative stretchability of the pane.
 // When the paned window is resized, the extra space is added
 // or subtracted to each pane proportionally to its '-weight'.
+// 
+// # Description
+// 
+// A ttk::panedwindow widget displays a number of subwindows,
+// stacked either vertically or horizontally.
+// The user may adjust the relative sizes of the subwindows
+// by dragging the sash between panes.
 func TPanedwindow(options ...option) *Window {
 	return Inter.TPanedwindow(options...)
 }
@@ -3738,6 +4880,20 @@ func TPanedwindow(options ...option) *Window {
 // If specified to an existing variable, the '-value' of the progress bar is
 // automatically set to the value of the variable whenever
 // the latter is modified.
+// 
+// # Description
+// 
+// A ttk::progressbar widget shows the status of a long-running
+// operation.  They can operate in two modes: determinate mode shows the
+// amount completed relative to the total amount of work to be done, and
+// indeterminate mode provides an animated display to let the user know
+// that something is happening.
+// 
+// If the value of -orient is horizontal a text string can be
+// displayed inside the progressbar. This string can be configured using
+// the -anchor, -font, -foreground, -justify,
+// -text and -wraplength options. If the value of -orient
+// is vertical then these options are ignored.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TProgressbar(options ...option) *Window {
@@ -3788,6 +4944,20 @@ func (w *Window) TProgressbar(options ...option) *Window {
 // If specified to an existing variable, the '-value' of the progress bar is
 // automatically set to the value of the variable whenever
 // the latter is modified.
+// 
+// # Description
+// 
+// A ttk::progressbar widget shows the status of a long-running
+// operation.  They can operate in two modes: determinate mode shows the
+// amount completed relative to the total amount of work to be done, and
+// indeterminate mode provides an animated display to let the user know
+// that something is happening.
+// 
+// If the value of -orient is horizontal a text string can be
+// displayed inside the progressbar. This string can be configured using
+// the -anchor, -font, -foreground, -justify,
+// -text and -wraplength options. If the value of -orient
+// is vertical then these options are ignored.
 func TProgressbar(options ...option) *Window {
 	return Inter.TProgressbar(options...)
 }
@@ -3807,6 +4977,14 @@ func TProgressbar(options ...option) *Window {
 // 
 // The name of a global variable whose value is linked to the widget.
 // Default value is '::selectedButton'.
+// 
+// # Description
+// 
+// ttk::radiobutton widgets are used in groups to show or change
+// a set of mutually-exclusive options.
+// Radiobuttons are linked to a Tcl variable,
+// and have an associated value; when a radiobutton is clicked,
+// it sets the variable to its associated value.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TRadiobutton(options ...option) *Window {
@@ -3828,6 +5006,14 @@ func (w *Window) TRadiobutton(options ...option) *Window {
 // 
 // The name of a global variable whose value is linked to the widget.
 // Default value is '::selectedButton'.
+// 
+// # Description
+// 
+// ttk::radiobutton widgets are used in groups to show or change
+// a set of mutually-exclusive options.
+// Radiobuttons are linked to a Tcl variable,
+// and have an associated value; when a radiobutton is clicked,
+// it sets the variable to its associated value.
 func TRadiobutton(options ...option) *Window {
 	return Inter.TRadiobutton(options...)
 }
@@ -3873,6 +5059,13 @@ func TRadiobutton(options ...option) *Window {
 // value of the variable changes, the scale will update to reflect this value.
 // Whenever the scale is manipulated interactively, the variable will be modified
 // to reflect the scale's new value.
+// 
+// # Description
+// 
+// A ttk::scale widget is typically used to control the numeric value of a
+// linked variable that varies uniformly over some range. A scale displays a
+// slider that can be moved along over a trough, with the relative
+// position of the slider over the trough indicating the value of the variable.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TScale(options ...option) *Window {
@@ -3920,6 +5113,13 @@ func (w *Window) TScale(options ...option) *Window {
 // value of the variable changes, the scale will update to reflect this value.
 // Whenever the scale is manipulated interactively, the variable will be modified
 // to reflect the scale's new value.
+// 
+// # Description
+// 
+// A ttk::scale widget is typically used to control the numeric value of a
+// linked variable that varies uniformly over some range. A scale displays a
+// slider that can be moved along over a trough, with the relative
+// position of the slider over the trough indicating the value of the variable.
 func TScale(options ...option) *Window {
 	return Inter.TScale(options...)
 }
@@ -3938,6 +5138,18 @@ func TScale(options ...option) *Window {
 // 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the scrollbar.
+// 
+// # Description
+// 
+// ttk::scrollbar widgets are typically linked to an associated window
+// that displays a document of some sort, such as a file being edited or a
+// drawing.
+// A scrollbar displays a thumb in the middle portion of the scrollbar,
+// whose position and size provides information about the portion of the
+// document visible in the associated window.
+// The thumb may be dragged by the user to control the visible region.
+// Depending on the theme, two or more arrow buttons may also be present;
+// these are used to scroll the visible region in discrete units.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TScrollbar(options ...option) *Window {
@@ -3958,6 +5170,18 @@ func (w *Window) TScrollbar(options ...option) *Window {
 // 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the scrollbar.
+// 
+// # Description
+// 
+// ttk::scrollbar widgets are typically linked to an associated window
+// that displays a document of some sort, such as a file being edited or a
+// drawing.
+// A scrollbar displays a thumb in the middle portion of the scrollbar,
+// whose position and size provides information about the portion of the
+// document visible in the associated window.
+// The thumb may be dragged by the user to control the visible region.
+// Depending on the theme, two or more arrow buttons may also be present;
+// these are used to scroll the visible region in discrete units.
 func TScrollbar(options ...option) *Window {
 	return Inter.TScrollbar(options...)
 }
@@ -3968,6 +5192,11 @@ func TScrollbar(options ...option) *Window {
 // 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the separator.
+// 
+// # Description
+// 
+// A ttk::separator widget displays a horizontal or vertical separator
+// bar.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TSeparator(options ...option) *Window {
@@ -3980,11 +5209,20 @@ func (w *Window) TSeparator(options ...option) *Window {
 // 
 // One of 'horizontal' or 'vertical'.
 // Specifies the orientation of the separator.
+// 
+// # Description
+// 
+// A ttk::separator widget displays a horizontal or vertical separator
+// bar.
 func TSeparator(options ...option) *Window {
 	return Inter.TSeparator(options...)
 }
 
 // ttk::sizegrip - Bottom-right corner resize widget
+// 
+// A ttk::sizegrip widget (also known as a grow box)
+// allows the user to resize the containing toplevel window
+// by pressing and dragging the grip.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TSizegrip(options ...option) *Window {
@@ -3992,6 +5230,10 @@ func (w *Window) TSizegrip(options ...option) *Window {
 }
 
 // ttk::sizegrip - Bottom-right corner resize widget
+// 
+// A ttk::sizegrip widget (also known as a grow box)
+// allows the user to resize the containing toplevel window
+// by pressing and dragging the grip.
 func TSizegrip(options ...option) *Window {
 	return Inter.TSizegrip(options...)
 }
@@ -4038,6 +5280,15 @@ func TSizegrip(options ...option) *Window {
 // 
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
+// 
+// # Description
+// 
+// A ttk::spinbox widget is a ttk::entry widget with built-in
+// up and down buttons that are used to either modify a numeric value or
+// to select among a set of values. The widget implements all the features
+// of the ttk::entry widget including support of the
+// -textvariable option to link the value displayed by the widget
+// to a Tcl variable.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TSpinbox(options ...option) *Window {
@@ -4086,6 +5337,15 @@ func (w *Window) TSpinbox(options ...option) *Window {
 // 
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
+// 
+// # Description
+// 
+// A ttk::spinbox widget is a ttk::entry widget with built-in
+// up and down buttons that are used to either modify a numeric value or
+// to select among a set of values. The widget implements all the features
+// of the ttk::entry widget including support of the
+// -textvariable option to link the value displayed by the widget
+// to a Tcl variable.
 func TSpinbox(options ...option) *Window {
 	return Inter.TSpinbox(options...)
 }
@@ -4144,6 +5404,35 @@ func TSpinbox(options ...option) *Window {
 // # TTreeview(Titleitems(...))
 // 
 // Number of items at the top that should not be vertically scrolled. Default is 0.
+// 
+// # Description
+// 
+// The ttk::treeview widget displays a hierarchical collection of items.
+// Each item has a textual label, an optional image,
+// and an optional list of data values.
+// The data values are displayed in successive columns after
+// the tree label.
+// 
+// The order in which data values are displayed may be controlled
+// by setting the -displaycolumns widget option.
+// The tree widget can also display column headings.
+// Columns may be accessed by number or by symbolic names
+// listed in the -columns widget option;
+// see COLUMN IDENTIFIERS.
+// 
+// Each item is identified by a unique name.
+// The widget will generate item IDs if they are not supplied by the caller.
+// There is a distinguished root item, named {}.
+// The root item itself is not displayed;
+// its children appear at the top level of the hierarchy.
+// 
+// Each item also has a list of tags,
+// which can be used to associate event bindings with individual items
+// and control the appearance of the item.
+// 
+// Treeview widgets support horizontal and vertical scrolling with the
+// standard -[xy]scrollcommand options
+// and [xy]view widget commands.
 //
 // The resulting Window is a child of 'w'.
 func (w *Window) TTreeview(options ...option) *Window {
@@ -4204,6 +5493,35 @@ func (w *Window) TTreeview(options ...option) *Window {
 // # TTreeview(Titleitems(...))
 // 
 // Number of items at the top that should not be vertically scrolled. Default is 0.
+// 
+// # Description
+// 
+// The ttk::treeview widget displays a hierarchical collection of items.
+// Each item has a textual label, an optional image,
+// and an optional list of data values.
+// The data values are displayed in successive columns after
+// the tree label.
+// 
+// The order in which data values are displayed may be controlled
+// by setting the -displaycolumns widget option.
+// The tree widget can also display column headings.
+// Columns may be accessed by number or by symbolic names
+// listed in the -columns widget option;
+// see COLUMN IDENTIFIERS.
+// 
+// Each item is identified by a unique name.
+// The widget will generate item IDs if they are not supplied by the caller.
+// There is a distinguished root item, named {}.
+// The root item itself is not displayed;
+// its children appear at the top level of the hierarchy.
+// 
+// Each item also has a list of tags,
+// which can be used to associate event bindings with individual items
+// and control the appearance of the item.
+// 
+// Treeview widgets support horizontal and vertical scrolling with the
+// standard -[xy]scrollcommand options
+// and [xy]view widget commands.
 func TTreeview(options ...option) *Window {
 	return Inter.TTreeview(options...)
 }
@@ -7959,4 +9277,12 @@ func (o yscrollincrementOption) optionString(w *Window) string {
 // is unconstrained.
 func Yscrollincrement(value any) option {
 	return yscrollincrementOption{value}
+}
+
+func Displayof(w *Window) option {
+	return stringOption(fmt.Sprintf(`-displayof %ss`, w.path()))
+}
+
+func Nice() option {
+	return stringOption(fmt.Sprintf(`-nice`))
 }
