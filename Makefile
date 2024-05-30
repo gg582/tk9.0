@@ -21,10 +21,10 @@ edit:
 	@if [ -f "Session.vim" ]; then gvim -S & else gvim -p Makefile go.mod builder.json *.go & fi
 
 editor:
-	gofmt -l -s -w . 2>&1 | tee log-editor
 	# go test -c -o /dev/null 2>&1 | tee -a log-editor
 	go build -v  -o /dev/null generator.go 2>&1 | tee -a log-editor
 	go run generator.go 2>&1 | tee -a log-editor
+	gofmt -l -s -w . 2>&1 | tee log-editor
 	go build -v  -o /dev/null ./... 2>&1 | tee -a log-editor
 	go test  2>&1 | tee -a log-editor
 

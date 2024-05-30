@@ -47,16 +47,17 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	b := TButton(Txt("{[Close\nMe]}"), Underline(2), Command(func() { Destroy(Inter) }))
-	Inter.eval(fmt.Sprintf(`
+	Bind("TLabel", "<1>", Command(func() { fmt.Println("Clicked!") }))
+	Pack(
+		TButton(Txt("Close"), Underline(0), Command(func() { Destroy(Inter) })),
+		TLabel(Txt("Click me"), Underline(4)),
+	)
+	Inter.eval(`
 ttk::style theme use clam
 . configure -pady 10
-pack %s
 tk::PlaceWindow . center
 wm title . "modernc.org/tk9.0 example"
 wm geometry . 300x[winfo height .]
 tkwait window .
-
-`, b.path()))
-	trc("", b)
+`)
 }

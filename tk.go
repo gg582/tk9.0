@@ -251,6 +251,14 @@ func (tk *Tk) eval(code string) (r string, err error) {
 	return tk.in.Eval(code, tcl.EvalGlobal)
 }
 
+func (tk *Tk) evalErr(code string) (r string) {
+	r, err := tk.eval(code)
+	if err != nil {
+		Inter.fail(err)
+	}
+	return r
+}
+
 func (tk *Tk) fail(err error) {
 	if !CollectErrors {
 		if dmesgs {
@@ -382,6 +390,27 @@ func optionString(v any) string {
 	}
 }
 
+func tclSafeStringBind(s string) string {
+	if s == "" {
+		return "{}"
+	}
+
+	const badString = "&;`'\"|*?~^()[]{}$\\\n\r\t "
+	if strings.ContainsAny(s, badString) {
+		var b strings.Builder
+		for _, c := range s {
+			switch {
+			case int(c) < len(badChars) && badChars[c]:
+				fmt.Fprintf(&b, "\\x%02x", c)
+			default:
+				b.WriteRune(c)
+			}
+		}
+		s = b.String()
+	}
+	return s
+}
+
 func tclSafeString(s string) string {
 	if s == "" {
 		return "{}"
@@ -503,21 +532,23 @@ func Finalize() (err error) {
 	return err
 }
 
-// bell — Ring a display's bell
+// bind — Arrange for X events to invoke functions
 //
-// This command rings the bell on the display for window and returns an empty
-// string. If the -displayof option is omitted, the display of the
-// application's main window is used by default. The command uses the current
-// bell-related settings for the display, which may be modified with programs
-// such as xset.
+// Additional information might be available at the [Tcl/Tk bind] page.
 //
-// If -nice is not specified, this command also resets the screen saver for the
-// screen. Some screen savers will ignore this, but others will reset so that
-// the screen becomes visible again.
-//
-// bell ?-displayof window? ?-nice?
-//
-// func Bell(opts ...option) {
-// }
-
-// Displayof
+// [Tcl/Tk bind]: https://www.tcl.tk/man/tcl9.0/TkCmd/bind.html
+func Bind(options ...any) {
+	a := []string{"bind"}
+	for _, v := range options {
+		switch x := v.(type) {
+		case *Window:
+			a = append(a, x.path())
+		case *eventHandler:
+			x.tcl = ""
+			a = append(a, x.optionString(nil))
+		default:
+			a = append(a, tclSafeStringBind(fmt.Sprint(x)))
+		}
+	}
+	Inter.evalErr(strings.Join(a, " "))
+}

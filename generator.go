@@ -122,12 +122,14 @@ func generated(fn string, docs []document) {
 				fmt.Fprintf(w, "\n\n// %v", doc["Name"])
 				fmt.Fprintf(w, "%s", description)
 				fmt.Fprintf(w, "\n//\n// The resulting Window is a child of 'w'.")
+				pageLink(w, page)
 				fmt.Fprintf(w, "\nfunc (w *Window) %s(options ...option) *Window {", nm)
 				fmt.Fprintf(w, "\n\treturn w.newChild(%q, options...)", nm0)
 				fmt.Fprintf(w, "\n}")
 
 				fmt.Fprintf(w, "\n\n// %v", doc["Name"])
 				fmt.Fprintf(w, "%s", description)
+				pageLink(w, page)
 				fmt.Fprintf(w, "\nfunc %s(options ...option) *Window {", nm)
 				fmt.Fprintf(w, "\n\treturn Inter.%s(options...)", nm)
 				fmt.Fprintf(w, "\n}")
@@ -151,11 +153,11 @@ func generated(fn string, docs []document) {
 			case !isWindow && synops != nil && methods == nil:
 				nonWinOnlySynops(w, doc)
 			case !isWindow && synops != nil && methods != nil:
-				//TODO nonWinSynopsAndMethods(w, doc)
+				nonWinSynopsAndMethods(w, doc)
 			case isWindow && synops != nil && methods != nil:
-				//TODO winSynopsAndMethods(w, doc)
+				winSynopsAndMethods(w, doc)
 			case isWindow && synops != nil && methods == nil:
-				//TODO winOnlySynops(w, doc)
+				winOnlySynops(w, doc)
 			default:
 				fmt.Printf("TODO page=%s isWindow=%v synops=%v methods=%v\n", page, isWindow, synops != nil, methods != nil)
 			}
@@ -340,15 +342,23 @@ func parseSynopsisLine(line string) (r []any) {
 	}
 }
 
+var nonWinOnlySynopsManual = map[string]struct{}{
+	"bind": {},
+}
+
 func nonWinOnlySynops(w io.Writer, doc document) {
 	page := doc["Page"].(string)
+	if _, ok := nonWinOnlySynopsManual[page]; ok {
+		return
+	}
+
 	for _, v := range doc["Synopsis"].([]any) {
 		syn := parseSynopsisLine(v.(string))
 		switch page {
 		case "bell":
-			command0(w, comment(doc["Name"], doc["Description"]), syn[0], winOpt{syn[1]}, syn[2])
+			command0(w, page, comment(doc["Name"], doc["Description"]), syn[0], winOpt{syn[1]}, syn[2])
 		case "destroy":
-			command0(w, comment(doc["Name"], doc["Description"]), syn[0], wins0Opt{})
+			command0(w, page, comment(doc["Name"], doc["Description"]), syn[0], wins0Opt{})
 		default:
 			fmt.Printf("TODO nonWinOnlySynopsManual: page=%s non-win only synops=%v\n", page, syn)
 		}
@@ -367,7 +377,12 @@ func nonWinSynopsAndMethods(w io.Writer, doc document) {
 	page := doc["Page"].(string)
 	for _, v := range doc["Synopsis"].([]any) {
 		syn := parseSynopsisLine(v.(string))
-		fmt.Printf("TODO nonWinSynopsAndMethods: page=%s non-win synops=%v\n", page, syn)
+		switch page {
+		case "pack":
+			command0(w, page, comment(doc["Name"], doc["Description"].([]any)[:1]), syn[0], wins0Opt{})
+		default:
+			fmt.Printf("TODO nonWinSynopsAndMethods: page=%s non-win synops=%v\n", page, syn)
+		}
 	}
 	for _, v := range doc["Methods"].([]any) {
 		m := v.(map[string]any)
@@ -457,13 +472,23 @@ func registerOptions(syns []any) {
 	}
 }
 
-func command0(w io.Writer, comment string, syns ...any) {
+func command0(w io.Writer, page string, comment string, syns ...any) {
 	fmt.Fprintf(w, "\n\n%s", comment)
+	pageLink(w, page)
 	params := params(syns[1:])
 	registerOptions(syns[1:])
 	fmt.Fprintf(w, "\nfunc %s(%s) {", export(fmt.Sprint(syns[0])), strings.Join(params, ", "))
 	fmt.Fprintf(w, "\n\tInter.eval(fmt.Sprintf(`%s %%s`, collect(options...)))", syns[0])
 	fmt.Fprintf(w, "\n}")
+}
+
+func pageLink(w io.Writer, page string) {
+	if page == "" {
+		return
+	}
+
+	fmt.Fprintf(w, "\n//\n// Additional information might be available at the [Tcl/Tk %s] page.", page)
+	fmt.Fprintf(w, "\n//\n// [Tcl/Tk %s]: https://www.tcl.tk/man/tcl9.0/TkCmd/%[1]s.html ", page)
 }
 
 func moreOptions(w io.Writer, m map[string][]any) {
