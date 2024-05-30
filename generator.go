@@ -131,7 +131,7 @@ func generated(fn string, docs []document) {
 				fmt.Fprintf(w, "%s", description)
 				pageLink(w, page)
 				fmt.Fprintf(w, "\nfunc %s(options ...option) *Window {", nm)
-				fmt.Fprintf(w, "\n\treturn Inter.%s(options...)", nm)
+				fmt.Fprintf(w, "\n\treturn App.%s(options...)", nm)
 				fmt.Fprintf(w, "\n}")
 				if opts, ok := doc["Options"].([]any); ok {
 					for _, v := range opts {
@@ -342,13 +342,14 @@ func parseSynopsisLine(line string) (r []any) {
 	}
 }
 
-var nonWinOnlySynopsManual = map[string]struct{}{
-	"bind": {},
+var nonWinOnlySynopsSkip = map[string]struct{}{
+	"bind":     {}, // Manual.
+	"bindtags": {}, // Ignored, tkinter does not expose it either.
 }
 
 func nonWinOnlySynops(w io.Writer, doc document) {
 	page := doc["Page"].(string)
-	if _, ok := nonWinOnlySynopsManual[page]; ok {
+	if _, ok := nonWinOnlySynopsSkip[page]; ok {
 		return
 	}
 
@@ -360,7 +361,7 @@ func nonWinOnlySynops(w io.Writer, doc document) {
 		case "destroy":
 			command0(w, page, comment(doc["Name"], doc["Description"]), syn[0], wins0Opt{})
 		default:
-			fmt.Printf("TODO nonWinOnlySynopsManual: page=%s non-win only synops=%v\n", page, syn)
+			fmt.Printf("TODO nonWinOnlySynops: page=%s non-win only synops=%v\n", page, syn)
 		}
 	}
 }
@@ -377,6 +378,10 @@ func nonWinSynopsAndMethods(w io.Writer, doc document) {
 	page := doc["Page"].(string)
 	for _, v := range doc["Synopsis"].([]any) {
 		syn := parseSynopsisLine(v.(string))
+		if len(syn) == 0 {
+			continue
+		}
+
 		switch page {
 		case "pack":
 			command0(w, page, comment(doc["Name"], doc["Description"].([]any)[:1]), syn[0], wins0Opt{})
@@ -478,7 +483,7 @@ func command0(w io.Writer, page string, comment string, syns ...any) {
 	params := params(syns[1:])
 	registerOptions(syns[1:])
 	fmt.Fprintf(w, "\nfunc %s(%s) {", export(fmt.Sprint(syns[0])), strings.Join(params, ", "))
-	fmt.Fprintf(w, "\n\tInter.eval(fmt.Sprintf(`%s %%s`, collect(options...)))", syns[0])
+	fmt.Fprintf(w, "\n\teval(fmt.Sprintf(`%s %%s`, collect(options...)))", syns[0])
 	fmt.Fprintf(w, "\n}")
 }
 

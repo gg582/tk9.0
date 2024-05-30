@@ -23,7 +23,7 @@ import (
 //
 // [Tcl/Tk bell]: https://www.tcl.tk/man/tcl9.0/TkCmd/bell.html
 func Bell(options ...option) {
-	Inter.eval(fmt.Sprintf(`bell %s`, collect(options...)))
+	eval(fmt.Sprintf(`bell %s`, collect(options...)))
 }
 
 // button - Create and manipulate 'button' action widgets
@@ -221,7 +221,7 @@ func (w *Window) Button(options ...option) *Window {
 //
 // [Tcl/Tk button]: https://www.tcl.tk/man/tcl9.0/TkCmd/button.html
 func Button(options ...option) *Window {
-	return Inter.Button(options...)
+	return App.Button(options...)
 }
 
 // canvas - Create and manipulate 'canvas' hypergraphics drawing surface widgets
@@ -381,7 +381,7 @@ func (w *Window) Canvas(options ...option) *Window {
 //
 // [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl9.0/TkCmd/canvas.html
 func Canvas(options ...option) *Window {
-	return Inter.Canvas(options...)
+	return App.Canvas(options...)
 }
 
 // checkbutton - Create and manipulate 'checkbutton' boolean selection widgets
@@ -749,7 +749,7 @@ func (w *Window) Checkbutton(options ...option) *Window {
 //
 // [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
 func Checkbutton(options ...option) *Window {
-	return Inter.Checkbutton(options...)
+	return App.Checkbutton(options...)
 }
 
 // destroy - Destroy one or more windows
@@ -769,7 +769,7 @@ func Checkbutton(options ...option) *Window {
 //
 // [Tcl/Tk destroy]: https://www.tcl.tk/man/tcl9.0/TkCmd/destroy.html
 func Destroy(options ...option) {
-	Inter.eval(fmt.Sprintf(`destroy %s`, collect(options...)))
+	eval(fmt.Sprintf(`destroy %s`, collect(options...)))
 }
 
 // entry - Create and manipulate 'entry' one-line text entry widgets
@@ -985,7 +985,7 @@ func (w *Window) Entry(options ...option) *Window {
 //
 // [Tcl/Tk entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/entry.html
 func Entry(options ...option) *Window {
-	return Inter.Entry(options...)
+	return App.Entry(options...)
 }
 
 // frame - Create and manipulate 'frame' simple container widgets
@@ -1207,7 +1207,7 @@ func (w *Window) Frame(options ...option) *Window {
 //
 // [Tcl/Tk frame]: https://www.tcl.tk/man/tcl9.0/TkCmd/frame.html
 func Frame(options ...option) *Window {
-	return Inter.Frame(options...)
+	return App.Frame(options...)
 }
 
 // label - Create and manipulate 'label' non-interactive text or image widgets
@@ -1327,7 +1327,7 @@ func (w *Window) Label(options ...option) *Window {
 //
 // [Tcl/Tk label]: https://www.tcl.tk/man/tcl9.0/TkCmd/label.html
 func Label(options ...option) *Window {
-	return Inter.Label(options...)
+	return App.Label(options...)
 }
 
 // labelframe - Create and manipulate 'labelframe' labelled container widgets
@@ -1515,7 +1515,7 @@ func (w *Window) Labelframe(options ...option) *Window {
 //
 // [Tcl/Tk labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/labelframe.html
 func Labelframe(options ...option) *Window {
-	return Inter.Labelframe(options...)
+	return App.Labelframe(options...)
 }
 
 // listbox - Create and manipulate 'listbox' item list widgets
@@ -1683,7 +1683,7 @@ func (w *Window) Listbox(options ...option) *Window {
 //
 // [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/listbox.html
 func Listbox(options ...option) *Window {
-	return Inter.Listbox(options...)
+	return App.Listbox(options...)
 }
 
 // menu, tk_menuSetFocus - Create and manipulate 'menu' widgets and menubars
@@ -1805,7 +1805,7 @@ func (w *Window) Menu(options ...option) *Window {
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tcl9.0/TkCmd/menu.html
 func Menu(options ...option) *Window {
-	return Inter.Menu(options...)
+	return App.Menu(options...)
 }
 
 // menubutton - Create and manipulate 'menubutton' pop-up menu indicator widgets
@@ -1933,7 +1933,7 @@ func (w *Window) Menubutton(options ...option) *Window {
 //
 // [Tcl/Tk menubutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/menubutton.html
 func Menubutton(options ...option) *Window {
-	return Inter.Menubutton(options...)
+	return App.Menubutton(options...)
 }
 
 // message - Create and manipulate 'message' non-interactive text widgets
@@ -2121,7 +2121,7 @@ func (w *Window) Message(options ...option) *Window {
 //
 // [Tcl/Tk message]: https://www.tcl.tk/man/tcl9.0/TkCmd/message.html
 func Message(options ...option) *Window {
-	return Inter.Message(options...)
+	return App.Message(options...)
 }
 
 // tk_optionMenu - Create an option menubutton and its menu
@@ -2175,7 +2175,7 @@ func (w *Window) OptionMenu(options ...option) *Window {
 //
 // [Tcl/Tk optionMenu]: https://www.tcl.tk/man/tcl9.0/TkCmd/optionMenu.html
 func OptionMenu(options ...option) *Window {
-	return Inter.OptionMenu(options...)
+	return App.OptionMenu(options...)
 }
 
 // pack - Geometry manager that packs around edges of cavity
@@ -2190,7 +2190,7 @@ func OptionMenu(options ...option) *Window {
 //
 // [Tcl/Tk pack]: https://www.tcl.tk/man/tcl9.0/TkCmd/pack.html
 func Pack(options ...option) {
-	Inter.eval(fmt.Sprintf(`pack %s`, collect(options...)))
+	eval(fmt.Sprintf(`pack %s`, collect(options...)))
 }
 
 // panedwindow - Create and manipulate 'panedwindow' split container widgets
@@ -2382,7 +2382,7 @@ func (w *Window) Panedwindow(options ...option) *Window {
 //
 // [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/panedwindow.html
 func Panedwindow(options ...option) *Window {
-	return Inter.Panedwindow(options...)
+	return App.Panedwindow(options...)
 }
 
 // radiobutton - Create and manipulate 'radiobutton' pick-one widgets
@@ -2722,7 +2722,7 @@ func (w *Window) Radiobutton(options ...option) *Window {
 //
 // [Tcl/Tk radiobutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/radiobutton.html
 func Radiobutton(options ...option) *Window {
-	return Inter.Radiobutton(options...)
+	return App.Radiobutton(options...)
 }
 
 // scale - Create and manipulate 'scale' value-controlled slider widgets
@@ -3018,7 +3018,7 @@ func (w *Window) Scale(options ...option) *Window {
 //
 // [Tcl/Tk scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/scale.html
 func Scale(options ...option) *Window {
-	return Inter.Scale(options...)
+	return App.Scale(options...)
 }
 
 // scrollbar - Create and manipulate 'scrollbar' scrolling control and indicator widgets
@@ -3166,7 +3166,7 @@ func (w *Window) Scrollbar(options ...option) *Window {
 //
 // [Tcl/Tk scrollbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/scrollbar.html
 func Scrollbar(options ...option) *Window {
-	return Inter.Scrollbar(options...)
+	return App.Scrollbar(options...)
 }
 
 // spinbox - Create and manipulate 'spinbox' value spinner widgets
@@ -3504,7 +3504,7 @@ func (w *Window) Spinbox(options ...option) *Window {
 //
 // [Tcl/Tk spinbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/spinbox.html
 func Spinbox(options ...option) *Window {
-	return Inter.Spinbox(options...)
+	return App.Spinbox(options...)
 }
 
 // text, tk_textCopy, tk_textCut, tk_textPaste - Create and manipulate 'text' hypertext editing widgets
@@ -3852,7 +3852,7 @@ func (w *Window) Text(options ...option) *Window {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func Text(options ...option) *Window {
-	return Inter.Text(options...)
+	return App.Text(options...)
 }
 
 // toplevel - Create and manipulate 'toplevel' main and popup window widgets
@@ -4128,7 +4128,7 @@ func (w *Window) Toplevel(options ...option) *Window {
 //
 // [Tcl/Tk toplevel]: https://www.tcl.tk/man/tcl9.0/TkCmd/toplevel.html
 func Toplevel(options ...option) *Window {
-	return Inter.Toplevel(options...)
+	return App.Toplevel(options...)
 }
 
 // ttk::button - Widget that issues a command when pressed
@@ -4176,7 +4176,7 @@ func (w *Window) TButton(options ...option) *Window {
 //
 // [Tcl/Tk ttk_button]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_button.html
 func TButton(options ...option) *Window {
-	return Inter.TButton(options...)
+	return App.TButton(options...)
 }
 
 // ttk::checkbutton - On/off widget
@@ -4246,7 +4246,7 @@ func (w *Window) TCheckbutton(options ...option) *Window {
 //
 // [Tcl/Tk ttk_checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_checkbutton.html
 func TCheckbutton(options ...option) *Window {
-	return Inter.TCheckbutton(options...)
+	return App.TCheckbutton(options...)
 }
 
 // ttk::combobox - text field with popdown selection list
@@ -4370,7 +4370,7 @@ func (w *Window) TCombobox(options ...option) *Window {
 //
 // [Tcl/Tk ttk_combobox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_combobox.html
 func TCombobox(options ...option) *Window {
-	return Inter.TCombobox(options...)
+	return App.TCombobox(options...)
 }
 
 // ttk::entry - Editable text field widget
@@ -4526,7 +4526,7 @@ func (w *Window) TEntry(options ...option) *Window {
 //
 // [Tcl/Tk ttk_entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_entry.html
 func TEntry(options ...option) *Window {
-	return Inter.TEntry(options...)
+	return App.TEntry(options...)
 }
 
 // ttk::frame - Simple container widget
@@ -4596,7 +4596,7 @@ func (w *Window) TFrame(options ...option) *Window {
 //
 // [Tcl/Tk ttk_frame]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_frame.html
 func TFrame(options ...option) *Window {
-	return Inter.TFrame(options...)
+	return App.TFrame(options...)
 }
 
 // ttk::label - Display a text string and/or image
@@ -4662,7 +4662,7 @@ func (w *Window) TLabel(options ...option) *Window {
 //
 // [Tcl/Tk ttk_label]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_label.html
 func TLabel(options ...option) *Window {
-	return Inter.TLabel(options...)
+	return App.TLabel(options...)
 }
 
 // ttk::labelframe - Container widget with optional label
@@ -4770,7 +4770,7 @@ func (w *Window) TLabelframe(options ...option) *Window {
 //
 // [Tcl/Tk ttk_labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_labelframe.html
 func TLabelframe(options ...option) *Window {
-	return Inter.TLabelframe(options...)
+	return App.TLabelframe(options...)
 }
 
 // ttk::menubutton - Widget that pops down a menu when pressed
@@ -4828,7 +4828,7 @@ func (w *Window) TMenubutton(options ...option) *Window {
 //
 // [Tcl/Tk ttk_menubutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_menubutton.html
 func TMenubutton(options ...option) *Window {
-	return Inter.TMenubutton(options...)
+	return App.TMenubutton(options...)
 }
 
 // ttk::notebook - Multi-paned container widget
@@ -5000,7 +5000,7 @@ func (w *Window) TNotebook(options ...option) *Window {
 //
 // [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
 func TNotebook(options ...option) *Window {
-	return Inter.TNotebook(options...)
+	return App.TNotebook(options...)
 }
 
 // ttk::panedwindow - Multi-pane container window
@@ -5086,7 +5086,7 @@ func (w *Window) TPanedwindow(options ...option) *Window {
 //
 // [Tcl/Tk ttk_panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_panedwindow.html
 func TPanedwindow(options ...option) *Window {
-	return Inter.TPanedwindow(options...)
+	return App.TPanedwindow(options...)
 }
 
 // ttk::progressbar - Provide progress feedback
@@ -5220,7 +5220,7 @@ func (w *Window) TProgressbar(options ...option) *Window {
 //
 // [Tcl/Tk ttk_progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
 func TProgressbar(options ...option) *Window {
-	return Inter.TProgressbar(options...)
+	return App.TProgressbar(options...)
 }
 
 // ttk::radiobutton - Mutually exclusive option widget
@@ -5284,7 +5284,7 @@ func (w *Window) TRadiobutton(options ...option) *Window {
 //
 // [Tcl/Tk ttk_radiobutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_radiobutton.html
 func TRadiobutton(options ...option) *Window {
-	return Inter.TRadiobutton(options...)
+	return App.TRadiobutton(options...)
 }
 
 // ttk::scale - Create and manipulate a scale widget
@@ -5398,7 +5398,7 @@ func (w *Window) TScale(options ...option) *Window {
 //
 // [Tcl/Tk ttk_scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scale.html
 func TScale(options ...option) *Window {
-	return Inter.TScale(options...)
+	return App.TScale(options...)
 }
 
 // ttk::scrollbar - Control the viewport of a scrollable widget
@@ -5468,7 +5468,7 @@ func (w *Window) TScrollbar(options ...option) *Window {
 //
 // [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scrollbar.html
 func TScrollbar(options ...option) *Window {
-	return Inter.TScrollbar(options...)
+	return App.TScrollbar(options...)
 }
 
 // ttk::separator - Separator bar
@@ -5508,7 +5508,7 @@ func (w *Window) TSeparator(options ...option) *Window {
 //
 // [Tcl/Tk ttk_separator]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_separator.html
 func TSeparator(options ...option) *Window {
-	return Inter.TSeparator(options...)
+	return App.TSeparator(options...)
 }
 
 // ttk::sizegrip - Bottom-right corner resize widget
@@ -5536,7 +5536,7 @@ func (w *Window) TSizegrip(options ...option) *Window {
 //
 // [Tcl/Tk ttk_sizegrip]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_sizegrip.html
 func TSizegrip(options ...option) *Window {
-	return Inter.TSizegrip(options...)
+	return App.TSizegrip(options...)
 }
 
 // ttk::spinbox - Selecting text field widget
@@ -5656,7 +5656,7 @@ func (w *Window) TSpinbox(options ...option) *Window {
 //
 // [Tcl/Tk ttk_spinbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_spinbox.html
 func TSpinbox(options ...option) *Window {
-	return Inter.TSpinbox(options...)
+	return App.TSpinbox(options...)
 }
 
 // ttk::treeview - hierarchical multicolumn data display widget
@@ -5840,7 +5840,7 @@ func (w *Window) TTreeview(options ...option) *Window {
 //
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func TTreeview(options ...option) *Window {
-	return Inter.TTreeview(options...)
+	return App.TTreeview(options...)
 }
 
 type activebackgroundOption struct{ v any }

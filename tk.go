@@ -5,6 +5,12 @@
 // Package tk9.0 is an idiomatic Go wrapper for [libtk9.0]. It is similar to
 // Python's tkinter.
 //
+// # Package initialization
+//
+// User code should check if the package variable 'Error' is nil before using
+// this package.  If package initialization failed the 'Error' variable will be
+// non nil.
+//
 // # The options pattern
 //
 // Zero or more options can be specified when creating a widget. For example
@@ -79,7 +85,7 @@
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 package tk9_0 // import "modernc.org/tk9.0"
 
-//TODO Use Tcl 'uknown' for prefixed commands
+//TODO Use Tcl 'unknown' for prefixed commands?
 
 import (
 	"errors"
@@ -101,31 +107,28 @@ import (
 )
 
 var (
-	isBuilder = os.Getenv("MODERNC_BUILDER") != ""
+	// App is the main/root application window.
+	App *Window
 
-	id atomic.Int32
+	// Error records errors when ErrModeCollect is true.
+	Error error
 
-	// Inter is the singleton Tk instance created on package initialization.
-	Inter *Tk
-
-	interErr  error
-	interOnce sync.Once
-
-	tclDir string
-	tkDir  string
-
-	finished atomic.Int32
-
-	// CollectErrors selects the behaviour on errors for certain functions
-	// that do not return error.
+	// CollectErrors selects the behaviour on errors for certain functions that do
+	// not return error.
 	//
 	// When false, errors will panic, providing a stack trace.
 	//
-	// When true, errors will be recorded using errors.Join in the Error
-	// variable.
+	// When true, errors will be recorded using errors.Join in the Error variable.
 	CollectErrors bool
-	// Error records errors when ErrModeCollect is true.
-	Error error
+
+	finished  atomic.Int32
+	handlers  = map[int32]*eventHandler{}
+	id        atomic.Int32
+	initOnce  sync.Once
+	interp    *tcl.Interp
+	isBuilder = os.Getenv("MODERNC_BUILDER") != ""
+	tclDir    string
+	tkDir     string
 
 	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
 	//
@@ -166,9 +169,33 @@ func init() {
 		return
 	}
 
-	initialize()
-	if interErr != nil {
-		panic(interErr)
+	initOnce.Do(func() {
+		runtime.LockOSThread()
+		if tclDir, Error = tcl.Stdlib(); Error != nil {
+			return
+		}
+
+		if tkDir, Error = stdlib(); Error != nil {
+			return
+		}
+
+		if interp, Error = tcl.NewInterp(map[string]string{
+			"tcl_library": tclDir,
+			"tk_library":  tkDir,
+		}); Error != nil {
+			return
+		}
+
+		if rc := libtk.XTk_Init(interp.TLS(), interp.Handle()); rc != libtk.TCL_OK {
+			interp.Close()
+			Error = fmt.Errorf("failed to initialize the Tk subsystem")
+			return
+		}
+
+		Error = interp.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil)
+	})
+	if Error == nil {
+		App = &Window{}
 	}
 }
 
@@ -196,11 +223,39 @@ func (w *Window) newChild(nm string, options ...option) *Window {
 	}
 	path := fmt.Sprintf("%s.%s%v", w.path(), nm, id.Add(1))
 	code := fmt.Sprintf("%s %s %s", class, path, winCollect(w, options...))
-	r, err := Inter.eval(code)
+	r, err := eval(code)
 	if err != nil {
-		Inter.fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
 	}
 	return &Window{fpath: r}
+}
+
+func eval(code string) (r string, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("code=%s -> r=%v err=%v", code, r, err)
+		}()
+	}
+	return interp.Eval(code, tcl.EvalGlobal)
+}
+
+func evalErr(code string) (r string) {
+	r, err := eval(code)
+	if err != nil {
+		fail(err)
+	}
+	return r
+}
+
+func fail(err error) {
+	if !CollectErrors {
+		if dmesgs {
+			dmesg("PANIC %v", err)
+		}
+		panic(err)
+	}
+
+	Error = errors.Join(Error, err)
 }
 
 func winCollect(w *Window, options ...option) string {
@@ -236,38 +291,6 @@ func (s stringOption) optionString(w *Window) string {
 // Note: Tk has all *Window methods promoted.
 type Tk struct {
 	*Window
-	handlers map[int32]*eventHandler
-	in       *tcl.Interp
-
-	trace bool
-}
-
-func (tk *Tk) eval(code string) (r string, err error) {
-	if dmesgs {
-		defer func() {
-			dmesg("code=%s -> r=%v err=%v", code, r, err)
-		}()
-	}
-	return tk.in.Eval(code, tcl.EvalGlobal)
-}
-
-func (tk *Tk) evalErr(code string) (r string) {
-	r, err := tk.eval(code)
-	if err != nil {
-		Inter.fail(err)
-	}
-	return r
-}
-
-func (tk *Tk) fail(err error) {
-	if !CollectErrors {
-		if dmesgs {
-			dmesg("PANIC %v", err)
-		}
-		panic(err)
-	}
-
-	Error = errors.Join(Error, err)
 }
 
 // EventHandler is invoked when its associated event fires. The 'data' argument
@@ -289,7 +312,7 @@ type eventHandler struct {
 
 func newEventHandler(option string, args ...any) (r *eventHandler) {
 	if len(args) == 0 {
-		Inter.fail(fmt.Errorf("registering event handler: need at least one argument"))
+		fail(fmt.Errorf("registering event handler: need at least one argument"))
 		return nil
 	}
 
@@ -300,14 +323,14 @@ func newEventHandler(option string, args ...any) (r *eventHandler) {
 		switch x := v.(type) {
 		case EventHandler:
 			if handler != nil {
-				Inter.fail(fmt.Errorf("registering event handler: multiple handling functions"))
+				fail(fmt.Errorf("registering event handler: multiple handling functions"))
 				return nil
 			}
 
 			handler = x
 		case func(*Window, any) (any, error):
 			if handler != nil {
-				Inter.fail(fmt.Errorf("registering event handler: multiple handling functions"))
+				fail(fmt.Errorf("registering event handler: multiple handling functions"))
 				return nil
 			}
 
@@ -315,7 +338,7 @@ func newEventHandler(option string, args ...any) (r *eventHandler) {
 		case func():
 			if handler != nil {
 				if detacher != nil {
-					Inter.fail(fmt.Errorf("registering event handler: multiple detaching functions"))
+					fail(fmt.Errorf("registering event handler: multiple detaching functions"))
 					return nil
 				}
 
@@ -326,21 +349,21 @@ func newEventHandler(option string, args ...any) (r *eventHandler) {
 			handler = func(*Window, any) (any, error) { x(); return nil, nil }
 		case EventDetacher:
 			if detacher != nil {
-				Inter.fail(fmt.Errorf("registering event handler: multiple detaching functions"))
+				fail(fmt.Errorf("registering event handler: multiple detaching functions"))
 				return nil
 			}
 
 			detacher = x
 		case func(*Window, any):
 			if detacher != nil {
-				Inter.fail(fmt.Errorf("registering event handler: multiple detaching functions"))
+				fail(fmt.Errorf("registering event handler: multiple detaching functions"))
 				return nil
 			}
 
 			detacher = x
 		default:
 			if data != nil {
-				Inter.fail(fmt.Errorf("registering event handler: multiple data values"))
+				fail(fmt.Errorf("registering event handler: multiple data values"))
 				return nil
 			}
 
@@ -348,7 +371,7 @@ func newEventHandler(option string, args ...any) (r *eventHandler) {
 		}
 	}
 	if handler == nil {
-		Inter.fail(fmt.Errorf("registering event handler: no event handler argument"))
+		fail(fmt.Errorf("registering event handler: no event handler argument"))
 		return nil
 	}
 
@@ -361,14 +384,14 @@ func newEventHandler(option string, args ...any) (r *eventHandler) {
 	}
 	switch {
 	case r.detacher == nil:
-		r.detacher = func(w *Window, v any) { delete(Inter.handlers, r.id) }
+		r.detacher = func(w *Window, v any) { delete(handlers, r.id) }
 	default:
 		r.detacher = func(w *Window, v any) {
 			detacher(w, v)
-			delete(Inter.handlers, r.id)
+			delete(handlers, r.id)
 		}
 	}
-	Inter.handlers[r.id] = r
+	handlers[r.id] = r
 	return r
 }
 
@@ -432,59 +455,15 @@ func tclSafeString(s string) string {
 	return s
 }
 
-// initialize performs package initialization and returns a *Tk or error, if
-// any.
-//
-// The returned value is a singleton. Calls to initialize() are idempotent and
-// all return the same (instance, error) tuple.
-//
-// initialize will perform runtime.LockOSThread. All further uses of this
-// package should be done using the same goroutine that first called
-// initialize.
-func initialize() (r *Tk, err error) {
-	interOnce.Do(func() {
-		runtime.LockOSThread()
-		if tclDir, interErr = tcl.Stdlib(); err != nil {
-			return
-		}
-
-		if tkDir, interErr = stdlib(); interErr != nil {
-			return
-		}
-
-		var in *tcl.Interp
-		if in, interErr = tcl.NewInterp(map[string]string{
-			"tcl_library": tclDir,
-			"tk_library":  tkDir,
-		}); interErr != nil {
-			return
-		}
-
-		if rc := libtk.XTk_Init(in.TLS(), in.Handle()); rc != libtk.TCL_OK {
-			in.Close()
-			interErr = fmt.Errorf("failed to initialize the Tk subsystem")
-			return
-		}
-
-		Inter = &Tk{
-			Window:   &Window{},
-			handlers: map[int32]*eventHandler{},
-			in:       in,
-		}
-		interErr = Inter.in.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil)
-	})
-	return Inter, interErr
-}
-
-func eventDispatcher(data any, in *tcl.Interp, args []string) int {
+func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
 	id, err := strconv.Atoi(args[1])
 	if err != nil {
 		panic(todo("event dispatcher internal error: %q", args))
 	}
 
-	h := Inter.handlers[int32(id)]
+	h := handlers[int32(id)]
 	r, err := h.handler(h.w, h.data)
-	Inter.in.SetResult(tclSafeString(fmt.Sprint(r)))
+	interp.SetResult(tclSafeString(fmt.Sprint(r)))
 	if err != nil {
 		return libtcl.TCL_ERROR
 	}
@@ -521,10 +500,11 @@ func Finalize() (err error) {
 		return
 	}
 
-	runtime.UnlockOSThread()
-	if Inter != nil {
-		err = Inter.in.Close()
-		Inter = nil
+	defer runtime.UnlockOSThread()
+
+	if interp != nil {
+		err = interp.Close()
+		interp = nil
 	}
 	for _, v := range []string{tclDir, tkDir} {
 		err = errors.Join(err, os.RemoveAll(v))
@@ -533,6 +513,11 @@ func Finalize() (err error) {
 }
 
 // bind — Arrange for X events to invoke functions
+//
+// Example: Bind all TLabel widgets mouse button 1 click to a function printing
+// "Clicked".
+//
+//	Bind("TLabel", "<1>", Command(func() { fmt.Println("Clicked!") }))
 //
 // Additional information might be available at the [Tcl/Tk bind] page.
 //
@@ -550,5 +535,5 @@ func Bind(options ...any) {
 			a = append(a, tclSafeStringBind(fmt.Sprint(x)))
 		}
 	}
-	Inter.evalErr(strings.Join(a, " "))
+	evalErr(strings.Join(a, " "))
 }

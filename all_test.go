@@ -9,12 +9,16 @@ import (
 	"fmt"
 	"os"
 	"testing"
-	// tcl "modernc.org/tcl9.0"
 )
 
 func TestMain(m *testing.M) {
 	if isBuilder {
 		os.Exit(0)
+	}
+
+	if Error != nil {
+		fmt.Fprintln(os.Stderr, Error)
+		os.Exit(1)
 	}
 
 	flag.Parse()
@@ -47,12 +51,8 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	Bind("TLabel", "<1>", Command(func() { fmt.Println("Clicked!") }))
-	Pack(
-		TButton(Txt("Close"), Underline(0), Command(func() { Destroy(Inter) })),
-		TLabel(Txt("Click me"), Underline(4)),
-	)
-	Inter.eval(`
+	Pack(TButton(Txt("Close"), Underline(0), Command(func() { Destroy(App) })))
+	eval(`
 ttk::style theme use clam
 . configure -pady 10
 tk::PlaceWindow . center
