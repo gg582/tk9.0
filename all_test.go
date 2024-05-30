@@ -51,7 +51,10 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	Pack(TButton(Txt("Close"), Underline(0), Command(func() { Destroy(App) })))
+	Pack(
+		Label(Image(ImageCreatePhoto(File("testdata/gimp.png")))),
+		TButton(Txt("Close"), Underline(0), Command(func() { Destroy(App) })),
+	)
 	eval(`
 ttk::style theme use clam
 . configure -pady 10

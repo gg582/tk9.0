@@ -77,6 +77,16 @@ func generated(fn string, docs []document) {
 				}
 			}
 		default:
+			if opts := doc["Options"]; opts != nil {
+				for _, v := range opts.([]any) {
+					v := v.(map[string]any)
+					onms := v["Name"].(string)
+					docs := v["Docs"].(string)
+					for _, onm := range optionNames(onms) {
+						options[onm] = append(options[onm], &optionDocs{page, docs})
+					}
+				}
+			}
 			nm := tclName2GoName(nm0)
 			isWindow := false
 			if _, isWindow = doc["IsWindow"].(bool); isWindow {
@@ -200,6 +210,10 @@ func option(w io.Writer, nm string, docsv []*optionDocs) {
 	nm = strings.ReplaceAll(nm, `"`, "")
 	a := optionNames(nm)
 	for _, nm := range a {
+		if nm == "--" {
+			continue
+		}
+
 		nm = nm[1:] // remove leading '-'
 		if !isCommand[nm] {
 			fmt.Fprintf(w, "\n\ntype %sOption struct { v any }", nm)
@@ -209,6 +223,10 @@ func option(w io.Writer, nm string, docsv []*optionDocs) {
 		}
 		nm2 := nm
 		if r := replaceOpt[nm]; r != "" {
+			if r == "-" {
+				continue
+			}
+
 			nm2 = r
 		}
 		fmt.Fprintf(w, "\n\n")
@@ -230,6 +248,7 @@ func option(w io.Writer, nm string, docsv []*optionDocs) {
 			panic(fmt.Sprintf("option %q already generated", enm))
 		}
 
+		optionsGenerated[enm] = struct{}{}
 		switch {
 		case isCommand[nm]:
 			fmt.Fprintf(w, "\n//\n// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers")
@@ -258,9 +277,12 @@ var isCommand = map[string]bool{
 }
 
 var replaceOpt = map[string]string{
-	"label": "lbl",
-	"menu":  "mnu",
-	"text":  "txt",
+	"button":  "btn",
+	"label":   "lbl",
+	"menu":    "mnu",
+	"message": "msg",
+	"text":    "txt",
+	"window":  "-",
 }
 
 func tclName2GoName(s string) string {
@@ -374,8 +396,16 @@ func winOnlySynops(w io.Writer, doc document) {
 	}
 }
 
+var nonWinSynopsAndMethodsSkip = map[string]struct{}{
+	"image": {}, // Manual.
+}
+
 func nonWinSynopsAndMethods(w io.Writer, doc document) {
 	page := doc["Page"].(string)
+	if _, ok := nonWinSynopsAndMethodsSkip[page]; ok {
+		return
+	}
+
 	for _, v := range doc["Synopsis"].([]any) {
 		syn := parseSynopsisLine(v.(string))
 		if len(syn) == 0 {
@@ -507,13 +537,14 @@ func moreOptions(w io.Writer, m map[string][]any) {
 			continue
 		}
 
+		optionsGenerated[enm] = struct{}{}
 		syn := m[enm][0]
 		switch x := syn.(type) {
 		case winOpt:
 			switch y := x.opt.(type) {
 			case synOpt:
 				fmt.Fprintf(w, "\n\nfunc %s(w *Window) option {", enm)
-				fmt.Fprintf(w, "\n\treturn stringOption(fmt.Sprintf(`%s %%ss`, w.path()))", y.opt[0])
+				fmt.Fprintf(w, "\n\treturn stringOption(fmt.Sprintf(`%s %%s`, w.path()))", y.opt[0])
 				fmt.Fprintf(w, "\n}")
 			default:
 				panic(fmt.Sprintf("%T %v", y, y))

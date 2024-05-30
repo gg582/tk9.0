@@ -21,10 +21,10 @@
 //
 //	lbl := myFrame.Label(State("disabled"), Width(200))
 //
-// # Widget path names
+// # Widget path names, image names
 //
-// Tcl/Tk uses widget pathnames explicitly set by user code. This package
-// generates pathnames automatically.
+// Tcl/Tk uses widget pathnames and image names explicitly set by user code.
+// This package generates those names automatically.
 //
 // # OS thread
 //
@@ -242,7 +242,7 @@ func eval(code string) (r string, err error) {
 func evalErr(code string) (r string) {
 	r, err := eval(code)
 	if err != nil {
-		fail(err)
+		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
 	}
 	return r
 }
@@ -408,6 +408,8 @@ func optionString(v any) string {
 	switch x := v.(type) {
 	case time.Duration:
 		return fmt.Sprint(int64((x + time.Millisecond/2) / time.Millisecond))
+	case *Img:
+		return x.name
 	default:
 		return tclSafeString(fmt.Sprint(v))
 	}
@@ -536,4 +538,68 @@ func Bind(options ...any) {
 		}
 	}
 	evalErr(strings.Join(a, " "))
+}
+
+// Img represents a Tk image.
+type Img struct {
+	name string
+}
+
+func (m *Img) optionString(_ *Window) string {
+	return m.name
+}
+
+// bitmap — Images that display two colors
+//
+// A bitmap is an image whose pixels can display either of two colors or be
+// transparent. A bitmap image is defined by four things: a background color, a
+// foreground color, and two bitmaps, called the source and the mask. Each of
+// the bitmaps specifies 0/1 values for a rectangular array of pixels, and the
+// two bitmaps must have the same dimensions. For pixels where the mask is
+// zero, the image displays nothing, producing a transparent effect. For other
+// pixels, the image displays the foreground color if the source data is one
+// and the background color if the source data is zero.
+//
+// Additional information might be available at the [Tcl/Tk bitmap] page.
+//
+// [Tcl/Tk bitmap]: https://www.tcl.tk/man/tcl9.0/TkCmd/bitmap.html
+func ImageCreateBitmap(options ...option) *Img {
+	nm := fmt.Sprintf("img%v", id.Add(1))
+	code := fmt.Sprintf("image create bitmap %s %s", nm, collect(options...))
+	r, err := eval(code)
+	if err != nil {
+		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+		return nil
+	}
+
+	return &Img{name: nm}
+}
+
+// photo — Full-color images
+//
+// A photo is an image whose pixels can display any color with a varying degree
+// of transparency (the alpha channel). A photo image is stored internally in
+// full color (32 bits per pixel), and is displayed using dithering if
+// necessary. Image data for a photo image can be obtained from a file or a
+// string, or it can be supplied from C code through a procedural interface. At
+// present, only PNG, GIF, PPM/PGM, and (read-only) SVG formats are supported,
+// but an interface exists to allow additional image file formats to be added
+// easily. A photo image is (semi)transparent if the image data it was obtained
+// from had transparency information. In regions where no image data has been
+// supplied, it is fully transparent. Transparency may also be modified with
+// the transparency set subcommand.
+//
+// Additional information might be available at the [Tcl/Tk photo] page.
+//
+// [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
+func ImageCreatePhoto(options ...option) *Img {
+	nm := fmt.Sprintf("img%v", id.Add(1))
+	code := fmt.Sprintf("image create photo %s %s", nm, collect(options...))
+	r, err := eval(code)
+	if err != nil {
+		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+		return nil
+	}
+
+	return &Img{name: nm}
 }
