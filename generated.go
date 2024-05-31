@@ -19098,3 +19098,146 @@ func Zoomed(value any) option {
 func Nice() option {
 	return stringOption(fmt.Sprintf(`-nice`))
 }
+
+// # bitmap.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the
+// image create bitmap command.
+//
+// # photo.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the
+// image create photo command.
+func (rx *Img) Cget(opt func(any) option) any {
+	return evalAny(fmt.Sprintf(`%s cget %s`, rx.optionString(nil), collect0(opt)))
+}
+
+// # button.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the button
+// command.
+//
+// # canvas.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the canvas
+// command.
+//
+// # checkbutton.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the checkbutton
+// command.
+//
+// # entry.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the entry
+// command.
+//
+// # frame.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the frame
+// command.
+//
+// # label.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the label
+// command.
+//
+// # labelframe.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the labelframe
+// command.
+//
+// # listbox.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the listbox
+// command.
+//
+// # menu.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the menu
+// command.
+//
+// # menubutton.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the menubutton
+// command.
+//
+// # message.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the message
+// command.
+//
+// # panedwindow.Cget(...)
+//
+// Returns the current value of the configuration option given by
+// option.  Option may have any of the values accepted by the
+// panedwindow command.
+//
+// # radiobutton.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the radiobutton
+// command.
+//
+// # scale.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the scale
+// command.
+//
+// # scrollbar.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the scrollbar
+// command.
+//
+// # spinbox.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the spinbox
+// command.
+//
+// # text.Cget(...)
+//
+// Returns the current value of the configuration option given by option.
+// Option may have any of the values accepted by the text command.
+//
+// # toplevel.Cget(...)
+//
+// Returns the current value of the configuration option given
+// by option.
+// Option may have any of the values accepted by the toplevel
+// command.
+func (rx *Window) Cget(opt func(any) option) any {
+	return evalAny(fmt.Sprintf(`%s cget %s`, rx.optionString(nil), collect0(opt)))
+}

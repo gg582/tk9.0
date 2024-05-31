@@ -51,9 +51,12 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
+	b := TButton(Txt("Disabled"), Underline(0), State("disabled"))
 	Pack(
 		Label(Image(ImageCreatePhoto(File("testdata/gimp.png")))),
 		TButton(Txt("Close"), Underline(0), Command(func() { Destroy(App) })),
+		b,
+		Label(Txt(fmt.Sprintf("button above .Txt=%s", b.Cget(Txt)))),
 	)
 	eval(`
 ttk::style theme use clam

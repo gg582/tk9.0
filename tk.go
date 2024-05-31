@@ -239,6 +239,23 @@ func eval(code string) (r string, err error) {
 	return interp.Eval(code, tcl.EvalGlobal)
 }
 
+func evalAny(code string) (r any) {
+	s := evalErr(code)
+	if s == "" {
+		return nil
+	}
+
+	if n, err := strconv.ParseInt(s, 0, 64); err == nil {
+		return n
+	}
+
+	if n, err := strconv.ParseFloat(s, 64); err == nil {
+		return n
+	}
+
+	return s
+}
+
 func evalErr(code string) (r string) {
 	r, err := eval(code)
 	if err != nil {
@@ -283,14 +300,6 @@ type stringOption string
 
 func (s stringOption) optionString(w *Window) string {
 	return tclSafeString(string(s))
-}
-
-// Tk represents the main window of an application. It has an associated Tcl
-// interpreter.
-//
-// Note: Tk has all *Window methods promoted.
-type Tk struct {
-	*Window
 }
 
 // EventHandler is invoked when its associated event fires. The 'data' argument
@@ -602,4 +611,10 @@ func ImageCreatePhoto(options ...option) *Img {
 	}
 
 	return &Img{name: nm}
+}
+
+func collect0(f func(any) option) string {
+	s := f("").optionString(nil)
+	s = s[:len(s)-len("{}")-1]
+	return s
 }
