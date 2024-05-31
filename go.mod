@@ -6,7 +6,7 @@ require (
 	github.com/evilsocket/islazy v1.11.0
 	modernc.org/libtcl9.0 v0.3.5
 	modernc.org/libtk9.0 v0.3.9
-	modernc.org/tcl9.0 v0.3.24
+	modernc.org/tcl9.0 v0.3.26
 )
 
 require (
