@@ -51,16 +51,18 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	b := TButton(Txt("Disabled"), Underline(0), State("disabled"))
+	b := TButton(Txt("Save"), Underline(0), State("disabled"))
 	Pack(
 		Label(Image(ImageCreatePhoto(File("testdata/gimp.png")))),
-		TButton(Txt("Close"), Underline(0), Command(func() { Destroy(App) })),
 		b,
 		Label(Txt(fmt.Sprintf("button above .Txt=%s", b.Cget(Txt)))),
+		TButton(Txt("Close"), Underline(0), Command(func() { Destroy(App) })),
+		Ipadx(30),
 	)
+	App.Configure(Pady(30))
+	fmt.Println(App.Configure())
 	eval(`
 ttk::style theme use clam
-. configure -pady 10
 tk::PlaceWindow . center
 wm title . "modernc.org/tk9.0 example"
 wm geometry . 300x[winfo height .]

@@ -5,6 +5,14 @@
 // Package tk9.0 is an idiomatic Go wrapper for [libtk9.0]. It is similar to
 // Python's tkinter.
 //
+// # Supported platforms and architectures
+//
+// These combinations of GOOS and GOARCH are currently supported
+//
+//	OS      Arch
+//	-------------
+//	linux	amd64
+//
 // # Package initialization
 //
 // User code should check if the package variable 'Error' is nil before using

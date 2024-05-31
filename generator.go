@@ -80,12 +80,26 @@ func generated(fn string, docs []document) {
 					options[onm] = append(options[onm], &optionDocs{"", docs})
 				}
 			}
+		case "ttk_widget":
+			for _, v := range doc["Options"].([]any) {
+				v := v.(map[string]any)
+				onms := v["Name"].(string)
+				docs := v["Docs"].(string)
+				for _, onm := range optionNames(onms) {
+					if _, ok := options[onm]; !ok {
+						options[onm] = append(options[onm], &optionDocs{"", docs})
+					}
+				}
+			}
 		default:
 			if opts := doc["Options"]; opts != nil {
 				for _, v := range opts.([]any) {
 					v := v.(map[string]any)
 					onms := v["Name"].(string)
-					docs := v["Docs"].(string)
+					var docs string
+					if w := v["Docs"]; w != nil {
+						docs = w.(string)
+					}
 					for _, onm := range optionNames(onms) {
 						options[onm] = append(options[onm], &optionDocs{page, docs})
 					}
@@ -117,7 +131,9 @@ func generated(fn string, docs []document) {
 							}
 							a = append(a, "", fmt.Sprintf("# %s", strings.Join(c, " or ")), "")
 						}
-						a = append(a, strings.Split(v["Docs"].(string), "\n")...)
+						if w := v["Docs"]; w != nil {
+							a = append(a, strings.Split(w.(string), "\n")...)
+						}
 					}
 				}
 				switch x := doc["Description"].(type) {
@@ -152,7 +168,10 @@ func generated(fn string, docs []document) {
 					for _, v := range opts {
 						v := v.(map[string]any)
 						onms := v["Name"].(string)
-						docs := v["Docs"].(string)
+						var docs string
+						if w := v["Docs"]; w != nil {
+							docs = w.(string)
+						}
 						for _, onm := range optionNames(onms) {
 							options[onm] = append(options[onm], &optionDocs{page, docs})
 						}
@@ -167,14 +186,12 @@ func generated(fn string, docs []document) {
 				// nop
 			case !isWindow && synops != nil && methods == nil:
 				nonWinOnlySynops(w, doc)
-			case !isWindow && synops != nil && methods != nil:
-				nonWinSynopsAndMethods(w, doc)
-			case isWindow && synops != nil && methods != nil:
-				winSynopsAndMethods(w, doc)
+			case synops != nil && methods != nil:
+				synopsAndMethods(w, doc)
 			case isWindow && synops != nil && methods == nil:
 				winOnlySynops(w, doc)
 			default:
-				fmt.Printf("TODO page=%s isWindow=%v synops=%v methods=%v\n", page, isWindow, synops != nil, methods != nil)
+				fmt.Printf("TODO rx=%s page=%s isWindow=%v synops=%v methods=%v\n", receivers[page], page, isWindow, synops != nil, methods != nil)
 			}
 		}
 	}
@@ -384,7 +401,7 @@ func nonWinOnlySynops(w io.Writer, doc document) {
 		case "destroy":
 			command0(w, page, comment(doc["Name"], doc["Description"]), syn[0], wins0Opt{})
 		default:
-			fmt.Printf("TODO nonWinOnlySynops: page=%s non-win only synops=%v\n", page, syn)
+			fmt.Printf("TODO nonWinOnlySynops: rx=%s page=%s non-win only synops=%v\n", receivers[page], page, syn)
 		}
 	}
 }
@@ -393,11 +410,11 @@ func winOnlySynops(w io.Writer, doc document) {
 	page := doc["Page"].(string)
 	for _, v := range doc["Synopsis"].([]any) {
 		syn := parseSynopsisLine(v.(string))
-		fmt.Printf("TODO winOnlySynopsManual: page=%s win only synops=%v\n", page, syn)
+		fmt.Printf("TODO winOnlySynopsManual: rx=%s page=%s win only synops=%v\n", receivers[page], page, syn)
 	}
 }
 
-func nonWinSynopsAndMethods(w io.Writer, doc document) {
+func synopsAndMethods(w io.Writer, doc document) {
 	page := doc["Page"].(string)
 	for _, v := range doc["Synopsis"].([]any) {
 		syn := parseSynopsisLine(v.(string))
@@ -405,19 +422,20 @@ func nonWinSynopsAndMethods(w io.Writer, doc document) {
 			break
 		}
 
+		syn0 := fmt.Sprint(syn[0])
 		switch page {
 		case "pack":
 			command0(w, page, comment(doc["Name"], doc["Description"].([]any)[:1]), syn[0], wins0Opt{})
 		case "bitmap", "photo":
 			receivers[page] = "*Img"
-			switch fmt.Sprint(syn[0]) {
+			switch syn0 {
 			case "image": // Manual
 				// nop
 			default:
-				fmt.Printf("TODO nonWinSynopsAndMethods: page=%s non-win synops=%v\n", page, syn)
+				fmt.Printf("TODO synopsAndMethods: rx=%s page=%s synops=%v\n", receivers[page], page, syn)
 			}
 		default:
-			fmt.Printf("TODO nonWinSynopsAndMethods: page=%s non-win synops=%v\n", page, syn)
+			fmt.Printf("TODO synopsAndMethods: rx=%s page=%s synops=%v\n", receivers[page], page, syn)
 		}
 		break
 	}
@@ -426,8 +444,10 @@ func nonWinSynopsAndMethods(w io.Writer, doc document) {
 		switch m["Name"] {
 		case "cget":
 			newMethod(page, v, methodCget, true)
+		case "configure":
+			newMethod(page, v, methodConfigure, true)
 		default:
-			fmt.Printf("TODO nonWinSynopsAndMethods: page=%s non-win method=%v\n", page, m["Name"])
+			fmt.Printf("TODO synopsAndMethods: rx=%s page=%s method=%v\n", receivers[page], page, m["Name"])
 		}
 	}
 }
@@ -435,6 +455,7 @@ func nonWinSynopsAndMethods(w io.Writer, doc document) {
 const (
 	_ = iota
 	methodCget
+	methodConfigure
 )
 
 type method struct {
@@ -449,7 +470,7 @@ func newMethod(page string, v any, typ int, register bool) (r *method) {
 
 	m := v.(map[string]any)
 	if receivers[page] == "" {
-		fmt.Printf("TODO page=%s no rx method=%v\n", page, m["Name"])
+		fmt.Printf("TODO rx= page=%s new method=%v\n", page, m["Name"])
 		return
 	}
 
@@ -471,23 +492,6 @@ func newMethod(page string, v any, typ int, register bool) (r *method) {
 }
 
 var methods = map[string][]*method{} // method name: *method
-
-func winSynopsAndMethods(w io.Writer, doc document) {
-	page := doc["Page"].(string)
-	for _, v := range doc["Synopsis"].([]any) {
-		syn := parseSynopsisLine(v.(string))
-		fmt.Printf("TODO winSynopsAndMethods: page=%s win synops=%v\n", page, syn)
-	}
-	for _, v := range doc["Methods"].([]any) {
-		m := v.(map[string]any)
-		switch m["Name"] {
-		case "cget":
-			newMethod(page, v, methodCget, true)
-		default:
-			fmt.Printf("TODO winSynopsAndMethods: page=%s win method=%v\n", page, m["Name"])
-		}
-	}
-}
 
 type winOpt struct {
 	opt any
@@ -654,17 +658,21 @@ func moreMethods(w io.Writer, methods map[string][]*method) {
 			rx2page[rx] = append(rx2page[rx], page)
 		}
 		for _, rx := range rxs {
+			var docs []string
+			for _, page := range rx2page[rx] {
+				m := ix[struct{ rx, page string }{receivers[page], page}]
+				docs = append(docs, "", fmt.Sprintf("# %s.%s(...)", page, export(mnm)), "")
+				docs = append(docs, m.docs...)
+			}
+			fmt.Fprintf(w, "\n\n// %s", strings.Join(docs, "\n// "))
 			switch typ {
 			case methodCget:
-				var docs []string
-				for _, page := range rx2page[rx] {
-					m := ix[struct{ rx, page string }{receivers[page], page}]
-					docs = append(docs, "", fmt.Sprintf("# %s.%s(...)", page, export(mnm)), "")
-					docs = append(docs, m.docs...)
-				}
-				fmt.Fprintf(w, "\n\n// %s", strings.Join(docs, "\n// "))
 				fmt.Fprintf(w, "\nfunc(rx %s) %s(opt func(any) option) any {", rx, export(mnm))
-				fmt.Fprintf(w, "\n\treturn evalAny(fmt.Sprintf(`%%s cget %%s`, rx.optionString(nil), collect0(opt)))")
+				fmt.Fprintf(w, "\n\treturn evalAny(fmt.Sprintf(`%%s %s %%s`, rx.optionString(nil), collect0(opt)))", mnm)
+				fmt.Fprintf(w, "\n}")
+			case methodConfigure:
+				fmt.Fprintf(w, "\nfunc(rx %s) %s(options ...option) any {", rx, export(mnm))
+				fmt.Fprintf(w, "\n\treturn evalAny(fmt.Sprintf(`%%s %s %%s`, rx.optionString(nil), collect(options...)))", mnm)
 				fmt.Fprintf(w, "\n}")
 			default:
 				fmt.Printf("TODO method=%s typ=%v pages=%v rx=%q\n", mnm, typ, rx2page[rx], rx)

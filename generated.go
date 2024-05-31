@@ -425,6 +425,10 @@ func Button(options ...option) *Window {
 // its top center point is at the positioning point.
 // This option defaults to center.
 //
+// # Canvas(Dash(...))
+//
+// # Canvas(Activedash(...))
+//
 // # Canvas(Disableddash(...))
 //
 // These options specify dash patterns for the normal, active
@@ -440,6 +444,10 @@ func Button(options ...option) *Window {
 // -dash pattern. The offset may have any of the forms described
 // in the COORDINATES section above.
 //
+// # Canvas(Fill(...))
+//
+// # Canvas(Activefill(...))
+//
 // # Canvas(Disabledfill(...))
 //
 // These options specify the color to be used to fill item's area.
@@ -450,6 +458,10 @@ func Button(options ...option) *Window {
 // For the text item, it specifies the foreground color of the text.
 // If color is an empty string (the default for all canvas items
 // except line and text), then the item will not be filled.
+//
+// # Canvas(Outline(...))
+//
+// # Canvas(Activeoutline(...))
 //
 // # Canvas(Disabledoutline(...))
 //
@@ -473,6 +485,10 @@ func Button(options ...option) *Window {
 // of the coordinate points of the line/polygon. Note that stipple offsets are
 // only supported on X11; they are silently ignored on other platforms.
 //
+// # Canvas(Outlinestipple(...))
+//
+// # Canvas(Activeoutlinestipple(...))
+//
 // # Canvas(Disabledoutlinestipple(...))
 //
 // These options specify stipple patterns that should be used to draw the
@@ -492,6 +508,10 @@ func Button(options ...option) *Window {
 // Specifies the offset of the stipple pattern used for outlines, in the same way
 // that the -outline option controls fill stipples. (See the
 // -outline option for a description of the syntax of offset.)
+//
+// # Canvas(Stipple(...))
+//
+// # Canvas(Activestipple(...))
 //
 // # Canvas(Disabledstipple(...))
 //
@@ -518,6 +538,10 @@ func Button(options ...option) *Window {
 // Specifies a set of tags to apply to the item.
 // TagList consists of a list of tag names, which replace any
 // existing tags for the item. TagList may be an empty list.
+//
+// # Canvas(Width(...))
+//
+// # Canvas(Activewidth(...))
 //
 // # Canvas(Disabledwidth(...))
 //
@@ -567,9 +591,17 @@ func Button(options ...option) *Window {
 // a section of the perimeter alone.
 // In this last case the -fill option is ignored.
 //
+// # Canvas(Background(...))
+//
+// # Canvas(Activebackground(...))
+//
 // # Canvas(Disabledbackground(...))
 //
 // # Specifies the color to use for each of the bitmap's
+//
+// # Canvas(Bitmap(...))
+//
+// # Canvas(Activebitmap(...))
 //
 // # Canvas(Disabledbitmap(...))
 //
@@ -577,9 +609,17 @@ func Button(options ...option) *Window {
 // active and disabled states.
 // Bitmap may have any of the forms accepted by Tk_GetBitmap.
 //
+// # Canvas(Foreground(...))
+//
+// # Canvas(Activeforeground(...))
+//
 // # Canvas(Disabledforeground(...))
 //
 // # These options specify the color to use for each of the bitmap's
+//
+// # Canvas(Image(...))
+//
+// # Canvas(Activeimage(...))
 //
 // # Canvas(Disabledimage(...))
 //
@@ -990,6 +1030,10 @@ func (w *Window) Canvas(options ...option) *Window {
 // its top center point is at the positioning point.
 // This option defaults to center.
 //
+// # Canvas(Dash(...))
+//
+// # Canvas(Activedash(...))
+//
 // # Canvas(Disableddash(...))
 //
 // These options specify dash patterns for the normal, active
@@ -1005,6 +1049,10 @@ func (w *Window) Canvas(options ...option) *Window {
 // -dash pattern. The offset may have any of the forms described
 // in the COORDINATES section above.
 //
+// # Canvas(Fill(...))
+//
+// # Canvas(Activefill(...))
+//
 // # Canvas(Disabledfill(...))
 //
 // These options specify the color to be used to fill item's area.
@@ -1015,6 +1063,10 @@ func (w *Window) Canvas(options ...option) *Window {
 // For the text item, it specifies the foreground color of the text.
 // If color is an empty string (the default for all canvas items
 // except line and text), then the item will not be filled.
+//
+// # Canvas(Outline(...))
+//
+// # Canvas(Activeoutline(...))
 //
 // # Canvas(Disabledoutline(...))
 //
@@ -1038,6 +1090,10 @@ func (w *Window) Canvas(options ...option) *Window {
 // of the coordinate points of the line/polygon. Note that stipple offsets are
 // only supported on X11; they are silently ignored on other platforms.
 //
+// # Canvas(Outlinestipple(...))
+//
+// # Canvas(Activeoutlinestipple(...))
+//
 // # Canvas(Disabledoutlinestipple(...))
 //
 // These options specify stipple patterns that should be used to draw the
@@ -1057,6 +1113,10 @@ func (w *Window) Canvas(options ...option) *Window {
 // Specifies the offset of the stipple pattern used for outlines, in the same way
 // that the -outline option controls fill stipples. (See the
 // -outline option for a description of the syntax of offset.)
+//
+// # Canvas(Stipple(...))
+//
+// # Canvas(Activestipple(...))
 //
 // # Canvas(Disabledstipple(...))
 //
@@ -1083,6 +1143,10 @@ func (w *Window) Canvas(options ...option) *Window {
 // Specifies a set of tags to apply to the item.
 // TagList consists of a list of tag names, which replace any
 // existing tags for the item. TagList may be an empty list.
+//
+// # Canvas(Width(...))
+//
+// # Canvas(Activewidth(...))
 //
 // # Canvas(Disabledwidth(...))
 //
@@ -1132,9 +1196,17 @@ func (w *Window) Canvas(options ...option) *Window {
 // a section of the perimeter alone.
 // In this last case the -fill option is ignored.
 //
+// # Canvas(Background(...))
+//
+// # Canvas(Activebackground(...))
+//
 // # Canvas(Disabledbackground(...))
 //
 // # Specifies the color to use for each of the bitmap's
+//
+// # Canvas(Bitmap(...))
+//
+// # Canvas(Activebitmap(...))
 //
 // # Canvas(Disabledbitmap(...))
 //
@@ -1142,9 +1214,17 @@ func (w *Window) Canvas(options ...option) *Window {
 // active and disabled states.
 // Bitmap may have any of the forms accepted by Tk_GetBitmap.
 //
+// # Canvas(Foreground(...))
+//
+// # Canvas(Activeforeground(...))
+//
 // # Canvas(Disabledforeground(...))
 //
 // # These options specify the color to use for each of the bitmap's
+//
+// # Canvas(Image(...))
+//
+// # Canvas(Activeimage(...))
 //
 // # Canvas(Disabledimage(...))
 //
@@ -8394,6 +8474,10 @@ func (o activebackgroundOption) optionString(w *Window) string {
 // For some elements on Windows and Macintosh systems, the active color
 // will only be used while mouse button 1 is pressed over the element.
 //
+// # Canvas(Activebackground(...))
+//
+// # Canvas(Activebackground(...))
+//
 // # Menu(Activebackground(...))
 //
 // Specifies a background color to use for displaying this entry when it
@@ -8419,6 +8503,19 @@ func Activebackground(value any) option {
 	return activebackgroundOption{value}
 }
 
+type activebitmapOption struct{ v any }
+
+func (o activebitmapOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activebitmap %s`, optionString(o.v))
+}
+
+// # Canvas(Activebitmap(...))
+//
+// # Canvas(Activebitmap(...))
+func Activebitmap(value any) option {
+	return activebitmapOption{value}
+}
+
 type activeborderwidthOption struct{ v any }
 
 func (o activeborderwidthOption) optionString(w *Window) string {
@@ -8435,6 +8532,32 @@ func Activeborderwidth(value any) option {
 	return activeborderwidthOption{value}
 }
 
+type activedashOption struct{ v any }
+
+func (o activedashOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activedash %s`, optionString(o.v))
+}
+
+// # Canvas(Activedash(...))
+//
+// # Canvas(Activedash(...))
+func Activedash(value any) option {
+	return activedashOption{value}
+}
+
+type activefillOption struct{ v any }
+
+func (o activefillOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activefill %s`, optionString(o.v))
+}
+
+// # Canvas(Activefill(...))
+//
+// # Canvas(Activefill(...))
+func Activefill(value any) option {
+	return activefillOption{value}
+}
+
 type activeforegroundOption struct{ v any }
 
 func (o activeforegroundOption) optionString(w *Window) string {
@@ -8443,6 +8566,10 @@ func (o activeforegroundOption) optionString(w *Window) string {
 
 // Specifies foreground color to use when drawing active elements.
 // See above for definition of active elements.
+//
+// # Canvas(Activeforeground(...))
+//
+// # Canvas(Activeforeground(...))
 //
 // # Menu(Activeforeground(...))
 //
@@ -8459,6 +8586,45 @@ func (o activeforegroundOption) optionString(w *Window) string {
 // -activeforeground option for the overall menu is used.
 func Activeforeground(value any) option {
 	return activeforegroundOption{value}
+}
+
+type activeimageOption struct{ v any }
+
+func (o activeimageOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activeimage %s`, optionString(o.v))
+}
+
+// # Canvas(Activeimage(...))
+//
+// # Canvas(Activeimage(...))
+func Activeimage(value any) option {
+	return activeimageOption{value}
+}
+
+type activeoutlineOption struct{ v any }
+
+func (o activeoutlineOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activeoutline %s`, optionString(o.v))
+}
+
+// # Canvas(Activeoutline(...))
+//
+// # Canvas(Activeoutline(...))
+func Activeoutline(value any) option {
+	return activeoutlineOption{value}
+}
+
+type activeoutlinestippleOption struct{ v any }
+
+func (o activeoutlinestippleOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activeoutlinestipple %s`, optionString(o.v))
+}
+
+// # Canvas(Activeoutlinestipple(...))
+//
+// # Canvas(Activeoutlinestipple(...))
+func Activeoutlinestipple(value any) option {
+	return activeoutlinestippleOption{value}
 }
 
 type activereliefOption struct{ v any }
@@ -8487,6 +8653,19 @@ func Activerelief(value any) option {
 	return activereliefOption{value}
 }
 
+type activestippleOption struct{ v any }
+
+func (o activestippleOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activestipple %s`, optionString(o.v))
+}
+
+// # Canvas(Activestipple(...))
+//
+// # Canvas(Activestipple(...))
+func Activestipple(value any) option {
+	return activestippleOption{value}
+}
+
 type activestyleOption struct{ v any }
 
 func (o activestyleOption) optionString(w *Window) string {
@@ -8510,6 +8689,19 @@ func (o activestyleOption) optionString(w *Window) string {
 // The default is 'underline' on Windows, and 'dotbox' elsewhere.
 func Activestyle(value any) option {
 	return activestyleOption{value}
+}
+
+type activewidthOption struct{ v any }
+
+func (o activewidthOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-activewidth %s`, optionString(o.v))
+}
+
+// # Canvas(Activewidth(...))
+//
+// # Canvas(Activewidth(...))
+func Activewidth(value any) option {
+	return activewidthOption{value}
 }
 
 type afterOption struct{ v any }
@@ -8631,6 +8823,8 @@ func (o alphaOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-alpha %s`, optionString(o.v))
 }
 
+// # Nsimage(Alpha(...))
+//
 // # Wm(Alpha(...))
 //
 // Specifies the alpha transparency level of the toplevel. It accepts a value
@@ -8839,6 +9033,17 @@ func Arrowshape(value any) option {
 	return arrowshapeOption{value}
 }
 
+type asOption struct{ v any }
+
+func (o asOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-as %s`, optionString(o.v))
+}
+
+// # Nsimage(As(...))
+func As(value any) option {
+	return asOption{value}
+}
+
 type ascentOption struct{ v any }
 
 func (o ascentOption) optionString(w *Window) string {
@@ -8939,6 +9144,10 @@ func (o backgroundOption) optionString(w *Window) string {
 // then the background pixels will be transparent.  This effect
 // is achieved by using the source bitmap as the mask bitmap, ignoring
 // any -maskdata or -maskfile options.
+//
+// # Canvas(Background(...))
+//
+// # Canvas(Background(...))
 //
 // # Frame(Background(...))
 //
@@ -9235,6 +9444,10 @@ func (o bitmapOption) optionString(w *Window) string {
 // a text display.
 // In widgets that support both '-bitmap' and '-image' options,
 // '-image' will usually override '-bitmap'.
+//
+// # Canvas(Bitmap(...))
+//
+// # Canvas(Bitmap(...))
 //
 // # Menu(Bitmap(...))
 //
@@ -10309,6 +10522,19 @@ func Cursor(value any) option {
 	return cursorOption{value}
 }
 
+type dashOption struct{ v any }
+
+func (o dashOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-dash %s`, optionString(o.v))
+}
+
+// # Canvas(Dash(...))
+//
+// # Canvas(Dash(...))
+func Dash(value any) option {
+	return dashOption{value}
+}
+
 type dashoffsetOption struct{ v any }
 
 func (o dashoffsetOption) optionString(w *Window) string {
@@ -11247,6 +11473,10 @@ func (o fillOption) optionString(w *Window) string {
 	return fmt.Sprintf(`-fill %s`, optionString(o.v))
 }
 
+// # Canvas(Fill(...))
+//
+// # Canvas(Fill(...))
+//
 // # Pack(Fill(...))
 //
 // If a content's parcel is larger than its requested dimensions, this
@@ -11399,6 +11629,10 @@ func (o foregroundOption) optionString(w *Window) string {
 //
 // Specifies a foreground color for the image in any of the standard
 // ways accepted by Tk.
+//
+// # Canvas(Foreground(...))
+//
+// # Canvas(Foreground(...))
 //
 // # Listbox(Foreground(...))
 //
@@ -11926,6 +12160,8 @@ func (o heightOption) optionString(w *Window) string {
 // If this option is not specified, the menubutton's desired height is computed
 // from the size of the image or bitmap or text being displayed in it.
 //
+// # Nsimage(Height(...))
+//
 // # Panedwindow(Height(...))
 //
 // Specifies a desired height for the overall panedwindow widget. May be any
@@ -12231,17 +12467,9 @@ func (o imageOption) optionString(w *Window) string {
 // the '-image' option may be reset to an empty string to re-enable
 // a bitmap or text display.
 //
-// # Menu(Image(...))
+// # Canvas(Image(...))
 //
-// Specifies an image to display in the menu instead of a text string
-// or bitmap.
-// The image must have been created by some previous invocation of
-// image create.
-// This option overrides the -label and -bitmap options
-// (as controlled by the -compound option)
-// but may be reset to an empty string to enable a textual or
-// bitmap label to be displayed.
-// This option is not available for separator or tear-off entries.
+// # Canvas(Image(...))
 //
 // # Menu(Image(...))
 //
@@ -12254,15 +12482,27 @@ func (o imageOption) optionString(w *Window) string {
 // but may be reset to an empty string to enable a textual or
 // bitmap label to be displayed.
 // This option is not available for separator or tear-off entries.
+//
+// # Menu(Image(...))
+//
+// Specifies an image to display in the menu instead of a text string
+// or bitmap.
+// The image must have been created by some previous invocation of
+// image create.
+// This option overrides the -label and -bitmap options
+// (as controlled by the -compound option)
+// but may be reset to an empty string to enable a textual or
+// bitmap label to be displayed.
+// This option is not available for separator or tear-off entries.
+//
+// # Text(Image(...))
+//
+// Include information about images in the dump results.
 //
 // # Text(Image(...))
 //
 // Specifies the name of the Tk image to display in the annotation. If
 // image is not a valid Tk image, then an error is returned.
-//
-// # Text(Image(...))
-//
-// Include information about images in the dump results.
 //
 // # Text(Image(...))
 //
@@ -13954,6 +14194,19 @@ func OsType(value any) option {
 	return osTypeOption{value}
 }
 
+type outlineOption struct{ v any }
+
+func (o outlineOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-outline %s`, optionString(o.v))
+}
+
+// # Canvas(Outline(...))
+//
+// # Canvas(Outline(...))
+func Outline(value any) option {
+	return outlineOption{value}
+}
+
 type outlineoffsetOption struct{ v any }
 
 func (o outlineoffsetOption) optionString(w *Window) string {
@@ -13973,6 +14226,19 @@ func (o outlineoffsetOption) optionString(w *Window) string {
 // -outline option for a description of the syntax of offset.)
 func Outlineoffset(value any) option {
 	return outlineoffsetOption{value}
+}
+
+type outlinestippleOption struct{ v any }
+
+func (o outlinestippleOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-outlinestipple %s`, optionString(o.v))
+}
+
+// # Canvas(Outlinestipple(...))
+//
+// # Canvas(Outlinestipple(...))
+func Outlinestipple(value any) option {
+	return outlinestippleOption{value}
 }
 
 type overlapOption struct{ v any }
@@ -14644,6 +14910,17 @@ func Postcommand(args ...any) option {
 	return newEventHandler("-postcommand", args...)
 }
 
+type pressedOption struct{ v any }
+
+func (o pressedOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-pressed %s`, optionString(o.v))
+}
+
+// # Nsimage(Pressed(...))
+func Pressed(value any) option {
+	return pressedOption{value}
+}
+
 type proxybackgroundOption struct{ v any }
 
 func (o proxybackgroundOption) optionString(w *Window) string {
@@ -14701,6 +14978,17 @@ func (o proxyreliefOption) optionString(w *Window) string {
 // option will be used.
 func Proxyrelief(value any) option {
 	return proxyreliefOption{value}
+}
+
+type radiusOption struct{ v any }
+
+func (o radiusOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-radius %s`, optionString(o.v))
+}
+
+// # Nsimage(Radius(...))
+func Radius(value any) option {
+	return radiusOption{value}
 }
 
 type readonlybackgroundOption struct{ v any }
@@ -14950,6 +15238,17 @@ func (o resolutionOption) optionString(w *Window) string {
 // rounding occurs.  Defaults to 1 (i.e., the value will be integral).
 func Resolution(value any) option {
 	return resolutionOption{value}
+}
+
+type ringOption struct{ v any }
+
+func (o ringOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-ring %s`, optionString(o.v))
+}
+
+// # Nsimage(Ring(...))
+func Ring(value any) option {
+	return ringOption{value}
 }
 
 type rmarginOption struct{ v any }
@@ -15924,6 +16223,17 @@ func Smooth(value any) option {
 	return smoothOption{value}
 }
 
+type sourceOption struct{ v any }
+
+func (o sourceOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-source %s`, optionString(o.v))
+}
+
+// # Nsimage(Source(...))
+func Source(value any) option {
+	return sourceOption{value}
+}
+
 type spacing1Option struct{ v any }
 
 func (o spacing1Option) optionString(w *Window) string {
@@ -16535,6 +16845,19 @@ func Sticky(value any) option {
 	return stickyOption{value}
 }
 
+type stippleOption struct{ v any }
+
+func (o stippleOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-stipple %s`, optionString(o.v))
+}
+
+// # Canvas(Stipple(...))
+//
+// # Canvas(Stipple(...))
+func Stipple(value any) option {
+	return stippleOption{value}
+}
+
 type stretchOption struct{ v any }
 
 func (o stretchOption) optionString(w *Window) string {
@@ -17039,6 +17362,17 @@ func Tearoff(value any) option {
 // [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
 func Tearoffcommand(args ...any) option {
 	return newEventHandler("-tearoffcommand", args...)
+}
+
+type templateOption struct{ v any }
+
+func (o templateOption) optionString(w *Window) string {
+	return fmt.Sprintf(`-template %s`, optionString(o.v))
+}
+
+// # Nsimage(Template(...))
+func Template(value any) option {
+	return templateOption{value}
 }
 
 type textOption struct{ v any }
@@ -17578,6 +17912,8 @@ func (o typeOption) optionString(w *Window) string {
 //
 // Arranges for a predefined set of buttons to be displayed. The
 // following values are possible for predefinedType:
+//
+// # Wm(Type(...))
 func Type(value any) option {
 	return typeOption{value}
 }
@@ -18342,6 +18678,8 @@ func (o widthOption) optionString(w *Window) string {
 //
 // # Canvas(Width(...))
 //
+// # Canvas(Width(...))
+//
 // Specifies a maximum line length for the text, in any of the forms
 // described in the COORDINATES section above.
 // If this option is zero (the default) the text is broken into
@@ -18370,6 +18708,8 @@ func (o widthOption) optionString(w *Window) string {
 //
 // Specifies the width of the area of the canvas to print.
 // Defaults to the width of the canvas window.
+//
+// # Canvas(Width(...))
 //
 // # Canvas(Width(...))
 //
@@ -18529,6 +18869,8 @@ func (o widthOption) optionString(w *Window) string {
 // length.
 // If this option has a value less than or equal to zero, then
 // the '-aspect' option determines the line length.
+//
+// # Nsimage(Width(...))
 //
 // # Panedwindow(Width(...))
 //
@@ -19101,15 +19443,31 @@ func Nice() option {
 
 // # bitmap.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options for the image.
+// If no option is specified, returns a list describing all of
+// the available options for imageName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the
 // image create bitmap command.
 //
 // # photo.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options for the image.
+// If no option is specified, returns a list describing all of
+// the available options for imageName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the
 // image create photo command.
 func (rx *Img) Cget(opt func(any) option) any {
@@ -19118,126 +19476,573 @@ func (rx *Img) Cget(opt func(any) option) any {
 
 // # button.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the button
 // command.
 //
 // # canvas.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list). If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified). If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s); in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the canvas
 // command.
 //
 // # checkbutton.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the checkbutton
 // command.
 //
 // # entry.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the entry
 // command.
 //
 // # frame.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the frame
 // command.
 //
 // # label.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the label
 // command.
 //
 // # labelframe.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the labelframe
 // command.
 //
 // # listbox.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the listbox
 // command.
 //
 // # menu.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the menu
 // command.
 //
 // # menubutton.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the menubutton
 // command.
 //
 // # message.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the message
 // command.
 //
 // # panedwindow.Cget(...)
 //
-// Returns the current value of the configuration option given by
-// option.  Option may have any of the values accepted by the
-// panedwindow command.
+// Query or modify the configuration options of the widget.  If no
+// option is specified, returns a list describing all of the
+// available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string. Option may have
+// any of the values accepted by the panedwindow command.
 //
 // # radiobutton.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the radiobutton
 // command.
 //
 // # scale.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the scale
 // command.
 //
 // # scrollbar.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the scrollbar
 // command.
 //
 // # spinbox.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the spinbox
 // command.
 //
 // # text.Cget(...)
 //
-// Returns the current value of the configuration option given by option.
-// Option may have any of the values accepted by the text command.
+// Query or modify the configuration options of the widget. If no option is
+// specified, returns a list describing all of the available options for
+// pathName (see Tk_ConfigureInfo for information on the format of
+// this list). If option is specified with no value, then the command
+// returns a list describing the one named option (this list will be identical to
+// the corresponding sublist of the value returned if no option is
+// specified). If one or more option-value pairs are specified, then the
+// command modifies the given widget option(s) to have the given value(s); in
+// this case the command returns an empty string. Option may have any of
+// the values accepted by the text command.
 //
 // # toplevel.Cget(...)
 //
-// Returns the current value of the configuration option given
-// by option.
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
 // Option may have any of the values accepted by the toplevel
 // command.
 func (rx *Window) Cget(opt func(any) option) any {
 	return evalAny(fmt.Sprintf(`%s cget %s`, rx.optionString(nil), collect0(opt)))
+}
+
+// # bitmap.Configure(...)
+//
+// Query or modify the configuration options for the image.
+// If no option is specified, returns a list describing all of
+// the available options for imageName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the
+// image create bitmap command.
+//
+// # photo.Configure(...)
+//
+// Query or modify the configuration options for the image.
+// If no option is specified, returns a list describing all of
+// the available options for imageName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the
+// image create photo command.
+func (rx *Img) Configure(options ...option) any {
+	return evalAny(fmt.Sprintf(`%s configure %s`, rx.optionString(nil), collect(options...)))
+}
+
+// # button.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the button
+// command.
+//
+// # canvas.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list). If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified). If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s); in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the canvas
+// command.
+//
+// # checkbutton.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the checkbutton
+// command.
+//
+// # entry.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the entry
+// command.
+//
+// # frame.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the frame
+// command.
+//
+// # label.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the label
+// command.
+//
+// # labelframe.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the labelframe
+// command.
+//
+// # listbox.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the listbox
+// command.
+//
+// # menu.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the menu
+// command.
+//
+// # menubutton.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the menubutton
+// command.
+//
+// # message.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the message
+// command.
+//
+// # panedwindow.Configure(...)
+//
+// Query or modify the configuration options of the widget.  If no
+// option is specified, returns a list describing all of the
+// available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string. Option may have
+// any of the values accepted by the panedwindow command.
+//
+// # radiobutton.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the radiobutton
+// command.
+//
+// # scale.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the scale
+// command.
+//
+// # scrollbar.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the scrollbar
+// command.
+//
+// # spinbox.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the spinbox
+// command.
+//
+// # text.Configure(...)
+//
+// Query or modify the configuration options of the widget. If no option is
+// specified, returns a list describing all of the available options for
+// pathName (see Tk_ConfigureInfo for information on the format of
+// this list). If option is specified with no value, then the command
+// returns a list describing the one named option (this list will be identical to
+// the corresponding sublist of the value returned if no option is
+// specified). If one or more option-value pairs are specified, then the
+// command modifies the given widget option(s) to have the given value(s); in
+// this case the command returns an empty string. Option may have any of
+// the values accepted by the text command.
+//
+// # toplevel.Configure(...)
+//
+// Query or modify the configuration options of the widget.
+// If no option is specified, returns a list describing all of
+// the available options for pathName (see Tk_ConfigureInfo for
+// information on the format of this list).  If option is specified
+// with no value, then the command returns a list describing the
+// one named option (this list will be identical to the corresponding
+// sublist of the value returned if no option is specified).  If
+// one or more option-value pairs are specified, then the command
+// modifies the given widget option(s) to have the given value(s);  in
+// this case the command returns an empty string.
+// Option may have any of the values accepted by the toplevel
+// command.
+func (rx *Window) Configure(options ...option) any {
+	return evalAny(fmt.Sprintf(`%s configure %s`, rx.optionString(nil), collect(options...)))
 }
