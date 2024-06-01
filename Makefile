@@ -44,3 +44,4 @@ work:
 	go work use ../libtk9.0
 	go work use ../libz
 	go work use ../tcl9.0
+	go work use ../ngrab
