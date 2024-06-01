@@ -8,9 +8,9 @@ require (
 	golang.org/x/net v0.25.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/libtcl9.0 v0.3.5
-	modernc.org/libtk9.0 v0.3.10
+	modernc.org/libtk9.0 v0.3.11
 	modernc.org/ngrab v0.0.3
-	modernc.org/tcl9.0 v0.3.29
+	modernc.org/tcl9.0 v0.3.35
 )
 
 require (
@@ -23,7 +23,7 @@ require (
 	modernc.org/libX11 v0.1.21 // indirect
 	modernc.org/libXau v0.1.26 // indirect
 	modernc.org/libXdmcp v0.1.14 // indirect
-	modernc.org/libXft v0.0.22 // indirect
+	modernc.org/libXft v0.0.23 // indirect
 	modernc.org/libXrender v0.0.22 // indirect
 	modernc.org/libbsd v0.1.34 // indirect
 	modernc.org/libc v1.50.9 // indirect
