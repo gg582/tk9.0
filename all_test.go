@@ -79,8 +79,8 @@ func Test3(t *testing.T) {
 
 ttk::style theme use clam
 . configure -pady 30
-image create photo gimp -file testdata/go.png
-label .l -image gimp
+image create photo gopher -file testdata/go.png
+label .l -image gopher
 ttk::button .save -text Save -state disabled -underline 0
 label .l2 -text "button above .Txt=[.save cget -text]"
 ttk::button .close -text Close -command { destroy . } -underline 0
@@ -89,7 +89,6 @@ tk::PlaceWindow . center
 wm title . "modernc.org/tk9.0 example"
 wm geometry . 500x[winfo height .]
 tkwait window .
-
 
 `,
 	); err != nil {
