@@ -7,10 +7,10 @@ require (
 	github.com/evilsocket/islazy v1.11.0
 	golang.org/x/net v0.25.0
 	modernc.org/fileutil v1.3.0
-	modernc.org/libtcl9.0 v0.3.6
+	modernc.org/libtcl9.0 v0.3.8
 	modernc.org/libtk9.0 v0.3.11
 	modernc.org/ngrab v0.0.3
-	modernc.org/tcl9.0 v0.3.42
+	modernc.org/tcl9.0 v0.3.45
 )
 
 require (
@@ -32,7 +32,7 @@ require (
 	modernc.org/libfreetype v0.2.26 // indirect
 	modernc.org/libmd v0.2.20 // indirect
 	modernc.org/libxcb v0.2.19 // indirect
-	modernc.org/libz v0.10.6 // indirect
+	modernc.org/libz v0.10.7 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
 )
