@@ -76,4 +76,6 @@ modernc.org/sortutil v1.2.0 h1:jQiD3PfS2REGJNzNCMMaLSp/wdMNieTbKX920Cqdgqc=
 modernc.org/strutil v1.2.0 h1:agBi9dp1I+eOnxXeiZawM8F4LawKv4NzGWSaLfyeNZA=
 modernc.org/tcl9.0 v0.3.47 h1:x7KpTdQEsVig92A3EWMSRyLlpT6H+nkddrOCzmDs7w8=
 modernc.org/tcl9.0 v0.3.47/go.mod h1:tzwwU7lYJivWT/U6tq0Ia/R+dy1EKim3BhlrtpV55lY=
+modernc.org/tcl9.0 v0.3.48 h1:vONR2Mu3dNFvEmu6lL2PoO+UdbU2yciFds1YaE+mA3w=
+modernc.org/tcl9.0 v0.3.48/go.mod h1:tzwwU7lYJivWT/U6tq0Ia/R+dy1EKim3BhlrtpV55lY=
 modernc.org/token v1.1.0 h1:Xl7Ap9dKaEs5kLoOQeQmPWevfnk/DM5qcLcYlA8ys6Y=
