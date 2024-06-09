@@ -8,9 +8,9 @@ require (
 	golang.org/x/net v0.25.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/libtcl9.0 v0.4.2
-	modernc.org/libtk9.0 v0.4.0
+	modernc.org/libtk9.0 v0.4.1
 	modernc.org/ngrab v0.0.3
-	modernc.org/tcl9.0 v0.3.50
+	modernc.org/tcl9.0 v0.3.51
 )
 
 require (
@@ -20,16 +20,16 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	golang.org/x/sys v0.20.0 // indirect
-	modernc.org/libX11 v0.2.0 // indirect
+	modernc.org/libX11 v0.2.1 // indirect
 	modernc.org/libXau v0.1.28 // indirect
 	modernc.org/libXdmcp v0.2.0 // indirect
-	modernc.org/libXft v0.1.0 // indirect
+	modernc.org/libXft v0.1.1 // indirect
 	modernc.org/libXrender v0.1.0 // indirect
 	modernc.org/libbsd v0.2.0 // indirect
 	modernc.org/libc v1.52.1 // indirect
 	modernc.org/libexpat v0.3.0 // indirect
-	modernc.org/libfontconfig v0.1.23 // indirect
-	modernc.org/libfreetype v0.2.29 // indirect
+	modernc.org/libfontconfig v0.1.24 // indirect
+	modernc.org/libfreetype v0.2.30 // indirect
 	modernc.org/libmd v0.3.0 // indirect
 	modernc.org/libxcb v0.3.0 // indirect
 	modernc.org/libz v0.10.7 // indirect
