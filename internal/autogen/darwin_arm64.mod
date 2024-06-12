@@ -8,9 +8,9 @@ require (
 	golang.org/x/net v0.25.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/libtcl9.0 v0.5.0
-	modernc.org/libtk9.0 v0.4.2
+	modernc.org/libtk9.0 v0.4.3
 	modernc.org/ngrab v0.0.3
-	modernc.org/tcl9.0 v0.4.3
+	modernc.org/tcl9.0 v0.4.6
 )
 
 require (
