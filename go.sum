@@ -232,4 +232,6 @@ modernc.org/tcl9.0 v0.4.42 h1:uEq5QEpdWNYPQifuhKpec4UhmrHNimkExU2ffvnTp9s=
 modernc.org/tcl9.0 v0.4.42/go.mod h1:1fIO0tWXrTUCFsuSH8QosDMoa11189UHBNQwkfGz3rE=
 modernc.org/tcl9.0 v0.4.44 h1:aSFaVcmwY4ftA8zii7Ckt8Ps/S5Y29cavQEuNeMm9lI=
 modernc.org/tcl9.0 v0.4.44/go.mod h1:peDMd+SosI3Bhvt+4y4Mm2W4TqwsL7CqNn9Rsdes5bs=
+modernc.org/tcl9.0 v0.4.47 h1:xIaWr5hg15yNrKmtGX5sU6JxtrCmRjLXyP1AXomiCj0=
+modernc.org/tcl9.0 v0.4.47/go.mod h1:peDMd+SosI3Bhvt+4y4Mm2W4TqwsL7CqNn9Rsdes5bs=
 modernc.org/token v1.1.0 h1:Xl7Ap9dKaEs5kLoOQeQmPWevfnk/DM5qcLcYlA8ys6Y=
