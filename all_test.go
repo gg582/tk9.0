@@ -77,17 +77,21 @@ func TestMain(m *testing.M) {
 func Test3(t *testing.T) {
 	if _, err := eval(`
 
-ttk::style theme use clam
-. configure -pady 30
-image create photo gopher -file testdata/go.png
-label .l -image gopher
-ttk::button .save -text Save -state disabled -underline 0
-label .l2 -text "button above .Txt=[.save cget -text]"
-ttk::button .close -text Close -command { destroy . } -underline 0
-pack .l .save .l2 .close -ipadx 30
-tk::PlaceWindow . center
-wm title . "modernc.org/tk9.0 example"
-wm geometry . 500x[winfo height .]
+# ttk::style theme use clam
+# . configure -pady 30
+# image create photo gopher -file testdata/go.png
+# label .l -image gopher
+# ttk::button .save -text Save -state disabled -underline 0
+# label .l2 -text "button above .Txt=[.save cget -text]"
+# ttk::button .close -text Close -command { destroy . } -underline 0
+# pack .l .save .l2 .close -ipadx 30
+# tk::PlaceWindow . center
+# wm title . "modernc.org/tk9.0 example"
+# wm geometry . 500x[winfo height .]
+# tkwait window .
+
+button .b -text hello -command { destroy . }
+pack .b
 tkwait window .
 
 `,

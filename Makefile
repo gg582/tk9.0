@@ -39,9 +39,24 @@ work:
 	go work use ../cc/v4
 	go work use ../ccgo/v3
 	go work use ../ccgo/v4
+	go work use ../libX11
+	go work use ../libXft
+	go work use ../libadvapi32
 	go work use ../libc
+	go work use ../libcomctl32
+	go work use ../libcomdlg32
+	go work use ../libfontconfig
+	go work use ../libgdi32
+	go work use ../libimm32
+	go work use ../libkernel32
+	go work use ../libole32
+	go work use ../liboleaut32
+	go work use ../libshell32
 	go work use ../libtcl9.0
 	go work use ../libtk9.0
+	go work use ../libuser32
+	go work use ../libuserenv
+	go work use ../libwinspool
 	go work use ../libz
-	go work use ../tcl9.0
 	go work use ../ngrab
+	go work use ../tcl9.0
