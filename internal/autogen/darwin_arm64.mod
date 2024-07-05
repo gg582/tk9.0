@@ -7,7 +7,7 @@ require (
 	github.com/evilsocket/islazy v1.11.0
 	golang.org/x/net v0.25.0
 	modernc.org/fileutil v1.3.0
-	modernc.org/libtcl9.0 v0.6.1
+	modernc.org/libtcl9.0 v0.6.2
 	modernc.org/libtk9.0 v0.4.4
 	modernc.org/ngrab v0.0.3
 	modernc.org/tcl9.0 v0.4.62
