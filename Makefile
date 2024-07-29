@@ -20,11 +20,12 @@ edit:
 	@if [ -f "Session.vim" ]; then gvim -S & else gvim -p Makefile go.mod builder.json *.go & fi
 
 editor:
+	go test -c -o /dev/null
 	go build -v  -o /dev/null generator.go
 	go run generator.go
 	gofmt -l -s -w .
-	go build -v  -o /dev/null ./...
-	go test
+	go build -v  -o /dev/null
+	$(shell for f in examples/*.go ; do go build -o /dev/null $$f ; done)
 
 test:
 	go test -v -timeout 24h -count=1

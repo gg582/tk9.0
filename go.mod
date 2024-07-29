@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/adrg/xdg v0.5.0
 	github.com/evilsocket/islazy v1.11.0
+	github.com/expr-lang/expr v1.16.9
 	golang.org/x/net v0.27.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/libtcl9.0 v0.6.3

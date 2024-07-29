@@ -10,9 +10,10 @@ import (
 	"os"
 	"testing"
 
-	_ "github.com/adrg/xdg"   // generator.go
-	_ "golang.org/x/net/html" // generator.go
-	_ "modernc.org/ngrab/lib" // generator.go
+	_ "github.com/adrg/xdg"       // generator.go
+	_ "github.com/expr-lang/expr" // examples
+	_ "golang.org/x/net/html"     // generator.go
+	_ "modernc.org/ngrab/lib"     // generator.go
 )
 
 func TestMain(m *testing.M) {
