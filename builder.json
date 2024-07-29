@@ -1,5 +1,6 @@
 {
-	"autotag": "linux/(amd64|arm64)|darwin/arm64",
-	"autoupdate": "linux/(amd64|arm64)|darwin/arm64",
-	"test": "linux/(amd64|arm64)|darwin/arm64"
+	"autogen": "<none>",
+	"autotag": "linux/amd64",
+	"autoupdate": "linux/amd64",
+	"test": "linux/amd64"
 }
