@@ -11,7 +11,7 @@
 //
 // # Hello world
 //
-// Also available in examples/hello.go
+// Also available in _examples/hello.go
 //
 //	package main
 //
@@ -31,7 +31,7 @@
 //
 // # Debugging
 //
-// Consider this program in examples/debugging.go:
+// Consider this program in _examples/debugging.go:
 //
 //	// Build this program using -tags=tk.dmesg
 //	package main
@@ -50,7 +50,7 @@
 // click the Hello button. With the tk.dmesg tag the package initialization
 // prints the debug messages path. So we can view it, for example, like this:
 //
-//	$ cat $(go run -tags=tk.dmesg ./examples/debugging.go)
+//	$ cat $(go run -tags=tk.dmesg ./_examples/debugging.go)
 //	[27190 debugging] enter [dmesgon.go:32:0 proc.go:7176:doInit1 proc.go:7143:doInit]
 //	[27190 debugging] code=ttk::button ..ttk::button2 -text Hello -command {eventDispatcher 1} -> r=.ttk::button2 err=<nil> [tk.go:304:eval tk.go:304:eval tk.go:291:newChild]
 //	[27190 debugging] code=pack .ttk::button2 -ipadx 10 -ipady 5 -padx 20 -pady 10 -> r= err=<nil> [tk.go:304:eval tk.go:304:eval tk.go:800:Pack]
