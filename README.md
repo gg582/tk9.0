@@ -1,8 +1,8 @@
 # tk9.0: CGo-free cross platform GUI for Go
 
-![calc](examples/calc.png "calc")
+![calc](_examples/calc.png "calc")
 
-A simple calculator (examples/calc.go).
+A simple calculator (_examples/calc.go).
 
      1	package main
      2	
@@ -37,9 +37,9 @@ A simple calculator (examples/calc.go).
     31		App.Wait()
     32	}
 
-![font](examples/font.png "font")
+![font](_examples/font.png "font")
 
-A font previewer (examples/font.go).
+A font previewer (_examples/font.go).
 
      1	package main
      2	
@@ -54,9 +54,9 @@ A font previewer (examples/font.go).
     11		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
     12	}
 
-![photo](examples/photo.png "photo")
+![photo](_examples/photo.png "photo")
 
-Using embedded images (examples/photo.go).
+Using embedded images (_examples/photo.go).
 
      1	package main
      2	
