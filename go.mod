@@ -8,10 +8,10 @@ require (
 	github.com/expr-lang/expr v1.16.9
 	golang.org/x/net v0.27.0
 	modernc.org/fileutil v1.3.0
-	modernc.org/libtcl9.0 v0.6.3
-	modernc.org/libtk9.0 v0.4.5
+	modernc.org/libtcl9.0 v0.7.1
+	modernc.org/libtk9.0 v0.5.0
 	modernc.org/ngrab v0.1.0
-	modernc.org/tcl9.0 v0.4.64
+	modernc.org/tcl9.0 v0.5.0
 )
 
 require (
@@ -21,18 +21,18 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	golang.org/x/sys v0.22.0 // indirect
-	modernc.org/libX11 v0.4.3 // indirect
-	modernc.org/libXau v0.2.3 // indirect
-	modernc.org/libXdmcp v0.3.6 // indirect
-	modernc.org/libXft v0.3.5 // indirect
-	modernc.org/libXrender v0.3.5 // indirect
-	modernc.org/libbsd v0.3.5 // indirect
-	modernc.org/libc v1.55.6 // indirect
-	modernc.org/libexpat v0.4.6 // indirect
-	modernc.org/libfontconfig v0.2.8 // indirect
-	modernc.org/libfreetype v0.3.1 // indirect
-	modernc.org/libmd v0.4.3 // indirect
-	modernc.org/libxcb v0.4.9 // indirect
+	modernc.org/libX11 v0.4.6 // indirect
+	modernc.org/libXau v0.2.6 // indirect
+	modernc.org/libXdmcp v0.3.9 // indirect
+	modernc.org/libXft v0.4.0 // indirect
+	modernc.org/libXrender v0.3.7 // indirect
+	modernc.org/libbsd v0.3.8 // indirect
+	modernc.org/libc v1.55.8 // indirect
+	modernc.org/libexpat v0.4.10 // indirect
+	modernc.org/libfontconfig v0.2.11 // indirect
+	modernc.org/libfreetype v0.4.0 // indirect
+	modernc.org/libmd v0.4.6 // indirect
+	modernc.org/libxcb v0.4.12 // indirect
 	modernc.org/libz v0.13.2 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect

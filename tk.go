@@ -5,6 +5,10 @@
 // Package tk9.0 is a CGo-free cross platform GUI for Go. It is similar to
 // [tkinter] for Python.
 //
+// # Tk8
+//
+// An older version of Tcl/Tk exists at [tk8].
+//
 // # Hello world
 //
 // Also available in examples/hello.go
@@ -64,6 +68,7 @@
 //	OS      Arch
 //	-------------
 //	linux	amd64
+//	linux	arm64
 //
 // # XQuartz
 //
@@ -219,6 +224,7 @@
 // [XQuartz]: https://en.wikipedia.org/wiki/XQuartz
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
+// [tk8]: https://pkg.go.dev/modernc.org/tk8.6
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
 package tk9_0 // import "modernc.org/tk9.0"
