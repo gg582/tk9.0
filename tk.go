@@ -70,6 +70,10 @@
 //	linux	amd64
 //	linux	arm64
 //
+// # Platforms blocked on issues
+//
+// linux/loong64, see [libxcb issue1].
+//
 // # XQuartz
 //
 // On darwin (macOS) this package depends on [XQuartz], but only at run-time.
