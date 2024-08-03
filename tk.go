@@ -61,7 +61,7 @@
 // 27190 was the process PID in this particular run. Using the tags allows to
 // inspect the Tcl/Tk code executed during the lifetime of the process.
 //
-// # Supported platforms and architectures
+// # Supported targets
 //
 // These combinations of GOOS and GOARCH are currently supported
 //
@@ -70,7 +70,7 @@
 //	linux	amd64
 //	linux	arm64
 //
-// # Platforms blocked on issues
+// # Targets blocked on issues
 //
 // linux/loong64, see [libxcb issue1].
 //
