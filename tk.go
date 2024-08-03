@@ -73,6 +73,7 @@
 // # Targets blocked on issues
 //
 // linux/loong64, see [libxcb issue1].
+// linux/ppc64le, see [libxcb issue2].
 //
 // # XQuartz
 //
@@ -227,6 +228,8 @@
 //
 // [XQuartz]: https://en.wikipedia.org/wiki/XQuartz
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
+// [libxcb issue1]: https://gitlab.com/cznic/libxcb/-/issues/1
+// [libxcb issue2]: https://gitlab.com/cznic/libxcb/-/issues/2
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tk8]: https://pkg.go.dev/modernc.org/tk8.6
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter
