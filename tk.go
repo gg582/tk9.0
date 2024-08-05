@@ -832,7 +832,7 @@ func (m *Img) optionString(_ *Window) string {
 //
 // [Tcl/Tk bitmap]: https://www.tcl.tk/man/tcl9.0/TkCmd/bitmap.htm
 func NewBitmap(options ...Opt) *Img {
-	nm := fmt.Sprintf("img%v", id.Add(1))
+	nm := fmt.Sprintf("bmp%v", id.Add(1))
 	code := fmt.Sprintf("image create bitmap %s %s", nm, collect(options...))
 	r, err := eval(code)
 	if err != nil {
@@ -926,6 +926,43 @@ func NewPhoto(options ...Opt) *Img {
 	}
 
 	return &Img{name: nm}
+}
+
+// Width — Get the configured option value.
+func (m *Img) Width() string {
+	return evalErr(fmt.Sprintf(`%s cget -width`, m))
+}
+
+// Height — Get the configured option value.
+func (m *Img) Height() string {
+	return evalErr(fmt.Sprintf(`%s cget -height`, m))
+}
+
+// Plot — use gnuplot to draw on a photo. Plot returns 'm'
+//
+// The 'script' argument is passed to a gnuplot executable, which must be
+// installed on the machine.  See the [gnuplot site] for documentation about
+// producing graphs. The script must not use the 'set term <device>' command.
+//
+// The content of 'm' is replaced, including its internal name.
+//
+// [gnuplot site]: http://www.gnuplot.info/
+func (m *Img) Plot(script string) *Img {
+	switch {
+	case strings.HasPrefix(m.name, "img"):
+		w, h := m.Width(), m.Height()
+		script = fmt.Sprintf("set terminal pngcairo size %s, %s\n%s", w, h, script)
+		out, err := gnuplot(script)
+		if err != nil {
+			fail(fmt.Errorf("plot: executing script: %s", err))
+			break
+		}
+
+		*m = *NewPhoto(Width(w), Height(h), Data(out))
+	default:
+		fail(fmt.Errorf("plot: %s is not a photo", m))
+	}
+	return m
 }
 
 // Destroy — Destroy one or more windows
@@ -2649,7 +2686,7 @@ func (w *Window) Raise(aboveThis *Window) {
 //
 // The 'script' argument is passed to a gnuplot executable, which must be
 // installed on the machine.  See the [gnuplot site] for documentation about
-// producing graphs. The script must not use the 'set term ...' command.
+// producing graphs. The script must not use the 'set term <device>' command.
 //
 // [gnuplot site]: http://www.gnuplot.info/
 func (w *Window) Plot(script string) *Window {

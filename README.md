@@ -73,7 +73,7 @@ Using embedded images (_examples/photo.go).
 
 ![canvas-plot](_examples/canvas_plot.png "canvas plot")
 
-Graphing to a canvas using gnuplot  (_examples/canvas_plot.go).
+Canvas plot  (_examples/canvas_plot.go).
 
      1	package main
      2	
@@ -112,6 +112,51 @@ Graphing to a canvas using gnuplot  (_examples/canvas_plot.go).
     35		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
     36	}
 
+
+![photo-plot](_examples/photo_plot.png "photo plot")
+
+Photo plot  (_examples/photo_plot.go).
+
+     1	package main
+     2	
+     3	import . "modernc.org/tk9.0"
+     4	
+     5	// https://gnuplot.sourceforge.net/demo_5.4/hidden2.html
+     6	const script = `
+     7	set multiplot title "Interlocking Tori"
+     8	set title "PM3D surface\nno depth sorting"
+     9	set parametric
+    10	set urange [-pi:pi]
+    11	set vrange [-pi:pi]
+    12	set isosamples 50,20
+    13	set origin -0.02,0.0
+    14	set size 0.55, 0.9
+    15	unset key
+    16	unset xtics
+    17	unset ytics
+    18	unset ztics
+    19	set border 0
+    20	set view 60, 30, 1.5, 0.9
+    21	unset colorbox
+    22	set pm3d scansbackward
+    23	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with pm3d,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with pm3d
+    24	set title "PM3D surface\ndepth sorting"
+    25	set origin 0.40,0.0
+    26	set size 0.55, 0.9
+    27	set colorbox vertical user origin 0.9, 0.15 size 0.02, 0.50
+    28	set format cb "%.1f"
+    29	set pm3d depthorder
+    30	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with pm3d,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with pm3d
+    31	unset multiplot
+    32	`
+    33	
+    34	func main() {
+    35		Pack(
+    36			Label(Image(NewPhoto(Width(640), Height(480)).Plot(script))),
+    37			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    38		)
+    39		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+    40	}
 
 Documentation at [pkg.go.dev].
 
