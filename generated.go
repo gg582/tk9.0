@@ -226,7 +226,7 @@ func (w *Window) Button(options ...Opt) *Window {
 // multiple of xScrollIncrement; furthermore, the units for scrolling
 // (e.g., the change in view when the left and right arrows of a scrollbar
 // are selected) will also be xScrollIncrement. If the value of
-// this option is less than or equal to zero, then horizontal scrolling
+// this option is negative or zero, then horizontal scrolling
 // is unconstrained.
 //
 // [Yscrollincrement]
@@ -238,7 +238,7 @@ func (w *Window) Button(options ...Opt) *Window {
 // multiple of yScrollIncrement; furthermore, the units for scrolling
 // (e.g., the change in view when the top and bottom arrows of a scrollbar
 // are selected) will also be yScrollIncrement. If the value of
-// this option is less than or equal to zero, then vertical scrolling
+// this option is negative or zero, then vertical scrolling
 // is unconstrained.
 //
 // [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl8.6/TkCmd/canvas.htm
@@ -620,7 +620,7 @@ func (w *Window) Checkbutton(options ...Opt) *Window {
 //
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
-// If the value is less than or equal to zero, the widget picks a
+// If the value is negative or zero, the widget picks a
 // size just large enough to hold its current text.
 //
 // [Tcl/Tk entry]: https://www.tcl.tk/man/tcl8.6/TkCmd/entry.htm
@@ -729,8 +729,8 @@ func (w *Window) Entry(options ...Opt) *Window {
 // [Height]
 //
 // Specifies the desired height for the window in any of the forms
-// acceptable to Tk_GetPixels.  If this option is less than or equal
-// to zero then the window will not request any size at all.  Note that this
+// acceptable to Tk_GetPixels.  If this option is negative or
+// zero then the window will not request any size at all.  Note that this
 // sets the total height of the frame, any -borderwidth or similar is
 // not added.  Normally -height should not be used if a propagating
 // geometry manager, such as grid or pack, is used within the
@@ -757,8 +757,8 @@ func (w *Window) Entry(options ...Opt) *Window {
 // [Width]
 //
 // Specifies the desired width for the window in any of the forms
-// acceptable to Tk_GetPixels.  If this option is less than or equal
-// to zero then the window will not request any size at all.  Note that this
+// acceptable to Tk_GetPixels.  If this option is negative or
+// zero then the window will not request any size at all.  Note that this
 // sets the total width of the frame, any -borderwidth or similar is
 // not added.  Normally -width should not be used if a propagating
 // geometry manager, such as grid or pack, is used within the
@@ -948,7 +948,7 @@ func (w *Window) Label(options ...Opt) *Window {
 //
 // Specifies the desired height for the window in any of the forms
 // acceptable to Tk_GetPixels.
-// If this option is less than or equal to zero then the window will
+// If this option is negative or zero then the window will
 // not request any size at all.
 //
 // [Labelanchor]
@@ -980,7 +980,7 @@ func (w *Window) Label(options ...Opt) *Window {
 //
 // Specifies the desired width for the window in any of the forms
 // acceptable to Tk_GetPixels.
-// If this option is less than or equal to zero then the window will
+// If this option is negative or zero then the window will
 // not request any size at all.
 //
 // [Tcl/Tk labelframe]: https://www.tcl.tk/man/tcl8.6/TkCmd/labelframe.htm
@@ -1419,7 +1419,7 @@ func (w *Window) Menubutton(options ...Opt) *Window {
 // If this option has a value greater than zero then the -aspect
 // option is ignored and the -width option determines the line
 // length.
-// If this option has a value less than or equal to zero, then
+// If this option value is negative or zero, then
 // the -aspect option determines the line length.
 //
 // [Tcl/Tk message]: https://www.tcl.tk/man/tcl8.6/TkCmd/message.htm
@@ -1851,7 +1851,7 @@ func (w *Window) Radiobutton(options ...Opt) *Window {
 //
 // An integer specifying how many significant digits should be retained
 // when converting the value of the scale to a string.
-// If the number is less than or equal to zero, then the scale picks
+// If the number is negative or zero, then the scale picks
 // the smallest value that guarantees that every possible slider
 // position prints as a different string.
 //
@@ -1879,7 +1879,7 @@ func (w *Window) Radiobutton(options ...Opt) *Window {
 // A real value specifying the resolution for the scale.
 // If this value is greater than zero then the scale's value will always be
 // rounded to an even multiple of this value, as will
-// the endpoints of the scale.  If the value is less than zero then no
+// the endpoints of the scale.  If the value is negative then no
 // rounding occurs.  Defaults to 1 (i.e., the value will be integral).
 //
 // [Showvalue]
@@ -2029,8 +2029,8 @@ func (w *Window) Scale(options ...Opt) *Window {
 // Specifies the width of borders drawn around the internal elements
 // of the scrollbar (the two arrows and the slider).  The value may
 // have any of the forms acceptable to Tk_GetPixels.
-// If this value is less than zero, the value of the -borderwidth
-// option is used in its place.
+// If this value is the empty string (the default), the value of
+// the -borderwidth option is used in its place.
 //
 // [Width]
 //
@@ -2242,7 +2242,7 @@ func (w *Window) Scrollbar(options ...Opt) *Window {
 //
 // Specifies an integer value indicating the desired width of the spinbox window,
 // in average-size characters of the widget's font.
-// If the value is less than or equal to zero, the widget picks a
+// If the value is negative or zero, the widget picks a
 // size just large enough to hold its current text.
 //
 // [Wrap]
@@ -2578,7 +2578,7 @@ func (w *Window) Text(options ...Opt) *Window {
 //
 // Specifies the desired height for the window in any of the forms
 // acceptable to Tk_GetPixels.
-// If this option is less than or equal to zero then the window will
+// If this option is negative or zero then the window will
 // not request any size at all.
 //
 // [Mnu]
@@ -2633,7 +2633,7 @@ func (w *Window) Text(options ...Opt) *Window {
 //
 // Specifies the desired width for the window in any of the forms
 // acceptable to Tk_GetPixels.
-// If this option is less than or equal to zero then the window will
+// If this option is negative or zero then the window will
 // not request any size at all.
 //
 // [Tcl/Tk toplevel]: https://www.tcl.tk/man/tcl8.6/TkCmd/toplevel.htm
@@ -3061,7 +3061,7 @@ func (w *Window) TFrame(options ...Opt) *Window {
 // [Wraplength]
 //
 // Specifies the maximum line length (in pixels).
-// If this option is less than or equal to zero,
+// If this option is negative or zero,
 // then automatic wrapping is not performed; otherwise
 // the text is split into lines such that no line is longer
 // than the specified value.
@@ -8096,7 +8096,7 @@ func (w *Window) Wrap() string {
 // so that no line is longer than the specified length.
 // The value may be specified in any of the standard forms for
 // screen distances.
-// If this value is less than or equal to 0 then no wrapping is done:  lines
+// If this value is negative or zero then no wrapping is done:  lines
 // will break only at newline characters in the text.
 //
 // Known uses:

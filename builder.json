@@ -1,6 +1,6 @@
 {
 	"autogen": "<none>",
-	"autotag": "linux/(amd64|arm64)",
-	"autoupdate": "linux/(amd64|arm64)",
-	"test": "linux/(amd64|arm64)"
+	"autotag": "linux/(amd64|arm64|loong64|ppc64le)",
+	"autoupdate": "linux/(amd64|arm64|loong64|ppc64le)",
+	"test": "linux/(amd64|arm64|loong64|ppc64le)"
 }
