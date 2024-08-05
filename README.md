@@ -73,11 +73,11 @@ Using embedded images (_examples/photo.go).
 
 ![canvas-plot](_examples/canvas_plot.png "canvas plot")
 
-Graphing using gnuplot.
+Graphing to a canvas using gnuplot  (_examples/canvas_plot.go).
 
      1	package main
      2	
-     3	import . "modernc.org/tk8.6"
+     3	import . "modernc.org/tk9.0"
      4	
      5	// https://gnuplot.sourceforge.net/demo_5.4/surface2.9.gnu
      6	const script = `
