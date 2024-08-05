@@ -25,7 +25,7 @@ editor:
 	go run generator.go
 	gofmt -l -s -w .
 	go build -v  -o /dev/null
-	$(shell for f in examples/*.go ; do go build -o /dev/null $$f ; done)
+	$(shell for f in _examples/*.go ; do go build -o /dev/null $$f ; done)
 
 test:
 	go test -v -timeout 24h -count=1

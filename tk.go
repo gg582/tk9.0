@@ -232,11 +232,13 @@
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
+	"context"
 	_ "embed"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -2640,4 +2642,48 @@ func (w *Window) Raise(aboveThis *Window) {
 		b = aboveThis.String()
 	}
 	evalErr(fmt.Sprintf("raise %s %s", w, b))
+}
+
+// Plot — use gnuplot to draw on a canvas. Plot returns 'w', which must be a
+// canvas.
+//
+// The 'script' argument is passed to a gnuplot executable, which must be
+// installed on the machine.  See the [gnuplot site] for documentation about
+// producing graphs. The script must not use the 'set term ...' command.
+//
+// [gnuplot site]: http://www.gnuplot.info/
+func (w *Window) Plot(script string) *Window {
+	script = fmt.Sprintf("set terminal tkcanvas size %s, %s\n%s", w.Width(), w.Height(), script)
+	switch {
+	case strings.HasPrefix(w.String(), ".canvas"):
+		out, err := gnuplot(script)
+		if err != nil {
+			fail(fmt.Errorf("plot: executing script: %s", err))
+			break
+		}
+
+		evalErr(fmt.Sprintf("%s\ngnuplot %s", out, w))
+	default:
+		fail(fmt.Errorf("plot: %s is not a canvas", w))
+	}
+	return w
+}
+
+func gnuplot(script string) (out []byte, err error) {
+	f, err := os.CreateTemp("", "tk8.6-")
+	if err != nil {
+		return nil, err
+	}
+
+	defer os.Remove(f.Name())
+
+	if err := os.WriteFile(f.Name(), []byte(script), 0660); err != nil {
+		return nil, err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+
+	defer cancel()
+
+	return exec.CommandContext(ctx, "gnuplot", f.Name()).Output()
 }

@@ -71,6 +71,48 @@ Using embedded images (_examples/photo.go).
     11		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
     12	}
 
+![canvas-plot](_examples/canvas_plot.png "canvas plot")
+
+Graphing using gnuplot.
+
+     1	package main
+     2	
+     3	import . "modernc.org/tk8.6"
+     4	
+     5	// https://gnuplot.sourceforge.net/demo_5.4/surface2.9.gnu
+     6	const script = `
+     7	set dummy u, v
+     8	set key bmargin center horizontal Right noreverse enhanced autotitle nobox
+     9	set parametric
+    10	set view 50, 30, 1, 1
+    11	set isosamples 50, 20
+    12	set hidden3d back offset 1 trianglepattern 3 undefined 1 altdiagonal bentover
+    13	set style data lines
+    14	set xyplane relative 0
+    15	set title "Interlocking Tori" 
+    16	set urange [ -3.14159 : 3.14159 ] noreverse nowriteback
+    17	set vrange [ -3.14159 : 3.14159 ] noreverse nowriteback
+    18	set xrange [ * : * ] noreverse writeback
+    19	set x2range [ * : * ] noreverse writeback
+    20	set yrange [ * : * ] noreverse writeback
+    21	set y2range [ * : * ] noreverse writeback
+    22	set zrange [ * : * ] noreverse writeback
+    23	set cbrange [ * : * ] noreverse writeback
+    24	set rrange [ * : * ] noreverse writeback
+    25	set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front  noinvert bdefault
+    26	NO_ANIMATION = 1
+    27	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with lines
+    28	`
+    29	
+    30	func main() {
+    31		Pack(
+    32			Canvas(Width(640), Height(480), Background(White)).Plot(script),
+    33			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    34		)
+    35		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+    36	}
+
+
 Documentation at [pkg.go.dev].
 
 [pkg.go.dev]: https://pkg.go.dev/modernc.org/tk9.0
