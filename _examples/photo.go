@@ -8,5 +8,5 @@ var gopher []byte
 
 func main() {
 	Pack(Label(Image(NewPhoto(Data(gopher)))), TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-	App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+	App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
 }

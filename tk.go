@@ -26,7 +26,7 @@
 //
 //	$ CGO_ENABLED=0 go run hello.go
 //
-// The CGO_ENABLED=0 is optinal and here it only demonstrates the program can
+// The CGO_ENABLED=0 is optional and here it only demonstrates the program can
 // be built without CGo.
 //
 // # Debugging

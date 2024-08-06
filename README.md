@@ -1,4 +1,4 @@
-# tk9.0: CGo-free cross platform GUI for Go
+# tk9.0: The CGo-free cross platform GUI for Go
 
 ![photo](_examples/photo.png "photo")
 
@@ -14,7 +14,7 @@ Using embedded images (_examples/photo.go).
      8	
      9	func main() {
     10		Pack(Label(Image(NewPhoto(Data(gopher)))), TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    11		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+    11		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
     12	}
 
 ![calc](_examples/calc.png "calc")
@@ -68,7 +68,7 @@ A font previewer (_examples/font.go).
      8			t.TagConfigure(t.TagAdd(t.Insert(LC{i + 1, 0}, v+"\n"), LC{i + 2, 0}), Fnt(NewFont(Family(v))))
      9		}
     10		Pack(t, TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    11		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+    11		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
     12	}
 
 ![splot](_examples/splot.png "surface plot")
@@ -84,7 +84,7 @@ Surface plot (_examples/splot.go).
      7			Label(Image(NewPhoto(Width(800), Height(600)).Graph("set grid; splot x**2+y**2, x**2-y**2"))),
      8			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
      9		)
-    10		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+    10		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
     11	}
 
 ![tori](_examples/tori.png "interlocked tori")
@@ -129,7 +129,7 @@ Interlocked tori plot (_examples/tori.go).
     36			Label(Image(NewPhoto(Width(800), Height(600)).Graph(script))),
     37			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
     38		)
-    39		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+    39		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
     40	}
 
 ![tori-canvas](_examples/tori_canvas.png "interlocked tori on canvas")
@@ -171,7 +171,7 @@ Interlocked tori plot on canvas (_examples/tori_canvas.go).
     33			Canvas(Width(800), Height(600), Background(White)).Graph(script),
     34			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
     35		)
-    36		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+    36		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
     37	}
 
 Documentation at [pkg.go.dev].

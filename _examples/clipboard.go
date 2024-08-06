@@ -19,5 +19,5 @@ func main() {
 	})), style,
 	)
 	Grid(TExit(), Columnspan(3), style)
-	App.Configure(Padx("4m"), Pady("4m")).Wait()
+	App.Configure(Padx("4m"), Pady("3m")).Wait()
 }
