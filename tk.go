@@ -108,7 +108,7 @@
 // This is obviously a compromise enabling to have a way to check for errors
 // and, at the same time, the ability to write concise code like:
 //
-//	// Defered error handling.
+//	// Deferred error handling.
 //	if b = Button(Txt("Foo"), Padx(5), Pady(10)); Error != nil {
 //		...
 //	}
