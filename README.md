@@ -1,5 +1,22 @@
 # tk9.0: CGo-free cross platform GUI for Go
 
+![photo](_examples/photo.png "photo")
+
+Using embedded images (_examples/photo.go).
+
+     1	package main
+     2	
+     3	import _ "embed"
+     4	import . "modernc.org/tk9.0"
+     5	
+     6	//go:embed gopher.png
+     7	var gopher []byte
+     8	
+     9	func main() {
+    10		Pack(Label(Image(NewPhoto(Data(gopher)))), TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    11		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+    12	}
+
 ![calc](_examples/calc.png "calc")
 
 A simple calculator (_examples/calc.go).
@@ -51,23 +68,6 @@ A font previewer (_examples/font.go).
      8			t.TagConfigure(t.TagAdd(t.Insert(LC{i + 1, 0}, v+"\n"), LC{i + 2, 0}), Fnt(NewFont(Family(v))))
      9		}
     10		Pack(t, TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    11		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
-    12	}
-
-![photo](_examples/photo.png "photo")
-
-Using embedded images (_examples/photo.go).
-
-     1	package main
-     2	
-     3	import _ "embed"
-     4	import . "modernc.org/tk9.0"
-     5	
-     6	//go:embed gopher.png
-     7	var gopher []byte
-     8	
-     9	func main() {
-    10		Pack(Label(Image(NewPhoto(Data(gopher)))), TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
     11		App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
     12	}
 
