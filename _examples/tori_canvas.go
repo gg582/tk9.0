@@ -13,6 +13,7 @@ set hidden3d back offset 1 trianglepattern 3 undefined 1 altdiagonal bentover
 set style data lines
 set xyplane relative 0
 set title "Interlocking Tori" 
+set grid
 set urange [ -3.14159 : 3.14159 ] noreverse nowriteback
 set vrange [ -3.14159 : 3.14159 ] noreverse nowriteback
 set xrange [ * : * ] noreverse writeback
@@ -29,7 +30,7 @@ splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos
 
 func main() {
 	Pack(
-		Canvas(Width(640), Height(480), Background(White)).Plot(script),
+		Canvas(Width(800), Height(600), Background(White)).Graph(script),
 		TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
 	)
 	App.Configure(Padx("4m"), Pady("4m")).Center().Wait()

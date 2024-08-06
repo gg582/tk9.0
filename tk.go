@@ -938,7 +938,7 @@ func (m *Img) Height() string {
 	return evalErr(fmt.Sprintf(`%s cget -height`, m))
 }
 
-// Plot — use gnuplot to draw on a photo. Plot returns 'm'
+// Graph — use gnuplot to draw on a photo. Graph returns 'm'
 //
 // The 'script' argument is passed to a gnuplot executable, which must be
 // installed on the machine.  See the [gnuplot site] for documentation about
@@ -947,7 +947,7 @@ func (m *Img) Height() string {
 // The content of 'm' is replaced, including its internal name.
 //
 // [gnuplot site]: http://www.gnuplot.info/
-func (m *Img) Plot(script string) *Img {
+func (m *Img) Graph(script string) *Img {
 	switch {
 	case strings.HasPrefix(m.name, "img"):
 		w, h := m.Width(), m.Height()
@@ -2681,7 +2681,7 @@ func (w *Window) Raise(aboveThis *Window) {
 	evalErr(fmt.Sprintf("raise %s %s", w, b))
 }
 
-// Plot — use gnuplot to draw on a canvas. Plot returns 'w', which must be a
+// Graph — use gnuplot to draw on a canvas. Graph returns 'w', which must be a
 // canvas.
 //
 // The 'script' argument is passed to a gnuplot executable, which must be
@@ -2689,7 +2689,7 @@ func (w *Window) Raise(aboveThis *Window) {
 // producing graphs. The script must not use the 'set term <device>' command.
 //
 // [gnuplot site]: http://www.gnuplot.info/
-func (w *Window) Plot(script string) *Window {
+func (w *Window) Graph(script string) *Window {
 	script = fmt.Sprintf("set terminal tkcanvas size %s, %s\n%s", w.Width(), w.Height(), script)
 	switch {
 	case strings.HasPrefix(w.String(), ".canvas"):
