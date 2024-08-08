@@ -96,7 +96,7 @@
 // the [Error] variable.  Even if a function does not return error, it is still
 // possible to handle errors in the usual way when needed, except that Error is
 // now a static variable. That's a problem in the general case, but less so in
-// this package that must to be used from a single goroutine only, as
+// this package that must be used from a single goroutine only, as
 // documented elsewhere.
 //
 //	// Explicit error handling.
