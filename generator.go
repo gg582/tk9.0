@@ -1019,16 +1019,20 @@ func (j *job) widget(fn string, doc *document) {
 			j.w("\n//\n// %s", strings.Join(v.docs, "\n// "))
 		}
 	}
-	j.w("\nfunc %s(options ...Opt) *Window {", gnm)
+	j.w("\nfunc %s(options ...Opt) *%[1]sWidget {", gnm)
 	j.w("\nreturn App.%s(options...)", gnm)
 	j.w("\n}")
 
 	j.w("%s", doc0[0])
 	j.w("\n//\n// The resulting [Window] is a child of 'w'")
 	j.w("\n//\n// For details please see [%s]", gnm)
-	j.w("\nfunc (w *Window) %s(options ...Opt) *Window {", gnm)
+	j.w("\nfunc (w *Window) %s(options ...Opt) *%[1]sWidget {", gnm)
 	cmd := strings.Replace(base, "ttk_", "ttk::", 1)
-	j.w("\nreturn w.newChild(%q, options...)", cmd)
+	j.w("\nreturn &%sWidget{w.newChild(%q, options...)}", gnm, cmd)
+	j.w("\n}")
+	j.w("\n\n// %sWidget represents the Tcl/Tk %s widget/window", gnm, base)
+	j.w("\ntype %sWidget struct {", gnm)
+	j.w("\n*Window")
 	j.w("\n}")
 }
 

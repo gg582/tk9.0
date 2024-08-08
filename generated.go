@@ -130,7 +130,7 @@ import "fmt"
 // from the size of the image or bitmap or text being displayed in it.
 //
 // [Tcl/Tk button]: https://www.tcl.tk/man/tcl8.6/TkCmd/button.htm
-func Button(options ...Opt) *Window {
+func Button(options ...Opt) *ButtonWidget {
 	return App.Button(options...)
 }
 
@@ -139,8 +139,13 @@ func Button(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Button]
-func (w *Window) Button(options ...Opt) *Window {
-	return w.newChild("button", options...)
+func (w *Window) Button(options ...Opt) *ButtonWidget {
+	return &ButtonWidget{w.newChild("button", options...)}
+}
+
+// ButtonWidget represents the Tcl/Tk button widget/window
+type ButtonWidget struct {
+	*Window
 }
 
 // Canvas — Create and manipulate 'canvas' hypergraphics drawing surface widgets
@@ -242,7 +247,7 @@ func (w *Window) Button(options ...Opt) *Window {
 // is unconstrained.
 //
 // [Tcl/Tk canvas]: https://www.tcl.tk/man/tcl8.6/TkCmd/canvas.htm
-func Canvas(options ...Opt) *Window {
+func Canvas(options ...Opt) *CanvasWidget {
 	return App.Canvas(options...)
 }
 
@@ -251,8 +256,13 @@ func Canvas(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Canvas]
-func (w *Window) Canvas(options ...Opt) *Window {
-	return w.newChild("canvas", options...)
+func (w *Window) Canvas(options ...Opt) *CanvasWidget {
+	return &CanvasWidget{w.newChild("canvas", options...)}
+}
+
+// CanvasWidget represents the Tcl/Tk canvas widget/window
+type CanvasWidget struct {
+	*Window
 }
 
 // Checkbutton — Create and manipulate 'checkbutton' boolean selection widgets
@@ -473,7 +483,7 @@ func (w *Window) Canvas(options ...Opt) *Window {
 // from the size of the image or bitmap or text being displayed in it.
 //
 // [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl8.6/TkCmd/checkbutton.htm
-func Checkbutton(options ...Opt) *Window {
+func Checkbutton(options ...Opt) *CheckbuttonWidget {
 	return App.Checkbutton(options...)
 }
 
@@ -482,8 +492,13 @@ func Checkbutton(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Checkbutton]
-func (w *Window) Checkbutton(options ...Opt) *Window {
-	return w.newChild("checkbutton", options...)
+func (w *Window) Checkbutton(options ...Opt) *CheckbuttonWidget {
+	return &CheckbuttonWidget{w.newChild("checkbutton", options...)}
+}
+
+// CheckbuttonWidget represents the Tcl/Tk checkbutton widget/window
+type CheckbuttonWidget struct {
+	*Window
 }
 
 // Entry — Create and manipulate 'entry' one-line text entry widgets
@@ -624,7 +639,7 @@ func (w *Window) Checkbutton(options ...Opt) *Window {
 // size just large enough to hold its current text.
 //
 // [Tcl/Tk entry]: https://www.tcl.tk/man/tcl8.6/TkCmd/entry.htm
-func Entry(options ...Opt) *Window {
+func Entry(options ...Opt) *EntryWidget {
 	return App.Entry(options...)
 }
 
@@ -633,8 +648,13 @@ func Entry(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Entry]
-func (w *Window) Entry(options ...Opt) *Window {
-	return w.newChild("entry", options...)
+func (w *Window) Entry(options ...Opt) *EntryWidget {
+	return &EntryWidget{w.newChild("entry", options...)}
+}
+
+// EntryWidget represents the Tcl/Tk entry widget/window
+type EntryWidget struct {
+	*Window
 }
 
 // Frame — Create and manipulate 'frame' simple container widgets
@@ -765,7 +785,7 @@ func (w *Window) Entry(options ...Opt) *Window {
 // frame since the geometry manager will override the width of the frame.
 //
 // [Tcl/Tk frame]: https://www.tcl.tk/man/tcl8.6/TkCmd/frame.htm
-func Frame(options ...Opt) *Window {
+func Frame(options ...Opt) *FrameWidget {
 	return App.Frame(options...)
 }
 
@@ -774,8 +794,13 @@ func Frame(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Frame]
-func (w *Window) Frame(options ...Opt) *Window {
-	return w.newChild("frame", options...)
+func (w *Window) Frame(options ...Opt) *FrameWidget {
+	return &FrameWidget{w.newChild("frame", options...)}
+}
+
+// FrameWidget represents the Tcl/Tk frame widget/window
+type FrameWidget struct {
+	*Window
 }
 
 // Label — Create and manipulate 'label' non-interactive text or image widgets
@@ -863,7 +888,7 @@ func (w *Window) Frame(options ...Opt) *Window {
 // from the size of the image or bitmap or text being displayed in it.
 //
 // [Tcl/Tk label]: https://www.tcl.tk/man/tcl8.6/TkCmd/label.htm
-func Label(options ...Opt) *Window {
+func Label(options ...Opt) *LabelWidget {
 	return App.Label(options...)
 }
 
@@ -872,8 +897,13 @@ func Label(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Label]
-func (w *Window) Label(options ...Opt) *Window {
-	return w.newChild("label", options...)
+func (w *Window) Label(options ...Opt) *LabelWidget {
+	return &LabelWidget{w.newChild("label", options...)}
+}
+
+// LabelWidget represents the Tcl/Tk label widget/window
+type LabelWidget struct {
+	*Window
 }
 
 // Labelframe — Create and manipulate 'labelframe' labelled container widgets
@@ -984,7 +1014,7 @@ func (w *Window) Label(options ...Opt) *Window {
 // not request any size at all.
 //
 // [Tcl/Tk labelframe]: https://www.tcl.tk/man/tcl8.6/TkCmd/labelframe.htm
-func Labelframe(options ...Opt) *Window {
+func Labelframe(options ...Opt) *LabelframeWidget {
 	return App.Labelframe(options...)
 }
 
@@ -993,8 +1023,13 @@ func Labelframe(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Labelframe]
-func (w *Window) Labelframe(options ...Opt) *Window {
-	return w.newChild("labelframe", options...)
+func (w *Window) Labelframe(options ...Opt) *LabelframeWidget {
+	return &LabelframeWidget{w.newChild("labelframe", options...)}
+}
+
+// LabelframeWidget represents the Tcl/Tk labelframe widget/window
+type LabelframeWidget struct {
+	*Window
 }
 
 // Listbox — Create and manipulate 'listbox' item list widgets
@@ -1103,7 +1138,7 @@ func (w *Window) Labelframe(options ...Opt) *Window {
 // large enough to hold all the elements in the listbox.
 //
 // [Tcl/Tk listbox]: https://www.tcl.tk/man/tcl8.6/TkCmd/listbox.htm
-func Listbox(options ...Opt) *Window {
+func Listbox(options ...Opt) *ListboxWidget {
 	return App.Listbox(options...)
 }
 
@@ -1112,8 +1147,13 @@ func Listbox(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Listbox]
-func (w *Window) Listbox(options ...Opt) *Window {
-	return w.newChild("listbox", options...)
+func (w *Window) Listbox(options ...Opt) *ListboxWidget {
+	return &ListboxWidget{w.newChild("listbox", options...)}
+}
+
+// ListboxWidget represents the Tcl/Tk listbox widget/window
+type ListboxWidget struct {
+	*Window
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -1196,7 +1236,7 @@ func (w *Window) Listbox(options ...Opt) *Window {
 // library.
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
-func Menu(options ...Opt) *Window {
+func Menu(options ...Opt) *MenuWidget {
 	return App.Menu(options...)
 }
 
@@ -1205,8 +1245,13 @@ func Menu(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Menu]
-func (w *Window) Menu(options ...Opt) *Window {
-	return w.newChild("menu", options...)
+func (w *Window) Menu(options ...Opt) *MenuWidget {
+	return &MenuWidget{w.newChild("menu", options...)}
+}
+
+// MenuWidget represents the Tcl/Tk menu widget/window
+type MenuWidget struct {
+	*Window
 }
 
 // Menubutton — Create and manipulate 'menubutton' pop-up menu indicator widgets
@@ -1299,7 +1344,7 @@ func (w *Window) Menu(options ...Opt) *Window {
 // from the size of the image or bitmap or text being displayed in it.
 //
 // [Tcl/Tk menubutton]: https://www.tcl.tk/man/tcl8.6/TkCmd/menubutton.htm
-func Menubutton(options ...Opt) *Window {
+func Menubutton(options ...Opt) *MenubuttonWidget {
 	return App.Menubutton(options...)
 }
 
@@ -1308,8 +1353,13 @@ func Menubutton(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Menubutton]
-func (w *Window) Menubutton(options ...Opt) *Window {
-	return w.newChild("menubutton", options...)
+func (w *Window) Menubutton(options ...Opt) *MenubuttonWidget {
+	return &MenubuttonWidget{w.newChild("menubutton", options...)}
+}
+
+// MenubuttonWidget represents the Tcl/Tk menubutton widget/window
+type MenubuttonWidget struct {
+	*Window
 }
 
 // Message — Create and manipulate 'message' non-interactive text widgets
@@ -1423,7 +1473,7 @@ func (w *Window) Menubutton(options ...Opt) *Window {
 // the -aspect option determines the line length.
 //
 // [Tcl/Tk message]: https://www.tcl.tk/man/tcl8.6/TkCmd/message.htm
-func Message(options ...Opt) *Window {
+func Message(options ...Opt) *MessageWidget {
 	return App.Message(options...)
 }
 
@@ -1432,8 +1482,13 @@ func Message(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Message]
-func (w *Window) Message(options ...Opt) *Window {
-	return w.newChild("message", options...)
+func (w *Window) Message(options ...Opt) *MessageWidget {
+	return &MessageWidget{w.newChild("message", options...)}
+}
+
+// MessageWidget represents the Tcl/Tk message widget/window
+type MessageWidget struct {
+	*Window
 }
 
 // Panedwindow — Create and manipulate 'panedwindow' split container widgets
@@ -1543,7 +1598,7 @@ func (w *Window) Message(options ...Opt) *Window {
 // made wide enough to allow all contained widgets to have their natural width.
 //
 // [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl8.6/TkCmd/panedwindow.htm
-func Panedwindow(options ...Opt) *Window {
+func Panedwindow(options ...Opt) *PanedwindowWidget {
 	return App.Panedwindow(options...)
 }
 
@@ -1552,8 +1607,13 @@ func Panedwindow(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Panedwindow]
-func (w *Window) Panedwindow(options ...Opt) *Window {
-	return w.newChild("panedwindow", options...)
+func (w *Window) Panedwindow(options ...Opt) *PanedwindowWidget {
+	return &PanedwindowWidget{w.newChild("panedwindow", options...)}
+}
+
+// PanedwindowWidget represents the Tcl/Tk panedwindow widget/window
+type PanedwindowWidget struct {
+	*Window
 }
 
 // Radiobutton — Create and manipulate 'radiobutton' pick-one widgets
@@ -1758,7 +1818,7 @@ func (w *Window) Panedwindow(options ...Opt) *Window {
 // from the size of the image or bitmap or text being displayed in it.
 //
 // [Tcl/Tk radiobutton]: https://www.tcl.tk/man/tcl8.6/TkCmd/radiobutton.htm
-func Radiobutton(options ...Opt) *Window {
+func Radiobutton(options ...Opt) *RadiobuttonWidget {
 	return App.Radiobutton(options...)
 }
 
@@ -1767,8 +1827,13 @@ func Radiobutton(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Radiobutton]
-func (w *Window) Radiobutton(options ...Opt) *Window {
-	return w.newChild("radiobutton", options...)
+func (w *Window) Radiobutton(options ...Opt) *RadiobuttonWidget {
+	return &RadiobuttonWidget{w.newChild("radiobutton", options...)}
+}
+
+// RadiobuttonWidget represents the Tcl/Tk radiobutton widget/window
+type RadiobuttonWidget struct {
+	*Window
 }
 
 // Scale — Create and manipulate 'scale' value-controlled slider widgets
@@ -1938,7 +2003,7 @@ func (w *Window) Radiobutton(options ...Opt) *Window {
 // this is the scale's height.
 //
 // [Tcl/Tk scale]: https://www.tcl.tk/man/tcl8.6/TkCmd/scale.htm
-func Scale(options ...Opt) *Window {
+func Scale(options ...Opt) *ScaleWidget {
 	return App.Scale(options...)
 }
 
@@ -1947,8 +2012,13 @@ func Scale(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Scale]
-func (w *Window) Scale(options ...Opt) *Window {
-	return w.newChild("scale", options...)
+func (w *Window) Scale(options ...Opt) *ScaleWidget {
+	return &ScaleWidget{w.newChild("scale", options...)}
+}
+
+// ScaleWidget represents the Tcl/Tk scale widget/window
+type ScaleWidget struct {
+	*Window
 }
 
 // Scrollbar — Create and manipulate 'scrollbar' scrolling control and indicator widgets
@@ -2041,7 +2111,7 @@ func (w *Window) Scale(options ...Opt) *Window {
 // The value may have any of the forms acceptable to Tk_GetPixels.
 //
 // [Tcl/Tk scrollbar]: https://www.tcl.tk/man/tcl8.6/TkCmd/scrollbar.htm
-func Scrollbar(options ...Opt) *Window {
+func Scrollbar(options ...Opt) *ScrollbarWidget {
 	return App.Scrollbar(options...)
 }
 
@@ -2050,8 +2120,13 @@ func Scrollbar(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Scrollbar]
-func (w *Window) Scrollbar(options ...Opt) *Window {
-	return w.newChild("scrollbar", options...)
+func (w *Window) Scrollbar(options ...Opt) *ScrollbarWidget {
+	return &ScrollbarWidget{w.newChild("scrollbar", options...)}
+}
+
+// ScrollbarWidget represents the Tcl/Tk scrollbar widget/window
+type ScrollbarWidget struct {
+	*Window
 }
 
 // Spinbox — Create and manipulate 'spinbox' value spinner widgets
@@ -2251,7 +2326,7 @@ func (w *Window) Scrollbar(options ...Opt) *Window {
 // values of data in the widget.
 //
 // [Tcl/Tk spinbox]: https://www.tcl.tk/man/tcl8.6/TkCmd/spinbox.htm
-func Spinbox(options ...Opt) *Window {
+func Spinbox(options ...Opt) *SpinboxWidget {
 	return App.Spinbox(options...)
 }
 
@@ -2260,8 +2335,13 @@ func Spinbox(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Spinbox]
-func (w *Window) Spinbox(options ...Opt) *Window {
-	return w.newChild("spinbox", options...)
+func (w *Window) Spinbox(options ...Opt) *SpinboxWidget {
+	return &SpinboxWidget{w.newChild("spinbox", options...)}
+}
+
+// SpinboxWidget represents the Tcl/Tk spinbox widget/window
+type SpinboxWidget struct {
+	*Window
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2469,7 +2549,7 @@ func (w *Window) Spinbox(options ...Opt) *Window {
 // word mode a line break will only be made at word boundaries.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl8.6/TkCmd/text.htm
-func Text(options ...Opt) *Window {
+func Text(options ...Opt) *TextWidget {
 	return App.Text(options...)
 }
 
@@ -2478,8 +2558,13 @@ func Text(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Text]
-func (w *Window) Text(options ...Opt) *Window {
-	return w.newChild("text", options...)
+func (w *Window) Text(options ...Opt) *TextWidget {
+	return &TextWidget{w.newChild("text", options...)}
+}
+
+// TextWidget represents the Tcl/Tk text widget/window
+type TextWidget struct {
+	*Window
 }
 
 // Toplevel — Create and manipulate 'toplevel' main and popup window widgets
@@ -2637,7 +2722,7 @@ func (w *Window) Text(options ...Opt) *Window {
 // not request any size at all.
 //
 // [Tcl/Tk toplevel]: https://www.tcl.tk/man/tcl8.6/TkCmd/toplevel.htm
-func Toplevel(options ...Opt) *Window {
+func Toplevel(options ...Opt) *ToplevelWidget {
 	return App.Toplevel(options...)
 }
 
@@ -2646,8 +2731,13 @@ func Toplevel(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [Toplevel]
-func (w *Window) Toplevel(options ...Opt) *Window {
-	return w.newChild("toplevel", options...)
+func (w *Window) Toplevel(options ...Opt) *ToplevelWidget {
+	return &ToplevelWidget{w.newChild("toplevel", options...)}
+}
+
+// ToplevelWidget represents the Tcl/Tk toplevel widget/window
+type ToplevelWidget struct {
+	*Window
 }
 
 // TButton — Widget that issues a command when pressed
@@ -2693,7 +2783,7 @@ func (w *Window) Toplevel(options ...Opt) *Window {
 // The default is normal.
 //
 // [Tcl/Tk ttk_button]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_button.htm
-func TButton(options ...Opt) *Window {
+func TButton(options ...Opt) *TButtonWidget {
 	return App.TButton(options...)
 }
 
@@ -2702,8 +2792,13 @@ func TButton(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TButton]
-func (w *Window) TButton(options ...Opt) *Window {
-	return w.newChild("ttk::button", options...)
+func (w *Window) TButton(options ...Opt) *TButtonWidget {
+	return &TButtonWidget{w.newChild("ttk::button", options...)}
+}
+
+// TButtonWidget represents the Tcl/Tk ttk_button widget/window
+type TButtonWidget struct {
+	*Window
 }
 
 // TCheckbutton — On/off widget
@@ -2754,7 +2849,7 @@ func (w *Window) TButton(options ...Opt) *Window {
 // Defaults to the widget pathname if not specified.
 //
 // [Tcl/Tk ttk_checkbutton]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_checkbutton.htm
-func TCheckbutton(options ...Opt) *Window {
+func TCheckbutton(options ...Opt) *TCheckbuttonWidget {
 	return App.TCheckbutton(options...)
 }
 
@@ -2763,8 +2858,13 @@ func TCheckbutton(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TCheckbutton]
-func (w *Window) TCheckbutton(options ...Opt) *Window {
-	return w.newChild("ttk::checkbutton", options...)
+func (w *Window) TCheckbutton(options ...Opt) *TCheckbuttonWidget {
+	return &TCheckbuttonWidget{w.newChild("ttk::checkbutton", options...)}
+}
+
+// TCheckbuttonWidget represents the Tcl/Tk ttk_checkbutton widget/window
+type TCheckbuttonWidget struct {
+	*Window
 }
 
 // TCombobox — Text field with popdown selection list
@@ -2837,7 +2937,7 @@ func (w *Window) TCheckbutton(options ...Opt) *Window {
 // in average-size characters of the widget's font.
 //
 // [Tcl/Tk ttk_combobox]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_combobox.htm
-func TCombobox(options ...Opt) *Window {
+func TCombobox(options ...Opt) *TComboboxWidget {
 	return App.TCombobox(options...)
 }
 
@@ -2846,8 +2946,13 @@ func TCombobox(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TCombobox]
-func (w *Window) TCombobox(options ...Opt) *Window {
-	return w.newChild("ttk::combobox", options...)
+func (w *Window) TCombobox(options ...Opt) *TComboboxWidget {
+	return &TComboboxWidget{w.newChild("ttk::combobox", options...)}
+}
+
+// TComboboxWidget represents the Tcl/Tk ttk_combobox widget/window
+type TComboboxWidget struct {
+	*Window
 }
 
 // TEntry — Editable text field widget
@@ -2944,7 +3049,7 @@ func (w *Window) TCombobox(options ...Opt) *Window {
 // in average-size characters of the widget's font.
 //
 // [Tcl/Tk ttk_entry]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm
-func TEntry(options ...Opt) *Window {
+func TEntry(options ...Opt) *TEntryWidget {
 	return App.TEntry(options...)
 }
 
@@ -2953,8 +3058,13 @@ func TEntry(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TEntry]
-func (w *Window) TEntry(options ...Opt) *Window {
-	return w.newChild("ttk::entry", options...)
+func (w *Window) TEntry(options ...Opt) *TEntryWidget {
+	return &TEntryWidget{w.newChild("ttk::entry", options...)}
+}
+
+// TEntryWidget represents the Tcl/Tk ttk_entry widget/window
+type TEntryWidget struct {
+	*Window
 }
 
 // TFrame — Simple container widget
@@ -2999,7 +3109,7 @@ func (w *Window) TEntry(options ...Opt) *Window {
 // If specified, the widget's requested height in pixels.
 //
 // [Tcl/Tk ttk_frame]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_frame.htm
-func TFrame(options ...Opt) *Window {
+func TFrame(options ...Opt) *TFrameWidget {
 	return App.TFrame(options...)
 }
 
@@ -3008,8 +3118,13 @@ func TFrame(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TFrame]
-func (w *Window) TFrame(options ...Opt) *Window {
-	return w.newChild("ttk::frame", options...)
+func (w *Window) TFrame(options ...Opt) *TFrameWidget {
+	return &TFrameWidget{w.newChild("ttk::frame", options...)}
+}
+
+// TFrameWidget represents the Tcl/Tk ttk_frame widget/window
+type TFrameWidget struct {
+	*Window
 }
 
 // TLabel — Display a text string and/or image
@@ -3067,7 +3182,7 @@ func (w *Window) TFrame(options ...Opt) *Window {
 // than the specified value.
 //
 // [Tcl/Tk ttk_label]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_label.htm
-func TLabel(options ...Opt) *Window {
+func TLabel(options ...Opt) *TLabelWidget {
 	return App.TLabel(options...)
 }
 
@@ -3076,8 +3191,13 @@ func TLabel(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TLabel]
-func (w *Window) TLabel(options ...Opt) *Window {
-	return w.newChild("ttk::label", options...)
+func (w *Window) TLabel(options ...Opt) *TLabelWidget {
+	return &TLabelWidget{w.newChild("ttk::label", options...)}
+}
+
+// TLabelWidget represents the Tcl/Tk ttk_label widget/window
+type TLabelWidget struct {
+	*Window
 }
 
 // TLabelframe — Container widget with optional label
@@ -3141,7 +3261,7 @@ func (w *Window) TLabel(options ...Opt) *Window {
 // If specified, the widget's requested width in pixels.
 //
 // [Tcl/Tk ttk_labelframe]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_labelframe.htm
-func TLabelframe(options ...Opt) *Window {
+func TLabelframe(options ...Opt) *TLabelframeWidget {
 	return App.TLabelframe(options...)
 }
 
@@ -3150,8 +3270,13 @@ func TLabelframe(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TLabelframe]
-func (w *Window) TLabelframe(options ...Opt) *Window {
-	return w.newChild("ttk::labelframe", options...)
+func (w *Window) TLabelframe(options ...Opt) *TLabelframeWidget {
+	return &TLabelframeWidget{w.newChild("ttk::labelframe", options...)}
+}
+
+// TLabelframeWidget represents the Tcl/Tk ttk_labelframe widget/window
+type TLabelframeWidget struct {
+	*Window
 }
 
 // TMenubutton — Widget that pops down a menu when pressed
@@ -3196,7 +3321,7 @@ func (w *Window) TLabelframe(options ...Opt) *Window {
 // menubutton.
 //
 // [Tcl/Tk ttk_menubutton]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_menubutton.htm
-func TMenubutton(options ...Opt) *Window {
+func TMenubutton(options ...Opt) *TMenubuttonWidget {
 	return App.TMenubutton(options...)
 }
 
@@ -3205,8 +3330,13 @@ func TMenubutton(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TMenubutton]
-func (w *Window) TMenubutton(options ...Opt) *Window {
-	return w.newChild("ttk::menubutton", options...)
+func (w *Window) TMenubutton(options ...Opt) *TMenubuttonWidget {
+	return &TMenubuttonWidget{w.newChild("ttk::menubutton", options...)}
+}
+
+// TMenubuttonWidget represents the Tcl/Tk ttk_menubutton widget/window
+type TMenubuttonWidget struct {
+	*Window
 }
 
 // TNotebook — Multi-paned container widget
@@ -3302,7 +3432,7 @@ func (w *Window) TMenubutton(options ...Opt) *Window {
 // if ttk::notebook::enableTraversal is called.
 //
 // [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_notebook.htm
-func TNotebook(options ...Opt) *Window {
+func TNotebook(options ...Opt) *TNotebookWidget {
 	return App.TNotebook(options...)
 }
 
@@ -3311,8 +3441,13 @@ func TNotebook(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TNotebook]
-func (w *Window) TNotebook(options ...Opt) *Window {
-	return w.newChild("ttk::notebook", options...)
+func (w *Window) TNotebook(options ...Opt) *TNotebookWidget {
+	return &TNotebookWidget{w.newChild("ttk::notebook", options...)}
+}
+
+// TNotebookWidget represents the Tcl/Tk ttk_notebook widget/window
+type TNotebookWidget struct {
+	*Window
 }
 
 // TPanedwindow — Multi-pane container window
@@ -3364,7 +3499,7 @@ func (w *Window) TNotebook(options ...Opt) *Window {
 // or subtracted to each pane proportionally to its -weight.
 //
 // [Tcl/Tk ttk_panedwindow]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_panedwindow.htm
-func TPanedwindow(options ...Opt) *Window {
+func TPanedwindow(options ...Opt) *TPanedwindowWidget {
 	return App.TPanedwindow(options...)
 }
 
@@ -3373,8 +3508,13 @@ func TPanedwindow(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TPanedwindow]
-func (w *Window) TPanedwindow(options ...Opt) *Window {
-	return w.newChild("ttk::panedwindow", options...)
+func (w *Window) TPanedwindow(options ...Opt) *TPanedwindowWidget {
+	return &TPanedwindowWidget{w.newChild("ttk::panedwindow", options...)}
+}
+
+// TPanedwindowWidget represents the Tcl/Tk ttk_panedwindow widget/window
+type TPanedwindowWidget struct {
+	*Window
 }
 
 // TProgressbar — Provide progress feedback
@@ -3458,7 +3598,7 @@ func (w *Window) TPanedwindow(options ...Opt) *Window {
 // the latter is modified.
 //
 // [Tcl/Tk ttk_progressbar]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_progressbar.htm
-func TProgressbar(options ...Opt) *Window {
+func TProgressbar(options ...Opt) *TProgressbarWidget {
 	return App.TProgressbar(options...)
 }
 
@@ -3467,8 +3607,13 @@ func TProgressbar(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TProgressbar]
-func (w *Window) TProgressbar(options ...Opt) *Window {
-	return w.newChild("ttk::progressbar", options...)
+func (w *Window) TProgressbar(options ...Opt) *TProgressbarWidget {
+	return &TProgressbarWidget{w.newChild("ttk::progressbar", options...)}
+}
+
+// TProgressbarWidget represents the Tcl/Tk ttk_progressbar widget/window
+type TProgressbarWidget struct {
+	*Window
 }
 
 // TRadiobutton — Mutually exclusive option widget
@@ -3516,7 +3661,7 @@ func (w *Window) TProgressbar(options ...Opt) *Window {
 // Default value is ::selectedButton.
 //
 // [Tcl/Tk ttk_radiobutton]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_radiobutton.htm
-func TRadiobutton(options ...Opt) *Window {
+func TRadiobutton(options ...Opt) *TRadiobuttonWidget {
 	return App.TRadiobutton(options...)
 }
 
@@ -3525,8 +3670,13 @@ func TRadiobutton(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TRadiobutton]
-func (w *Window) TRadiobutton(options ...Opt) *Window {
-	return w.newChild("ttk::radiobutton", options...)
+func (w *Window) TRadiobutton(options ...Opt) *TRadiobuttonWidget {
+	return &TRadiobuttonWidget{w.newChild("ttk::radiobutton", options...)}
+}
+
+// TRadiobuttonWidget represents the Tcl/Tk ttk_radiobutton widget/window
+type TRadiobuttonWidget struct {
+	*Window
 }
 
 // TScale — Create and manipulate a scale widget
@@ -3592,7 +3742,7 @@ func (w *Window) TRadiobutton(options ...Opt) *Window {
 // to reflect the scale's new value.
 //
 // [Tcl/Tk ttk_scale]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_scale.htm
-func TScale(options ...Opt) *Window {
+func TScale(options ...Opt) *TScaleWidget {
 	return App.TScale(options...)
 }
 
@@ -3601,8 +3751,13 @@ func TScale(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TScale]
-func (w *Window) TScale(options ...Opt) *Window {
-	return w.newChild("ttk::scale", options...)
+func (w *Window) TScale(options ...Opt) *TScaleWidget {
+	return &TScaleWidget{w.newChild("ttk::scale", options...)}
+}
+
+// TScaleWidget represents the Tcl/Tk ttk_scale widget/window
+type TScaleWidget struct {
+	*Window
 }
 
 // TScrollbar — Control the viewport of a scrollable widget
@@ -3646,7 +3801,7 @@ func (w *Window) TScale(options ...Opt) *Window {
 // Specifies the orientation of the scrollbar.
 //
 // [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_scrollbar.htm
-func TScrollbar(options ...Opt) *Window {
+func TScrollbar(options ...Opt) *TScrollbarWidget {
 	return App.TScrollbar(options...)
 }
 
@@ -3655,8 +3810,13 @@ func TScrollbar(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TScrollbar]
-func (w *Window) TScrollbar(options ...Opt) *Window {
-	return w.newChild("ttk::scrollbar", options...)
+func (w *Window) TScrollbar(options ...Opt) *TScrollbarWidget {
+	return &TScrollbarWidget{w.newChild("ttk::scrollbar", options...)}
+}
+
+// TScrollbarWidget represents the Tcl/Tk ttk_scrollbar widget/window
+type TScrollbarWidget struct {
+	*Window
 }
 
 // TSeparator — Separator bar
@@ -3685,7 +3845,7 @@ func (w *Window) TScrollbar(options ...Opt) *Window {
 // Specifies the orientation of the separator.
 //
 // [Tcl/Tk ttk_separator]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_separator.htm
-func TSeparator(options ...Opt) *Window {
+func TSeparator(options ...Opt) *TSeparatorWidget {
 	return App.TSeparator(options...)
 }
 
@@ -3694,8 +3854,13 @@ func TSeparator(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TSeparator]
-func (w *Window) TSeparator(options ...Opt) *Window {
-	return w.newChild("ttk::separator", options...)
+func (w *Window) TSeparator(options ...Opt) *TSeparatorWidget {
+	return &TSeparatorWidget{w.newChild("ttk::separator", options...)}
+}
+
+// TSeparatorWidget represents the Tcl/Tk ttk_separator widget/window
+type TSeparatorWidget struct {
+	*Window
 }
 
 // TSizegrip — Bottom-right corner resize widget
@@ -3718,7 +3883,7 @@ func (w *Window) TSeparator(options ...Opt) *Window {
 //   - [Takefocus]
 //
 // [Tcl/Tk ttk_sizegrip]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_sizegrip.htm
-func TSizegrip(options ...Opt) *Window {
+func TSizegrip(options ...Opt) *TSizegripWidget {
 	return App.TSizegrip(options...)
 }
 
@@ -3727,8 +3892,13 @@ func TSizegrip(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TSizegrip]
-func (w *Window) TSizegrip(options ...Opt) *Window {
-	return w.newChild("ttk::sizegrip", options...)
+func (w *Window) TSizegrip(options ...Opt) *TSizegripWidget {
+	return &TSizegripWidget{w.newChild("ttk::sizegrip", options...)}
+}
+
+// TSizegripWidget represents the Tcl/Tk ttk_sizegrip widget/window
+type TSizegripWidget struct {
+	*Window
 }
 
 // TSpinbox — Selecting text field widget
@@ -3801,7 +3971,7 @@ func (w *Window) TSizegrip(options ...Opt) *Window {
 // values of data in the widget.
 //
 // [Tcl/Tk ttk_spinbox]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_spinbox.htm
-func TSpinbox(options ...Opt) *Window {
+func TSpinbox(options ...Opt) *TSpinboxWidget {
 	return App.TSpinbox(options...)
 }
 
@@ -3810,8 +3980,13 @@ func TSpinbox(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TSpinbox]
-func (w *Window) TSpinbox(options ...Opt) *Window {
-	return w.newChild("ttk::spinbox", options...)
+func (w *Window) TSpinbox(options ...Opt) *TSpinboxWidget {
+	return &TSpinboxWidget{w.newChild("ttk::spinbox", options...)}
+}
+
+// TSpinboxWidget represents the Tcl/Tk ttk_spinbox widget/window
+type TSpinboxWidget struct {
+	*Window
 }
 
 // TTreeview — Hierarchical multicolumn data display widget
@@ -3913,7 +4088,7 @@ func (w *Window) TSpinbox(options ...Opt) *Window {
 // Number of items at the top that should not be vertically scrolled. Default is 0.
 //
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_treeview.htm
-func TTreeview(options ...Opt) *Window {
+func TTreeview(options ...Opt) *TTreeviewWidget {
 	return App.TTreeview(options...)
 }
 
@@ -3922,8 +4097,13 @@ func TTreeview(options ...Opt) *Window {
 // The resulting [Window] is a child of 'w'
 //
 // For details please see [TTreeview]
-func (w *Window) TTreeview(options ...Opt) *Window {
-	return w.newChild("ttk::treeview", options...)
+func (w *Window) TTreeview(options ...Opt) *TTreeviewWidget {
+	return &TTreeviewWidget{w.newChild("ttk::treeview", options...)}
+}
+
+// TTreeviewWidget represents the Tcl/Tk ttk_treeview widget/window
+type TTreeviewWidget struct {
+	*Window
 }
 
 // Activebackground option.

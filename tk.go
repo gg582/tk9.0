@@ -75,9 +75,9 @@
 //
 // # Runtime dependencies
 //
-//  - [Img.Graph] and [Window.Graph](canvas graph) require the gnuplot 5.4+
-//  executable available in $PATH.
-//  - darwin (macOS) requires [XQuartz].
+//   - [Img.Graph] and [Canvas.Graph] require the gnuplot 5.4+
+//     executable available in $PATH.
+//   - darwin (macOS) requires [XQuartz].
 //
 // # Completeness
 //
@@ -266,6 +266,8 @@ var CollectErrors bool
 var Error error
 
 var (
+	_ Widget = (*Window)(nil)
+
 	//go:embed embed/gotk.png
 	icon []byte
 
@@ -357,12 +359,24 @@ func init() {
 	}
 }
 
-// Window represents a Tk window/widget.
+// Window represents a Tk window/widget. It implements common widget methods.
 //
 // Window implements Opt. When a Window instance is used as an Opt, it provides
 // its path name.
 type Window struct {
 	fpath string
+}
+
+func (w *Window) isWidget() {}
+
+// Widget is implemented by every *Window
+type Widget interface {
+	isWidget()
+	path() string
+}
+
+func (w *Window) path() (r string) {
+	return w.String()
 }
 
 // String implements fmt.Stringer.
@@ -1183,8 +1197,6 @@ func (w *Window) Center() *Window {
 // -, x and ^, can be specified instead of a window name to alter the default
 // location of a window, as described in the RELATIVE PLACEMENT section, below.
 //
-// The first argument must be a *Window.
-//
 // The following options are supported:
 //
 //   - [Column] n
@@ -1267,7 +1279,7 @@ func (w *Window) Center() *Window {
 // More information might be available at the [Tcl/Tk grid] page.
 //
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html#M9
-func Grid(w *Window, options ...Opt) {
+func Grid(w Widget, options ...Opt) {
 	evalErr(fmt.Sprintf("grid configure %s %s", w, collect(options...)))
 }
 
@@ -1621,7 +1633,7 @@ func ExitHandler() Opt {
 // [ExitHandler].
 //
 // Use [Window.Exit] to create a Exit with a particular parent.
-func Exit(options ...Opt) *Window {
+func Exit(options ...Opt) *ButtonWidget {
 	return App.Exit(options...)
 }
 
@@ -1629,7 +1641,7 @@ func Exit(options ...Opt) *Window {
 // [ExitHandler].
 //
 // The resulting [Window] is a child of 'w'
-func (w *Window) Exit(options ...Opt) *Window {
+func (w *Window) Exit(options ...Opt) *ButtonWidget {
 	return w.Button(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...)
 }
 
@@ -1637,7 +1649,7 @@ func (w *Window) Exit(options ...Opt) *Window {
 // [ExitHandler].
 //
 // Use [Window.TExit] to create a TExit with a particular parent.
-func TExit(options ...Opt) *Window {
+func TExit(options ...Opt) *TButtonWidget {
 	return App.TExit(options...)
 }
 
@@ -1645,7 +1657,7 @@ func TExit(options ...Opt) *Window {
 // [ExitHandler].
 //
 // The resulting [Window] is a child of 'w'
-func (w *Window) TExit(options ...Opt) *Window {
+func (w *Window) TExit(options ...Opt) *TButtonWidget {
 	return w.TButton(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...)
 }
 
@@ -2181,7 +2193,7 @@ func (f *Font) Delete() {
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
-func (w *Window) Insert(index any, chars string, options ...string) any {
+func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 	idx := fmt.Sprint(index)
 	evalErr(fmt.Sprintf("%s insert %s %s %s", w, tclSafeString(idx), tclSafeString(chars), tclSafeStrings(options...)))
 	return index
@@ -2218,7 +2230,7 @@ func (lc LC) String() string {
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
-func (w *Window) TagConfigure(name string, options ...Opt) {
+func (w *TextWidget) TagConfigure(name string, options ...Opt) {
 	evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(name), collect(options...)))
 }
 
@@ -2239,7 +2251,7 @@ func (w *Window) TagConfigure(name string, options ...Opt) {
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
-func (w *Window) TagAdd(options ...any) string {
+func (w *TextWidget) TagAdd(options ...any) string {
 	tag := fmt.Sprintf("tag%d", id.Add(1))
 	var a []Opt
 	for _, v := range options {
@@ -2644,10 +2656,10 @@ func Place(options ...Opt) {
 // Additional information might be available at the [Tcl/Tk lower] page.
 //
 // [Tcl/Tk lower]: https://www.tcl.tk/man/tcl9.0/TkCmd/lower.html
-func (w *Window) Lower(belowThis *Window) {
+func (w *Window) Lower(belowThis Widget) {
 	b := ""
 	if belowThis != nil {
-		b = belowThis.String()
+		b = belowThis.path()
 	}
 	evalErr(fmt.Sprintf("lower %s %s", w, b))
 }
@@ -2674,36 +2686,30 @@ func (w *Window) Lower(belowThis *Window) {
 // Additional information might be available at the [Tcl/Tk raise] page.
 //
 // [Tcl/Tk raise]: https://www.tcl.tk/man/tcl9.0/TkCmd/raise.html
-func (w *Window) Raise(aboveThis *Window) {
+func (w *Window) Raise(aboveThis Widget) {
 	b := ""
 	if aboveThis != nil {
-		b = aboveThis.String()
+		b = aboveThis.path()
 	}
 	evalErr(fmt.Sprintf("raise %s %s", w, b))
 }
 
-// Graph — use gnuplot to draw on a canvas. Graph returns 'w', which must be a
-// canvas.
+// Graph — use gnuplot to draw on a canvas. Graph returns 'w'.
 //
 // The 'script' argument is passed to a gnuplot executable, which must be
 // installed on the machine.  See the [gnuplot site] for documentation about
 // producing graphs. The script must not use the 'set term <device>' command.
 //
 // [gnuplot site]: http://www.gnuplot.info/
-func (w *Window) Graph(script string) *Window {
+func (w *CanvasWidget) Graph(script string) *CanvasWidget {
 	script = fmt.Sprintf("set terminal tkcanvas size %s, %s\n%s", w.Width(), w.Height(), script)
-	switch {
-	case strings.HasPrefix(w.String(), ".canvas"):
-		out, err := gnuplot(script)
-		if err != nil {
-			fail(fmt.Errorf("plot: executing script: %s", err))
-			break
-		}
-
-		evalErr(fmt.Sprintf("%s\ngnuplot %s", out, w))
-	default:
-		fail(fmt.Errorf("plot: %s is not a canvas", w))
+	out, err := gnuplot(script)
+	if err != nil {
+		fail(fmt.Errorf("plot: executing script: %s", err))
+		return w
 	}
+
+	evalErr(fmt.Sprintf("%s\ngnuplot %s", out, w))
 	return w
 }
 

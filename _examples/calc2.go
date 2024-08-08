@@ -5,7 +5,7 @@ import "github.com/expr-lang/expr"
 import . "modernc.org/tk9.0"
 
 var (
-	out *Window
+	out *LabelWidget
 	m   = map[rune][]string{
 		'*': {"<KeyPress-KP_Multiply>"},
 		'+': {"<KeyPress-KP_Add>"},
@@ -47,7 +47,7 @@ func handler(_ *Window, val any) (any, error) {
 func main() {
 	out = Label(Height(2), Anchor("e"), Txt("(123+232)/(123-10)"))
 	Grid(out, Columnspan(4), Sticky("e"))
-	var b *Window
+	var b *ButtonWidget
 	for i, c := range "C()/789*456-123+0.=" {
 		h := Command(handler, c)
 		b = Button(Txt(string(c)), h)

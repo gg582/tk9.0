@@ -29,7 +29,7 @@ A simple calculator (_examples/calc.go).
      6	func main() {
      7		out := Label(Height(2), Anchor("e"), Txt("(123+232)/(123-10)"))
      8		Grid(out, Columnspan(4), Sticky("e"))
-     9		var b *Window
+     9		var b *ButtonWidget
     10		for i, c := range "C()/789*456-123+0.=" {
     11			b = Button(Txt(string(c)), Command(
     12				func() {
