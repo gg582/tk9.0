@@ -73,11 +73,11 @@
 //	linux	ppc64le
 //	linux	s390x
 //
-// # XQuartz
+// # Runtime dependencies
 //
-// On darwin (macOS) this package depends on [XQuartz], but only at run-time.
-// You can still compile and cross compile this package for darwin on any
-// platform/architecture supported by Go without CGo.
+//  - [Img.Graph] and [Window.Graph](canvas graph) require the gnuplot 5.4+
+//  executable available in $PATH.
+//  - darwin (macOS) requires [XQuartz].
 //
 // # Completeness
 //
