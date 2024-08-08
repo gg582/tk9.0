@@ -71,6 +71,7 @@
 //	linux	arm64
 //	linux	loong64
 //	linux	ppc64le
+//	linux	s390x
 //
 // # XQuartz
 //

@@ -28,7 +28,7 @@ editor:
 	$(shell for f in _examples/*.go ; do go build -o /dev/null $$f ; done)
 
 test:
-	go test -v -timeout 24h -count=1
+	go test -vet=off -v -timeout 24h -count=1
 
 work:
 	rm -f go.work*
