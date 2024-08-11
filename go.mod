@@ -11,7 +11,7 @@ require (
 	modernc.org/libtcl9.0 v0.9.0
 	modernc.org/libtk9.0 v0.7.1
 	modernc.org/ngrab v0.1.0
-	modernc.org/tcl9.0 v0.7.0
+	modernc.org/tcl9.0 v0.7.3
 )
 
 require (
