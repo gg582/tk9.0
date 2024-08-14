@@ -67,18 +67,19 @@
 //
 //	OS      Arch
 //	-------------
-//	linux	386
-//	linux	amd64
-//	linux	arm
-//	linux	arm64
-//	linux	loong64
-//	linux	ppc64le
-//	linux	riscv64
-//	linux	s390x
+//	darwin  arm64
+//	linux   386
+//	linux   amd64
+//	linux   arm
+//	linux   arm64
+//	linux   loong64
+//	linux   ppc64le
+//	linux   riscv64
+//	linux   s390x
 //
 // # Runtime dependencies
 //
-//   - [Img.Graph] and [Canvas.Graph] require the gnuplot 5.4+
+//   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+
 //     executable available in $PATH.
 //   - darwin (macOS) requires [XQuartz].
 //
