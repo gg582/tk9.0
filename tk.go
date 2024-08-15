@@ -362,9 +362,14 @@ func init() {
 		Error = interp.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil)
 	})
 	if Error == nil {
+		CollectErrors = true
+
+		defer func() { CollectErrors = false }()
+
 		App = &Window{}
 		exitHandler = Command(func() { Destroy(App) })
 		// Set some defaults.
+		evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
 		App.Center()
 		App.IconPhoto(NewPhoto(Data(icon)))
 		App.WmTitle(filepath.Base(os.Args[0]))
@@ -2742,4 +2747,62 @@ func gnuplot(script string) (out []byte, err error) {
 	defer cancel()
 
 	return exec.CommandContext(ctx, "gnuplot", f.Name()).Output()
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Add a new command entry to the bottom of the menu.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+func (w *MenuWidget) AddCommand(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add command %s", w, winCollect(w.Window, options...)))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Add a new cascade entry to the end of the menu.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+func (w *MenuWidget) AddCascade(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add cascade %s", w, winCollect(w.Window, options...)))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Add a new separator entry to the bottom of the menu.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+func (w *MenuWidget) AddSeparator(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add separator %s", w, winCollect(w.Window, options...)))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Invoke the action of the menu entry. See the sections on the individual
+// entries above for details on what happens. If the menu entry is disabled
+// then nothing happens. If the entry has a command associated with it then the
+// result of that command is returned as the result of the invoke widget
+// command. Otherwise the result is an empty string. Note: invoking a menu
+// entry does not automatically unpost the menu; the default bindings normally
+// take care of this before invoking the invoke widget command.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+func (w *MenuWidget) Invoke(index uint) {
+	evalErr(fmt.Sprintf("%s invoke %d", w, index))
 }

@@ -4106,6 +4106,16 @@ type TTreeviewWidget struct {
 	*Window
 }
 
+// Accelerator option.
+//
+// Known uses:
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
+func Accelerator(val any) Opt {
+	return rawOption(fmt.Sprintf(`-accelerator %s`, optionString(val)))
+}
+
 // Activebackground option.
 //
 // Specifies background color to use when drawing active elements.
@@ -4122,6 +4132,9 @@ type TTreeviewWidget struct {
 //   - [Button]
 //   - [Checkbutton]
 //   - [Label]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menu]
 //   - [Menubutton]
 //   - [Radiobutton]
@@ -4180,6 +4193,9 @@ func (w *Window) Activeborderwidth() string {
 //   - [Button]
 //   - [Checkbutton]
 //   - [Label]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menu]
 //   - [Menubutton]
 //   - [Radiobutton]
@@ -4330,6 +4346,9 @@ func (w *Window) Autoseparators() string {
 //   - [Label]
 //   - [Labelframe] (widget specific)
 //   - [Listbox]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menu]
 //   - [Menubutton]
 //   - [Message]
@@ -4340,9 +4359,9 @@ func (w *Window) Autoseparators() string {
 //   - [Scrollbar]
 //   - [Spinbox]
 //   - [TLabel] (widget specific)
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text]
 //   - [Toplevel] (widget specific)
-//   - [Window.TagConfigure] (command specific)
 func Background(val any) Opt {
 	return rawOption(fmt.Sprintf(`-background %s`, optionString(val)))
 }
@@ -4402,7 +4421,7 @@ func Before(val any) Opt {
 // Bgstipple option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Bgstipple(val any) Opt {
 	return rawOption(fmt.Sprintf(`-bgstipple %s`, optionString(val)))
 }
@@ -4441,6 +4460,9 @@ func (w *Window) Bigincrement() string {
 //   - [Button]
 //   - [Checkbutton]
 //   - [Label]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menubutton]
 //   - [Radiobutton]
 func Bitmap(val any) Opt {
@@ -4510,9 +4532,9 @@ func Bordermode(val any) Opt {
 //   - [Scrollbar]
 //   - [Spinbox]
 //   - [TFrame] (widget specific)
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text]
 //   - [Toplevel]
-//   - [Window.TagConfigure] (command specific)
 func Borderwidth(val any) Opt {
 	return rawOption(fmt.Sprintf(`-borderwidth %s`, optionString(val)))
 }
@@ -4716,6 +4738,16 @@ func Column(val any) Opt {
 	return rawOption(fmt.Sprintf(`-column %s`, optionString(val)))
 }
 
+// Columnbreak option.
+//
+// Known uses:
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
+func Columnbreak(val any) Opt {
+	return rawOption(fmt.Sprintf(`-columnbreak %s`, optionString(val)))
+}
+
 // Columns option.
 //
 // Known uses:
@@ -4748,6 +4780,9 @@ func Columnspan(val any) Opt {
 //   - [Button] (widget specific)
 //   - [Checkbutton] (widget specific)
 //   - [Fontchooser] (command specific)
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [MessageBox] (command specific)
 //   - [Radiobutton] (widget specific)
 //   - [Scale] (widget specific)
@@ -4781,6 +4816,9 @@ func Command(args ...any) Opt {
 //   - [Button]
 //   - [Checkbutton]
 //   - [Label]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menubutton]
 //   - [Radiobutton]
 //   - [TButton]
@@ -5128,7 +5166,7 @@ func (w *Window) Elementborderwidth() string {
 // Elide option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Elide(val any) Opt {
 	return rawOption(fmt.Sprintf(`-elide %s`, optionString(val)))
 }
@@ -5204,7 +5242,7 @@ func Family(val any) Opt {
 // Fgstipple option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Fgstipple(val any) Opt {
 	return rawOption(fmt.Sprintf(`-fgstipple %s`, optionString(val)))
 }
@@ -5249,6 +5287,9 @@ func Fill(val any) Opt {
 //   - [Label]
 //   - [Labelframe]
 //   - [Listbox]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menu]
 //   - [Menubutton]
 //   - [Message]
@@ -5258,8 +5299,8 @@ func Fill(val any) Opt {
 //   - [TEntry]
 //   - [TLabel]
 //   - [TProgressbar]
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text]
-//   - [Window.TagConfigure] (command specific)
 func Fnt(val any) Opt {
 	return rawOption(fmt.Sprintf(`-font %s`, optionString(val)))
 }
@@ -5306,6 +5347,9 @@ func Force(val any) Opt {
 //   - [Label]
 //   - [Labelframe]
 //   - [Listbox]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menu]
 //   - [Menubutton]
 //   - [Message]
@@ -5316,8 +5360,8 @@ func Force(val any) Opt {
 //   - [TEntry]
 //   - [TLabel]
 //   - [TProgressbar]
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text]
-//   - [Window.TagConfigure] (command specific)
 func Foreground(val any) Opt {
 	return rawOption(fmt.Sprintf(`-foreground %s`, optionString(val)))
 }
@@ -5477,6 +5521,16 @@ func Height(val any) Opt {
 //   - [Toplevel] (widget specific)
 func (w *Window) Height() string {
 	return evalErr(fmt.Sprintf(`%s cget -height`, w))
+}
+
+// Hidemargin option.
+//
+// Known uses:
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
+func Hidemargin(val any) Opt {
+	return rawOption(fmt.Sprintf(`-hidemargin %s`, optionString(val)))
 }
 
 // Highlightbackground option.
@@ -5651,6 +5705,9 @@ func Icon(val any) Opt {
 //   - [Button]
 //   - [Checkbutton]
 //   - [Label]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menubutton]
 //   - [Radiobutton]
 //   - [TButton]
@@ -5729,6 +5786,9 @@ func (w *Window) Increment() string {
 //
 // Known uses:
 //   - [Checkbutton] (widget specific)
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menubutton] (widget specific)
 //   - [Radiobutton] (widget specific)
 func Indicatoron(val any) Opt {
@@ -6008,7 +6068,7 @@ func (w *Window) Jump() string {
 //   - [TEntry] (widget specific)
 //   - [TLabel]
 //   - [TProgressbar]
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Justify(val any) Opt {
 	return rawOption(fmt.Sprintf(`-justify %s`, optionString(val)))
 }
@@ -6037,6 +6097,9 @@ func (w *Window) Justify() string {
 // Lbl option.
 //
 // Known uses:
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Scale] (widget specific)
 func Lbl(val any) Opt {
 	return rawOption(fmt.Sprintf(`-label %s`, optionString(val)))
@@ -6133,7 +6196,7 @@ func (w *Window) Listvariable() string {
 // Lmargin1 option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Lmargin1(val any) Opt {
 	return rawOption(fmt.Sprintf(`-lmargin1 %s`, optionString(val)))
 }
@@ -6141,7 +6204,7 @@ func Lmargin1(val any) Opt {
 // Lmargin2 option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Lmargin2(val any) Opt {
 	return rawOption(fmt.Sprintf(`-lmargin2 %s`, optionString(val)))
 }
@@ -6149,7 +6212,7 @@ func Lmargin2(val any) Opt {
 // Lmargincolor option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Lmargincolor(val any) Opt {
 	return rawOption(fmt.Sprintf(`-lmargincolor %s`, optionString(val)))
 }
@@ -6205,6 +6268,9 @@ func (w *Window) Maxundo() string {
 // Mnu option.
 //
 // Known uses:
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menubutton] (widget specific)
 //   - [TMenubutton] (widget specific)
 //   - [Toplevel] (widget specific)
@@ -6300,7 +6366,7 @@ func (w *Window) Offrelief() string {
 // Offset option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Offset(val any) Opt {
 	return rawOption(fmt.Sprintf(`-offset %s`, optionString(val)))
 }
@@ -6309,6 +6375,9 @@ func Offset(val any) Opt {
 //
 // Known uses:
 //   - [Checkbutton] (widget specific)
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [TCheckbutton] (widget specific)
 func Offvalue(val any) Opt {
 	return rawOption(fmt.Sprintf(`-offvalue %s`, optionString(val)))
@@ -6327,6 +6396,9 @@ func (w *Window) Offvalue() string {
 //
 // Known uses:
 //   - [Checkbutton] (widget specific)
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [TCheckbutton] (widget specific)
 func Onvalue(val any) Opt {
 	return rawOption(fmt.Sprintf(`-onvalue %s`, optionString(val)))
@@ -6416,7 +6488,7 @@ func (w *Window) Overrelief() string {
 //
 // Known uses:
 //   - [NewFont] (command specific)
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Overstrike(val any) Opt {
 	return rawOption(fmt.Sprintf(`-overstrike %s`, optionString(val)))
 }
@@ -6424,7 +6496,7 @@ func Overstrike(val any) Opt {
 // Overstrikefg option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Overstrikefg(val any) Opt {
 	return rawOption(fmt.Sprintf(`-overstrikefg %s`, optionString(val)))
 }
@@ -6769,9 +6841,9 @@ func Relheight(val any) Opt {
 //   - [Spinbox]
 //   - [TFrame] (widget specific)
 //   - [TLabel] (widget specific)
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text]
 //   - [Toplevel]
-//   - [Window.TagConfigure] (command specific)
 func Relief(val any) Opt {
 	return rawOption(fmt.Sprintf(`-relief %s`, optionString(val)))
 }
@@ -6898,7 +6970,7 @@ func (w *Window) Resolution() string {
 // Rmargin option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Rmargin(val any) Opt {
 	return rawOption(fmt.Sprintf(`-rmargin %s`, optionString(val)))
 }
@@ -6906,7 +6978,7 @@ func Rmargin(val any) Opt {
 // Rmargincolor option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Rmargincolor(val any) Opt {
 	return rawOption(fmt.Sprintf(`-rmargincolor %s`, optionString(val)))
 }
@@ -7033,8 +7105,8 @@ func (w *Window) Scrollregion() string {
 //   - [Entry]
 //   - [Listbox]
 //   - [Spinbox]
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text]
-//   - [Window.TagConfigure] (command specific)
 func Selectbackground(val any) Opt {
 	return rawOption(fmt.Sprintf(`-selectbackground %s`, optionString(val)))
 }
@@ -7083,6 +7155,9 @@ func (w *Window) Selectborderwidth() string {
 //
 // Known uses:
 //   - [Checkbutton] (widget specific)
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menu] (widget specific)
 //   - [Radiobutton] (widget specific)
 func Selectcolor(val any) Opt {
@@ -7109,8 +7184,8 @@ func (w *Window) Selectcolor() string {
 //   - [Entry]
 //   - [Listbox]
 //   - [Spinbox]
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text]
-//   - [Window.TagConfigure] (command specific)
 func Selectforeground(val any) Opt {
 	return rawOption(fmt.Sprintf(`-selectforeground %s`, optionString(val)))
 }
@@ -7131,6 +7206,9 @@ func (w *Window) Selectforeground() string {
 //
 // Known uses:
 //   - [Checkbutton] (widget specific)
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Radiobutton] (widget specific)
 func Selectimage(val any) Opt {
 	return rawOption(fmt.Sprintf(`-selectimage %s`, optionString(val)))
@@ -7322,8 +7400,8 @@ func (w *Window) Sliderrelief() string {
 // Spacing1 option.
 //
 // Known uses:
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text] (widget specific)
-//   - [Window.TagConfigure] (command specific)
 func Spacing1(val any) Opt {
 	return rawOption(fmt.Sprintf(`-spacing1 %s`, optionString(val)))
 }
@@ -7339,8 +7417,8 @@ func (w *Window) Spacing1() string {
 // Spacing2 option.
 //
 // Known uses:
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text] (widget specific)
-//   - [Window.TagConfigure] (command specific)
 func Spacing2(val any) Opt {
 	return rawOption(fmt.Sprintf(`-spacing2 %s`, optionString(val)))
 }
@@ -7356,8 +7434,8 @@ func (w *Window) Spacing2() string {
 // Spacing3 option.
 //
 // Known uses:
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text] (widget specific)
-//   - [Window.TagConfigure] (command specific)
 func Spacing3(val any) Opt {
 	return rawOption(fmt.Sprintf(`-spacing3 %s`, optionString(val)))
 }
@@ -7402,6 +7480,9 @@ func (w *Window) Startline() string {
 //   - [Entry] (widget specific)
 //   - [Label] (widget specific)
 //   - [Listbox] (widget specific)
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menubutton] (widget specific)
 //   - [Radiobutton] (widget specific)
 //   - [Scale] (widget specific)
@@ -7535,8 +7616,8 @@ func (w *Window) Style() string {
 // Tabs option.
 //
 // Known uses:
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text] (widget specific)
-//   - [Window.TagConfigure] (command specific)
 func Tabs(val any) Opt {
 	return rawOption(fmt.Sprintf(`-tabs %s`, optionString(val)))
 }
@@ -7552,8 +7633,8 @@ func (w *Window) Tabs() string {
 // Tabstyle option.
 //
 // Known uses:
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text] (widget specific)
-//   - [Window.TagConfigure] (command specific)
 func Tabstyle(val any) Opt {
 	return rawOption(fmt.Sprintf(`-tabstyle %s`, optionString(val)))
 }
@@ -7950,6 +8031,9 @@ func (w *Window) Type() string {
 //   - [Button]
 //   - [Checkbutton]
 //   - [Label]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Menubutton]
 //   - [NewFont] (command specific)
 //   - [Radiobutton]
@@ -7960,7 +8044,7 @@ func (w *Window) Type() string {
 //   - [TMenubutton]
 //   - [TNotebook] (widget specific)
 //   - [TRadiobutton]
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Underline(val any) Opt {
 	return rawOption(fmt.Sprintf(`-underline %s`, optionString(val)))
 }
@@ -7987,7 +8071,7 @@ func (w *Window) Underline() string {
 // Underlinefg option.
 //
 // Known uses:
-//   - [Window.TagConfigure] (command specific)
+//   - [TextWidget.TagConfigure] (command specific)
 func Underlinefg(val any) Opt {
 	return rawOption(fmt.Sprintf(`-underlinefg %s`, optionString(val)))
 }
@@ -8064,6 +8148,9 @@ func Validatecommand(args ...any) Opt {
 // Value option.
 //
 // Known uses:
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Radiobutton] (widget specific)
 //   - [TProgressbar] (widget specific)
 //   - [TRadiobutton] (widget specific)
@@ -8107,6 +8194,9 @@ func (w *Window) Values() string {
 //
 // Known uses:
 //   - [Checkbutton] (widget specific)
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
 //   - [Radiobutton] (widget specific)
 //   - [Scale] (widget specific)
 //   - [TCheckbutton] (widget specific)
@@ -8252,8 +8342,8 @@ func (w *Window) Width() string {
 // Known uses:
 //   - [Spinbox] (widget specific)
 //   - [TSpinbox] (widget specific)
+//   - [TextWidget.TagConfigure] (command specific)
 //   - [Text] (widget specific)
-//   - [Window.TagConfigure] (command specific)
 func Wrap(val any) Opt {
 	return rawOption(fmt.Sprintf(`-wrap %s`, optionString(val)))
 }
