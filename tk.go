@@ -67,6 +67,7 @@
 //
 //	OS      Arch
 //	-------------
+//	darwin  amd64       *
 //	darwin  arm64
 //	linux   386
 //	linux   amd64
@@ -76,6 +77,8 @@
 //	linux   ppc64le
 //	linux   riscv64
 //	linux   s390x
+//
+// *) See [issue1].
 //
 // # Runtime dependencies
 //
@@ -230,6 +233,7 @@
 //
 // [XQuartz]: https://en.wikipedia.org/wiki/XQuartz
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
+// [issue1]: https://gitlab.com/cznic/tk8.6/-/issues/1
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tk8]: https://pkg.go.dev/modernc.org/tk8.6
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter
