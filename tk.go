@@ -233,7 +233,7 @@
 //
 // [XQuartz]: https://en.wikipedia.org/wiki/XQuartz
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
-// [issue1]: https://gitlab.com/cznic/tk8.6/-/issues/1
+// [issue1]: https://gitlab.com/cznic/tk9.0/-/issues/1
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tk8]: https://pkg.go.dev/modernc.org/tk8.6
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter
