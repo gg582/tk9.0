@@ -259,6 +259,10 @@ import (
 	tcl "modernc.org/tcl9.0"
 )
 
+const (
+	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
+)
+
 // App is the main/root application window.
 var App *Window
 
@@ -2729,7 +2733,7 @@ func gnuplot(script string) (out []byte, err error) {
 		return nil, err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), gnuplotTimeout)
 
 	defer cancel()
 
