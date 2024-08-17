@@ -82,8 +82,8 @@
 //
 // # Runtime dependencies
 //
-//   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+
-//     executable available in $PATH.
+//   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+ executable
+//	available in $PATH.
 //   - darwin (macOS) requires [XQuartz].
 //
 // # Completeness
@@ -157,8 +157,8 @@
 // # Renamed options
 //
 // There is, for a example, a Tcl/tk 'text' widget and a '-text' option. This
-// package exports the widget as 'Text' and the option as 'Txt'. The complete
-// list is:
+// package exports the widget as type 'TextWidget', its constructor as function
+// 'Text' and the option as function 'Txt'. The complete list is:
 //
 //   - [Button]  option is renamed to [Btn]
 //   - [Font]    option is renamed to [Fnt]
