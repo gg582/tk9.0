@@ -77,8 +77,6 @@
 //	linux   riscv64
 //	linux   s390x
 //
-// *) See [issue1].
-//
 // # Runtime dependencies
 //
 //   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+ executable
