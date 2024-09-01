@@ -17,6 +17,35 @@ Using embedded images (_examples/photo.go).
     11		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
     12	}
 
+![svg](_examples/svg.png "svg")
+
+Using svg (_examples/svg.go).
+
+     1	package main
+     2	
+     3	import . "modernc.org/tk9.0"
+     4	
+     5	// https://en.wikipedia.org/wiki/SVG
+     6	const svg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+     7	<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+     8	<svg width="391" height="391" viewBox="-70.5 -70.5 391 391" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+     9	<rect fill="#fff" stroke="#000" x="-70" y="-70" width="390" height="390"/>
+    10	<g opacity="0.8">
+    11		<rect x="25" y="25" width="200" height="200" fill="lime" stroke-width="4" stroke="pink" />
+    12		<circle cx="125" cy="125" r="75" fill="orange" />
+    13		<polyline points="50,150 50,200 200,200 200,100" stroke="red" stroke-width="4" fill="none" />
+    14		<line x1="50" y1="50" x2="200" y2="200" stroke="blue" stroke-width="4" />
+    15	</g>
+    16	</svg>`
+    17	
+    18	func main() {
+    19		Pack(
+    20			Label(Image(NewPhoto(Data(svg)))),
+    21			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    22		)
+    23		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    24	}
+
 ![calc](_examples/calc.png "calc")
 
 A simple calculator (_examples/calc.go).
