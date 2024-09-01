@@ -30,7 +30,7 @@ func init() {
 	}
 
 	dmesg("enter")
-	fmt.Fprintf(os.Stderr, "debug messages in %s\n", fn)
+	fmt.Println(fn)
 }
 
 func dmesg(s string, args ...interface{}) {
