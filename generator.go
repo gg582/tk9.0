@@ -299,6 +299,14 @@ var (
 		"keysyms": {ignore: true}, //MAYBE later
 		"loadTk":  {ignore: true},
 		"lower":   {manual: true}, // done
+		"menu": {widget: true,
+			commands: cmdOpts{
+				"MenuWidget.AddCommand":   menuOptions,
+				"MenuWidget.AddCascade":   menuOptions,
+				"MenuWidget.AddSeparator": menuOptions,
+				"MenuWidget.Invoke":       nil,
+			},
+		},
 		"messageBox": {
 			manual: true, // done
 			commands: cmdOpts{"MessageBox": []string{
@@ -394,7 +402,7 @@ var (
 		"systray":   {manual: true}, //TODO
 		"text": {widget: true, //MAYBE more
 			commands: cmdOpts{
-				".TagConfigure": []string{
+				"TextWidget.TagConfigure": []string{
 					"-background",
 					"-bgstipple",
 					"-borderwidth",
@@ -456,6 +464,32 @@ var (
 		"ttk_widget": {ignore: true},
 		"winfo":      {manual: true}, //TODO
 		"wm":         {manual: true}, //TODO
+	}
+
+	menuOptions = []string{
+		"-activebackground",
+		"-activeforeground",
+		"-accelerator",
+		"-background",
+		"-bitmap",
+		"-columnbreak",
+		"-command",
+		"-compound",
+		"-font",
+		"-foreground",
+		"-hidemargin",
+		"-image",
+		"-indicatoron",
+		"-label",
+		"-menu",
+		"-offvalue",
+		"-onvalue",
+		"-selectcolor",
+		"-selectimage",
+		"-state",
+		"-underline",
+		"-value",
+		"-variable",
 	}
 
 	handlers = map[string]bool{
@@ -638,7 +672,8 @@ func newJob(o *bytes.Buffer, files []string) *job {
 }
 
 func (j *job) registerOption(tclName string, docs []string, xref string) (r *option) {
-	if strings.HasPrefix(xref, "[.") {
+	switch {
+	case strings.HasPrefix(xref, "[."):
 		xref = "[Window." + xref[len("[."):]
 	}
 	r = j.optionsByTclName[tclName]
@@ -1019,16 +1054,20 @@ func (j *job) widget(fn string, doc *document) {
 			j.w("\n//\n// %s", strings.Join(v.docs, "\n// "))
 		}
 	}
-	j.w("\nfunc %s(options ...Opt) *Window {", gnm)
+	j.w("\nfunc %s(options ...Opt) *%[1]sWidget {", gnm)
 	j.w("\nreturn App.%s(options...)", gnm)
 	j.w("\n}")
 
 	j.w("%s", doc0[0])
 	j.w("\n//\n// The resulting [Window] is a child of 'w'")
 	j.w("\n//\n// For details please see [%s]", gnm)
-	j.w("\nfunc (w *Window) %s(options ...Opt) *Window {", gnm)
+	j.w("\nfunc (w *Window) %s(options ...Opt) *%[1]sWidget {", gnm)
 	cmd := strings.Replace(base, "ttk_", "ttk::", 1)
-	j.w("\nreturn w.newChild(%q, options...)", cmd)
+	j.w("\nreturn &%sWidget{w.newChild(%q, options...)}", gnm, cmd)
+	j.w("\n}")
+	j.w("\n\n// %sWidget represents the Tcl/Tk %s widget/window", gnm, base)
+	j.w("\ntype %sWidget struct {", gnm)
+	j.w("\n*Window")
 	j.w("\n}")
 }
 

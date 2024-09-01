@@ -10,10 +10,10 @@ func main() {
 	Place(b, X("4m"), Y("4m"))
 	Pack(
 		f,
-		TButton(Txt("Raise A"), Command(func() { a.Raise(b) })),
-		TButton(Txt("Raise B"), Command(func() { b.Raise(a) })),
+		TButton(Txt("Lower A"), Command(func() { a.Lower(b) })),
+		TButton(Txt("Lower B"), Command(func() { b.Lower(a) })),
 		TExit(),
 		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
 	)
-	App.Configure(Padx("4m"), Pady("4m")).Wait()
+	App.Configure(Padx("4m"), Pady("3m")).Wait()
 }

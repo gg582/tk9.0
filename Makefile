@@ -2,7 +2,12 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-.PHONY:	all clean edit editor test work
+.PHONY:	all clean edit editor test work w65 dlls
+
+TAR = tcl9.0b3-src.tar.gz
+URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
+TAR2 = tk9.0b3-src.tar.gz
+URL2 = http://prdownloads.sourceforge.net/tcl/$(TAR2)
 
 all: editor
 	golint 2>&1
@@ -16,6 +21,10 @@ clean:
 	rm -f log-* cpu.test mem.test *.out go.work*
 	go clean
 
+download:
+	@if [ ! -f $(TAR) ]; then wget $(URL) ; fi
+	@if [ ! -f $(TAR2) ]; then wget $(URL2) ; fi
+
 edit:
 	@if [ -f "Session.vim" ]; then gvim -S & else gvim -p Makefile go.mod builder.json *.go & fi
 
@@ -25,10 +34,10 @@ editor:
 	go run generator.go
 	gofmt -l -s -w .
 	go build -v  -o /dev/null
-	$(shell for f in examples/*.go ; do go build -o /dev/null $$f ; done)
+	$(shell for f in _examples/*.go ; do go build -o /dev/null $$f ; done)
 
 test:
-	go test -v -timeout 24h -count=1
+	go test -vet=off -v -timeout 24h -count=1
 
 work:
 	rm -f go.work*
@@ -43,3 +52,29 @@ work:
 	go work use ../libz
 	go work use ../tcl9.0
 	go work use ../ngrab
+
+win65:
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go test -o /dev/null -c
+	rsync \
+		-avP \
+		--rsync-path='wsl rsync' \
+		--exclude \*.gz \
+		--exclude .git/ \
+		.  \
+		win65:src/modernc.org/tk9.0
+
+dlls: download
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9*
+	tar xf tcl9.0b3-src.tar.gz -C ~/tmp
+	tar xf tk9.0b3-src.tar.gz -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0b3/win ; ./configure"
+	make -C ~/tmp/tcl9.0b3/win
+	cp -v \
+		~/tmp/tcl9.0b3/win/libtommath.dll \
+		~/tmp/tcl9.0b3/win/tcl90.dll \
+		embed_$(shell go env GOOS)_$(shell go env GOARCH)/
+	sh -c "cd ~/tmp/tk9.0b3/win ; ./configure --with-tcl=$$HOME/tmp/tcl9.0b3/win"
+	make -C ~/tmp/tk9.0b3/win
+	cp -v \
+		~/tmp/tk9.0b3/win/tcl9tk90.dll \
+		embed_$(shell go env GOOS)_$(shell go env GOARCH)/

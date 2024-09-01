@@ -6,7 +6,7 @@ import . "modernc.org/tk9.0"
 func main() {
 	out := Label(Height(2), Anchor("e"), Txt("(123+232)/(123-10)"))
 	Grid(out, Columnspan(4), Sticky("e"))
-	var b *Window
+	var b *ButtonWidget
 	for i, c := range "C()/789*456-123+0.=" {
 		b = Button(Txt(string(c)), Command(
 			func() {

@@ -8,5 +8,5 @@ func main() {
 		t.TagConfigure(t.TagAdd(t.Insert(LC{i + 1, 0}, v+"\n"), LC{i + 2, 0}), Fnt(NewFont(Family(v))))
 	}
 	Pack(t, TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-	App.Configure(Padx("4m"), Pady("4m")).Center().Wait()
+	App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
 }

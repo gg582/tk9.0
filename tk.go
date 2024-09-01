@@ -2,12 +2,18 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build !windows
+
 // Package tk9.0 is a CGo-free cross platform GUI for Go. It is similar to
 // [tkinter] for Python.
 //
+// # Tk8
+//
+// An older version of Tcl/Tk exists at [tk8].
+//
 // # Hello world
 //
-// Also available in examples/hello.go
+// Also available in _examples/hello.go
 //
 //	package main
 //
@@ -22,12 +28,12 @@
 //
 //	$ CGO_ENABLED=0 go run hello.go
 //
-// The CGO_ENABLED=0 is optinal and here it only demonstrates the program can
+// The CGO_ENABLED=0 is optional and here it only demonstrates the program can
 // be built without CGo.
 //
 // # Debugging
 //
-// Consider this program in examples/debugging.go:
+// Consider this program in _examples/debugging.go:
 //
 //	// Build this program using -tags=tk.dmesg
 //	package main
@@ -46,7 +52,7 @@
 // click the Hello button. With the tk.dmesg tag the package initialization
 // prints the debug messages path. So we can view it, for example, like this:
 //
-//	$ cat $(go run -tags=tk.dmesg ./examples/debugging.go)
+//	$ cat $(go run -tags=tk.dmesg ./_examples/debugging.go)
 //	[27190 debugging] enter [dmesgon.go:32:0 proc.go:7176:doInit1 proc.go:7143:doInit]
 //	[27190 debugging] code=ttk::button ..ttk::button2 -text Hello -command {eventDispatcher 1} -> r=.ttk::button2 err=<nil> [tk.go:304:eval tk.go:304:eval tk.go:291:newChild]
 //	[27190 debugging] code=pack .ttk::button2 -ipadx 10 -ipady 5 -padx 20 -pady 10 -> r= err=<nil> [tk.go:304:eval tk.go:304:eval tk.go:800:Pack]
@@ -57,19 +63,27 @@
 // 27190 was the process PID in this particular run. Using the tags allows to
 // inspect the Tcl/Tk code executed during the lifetime of the process.
 //
-// # Supported platforms and architectures
+// # Supported targets
 //
 // These combinations of GOOS and GOARCH are currently supported
 //
 //	OS      Arch
 //	-------------
-//	linux	amd64
+//	darwin  arm64
+//	linux   386
+//	linux   amd64
+//	linux   arm
+//	linux   arm64
+//	linux   loong64
+//	linux   ppc64le
+//	linux   riscv64
+//	linux   s390x
 //
-// # XQuartz
+// # Runtime dependencies
 //
-// On darwin (macOS) this package depends on [XQuartz], but only at run-time.
-// You can still compile and cross compile this package for darwin on any
-// platform/architecture supported by Go without CGo.
+//   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+ executable
+//     available in $PATH.
+//   - darwin (macOS) requires [XQuartz].
 //
 // # Completeness
 //
@@ -89,7 +103,7 @@
 // the [Error] variable.  Even if a function does not return error, it is still
 // possible to handle errors in the usual way when needed, except that Error is
 // now a static variable. That's a problem in the general case, but less so in
-// this package that must to be used from a single goroutine only, as
+// this package that must be used from a single goroutine only, as
 // documented elsewhere.
 //
 //	// Explicit error handling.
@@ -101,7 +115,7 @@
 // This is obviously a compromise enabling to have a way to check for errors
 // and, at the same time, the ability to write concise code like:
 //
-//	// Defered error handling.
+//	// Deferred error handling.
 //	if b = Button(Txt("Foo"), Padx(5), Pady(10)); Error != nil {
 //		...
 //	}
@@ -142,8 +156,8 @@
 // # Renamed options
 //
 // There is, for a example, a Tcl/tk 'text' widget and a '-text' option. This
-// package exports the widget as 'Text' and the option as 'Txt'. The complete
-// list is:
+// package exports the widget as type 'TextWidget', its constructor as function
+// 'Text' and the option as function 'Txt'. The complete list is:
 //
 //   - [Button]  option is renamed to [Btn]
 //   - [Font]    option is renamed to [Fnt]
@@ -219,16 +233,19 @@
 // [XQuartz]: https://en.wikipedia.org/wiki/XQuartz
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
+// [tk8]: https://pkg.go.dev/modernc.org/tk8.6
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
+	"context"
 	_ "embed"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -244,6 +261,10 @@ import (
 	tcl "modernc.org/tcl9.0"
 )
 
+const (
+	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
+)
+
 // App is the main/root application window.
 var App *Window
 
@@ -255,6 +276,8 @@ var CollectErrors bool
 var Error error
 
 var (
+	_ Widget = (*Window)(nil)
+
 	//go:embed embed/gotk.png
 	icon []byte
 
@@ -337,21 +360,38 @@ func init() {
 		Error = interp.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil)
 	})
 	if Error == nil {
+		CollectErrors = true
+
+		defer func() { CollectErrors = false }()
+
 		App = &Window{}
 		exitHandler = Command(func() { Destroy(App) })
 		// Set some defaults.
+		evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
 		App.Center()
 		App.IconPhoto(NewPhoto(Data(icon)))
 		App.WmTitle(filepath.Base(os.Args[0]))
 	}
 }
 
-// Window represents a Tk window/widget.
+// Window represents a Tk window/widget. It implements common widget methods.
 //
 // Window implements Opt. When a Window instance is used as an Opt, it provides
 // its path name.
 type Window struct {
 	fpath string
+}
+
+func (w *Window) isWidget() {}
+
+// Widget is implemented by every *Window
+type Widget interface {
+	isWidget()
+	path() string
+}
+
+func (w *Window) path() (r string) {
+	return w.String()
 }
 
 // String implements fmt.Stringer.
@@ -822,7 +862,7 @@ func (m *Img) optionString(_ *Window) string {
 //
 // [Tcl/Tk bitmap]: https://www.tcl.tk/man/tcl9.0/TkCmd/bitmap.htm
 func NewBitmap(options ...Opt) *Img {
-	nm := fmt.Sprintf("img%v", id.Add(1))
+	nm := fmt.Sprintf("bmp%v", id.Add(1))
 	code := fmt.Sprintf("image create bitmap %s %s", nm, collect(options...))
 	r, err := eval(code)
 	if err != nil {
@@ -916,6 +956,43 @@ func NewPhoto(options ...Opt) *Img {
 	}
 
 	return &Img{name: nm}
+}
+
+// Width — Get the configured option value.
+func (m *Img) Width() string {
+	return evalErr(fmt.Sprintf(`%s cget -width`, m))
+}
+
+// Height — Get the configured option value.
+func (m *Img) Height() string {
+	return evalErr(fmt.Sprintf(`%s cget -height`, m))
+}
+
+// Graph — use gnuplot to draw on a photo. Graph returns 'm'
+//
+// The 'script' argument is passed to a gnuplot executable, which must be
+// installed on the machine.  See the [gnuplot site] for documentation about
+// producing graphs. The script must not use the 'set term <device>' command.
+//
+// The content of 'm' is replaced, including its internal name.
+//
+// [gnuplot site]: http://www.gnuplot.info/
+func (m *Img) Graph(script string) *Img {
+	switch {
+	case strings.HasPrefix(m.name, "img"):
+		w, h := m.Width(), m.Height()
+		script = fmt.Sprintf("set terminal pngcairo size %s, %s\n%s", w, h, script)
+		out, err := gnuplot(script)
+		if err != nil {
+			fail(fmt.Errorf("plot: executing script: %s", err))
+			break
+		}
+
+		*m = *NewPhoto(Width(w), Height(h), Data(out))
+	default:
+		fail(fmt.Errorf("plot: %s is not a photo", m))
+	}
+	return m
 }
 
 // Destroy — Destroy one or more windows
@@ -1135,8 +1212,6 @@ func (w *Window) Center() *Window {
 // -, x and ^, can be specified instead of a window name to alter the default
 // location of a window, as described in the RELATIVE PLACEMENT section, below.
 //
-// The first argument must be a *Window.
-//
 // The following options are supported:
 //
 //   - [Column] n
@@ -1219,7 +1294,7 @@ func (w *Window) Center() *Window {
 // More information might be available at the [Tcl/Tk grid] page.
 //
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html#M9
-func Grid(w *Window, options ...Opt) {
+func Grid(w Widget, options ...Opt) {
 	evalErr(fmt.Sprintf("grid configure %s %s", w, collect(options...)))
 }
 
@@ -1573,7 +1648,7 @@ func ExitHandler() Opt {
 // [ExitHandler].
 //
 // Use [Window.Exit] to create a Exit with a particular parent.
-func Exit(options ...Opt) *Window {
+func Exit(options ...Opt) *ButtonWidget {
 	return App.Exit(options...)
 }
 
@@ -1581,7 +1656,7 @@ func Exit(options ...Opt) *Window {
 // [ExitHandler].
 //
 // The resulting [Window] is a child of 'w'
-func (w *Window) Exit(options ...Opt) *Window {
+func (w *Window) Exit(options ...Opt) *ButtonWidget {
 	return w.Button(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...)
 }
 
@@ -1589,7 +1664,7 @@ func (w *Window) Exit(options ...Opt) *Window {
 // [ExitHandler].
 //
 // Use [Window.TExit] to create a TExit with a particular parent.
-func TExit(options ...Opt) *Window {
+func TExit(options ...Opt) *TButtonWidget {
 	return App.TExit(options...)
 }
 
@@ -1597,7 +1672,7 @@ func TExit(options ...Opt) *Window {
 // [ExitHandler].
 //
 // The resulting [Window] is a child of 'w'
-func (w *Window) TExit(options ...Opt) *Window {
+func (w *Window) TExit(options ...Opt) *TButtonWidget {
 	return w.TButton(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...)
 }
 
@@ -2133,7 +2208,7 @@ func (f *Font) Delete() {
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
-func (w *Window) Insert(index any, chars string, options ...string) any {
+func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 	idx := fmt.Sprint(index)
 	evalErr(fmt.Sprintf("%s insert %s %s %s", w, tclSafeString(idx), tclSafeString(chars), tclSafeStrings(options...)))
 	return index
@@ -2170,7 +2245,7 @@ func (lc LC) String() string {
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
-func (w *Window) TagConfigure(name string, options ...Opt) {
+func (w *TextWidget) TagConfigure(name string, options ...Opt) {
 	evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(name), collect(options...)))
 }
 
@@ -2191,7 +2266,7 @@ func (w *Window) TagConfigure(name string, options ...Opt) {
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
-func (w *Window) TagAdd(options ...any) string {
+func (w *TextWidget) TagAdd(options ...any) string {
 	tag := fmt.Sprintf("tag%d", id.Add(1))
 	var a []Opt
 	for _, v := range options {
@@ -2596,10 +2671,10 @@ func Place(options ...Opt) {
 // Additional information might be available at the [Tcl/Tk lower] page.
 //
 // [Tcl/Tk lower]: https://www.tcl.tk/man/tcl9.0/TkCmd/lower.html
-func (w *Window) Lower(belowThis *Window) {
+func (w *Window) Lower(belowThis Widget) {
 	b := ""
 	if belowThis != nil {
-		b = belowThis.String()
+		b = belowThis.path()
 	}
 	evalErr(fmt.Sprintf("lower %s %s", w, b))
 }
@@ -2626,10 +2701,106 @@ func (w *Window) Lower(belowThis *Window) {
 // Additional information might be available at the [Tcl/Tk raise] page.
 //
 // [Tcl/Tk raise]: https://www.tcl.tk/man/tcl9.0/TkCmd/raise.html
-func (w *Window) Raise(aboveThis *Window) {
+func (w *Window) Raise(aboveThis Widget) {
 	b := ""
 	if aboveThis != nil {
-		b = aboveThis.String()
+		b = aboveThis.path()
 	}
 	evalErr(fmt.Sprintf("raise %s %s", w, b))
+}
+
+// Graph — use gnuplot to draw on a canvas. Graph returns 'w'.
+//
+// The 'script' argument is passed to a gnuplot executable, which must be
+// installed on the machine.  See the [gnuplot site] for documentation about
+// producing graphs. The script must not use the 'set term <device>' command.
+//
+// [gnuplot site]: http://www.gnuplot.info/
+func (w *CanvasWidget) Graph(script string) *CanvasWidget {
+	script = fmt.Sprintf("set terminal tkcanvas size %s, %s\n%s", w.Width(), w.Height(), script)
+	out, err := gnuplot(script)
+	if err != nil {
+		fail(fmt.Errorf("plot: executing script: %s", err))
+		return w
+	}
+
+	evalErr(fmt.Sprintf("%s\ngnuplot %s", out, w))
+	return w
+}
+
+func gnuplot(script string) (out []byte, err error) {
+	f, err := os.CreateTemp("", "tk8.6-")
+	if err != nil {
+		return nil, err
+	}
+
+	defer os.Remove(f.Name())
+
+	if err := os.WriteFile(f.Name(), []byte(script), 0660); err != nil {
+		return nil, err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), gnuplotTimeout)
+
+	defer cancel()
+
+	return exec.CommandContext(ctx, "gnuplot", f.Name()).Output()
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Add a new command entry to the bottom of the menu.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+func (w *MenuWidget) AddCommand(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add command %s", w, winCollect(w.Window, options...)))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Add a new cascade entry to the end of the menu.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+func (w *MenuWidget) AddCascade(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add cascade %s", w, winCollect(w.Window, options...)))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Add a new separator entry to the bottom of the menu.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+func (w *MenuWidget) AddSeparator(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add separator %s", w, winCollect(w.Window, options...)))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Invoke the action of the menu entry. See the sections on the individual
+// entries above for details on what happens. If the menu entry is disabled
+// then nothing happens. If the entry has a command associated with it then the
+// result of that command is returned as the result of the invoke widget
+// command. Otherwise the result is an empty string. Note: invoking a menu
+// entry does not automatically unpost the menu; the default bindings normally
+// take care of this before invoking the invoke widget command.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+func (w *MenuWidget) Invoke(index uint) {
+	evalErr(fmt.Sprintf("%s invoke %d", w, index))
 }
