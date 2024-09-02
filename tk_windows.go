@@ -72,12 +72,15 @@ func init() {
 	}
 
 	s, err := eval(`
+image create photo ico -file embed/gotk.png
 image create photo img -file _examples/gopher.png
 label .l -image img
 ttk::button .b -text Exit -command { destroy . }
 pack .l .b -padx 1m -pady 2m -ipadx 1m -ipady 1m
 . configure -padx 4m -pady 3m
-wm attributes . -topmost true
+wm iconphoto . ico
+wm title . photo
+# wm attributes . -topmost true
 tkwait window .`,
 	)
 	trc("s=%s, err=%v", s, err)
