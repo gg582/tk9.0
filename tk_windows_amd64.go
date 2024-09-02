@@ -162,6 +162,7 @@ func (w *Window) newChild(nm string, options ...Opt) (rw *Window) {
 }
 
 func eval(code string) (r string, err error) {
+	panic(":165:")
 	if dmesgs {
 		defer func() {
 			dmesg("code=%s -> r=%v err=%v", code, r, err)

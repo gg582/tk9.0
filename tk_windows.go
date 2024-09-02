@@ -96,10 +96,10 @@ func init() {
 			return
 		}
 
-		s, err := tclEvalEx(fmt.Sprintf("zipfs mount %s /lib/tk", tclSafeString(filepath.Join(cacheDir, "lib.zip"))))
+		s, err := tclEvalEx("zipfs mount tk_library.zip /lib/tk")
 		trc("---- MOUNT err=%v\n%s\n---", err, s)
-		s, err = tclEvalEx("zipfs list")
-		trc("---- LIST err=%v\n%s\n---", err, s)
+		// s, err = tclEvalEx("zipfs list")
+		// trc("---- LIST err=%v\n%s\n---", err, s)
 
 		if r, r2, err := tkInit.Call(interp); r != tcl_ok {
 			trc("r=%0x r2=%#0x err=%v res=%q", r, r2, err, tclResult())
@@ -165,6 +165,7 @@ tkwait window .
 }
 
 func getCacheDir() (r string, err error) {
+	defer func() { trc("168:->(r=%s err=%v)", r, err) }()
 	if r, err = os.UserCacheDir(); err != nil {
 		return "", err
 	}
@@ -194,7 +195,7 @@ func getCacheDir() (r string, err error) {
 	}
 
 	os.Remove(zf)
-	zf = filepath.Join(tmp, "lib.zip")
+	zf = filepath.Join(tmp, "tk_library.zip")
 	if err = os.WriteFile(zf, tkLibrary, 0660); err != nil {
 		return "", err
 	}
