@@ -49,75 +49,77 @@ func init() {
 		return
 	}
 
-	defer func() {
-		Error = errors.Join(Error, os.Chdir(wd))
+	func() {
+		defer func() {
+			Error = errors.Join(Error, os.Chdir(wd))
+		}()
+
+		if Error = os.Chdir(cacheDir); Error != nil {
+			return
+		}
+
+		if tclDll, Error = windows.LoadDLL("tcl90.dll"); Error != nil {
+			return
+		}
+
+		if tkDll, Error = windows.LoadDLL("tcl9tk90.dll"); Error != nil {
+			return
+		}
+
+		var tclCreateInterp, tclInit, tkInit *windows.Proc
+		if tclCreateInterp, Error = tclDll.FindProc("Tcl_CreateInterp"); Error != nil {
+			return
+		}
+
+		if tclInit, Error = tclDll.FindProc("Tcl_Init"); Error != nil {
+			return
+		}
+
+		if evalExProc, Error = tclDll.FindProc("Tcl_EvalEx"); Error != nil {
+			return
+		}
+
+		if setObjResultProc, Error = tclDll.FindProc("Tcl_SetObjResult"); Error != nil {
+			return
+		}
+
+		if getObjResultProc, Error = tclDll.FindProc("Tcl_GetObjResult"); Error != nil {
+			return
+		}
+
+		if getStringProc, Error = tclDll.FindProc("Tcl_GetString"); Error != nil {
+			return
+		}
+
+		if newStringObjProc, Error = tclDll.FindProc("Tcl_NewStringObj"); Error != nil {
+			return
+		}
+
+		if tkInit, Error = tkDll.FindProc("Tk_Init"); Error != nil {
+			return
+		}
+
+		if interp, _, _ = tclCreateInterp.Call(); interp == 0 {
+			Error = fmt.Errorf("failed to create a Tcl interpreter")
+			return
+		}
+
+		if r, _, _ := tclInit.Call(interp); r != tcl_ok {
+			Error = fmt.Errorf("failed to initialize the Tcl interpreter")
+			return
+		}
+
+		if _, Error := eval("zipfs mount tk_library.zip /lib/tk"); Error != nil {
+			return
+		}
+
+		if r, _, _ := tkInit.Call(interp); r != tcl_ok {
+			Error = fmt.Errorf("failed to initialize Tk")
+			return
+		}
 	}()
 
-	if Error = os.Chdir(cacheDir); Error != nil {
-		return
-	}
-
-	if tclDll, Error = windows.LoadDLL("tcl90.dll"); Error != nil {
-		return
-	}
-
-	if tkDll, Error = windows.LoadDLL("tcl9tk90.dll"); Error != nil {
-		return
-	}
-
-	var tclCreateInterp, tclInit, tkInit *windows.Proc
-	if tclCreateInterp, Error = tclDll.FindProc("Tcl_CreateInterp"); Error != nil {
-		return
-	}
-
-	if tclInit, Error = tclDll.FindProc("Tcl_Init"); Error != nil {
-		return
-	}
-
-	if evalExProc, Error = tclDll.FindProc("Tcl_EvalEx"); Error != nil {
-		return
-	}
-
-	if setObjResultProc, Error = tclDll.FindProc("Tcl_SetObjResult"); Error != nil {
-		return
-	}
-
-	if getObjResultProc, Error = tclDll.FindProc("Tcl_GetObjResult"); Error != nil {
-		return
-	}
-
-	if getStringProc, Error = tclDll.FindProc("Tcl_GetString"); Error != nil {
-		return
-	}
-
-	if newStringObjProc, Error = tclDll.FindProc("Tcl_NewStringObj"); Error != nil {
-		return
-	}
-
-	if tkInit, Error = tkDll.FindProc("Tk_Init"); Error != nil {
-		return
-	}
-
-	if interp, _, _ = tclCreateInterp.Call(); interp == 0 {
-		Error = fmt.Errorf("failed to create a Tcl interpreter")
-		return
-	}
-
-	if r, _, _ := tclInit.Call(interp); r != tcl_ok {
-		Error = fmt.Errorf("failed to initialize the Tcl interpreter")
-		return
-	}
-
-	if _, Error := eval("zipfs mount tk_library.zip /lib/tk"); Error != nil {
-		return
-	}
-
-	if r, _, _ := tkInit.Call(interp); r != tcl_ok {
-		Error = fmt.Errorf("failed to initialize Tk")
-		return
-	}
-
-	eval(`
+	s, err := eval(`
 image create photo img -file _examples/gopher.png
 label .l -image img
 ttk::button .b -text Exit -command { destroy . }
@@ -125,6 +127,7 @@ pack .l .b -padx 1m -pady 2m -ipadx 1m -ipady 1m
 . configure -padx 4m -pady 3m
 tkwait window .`,
 	)
+	trc("s=%s, err=%v", s, err)
 
 	// if Error = interp.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil); Error == nil {
 	// 	CollectErrors = true
