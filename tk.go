@@ -663,27 +663,6 @@ func tclSafeStrings(s ...string) string {
 	return strings.Join(a, " ")
 }
 
-func tclSafeString(s string) string {
-	if s == "" {
-		return "{}"
-	}
-
-	const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badChars) && badChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
-}
-
 func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
 	id, err := strconv.Atoi(args[1])
 	if err != nil {

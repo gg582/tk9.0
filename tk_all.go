@@ -236,29 +236,29 @@
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
 package tk9_0 // import "modernc.org/tk9.0"
 
-// TODO import (
-// TODO 	"context"
-// TODO 	_ "embed"
-// TODO 	"encoding/base64"
-// TODO 	"errors"
-// TODO 	"fmt"
-// TODO 	"os"
-// TODO 	"os/exec"
-// TODO 	"path/filepath"
-// TODO 	"runtime"
-// TODO 	"strconv"
-// TODO 	"strings"
-// TODO 	"sync"
-// TODO 	"sync/atomic"
-// TODO 	"time"
-// TODO
-// TODO 	"github.com/evilsocket/islazy/zip"
-// TODO 	libtcl "modernc.org/libtcl9.0"
-// TODO 	libtk "modernc.org/libtk9.0"
-// TODO 	tklib "modernc.org/libtk9.0/library"
-// TODO 	tcl "modernc.org/tcl9.0"
-// TODO )
-// TODO
+import (
+	// TODO 	"context"
+	// TODO 	_ "embed"
+	// TODO 	"encoding/base64"
+	// TODO 	"errors"
+	"fmt"
+	"os"
+	// TODO 	"os/exec"
+	// TODO 	"path/filepath"
+	// TODO 	"runtime"
+	// TODO 	"strconv"
+	"strings"
+	// TODO 	"sync"
+	// TODO 	"sync/atomic"
+	// TODO 	"time"
+	// TODO
+	// TODO 	"github.com/evilsocket/islazy/zip"
+	// TODO 	libtcl "modernc.org/libtcl9.0"
+	// TODO 	libtk "modernc.org/libtk9.0"
+	// TODO 	tklib "modernc.org/libtk9.0/library"
+	// TODO 	tcl "modernc.org/tcl9.0"
+)
+
 // TODO const (
 // TODO 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
 // TODO )
@@ -281,13 +281,14 @@ var (
 	//TODO
 	cleanupDirs []string
 
-// TODO 	exitHandler Opt
-// TODO 	finished    atomic.Int32
-// TODO 	handlers    = map[int32]*eventHandler{}
-// TODO 	id          atomic.Int32
-// TODO 	initOnce    sync.Once
-// TODO 	interp      *tcl.Interp
-// TODO 	isBuilder   = os.Getenv("MODERNC_BUILDER") != ""
+	// TODO 	exitHandler Opt
+	// TODO 	finished    atomic.Int32
+	// TODO 	handlers    = map[int32]*eventHandler{}
+	// TODO 	id          atomic.Int32
+	// TODO 	initOnce    sync.Once
+	// TODO 	interp      *tcl.Interp
+	isBuilder = os.Getenv("MODERNC_BUILDER") != ""
+
 // TODO 	tclDir      string
 // TODO 	tkDir       string
 // TODO
@@ -663,28 +664,28 @@ var (
 //TODO 	}
 //TODO 	return strings.Join(a, " ")
 //TODO }
-//TODO
-//TODO func tclSafeString(s string) string {
-//TODO 	if s == "" {
-//TODO 		return "{}"
-//TODO 	}
-//TODO
-//TODO 	const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
-//TODO 	if strings.ContainsAny(s, badString) {
-//TODO 		var b strings.Builder
-//TODO 		for _, c := range s {
-//TODO 			switch {
-//TODO 			case int(c) < len(badChars) && badChars[c]:
-//TODO 				fmt.Fprintf(&b, "\\x%02x", c)
-//TODO 			default:
-//TODO 				b.WriteRune(c)
-//TODO 			}
-//TODO 		}
-//TODO 		s = b.String()
-//TODO 	}
-//TODO 	return s
-//TODO }
-//TODO
+
+func tclSafeString(s string) string {
+	if s == "" {
+		return "{}"
+	}
+
+	const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
+	if strings.ContainsAny(s, badString) {
+		var b strings.Builder
+		for _, c := range s {
+			switch {
+			case int(c) < len(badChars) && badChars[c]:
+				fmt.Fprintf(&b, "\\x%02x", c)
+			default:
+				b.WriteRune(c)
+			}
+		}
+		s = b.String()
+	}
+	return s
+}
+
 //TODO func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
 //TODO 	id, err := strconv.Atoi(args[1])
 //TODO 	if err != nil {

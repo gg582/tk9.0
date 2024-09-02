@@ -2,31 +2,25 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build windows && amd64
-
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
 	"context"
-	"embed"
+	_ "embed"
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"io/fs"
+	// "io/fs"
 	"os"
 	"os/exec"
-	"path/filepath"
+	// "path/filepath"
 
 	//TODO "path/filepath"
-	"runtime"
 	//TODO "strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
-	"unsafe"
-
-	"golang.org/x/sys/windows"
 )
 
 const (
@@ -52,8 +46,8 @@ var (
 
 	//go:embed embed/gotk.png
 	icon []byte
-	//go:embed embed_windows_amd64/*
-	dlls embed.FS
+	//go:embed embed_windows_amd64/dll.zip
+	dlls []byte
 
 	exitHandler Opt
 	finished    atomic.Int32
@@ -61,7 +55,6 @@ var (
 	id          atomic.Int32
 	initOnce    sync.Once
 	interp      uintptr
-	isBuilder   = os.Getenv("MODERNC_BUILDER") != ""
 	tclDir      string
 	tkDir       string
 
@@ -102,227 +95,7 @@ var (
 	//interp and this map.
 	textVariables = map[*Window]string{} // : tclName
 
-	dllDir           string
-	tclDll           *windows.DLL
-	procEvalEx       *windows.Proc
-	procGetObjResult *windows.Proc
-	procGetString    *windows.Proc
-	tkDll            *windows.DLL
 )
-
-func install() (err error) {
-	cacheDir, err := os.UserCacheDir()
-	if err != nil {
-		return err
-	}
-
-	var files []string
-	var infos []fs.DirEntry
-	fs.WalkDir(dlls, ".", func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if d.IsDir() {
-			return nil
-		}
-
-		files = append(files, path)
-		infos = append(infos, d)
-		return nil
-	})
-	dir := filepath.Join(cacheDir, "modernc.org/tk9.0")
-	os.MkdirAll(dir, 0770)
-	if err = installDir(dir, files, infos); err == nil {
-		return nil
-	}
-
-	if dir, err = os.MkdirTemp("", "tk9.0-"); err != nil {
-		return err
-	}
-
-	cleanupDirs = append(cleanupDirs, dir)
-	return installDir(dir, files, infos)
-}
-
-func installDir(dir string, files []string, infos []fs.DirEntry) (err error) {
-	dllDir = dir
-	for i, v := range files {
-		dest := filepath.Join(dir, filepath.Base(v))
-		if dfi, err := os.Stat(dest); err == nil {
-			sfi, err := infos[i].Info()
-			if err != nil {
-				return err
-			}
-
-			if dfi.Size() == sfi.Size() {
-				continue
-			}
-		}
-
-		b, err := dlls.ReadFile(v)
-		if err != nil {
-			return err
-		}
-
-		if err := os.WriteFile(dest, b, 0770); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func tclResult() string {
-	r, _, _ := procGetObjResult.Call(interp)
-	if r == 0 {
-		return ""
-	}
-
-	if r, _, _ = procGetString.Call(r); r != 0 {
-		r0 := r
-		var n int
-		for ; *(*byte)(unsafe.Pointer(r)) != 0; n++ {
-			r++
-		}
-		if n != 0 {
-			return unsafe.String((*byte)(unsafe.Pointer(r0)), n)
-		}
-	}
-
-	return ""
-}
-
-func tclEvalEx(s string) (r string, err error) {
-	if r0, _, _ := procEvalEx.Call(interp, uintptr(unsafe.Pointer(unsafe.StringData(s))), uintptr(len(s)), tcl_eval_direct); r0 == tcl_ok {
-		return tclResult(), nil
-	}
-
-	return "", fmt.Errorf("%s", tclResult())
-}
-
-func init() {
-	if isBuilder {
-		return
-	}
-
-	initOnce.Do(func() {
-		runtime.LockOSThread()
-		if Error = install(); Error != nil {
-			return
-		}
-
-		var wd string
-		if wd, Error = os.Getwd(); Error != nil {
-			return
-		}
-
-		defer func() {
-			Error = errors.Join(Error, os.Chdir(wd))
-		}()
-
-		if Error = os.Chdir(dllDir); Error != nil {
-			return
-		}
-
-		if tclDll, Error = windows.LoadDLL("tcl90.dll"); Error != nil {
-			return
-		}
-
-		if tkDll, Error = windows.LoadDLL("tcl9tk90.dll"); Error != nil {
-			return
-		}
-
-		var tclCreateInterp, tclInit, tkInit *windows.Proc
-		if tclCreateInterp, Error = tclDll.FindProc("Tcl_CreateInterp"); Error != nil {
-			return
-		}
-
-		if tclInit, Error = tclDll.FindProc("Tcl_Init"); Error != nil {
-			return
-		}
-
-		if procEvalEx, Error = tclDll.FindProc("Tcl_EvalEx"); Error != nil {
-			return
-		}
-
-		if procGetObjResult, Error = tclDll.FindProc("Tcl_GetObjResult"); Error != nil {
-			return
-		}
-
-		if procGetString, Error = tclDll.FindProc("Tcl_GetString"); Error != nil {
-			return
-		}
-
-		if tkInit, Error = tkDll.FindProc("Tk_Init"); Error != nil {
-			return
-		}
-
-		if interp, _, _ = tclCreateInterp.Call(); interp == 0 {
-			Error = fmt.Errorf("failed to create a Tcl interpreter")
-			return
-		}
-
-		if r, _, _ := tclInit.Call(interp); r != tcl_ok {
-			Error = fmt.Errorf("failed to initialize the Tcl interpreter")
-			return
-		}
-
-		s, err := tclEvalEx("zipfs list")
-		trc("---- err=%v\n%s\n---", err, s)
-
-		if r, r2, err := tkInit.Call(interp); r != tcl_ok {
-			trc("r=%0x r2=%#0x err=%v res=%q", r, r2, err, tclResult())
-			Error = fmt.Errorf("failed to initialize Tk")
-			return
-		}
-
-		// r0, r1, err := tclInit.Call(uintptr(unsafe.Pointer(&interp)))
-		// trc("interp=%#0x r0=%v r1=%v err=%v", interp, r0, r1, err)
-
-		// tclDll = windows.NewLazyDLL(filepath.Join(dllDir, "tcl90.dll"))
-		// trc("A %v", tclDll.Load())
-
-		// tkDll = windows.NewLazyDLL(filepath.Join(dllDir, "tcl9tk90.dll"))
-		// trc("B %v", tkDll.Load())
-
-		// if tclDir, Error = tcl.Stdlib(); Error != nil {
-		// 	return
-		// }
-
-		// if tkDir, Error = stdlib(); Error != nil {
-		// 	return
-		// }
-
-		// if interp, Error = tcl.NewInterp(map[string]string{
-		// 	"tcl_library": tclDir,
-		// 	"tk_library":  tkDir,
-		// }); Error != nil {
-		// 	return
-		// }
-
-		// if rc := libtk.XTk_Init(interp.TLS(), interp.Handle()); rc != libtk.TCL_OK {
-		// 	interp.Close()
-		// 	Error = fmt.Errorf("failed to initialize the Tk subsystem")
-		// 	return
-		// }
-
-		// Error = interp.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil)
-	})
-	trc("Error=%v", Error)
-	//TODO if Error == nil {
-	//TODO 	CollectErrors = true
-
-	//TODO 	defer func() { CollectErrors = false }()
-
-	//TODO 	App = &Window{}
-	//TODO 	exitHandler = Command(func() { Destroy(App) })
-	//TODO 	// Set some defaults.
-	//TODO 	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
-	//TODO 	App.Center()
-	//TODO 	App.IconPhoto(NewPhoto(Data(icon)))
-	//TODO 	App.WmTitle(filepath.Base(os.Args[0]))
-	//TODO }
-}
 
 // Window represents a Tk window/widget. It implements common widget methods.
 //
@@ -612,27 +385,6 @@ func tclSafeStrings(s ...string) string {
 		a = append(a, tclSafeString(v))
 	}
 	return strings.Join(a, " ")
-}
-
-func tclSafeString(s string) string {
-	if s == "" {
-		return "{}"
-	}
-
-	const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badChars) && badChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
 }
 
 //TODO func eventDispatcher(data any, interp *tcl.Interp, args []string) int {

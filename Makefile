@@ -8,6 +8,8 @@ TAR = tcl9.0b3-src.tar.gz
 URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
 TAR2 = tk9.0b3-src.tar.gz
 URL2 = http://prdownloads.sourceforge.net/tcl/$(TAR2)
+GOOS = $(shell go env GOOS)
+GOARCH = $(shell go env GOARCH)
 
 all: editor
 	golint 2>&1
@@ -64,17 +66,21 @@ win65:
 		win65:src/modernc.org/tk9.0
 
 dlls: download
+	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
 	rm -rf ~/tmp/tcl9* ~/tmp/tk9*
 	tar xf tcl9.0b3-src.tar.gz -C ~/tmp
 	tar xf tk9.0b3-src.tar.gz -C ~/tmp
 	sh -c "cd ~/tmp/tcl9.0b3/win ; ./configure"
 	make -C ~/tmp/tcl9.0b3/win
-	cp -v \
-		~/tmp/tcl9.0b3/win/libtommath.dll \
-		~/tmp/tcl9.0b3/win/tcl90.dll \
-		embed_$(shell go env GOOS)_$(shell go env GOARCH)/
+	cp -v ~/tmp/tcl9.0b3/win/libtommath.dll ~/tmp/tcl9.0b3/win/tcl90.dll .
 	sh -c "cd ~/tmp/tk9.0b3/win ; ./configure --with-tcl=$$HOME/tmp/tcl9.0b3/win"
 	make -C ~/tmp/tk9.0b3/win
-	cp -v \
-		~/tmp/tk9.0b3/win/tcl9tk90.dll \
-		embed_$(shell go env GOOS)_$(shell go env GOARCH)/
+	cp -v ~/tmp/tk9.0b3/win/tcl9tk90.dll .
+	rm -rf embed_windows/
+	mkdir embed_windows
+	cp ../libtk9.0/library/library.zip embed_windows/
+	rm -rf mkdir embed_windows_$(GOARCH)
+	mkdir embed_windows_$(GOARCH)
+	rm -f embed_windows_$(GOARCH)/dll.zip
+	zip embed_windows_$(GOARCH)/dll.zip *.dll
+	rm -f *.dll
