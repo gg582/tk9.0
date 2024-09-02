@@ -145,7 +145,7 @@ image create photo img -file _examples/gopher.png
 label .l -image img
 ttk::button .b -text Exit -command { destroy . }
 pack .l .b -padx 1m -pady 2m -ipadx 1m -ipady 1m
-configure . -padx 4m -pady 3m
+. configure -padx 4m -pady 3m
 tkwait window .
 		`)
 	trc("---- WAIT err=%v\n%s\n---", err, s)
