@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"unsafe"
 
 	"github.com/evilsocket/islazy/zip"
@@ -18,19 +19,30 @@ import (
 	"modernc.org/memory"
 )
 
+const (
+	cachePath       = "tk9.0b3"
+	tcl_eval_direct = 0x40000 // tcl9.0b3/generic/tcl.h:978
+	tcl_ok          = 0       // tcl9.0b3/generic/tcl.h:522
+	tcl_error       = 1       // tcl9.0b3/generic/tcl.h:523
+
+)
+
 var (
 	//go:embed embed_windows/tk_library.zip
 	tkLibrary []byte
 
 	// No mutex, the package must be used by a single goroutine only.
-	allocator        memory.Allocator
-	evalExProc       *windows.Proc
-	getObjResultProc *windows.Proc
-	getStringProc    *windows.Proc
-	newStringObjProc *windows.Proc
-	setObjResultProc *windows.Proc
-	tclDll           *windows.DLL
-	tkDll            *windows.DLL
+	allocator memory.Allocator
+
+	createCommandProc *windows.Proc
+	evalExProc        *windows.Proc
+	getObjResultProc  *windows.Proc
+	getStringProc     *windows.Proc
+	newStringObjProc  *windows.Proc
+	runCmdProxy       = windows.NewCallbackCDecl(eventDispatcher)
+	setObjResultProc  *windows.Proc
+	tclDll            *windows.DLL
+	tkDll             *windows.DLL
 )
 
 func init() {
@@ -44,80 +56,20 @@ func init() {
 		return
 	}
 
-	var wd string
-	if wd, Error = os.Getwd(); Error != nil {
+	if init1(cacheDir); Error != nil {
 		return
 	}
 
-	func() {
-		defer func() {
-			Error = errors.Join(Error, os.Chdir(wd))
-		}()
+	var nm uintptr
+	if nm, Error = cString("eventDispatcher"); Error != nil {
+		return
+	}
 
-		if Error = os.Chdir(cacheDir); Error != nil {
-			return
-		}
-
-		if tclDll, Error = windows.LoadDLL("tcl90.dll"); Error != nil {
-			return
-		}
-
-		if tkDll, Error = windows.LoadDLL("tcl9tk90.dll"); Error != nil {
-			return
-		}
-
-		var tclCreateInterp, tclInit, tkInit *windows.Proc
-		if tclCreateInterp, Error = tclDll.FindProc("Tcl_CreateInterp"); Error != nil {
-			return
-		}
-
-		if tclInit, Error = tclDll.FindProc("Tcl_Init"); Error != nil {
-			return
-		}
-
-		if evalExProc, Error = tclDll.FindProc("Tcl_EvalEx"); Error != nil {
-			return
-		}
-
-		if setObjResultProc, Error = tclDll.FindProc("Tcl_SetObjResult"); Error != nil {
-			return
-		}
-
-		if getObjResultProc, Error = tclDll.FindProc("Tcl_GetObjResult"); Error != nil {
-			return
-		}
-
-		if getStringProc, Error = tclDll.FindProc("Tcl_GetString"); Error != nil {
-			return
-		}
-
-		if newStringObjProc, Error = tclDll.FindProc("Tcl_NewStringObj"); Error != nil {
-			return
-		}
-
-		if tkInit, Error = tkDll.FindProc("Tk_Init"); Error != nil {
-			return
-		}
-
-		if interp, _, _ = tclCreateInterp.Call(); interp == 0 {
-			Error = fmt.Errorf("failed to create a Tcl interpreter")
-			return
-		}
-
-		if r, _, _ := tclInit.Call(interp); r != tcl_ok {
-			Error = fmt.Errorf("failed to initialize the Tcl interpreter")
-			return
-		}
-
-		if _, Error := eval("zipfs mount tk_library.zip /lib/tk"); Error != nil {
-			return
-		}
-
-		if r, _, _ := tkInit.Call(interp); r != tcl_ok {
-			Error = fmt.Errorf("failed to initialize Tk")
-			return
-		}
-	}()
+	cmd, _, _ := createCommandProc.Call(interp, nm, runCmdProxy, 654321, 0) // clientData = 654321, not used.
+	if cmd == 0 {
+		Error = fmt.Errorf("registering event dispatcher proxy failed: %v", getObjResultProc)
+		return
+	}
 
 	s, err := eval(`
 image create photo img -file _examples/gopher.png
@@ -125,6 +77,7 @@ label .l -image img
 ttk::button .b -text Exit -command { destroy . }
 pack .l .b -padx 1m -pady 2m -ipadx 1m -ipady 1m
 . configure -padx 4m -pady 3m
+wm attributes . -topmost true
 tkwait window .`,
 	)
 	trc("s=%s, err=%v", s, err)
@@ -145,6 +98,85 @@ tkwait window .`,
 	// }
 }
 
+func init1(cacheDir string) {
+	var wd string
+	if wd, Error = os.Getwd(); Error != nil {
+		return
+	}
+
+	defer func() {
+		Error = errors.Join(Error, os.Chdir(wd))
+	}()
+
+	if Error = os.Chdir(cacheDir); Error != nil {
+		return
+	}
+
+	if tclDll, Error = windows.LoadDLL("tcl90.dll"); Error != nil {
+		return
+	}
+
+	if tkDll, Error = windows.LoadDLL("tcl9tk90.dll"); Error != nil {
+		return
+	}
+
+	var tclCreateInterp, tclInit, tkInit *windows.Proc
+	if tclCreateInterp, Error = tclDll.FindProc("Tcl_CreateInterp"); Error != nil {
+		return
+	}
+
+	if tclInit, Error = tclDll.FindProc("Tcl_Init"); Error != nil {
+		return
+	}
+
+	if createCommandProc, Error = tclDll.FindProc("Tcl_CreateCommand"); Error != nil {
+		return
+	}
+
+	if evalExProc, Error = tclDll.FindProc("Tcl_EvalEx"); Error != nil {
+		return
+	}
+
+	if setObjResultProc, Error = tclDll.FindProc("Tcl_SetObjResult"); Error != nil {
+		return
+	}
+
+	if getObjResultProc, Error = tclDll.FindProc("Tcl_GetObjResult"); Error != nil {
+		return
+	}
+
+	if getStringProc, Error = tclDll.FindProc("Tcl_GetString"); Error != nil {
+		return
+	}
+
+	if newStringObjProc, Error = tclDll.FindProc("Tcl_NewStringObj"); Error != nil {
+		return
+	}
+
+	if tkInit, Error = tkDll.FindProc("Tk_Init"); Error != nil {
+		return
+	}
+
+	if interp, _, _ = tclCreateInterp.Call(); interp == 0 {
+		Error = fmt.Errorf("failed to create a Tcl interpreter")
+		return
+	}
+
+	if r, _, _ := tclInit.Call(interp); r != tcl_ok {
+		Error = fmt.Errorf("failed to initialize the Tcl interpreter")
+		return
+	}
+
+	if _, Error := eval("zipfs mount tk_library.zip /lib/tk"); Error != nil {
+		return
+	}
+
+	if r, _, _ := tkInit.Call(interp); r != tcl_ok {
+		Error = fmt.Errorf("failed to initialize Tk")
+		return
+	}
+}
+
 func getCacheDir() (r string, err error) {
 	defer func() { trc("168:->(r=%s err=%v)", r, err) }()
 	if r, err = os.UserCacheDir(); err != nil {
@@ -152,7 +184,7 @@ func getCacheDir() (r string, err error) {
 	}
 
 	r0 := filepath.Join(r, "modernc.org")
-	r = filepath.Join(r0, "tk9.0")
+	r = filepath.Join(r0, cachePath)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
 		return r, nil
@@ -277,3 +309,31 @@ func setResult(s string) (err error) {
 //TODO
 //TODO 	return libtcl.TCL_OK
 //TODO }
+
+func goString(p uintptr) string {
+	if p == 0 {
+		return ""
+	}
+
+	var n uintptr
+	for p := p; *(*byte)(unsafe.Pointer(p + n)) != 0; n++ {
+	}
+	return unsafe.String((*byte)(unsafe.Pointer(p)), n)
+}
+
+func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
+	if argc != 2 {
+		setResult(fmt.Sprintf("eventDispatcher internal error: argc=%v", argc))
+		return tcl_error
+	}
+
+	arg1 := goString(*(*uintptr)(unsafe.Pointer(argv + unsafe.Sizeof(uintptr(0)))))
+	id, err := strconv.Atoi(arg1)
+	if err != nil {
+		setResult(fmt.Sprintf("eventDispatcher internal error: argv[1]=%q, err=%v", arg1, err))
+		return tcl_error
+	}
+
+	setResult(fmt.Sprintf("clientData=%v arg1=%q id=%v", clientData, arg1, id))
+	return tcl_ok
+}

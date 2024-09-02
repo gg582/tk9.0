@@ -19,12 +19,6 @@ import (
 	"time"
 )
 
-const (
-	tcl_eval_direct = 0x40000 // tcl9.0b3/generic/tcl.h:978
-	tcl_ok          = 0       // tcl9.0b3/generic/tcl.h:522
-
-)
-
 // CollectErrors selects the behaviour on errors for certain functions that do
 // not return error.
 var CollectErrors bool
