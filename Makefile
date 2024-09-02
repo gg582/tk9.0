@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-.PHONY:	all clean edit editor test work w65 dlls
+.PHONY:	all clean edit editor test work w65 dlls build_all_targets
 
 TAR = tcl9.0b3-src.tar.gz
 URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
@@ -11,13 +11,31 @@ URL2 = http://prdownloads.sourceforge.net/tcl/$(TAR2)
 GOOS = $(shell go env GOOS)
 GOARCH = $(shell go env GOARCH)
 
+build_all_targets:
+	GOOS=darwin GOARCH=arm64 go build
+	GOOS=darwin GOARCH=arm64 go test -o /dev/null -c
+	GOOS=linux GOARCH=386 go build
+	GOOS=linux GOARCH=386 go test -o /dev/null -c
+	GOOS=linux GOARCH=amd64 go build
+	GOOS=linux GOARCH=amd64 go test -o /dev/null -c
+	GOOS=linux GOARCH=arm go build
+	GOOS=linux GOARCH=arm go test -o /dev/null -c
+	GOOS=linux GOARCH=arm64 go build
+	GOOS=linux GOARCH=arm64 go test -o /dev/null -c
+	GOOS=linux GOARCH=loong64 go build
+	GOOS=linux GOARCH=loong64 go test -o /dev/null -c
+	GOOS=linux GOARCH=ppc64le go build
+	GOOS=linux GOARCH=ppc64le go test -o /dev/null -c
+	GOOS=linux GOARCH=riscv64 go build
+	GOOS=linux GOARCH=riscv64 go test -o /dev/null -c
+	GOOS=linux GOARCH=s390x go build
+	GOOS=linux GOARCH=s390x go test -o /dev/null -c
+	GOOS=windows GOARCH=amd64 go build
+	GOOS=windows GOARCH=amd64 go test -o /dev/null -c
+
 all: editor
 	golint 2>&1
 	staticcheck 2>&1
-
-build_all_targets:
-	./build_all_targets.sh
-	echo done
 
 clean:
 	rm -f log-* cpu.test mem.test *.out go.work*
@@ -78,7 +96,11 @@ dlls: download
 	cp -v ~/tmp/tk9.0b3/win/tcl9tk90.dll .
 	rm -rf embed_windows/
 	mkdir embed_windows
-	cp ../libtk9.0/library/library.zip embed_windows/
+	cp ../libtk9.0/library/library.zip .
+	unzip library.zip
+	rm library.zip
+	mv library/ tk_library/
+	zip -r embed_windows/tk_library.zip tk_library/
 	rm -rf mkdir embed_windows_$(GOARCH)
 	mkdir embed_windows_$(GOARCH)
 	rm -f embed_windows_$(GOARCH)/dll.zip

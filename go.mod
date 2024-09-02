@@ -11,6 +11,7 @@ require (
 	modernc.org/fileutil v1.3.0
 	modernc.org/libtcl9.0 v0.12.0
 	modernc.org/libtk9.0 v0.10.1
+	modernc.org/memory v1.8.0
 	modernc.org/ngrab v0.1.0
 	modernc.org/tcl9.0 v0.12.0
 )
@@ -35,5 +36,4 @@ require (
 	modernc.org/libxcb v0.9.0 // indirect
 	modernc.org/libz v0.16.3 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
-	modernc.org/memory v1.8.0 // indirect
 )

@@ -5,34 +5,25 @@
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
-	"context"
 	_ "embed"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	// "io/fs"
-	"os"
-	"os/exec"
 	// "path/filepath"
 
 	//TODO "path/filepath"
 	//TODO "strconv"
 	"strings"
-	"sync"
 	"sync/atomic"
 	"time"
 )
 
 const (
-	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
-
 	tcl_eval_direct = 0x40000 // tcl9.0b3/generic/tcl.h:978
 	tcl_ok          = 0       // tcl9.0b3/generic/tcl.h:522
 
 )
-
-// App is the main/root application window.
-var App *Window
 
 // CollectErrors selects the behaviour on errors for certain functions that do
 // not return error.
@@ -44,8 +35,6 @@ var Error error
 var (
 	_ Widget = (*Window)(nil)
 
-	//go:embed embed/gotk.png
-	icon []byte
 	//go:embed embed_windows_amd64/dll.zip
 	dlls []byte
 
@@ -53,7 +42,6 @@ var (
 	finished    atomic.Int32
 	handlers    = map[int32]*eventHandler{}
 	id          atomic.Int32
-	initOnce    sync.Once
 	interp      uintptr
 	tclDir      string
 	tkDir       string
@@ -159,17 +147,6 @@ func (w *Window) newChild(nm string, options ...Opt) (rw *Window) {
 		rw.Configure(tvs[len(tvs)-1])
 	}
 	return rw
-}
-
-func eval(code string) (r string, err error) {
-	panic(":165:")
-	if dmesgs {
-		defer func() {
-			dmesg("code=%s -> r=%v err=%v", code, r, err)
-		}()
-	}
-	panic(todo(""))
-	//TODO return interp.Eval(code, tcl.EvalGlobal)
 }
 
 func evalErr(code string) (r string) {
@@ -387,39 +364,6 @@ func tclSafeStrings(s ...string) string {
 	}
 	return strings.Join(a, " ")
 }
-
-//TODO func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
-//TODO 	id, err := strconv.Atoi(args[1])
-//TODO 	if err != nil {
-//TODO 		panic(todo("event dispatcher internal error: %q", args))
-//TODO 	}
-//TODO
-//TODO 	h := handlers[int32(id)]
-//TODO 	r, err := h.handler(h.w, h.data)
-//TODO 	interp.SetResult(tclSafeString(fmt.Sprint(r)))
-//TODO 	if err != nil {
-//TODO 		return libtcl.TCL_ERROR
-//TODO 	}
-//TODO
-//TODO 	return libtcl.TCL_OK
-//TODO }
-
-//TODO func stdlib() (dir string, err error) {
-//TODO 	if dir, err = os.MkdirTemp("", "tk-library-"); err != nil {
-//TODO 		return "", err
-//TODO 	}
-//TODO
-//TODO 	fn := filepath.Join(dir, "library.zip")
-//TODO 	if err = os.WriteFile(fn, []byte(tklib.Zip), 0600); err != nil {
-//TODO 		return
-//TODO 	}
-//TODO
-//TODO 	if _, err = zip.Unzip(fn, dir); err != nil {
-//TODO 		return
-//TODO 	}
-//TODO
-//TODO 	return filepath.Join(dir, "library"), nil
-//TODO }
 
 // Finalize releases all resources held, if any. This may include temporary
 // files. Finalize is intended to be called on process shutdown only.
@@ -2412,100 +2356,4 @@ func (w *Window) Raise(aboveThis Widget) {
 		b = aboveThis.path()
 	}
 	evalErr(fmt.Sprintf("raise %s %s", w, b))
-}
-
-// Graph — use gnuplot to draw on a canvas. Graph returns 'w'.
-//
-// The 'script' argument is passed to a gnuplot executable, which must be
-// installed on the machine.  See the [gnuplot site] for documentation about
-// producing graphs. The script must not use the 'set term <device>' command.
-//
-// [gnuplot site]: http://www.gnuplot.info/
-func (w *CanvasWidget) Graph(script string) *CanvasWidget {
-	script = fmt.Sprintf("set terminal tkcanvas size %s, %s\n%s", w.Width(), w.Height(), script)
-	out, err := gnuplot(script)
-	if err != nil {
-		fail(fmt.Errorf("plot: executing script: %s", err))
-		return w
-	}
-
-	evalErr(fmt.Sprintf("%s\ngnuplot %s", out, w))
-	return w
-}
-
-func gnuplot(script string) (out []byte, err error) {
-	f, err := os.CreateTemp("", "tk8.6-")
-	if err != nil {
-		return nil, err
-	}
-
-	defer os.Remove(f.Name())
-
-	if err := os.WriteFile(f.Name(), []byte(script), 0660); err != nil {
-		return nil, err
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), gnuplotTimeout)
-
-	defer cancel()
-
-	return exec.CommandContext(ctx, "gnuplot", f.Name()).Output()
-}
-
-// Menu — Create and manipulate 'menu' widgets and menubars
-//
-// # Description
-//
-// Add a new command entry to the bottom of the menu.
-//
-// Additional information might be available at the [Tcl/Tk menu] page.
-//
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
-func (w *MenuWidget) AddCommand(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add command %s", w, winCollect(w.Window, options...)))
-}
-
-// Menu — Create and manipulate 'menu' widgets and menubars
-//
-// # Description
-//
-// Add a new cascade entry to the end of the menu.
-//
-// Additional information might be available at the [Tcl/Tk menu] page.
-//
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
-func (w *MenuWidget) AddCascade(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add cascade %s", w, winCollect(w.Window, options...)))
-}
-
-// Menu — Create and manipulate 'menu' widgets and menubars
-//
-// # Description
-//
-// Add a new separator entry to the bottom of the menu.
-//
-// Additional information might be available at the [Tcl/Tk menu] page.
-//
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
-func (w *MenuWidget) AddSeparator(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add separator %s", w, winCollect(w.Window, options...)))
-}
-
-// Menu — Create and manipulate 'menu' widgets and menubars
-//
-// # Description
-//
-// Invoke the action of the menu entry. See the sections on the individual
-// entries above for details on what happens. If the menu entry is disabled
-// then nothing happens. If the entry has a command associated with it then the
-// result of that command is returned as the result of the invoke widget
-// command. Otherwise the result is an empty string. Note: invoking a menu
-// entry does not automatically unpost the menu; the default bindings normally
-// take care of this before invoking the invoke widget command.
-//
-// Additional information might be available at the [Tcl/Tk menu] page.
-//
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
-func (w *MenuWidget) Invoke(index uint) {
-	evalErr(fmt.Sprintf("%s invoke %d", w, index))
 }
