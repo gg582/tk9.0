@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build !windows
+
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (

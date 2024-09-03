@@ -1,15 +1,17 @@
 module modernc.org/tk9.0
 
-go 1.20
+go 1.22
 
 require (
 	github.com/adrg/xdg v0.5.0
 	github.com/evilsocket/islazy v1.11.0
 	github.com/expr-lang/expr v1.16.9
-	golang.org/x/net v0.27.0
+	golang.org/x/net v0.28.0
+	golang.org/x/sys v0.24.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/libtcl9.0 v0.12.0
 	modernc.org/libtk9.0 v0.10.1
+	modernc.org/memory v1.8.0
 	modernc.org/ngrab v0.1.0
 	modernc.org/tcl9.0 v0.12.0
 )
@@ -20,7 +22,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	golang.org/x/sys v0.22.0 // indirect
 	modernc.org/libX11 v0.9.0 // indirect
 	modernc.org/libXau v0.8.0 // indirect
 	modernc.org/libXdmcp v0.10.0 // indirect
@@ -35,5 +36,4 @@ require (
 	modernc.org/libxcb v0.9.0 // indirect
 	modernc.org/libz v0.16.3 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
-	modernc.org/memory v1.8.0 // indirect
 )
