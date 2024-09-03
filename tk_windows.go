@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strconv"
+	"strings"
 	"unsafe"
 
 	"github.com/evilsocket/islazy/zip"
@@ -81,7 +82,11 @@ func init() {
 	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
 	App.Center()
 	App.IconPhoto(NewPhoto(Data(icon)))
-	App.WmTitle(filepath.Base(os.Args[0]))
+	base := filepath.Base(os.Args[0])
+	if strings.HasSuffix(base, ".exe") {
+		base = base[:len(base)-len(".exe")]
+	}
+	App.WmTitle(base)
 }
 
 func init1(cacheDir string) {
