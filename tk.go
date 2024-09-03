@@ -16,7 +16,6 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
-	"sync/atomic"
 	"time"
 
 	"github.com/evilsocket/islazy/zip"
@@ -26,60 +25,10 @@ import (
 	tcl "modernc.org/tcl9.0"
 )
 
-// CollectErrors selects the behaviour on errors for certain functions that do
-// not return error.
-var CollectErrors bool
-
-// Error records errors when [CollectErrors] is true.
-var Error error
-
 var (
-	_ Widget = (*Window)(nil)
-
-	exitHandler Opt
-	finished    atomic.Int32
-	handlers    = map[int32]*eventHandler{}
-	id          atomic.Int32
-	interp      *tcl.Interp
-	tclDir      string
-	tkDir       string
-
-	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
-	//
-	// The following characters are dissallowed or have special meanings in Tcl and
-	// so are escaped:
-	//
-	//	&;`'"|*?~<>^()[]{}$\
-	badChars = [...]bool{
-		' ':  true,
-		'"':  true,
-		'$':  true,
-		'&':  true,
-		'(':  true,
-		')':  true,
-		'*':  true,
-		';':  true,
-		'<':  true,
-		'>':  true,
-		'?':  true,
-		'[':  true,
-		'\'': true,
-		'\\': true,
-		'\n': true,
-		'\r': true,
-		'\t': true,
-		']':  true,
-		'^':  true,
-		'`':  true,
-		'{':  true,
-		'|':  true,
-		'}':  true,
-		'~':  true,
-	}
-
-	//TODO remove the associated tcl var on window destroy event both from the
-	//interp and this map.
-	textVariables = map[*Window]string{} // : tclName
+	interp *tcl.Interp
+	tclDir string
+	tkDir  string
 )
 
 func init() {
@@ -122,6 +71,31 @@ func init() {
 		App.IconPhoto(NewPhoto(Data(icon)))
 		App.WmTitle(filepath.Base(os.Args[0]))
 	}
+}
+
+func eval(code string) (r string, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("code=%s -> r=%v err=%v", code, r, err)
+		}()
+	}
+	return interp.Eval(code, tcl.EvalDirect)
+}
+
+func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
+	id, err := strconv.Atoi(args[1])
+	if err != nil {
+		panic(todo("event dispatcher internal error: %q", args))
+	}
+
+	h := handlers[int32(id)]
+	r, err := h.handler(h.w, h.data)
+	interp.SetResult(tclSafeString(fmt.Sprint(r)))
+	if err != nil {
+		return libtcl.TCL_ERROR
+	}
+
+	return libtcl.TCL_OK
 }
 
 // Window represents a Tk window/widget. It implements common widget methods.
@@ -186,15 +160,6 @@ func (w *Window) newChild(nm string, options ...Opt) (rw *Window) {
 		rw.Configure(tvs[len(tvs)-1])
 	}
 	return rw
-}
-
-func eval(code string) (r string, err error) {
-	if dmesgs {
-		defer func() {
-			dmesg("code=%s -> r=%v err=%v", code, r, err)
-		}()
-	}
-	return interp.Eval(code, tcl.EvalDirect)
 }
 
 func evalErr(code string) (r string) {
@@ -413,22 +378,6 @@ func tclSafeStrings(s ...string) string {
 	return strings.Join(a, " ")
 }
 
-func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
-	id, err := strconv.Atoi(args[1])
-	if err != nil {
-		panic(todo("event dispatcher internal error: %q", args))
-	}
-
-	h := handlers[int32(id)]
-	r, err := h.handler(h.w, h.data)
-	interp.SetResult(tclSafeString(fmt.Sprint(r)))
-	if err != nil {
-		return libtcl.TCL_ERROR
-	}
-
-	return libtcl.TCL_OK
-}
-
 func stdlib() (dir string, err error) {
 	if dir, err = os.MkdirTemp("", "tk-library-"); err != nil {
 		return "", err
@@ -459,7 +408,7 @@ func Finalize() (err error) {
 		err = interp.Close()
 		interp = nil
 	}
-	for _, v := range []string{tclDir, tkDir} {
+	for _, v := range append([]string{tclDir, tkDir}, cleanupDirs...) {
 		err = errors.Join(err, os.RemoveAll(v))
 	}
 	return err
@@ -837,22 +786,6 @@ func Pack(options ...Opt) {
 	evalErr(fmt.Sprintf("pack %s", collect(options...)))
 }
 
-// Wait — Wait for a window to be destroyed
-//
-// # Description
-//
-// Wait command waits for 'w' to be destroyed. This is typically used to wait
-// for a user to finish interacting with a dialog box before using the result
-// of that interaction.
-//
-// While the Wwait command is waiting it processes events in the normal
-// fashion, so the application will continue to respond to user interactions.
-// If an event handler invokes Wait again, the nested call to Wait must
-// complete before the outer call can complete.
-func (w *Window) Wait() {
-	evalErr(fmt.Sprintf("tkwait window %s", w))
-}
-
 // WaitVisibility — Wait for a window to change visibility
 //
 // # Description
@@ -867,7 +800,7 @@ func (w *Window) Wait() {
 // If an event handler invokes Wait again, the nested call to Wait must
 // complete before the outer call can complete.
 func (w *Window) WaitVisibility() {
-	evalErr(fmt.Sprintf("tkwait visibility %s", w))
+	evalErr(fmt.Sprintf(`tkwait visibility %s`, w))
 }
 
 // IconPhoto — change window icon

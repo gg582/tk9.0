@@ -17,7 +17,7 @@ import (
 	// TODO 	"strconv"
 	"strings"
 	// TODO 	"sync"
-	// TODO 	"sync/atomic"
+	"sync/atomic"
 	"time"
 	// TODO
 	// TODO 	"github.com/evilsocket/islazy/zip"
@@ -34,67 +34,64 @@ const (
 // App is the main/root application window.
 var App *Window
 
-// TODO // CollectErrors selects the behaviour on errors for certain functions that do
-// TODO // not return error.
-// TODO var CollectErrors bool
-// TODO
-// TODO // Error records errors when [CollectErrors] is true.
-// TODO var Error error
-// TODO
+// CollectErrors selects the behaviour on errors for certain functions that do
+// not return error.
+var CollectErrors bool
+
+// Error records errors when [CollectErrors] is true.
+var Error error
+
 var (
-	//TODO 	_ Widget = (*Window)(nil)
-	//TODO
+	_ Widget = (*Window)(nil)
+
 	//go:embed embed/gotk.png
 	icon []byte
 
 	cleanupDirs []string
 
-	// TODO 	exitHandler Opt
-	// TODO 	finished    atomic.Int32
-	// TODO 	handlers    = map[int32]*eventHandler{}
-	// TODO 	id          atomic.Int32
+	exitHandler Opt
+	finished    atomic.Int32
+	handlers    = map[int32]*eventHandler{}
+	id          atomic.Int32
 	// TODO 	interp      *tcl.Interp
 	isBuilder = os.Getenv("MODERNC_BUILDER") != ""
 
-// TODO 	tclDir      string
-// TODO 	tkDir       string
-// TODO
-// TODO 	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
-// TODO 	//
-// TODO 	// The following characters are dissallowed or have special meanings in Tcl and
-// TODO 	// so are escaped:
-// TODO 	//
-// TODO 	//	&;`'"|*?~<>^()[]{}$\
-// TODO 	badChars = [...]bool{
-// TODO 		' ':  true,
-// TODO 		'"':  true,
-// TODO 		'$':  true,
-// TODO 		'&':  true,
-// TODO 		'(':  true,
-// TODO 		')':  true,
-// TODO 		'*':  true,
-// TODO 		';':  true,
-// TODO 		'<':  true,
-// TODO 		'>':  true,
-// TODO 		'?':  true,
-// TODO 		'[':  true,
-// TODO 		'\”: true,
-// TODO 		'\\': true,
-// TODO 		'\n': true,
-// TODO 		'\r': true,
-// TODO 		'\t': true,
-// TODO 		']':  true,
-// TODO 		'^':  true,
-// TODO 		'`':  true,
-// TODO 		'{':  true,
-// TODO 		'|':  true,
-// TODO 		'}':  true,
-// TODO 		'~':  true,
-// TODO 	}
-// TODO
-// TODO 	//TODO remove the associated tcl var on window destroy event both from the
-// TODO 	//interp and this map.
-// TODO 	textVariables = map[*Window]string{} // : tclName
+	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
+	//
+	// The following characters are dissallowed or have special meanings in Tcl and
+	// so are escaped:
+	//
+	//	&;`'"|*?~<>^()[]{}$\
+	badChars = [...]bool{
+		' ':  true,
+		'"':  true,
+		'$':  true,
+		'&':  true,
+		'(':  true,
+		')':  true,
+		'*':  true,
+		';':  true,
+		'<':  true,
+		'>':  true,
+		'?':  true,
+		'[':  true,
+		'\'': true,
+		'\\': true,
+		'\n': true,
+		'\r': true,
+		'\t': true,
+		']':  true,
+		'^':  true,
+		'`':  true,
+		'{':  true,
+		'|':  true,
+		'}':  true,
+		'~':  true,
+	}
+
+	//TODO remove the associated tcl var on window destroy event both from the
+	//interp and this map.
+	textVariables = map[*Window]string{} // : tclName
 )
 
 //TODO
@@ -439,25 +436,6 @@ func tclSafeString(s string) string {
 //TODO 	}
 //TODO
 //TODO 	return filepath.Join(dir, "library"), nil
-//TODO }
-//TODO
-//TODO // Finalize releases all resources held, if any. This may include temporary
-//TODO // files. Finalize is intended to be called on process shutdown only.
-//TODO func Finalize() (err error) {
-//TODO 	if finished.Swap(1) != 0 {
-//TODO 		return
-//TODO 	}
-//TODO
-//TODO 	defer runtime.UnlockOSThread()
-//TODO
-//TODO 	if interp != nil {
-//TODO 		err = interp.Close()
-//TODO 		interp = nil
-//TODO 	}
-//TODO 	for _, v := range []string{tclDir, tkDir} {
-//TODO 		err = errors.Join(err, os.RemoveAll(v))
-//TODO 	}
-//TODO 	return err
 //TODO }
 //TODO
 //TODO // bind — Arrange for X events to invoke functions
@@ -831,23 +809,23 @@ func tclSafeString(s string) string {
 //TODO func Pack(options ...Opt) {
 //TODO 	evalErr(fmt.Sprintf("pack %s", collect(options...)))
 //TODO }
-//TODO
-//TODO // Wait — Wait for a window to be destroyed
-//TODO //
-//TODO // # Description
-//TODO //
-//TODO // Wait command waits for 'w' to be destroyed. This is typically used to wait
-//TODO // for a user to finish interacting with a dialog box before using the result
-//TODO // of that interaction.
-//TODO //
-//TODO // While the Wwait command is waiting it processes events in the normal
-//TODO // fashion, so the application will continue to respond to user interactions.
-//TODO // If an event handler invokes Wait again, the nested call to Wait must
-//TODO // complete before the outer call can complete.
-//TODO func (w *Window) Wait() {
-//TODO 	evalErr(fmt.Sprintf("tkwait window %s", w))
-//TODO }
-//TODO
+
+// Wait — Wait for a window to be destroyed
+//
+// # Description
+//
+// Wait command waits for 'w' to be destroyed. This is typically used to wait
+// for a user to finish interacting with a dialog box before using the result
+// of that interaction.
+//
+// While the Wwait command is waiting it processes events in the normal
+// fashion, so the application will continue to respond to user interactions.
+// If an event handler invokes Wait again, the nested call to Wait must
+// complete before the outer call can complete.
+func (w *Window) Wait() {
+	evalErr(fmt.Sprintf("tkwait window %s", w))
+}
+
 //TODO // WaitVisibility — Wait for a window to change visibility
 //TODO //
 //TODO // # Description

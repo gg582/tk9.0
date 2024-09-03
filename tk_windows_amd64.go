@@ -10,73 +10,20 @@ import (
 	"errors"
 	"fmt"
 	// "io/fs"
+	"os"
 	// "path/filepath"
-
 	//TODO "path/filepath"
+	"runtime"
 	//TODO "strconv"
 	"strings"
-	"sync/atomic"
 	"time"
 )
 
-// CollectErrors selects the behaviour on errors for certain functions that do
-// not return error.
-var CollectErrors bool
-
-// Error records errors when [CollectErrors] is true.
-var Error error
-
 var (
-	_ Widget = (*Window)(nil)
-
 	//go:embed embed_windows_amd64/dll.zip
 	dlls []byte
 
-	exitHandler Opt
-	finished    atomic.Int32
-	handlers    = map[int32]*eventHandler{}
-	id          atomic.Int32
-	interp      uintptr
-	tclDir      string
-	tkDir       string
-
-	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
-	//
-	// The following characters are dissallowed or have special meanings in Tcl and
-	// so are escaped:
-	//
-	//	&;`'"|*?~<>^()[]{}$\
-	badChars = [...]bool{
-		' ':  true,
-		'"':  true,
-		'$':  true,
-		'&':  true,
-		'(':  true,
-		')':  true,
-		'*':  true,
-		';':  true,
-		'<':  true,
-		'>':  true,
-		'?':  true,
-		'[':  true,
-		'\'': true,
-		'\\': true,
-		'\n': true,
-		'\r': true,
-		'\t': true,
-		']':  true,
-		'^':  true,
-		'`':  true,
-		'{':  true,
-		'|':  true,
-		'}':  true,
-		'~':  true,
-	}
-
-	//TODO remove the associated tcl var on window destroy event both from the
-	//interp and this map.
-	textVariables = map[*Window]string{} // : tclName
-
+	interp uintptr
 )
 
 // Window represents a Tk window/widget. It implements common widget methods.
@@ -362,21 +309,16 @@ func tclSafeStrings(s ...string) string {
 // Finalize releases all resources held, if any. This may include temporary
 // files. Finalize is intended to be called on process shutdown only.
 func Finalize() (err error) {
-	//TODO if finished.Swap(1) != 0 {
-	//TODO 	return
-	//TODO }
+	if finished.Swap(1) != 0 {
+		return
+	}
 
-	//TODO defer runtime.UnlockOSThread()
+	defer runtime.UnlockOSThread()
 
-	//TODO if interp != nil {
-	//TODO 	err = interp.Close()
-	//TODO 	interp = nil
-	//TODO }
-	//TODO for _, v := range []string{tclDir, tkDir} {
-	//TODO 	err = errors.Join(err, os.RemoveAll(v))
-	//TODO }
-	//TODO return err
-	return nil
+	for _, v := range cleanupDirs {
+		err = errors.Join(err, os.RemoveAll(v))
+	}
+	return err
 }
 
 // bind — Arrange for X events to invoke functions
@@ -749,22 +691,6 @@ func Destroy(options ...Opt) {
 // [Tcl/Tk pack]: https://www.tcl.tk/man/tcl9.0/TkCmd/pack.htm
 func Pack(options ...Opt) {
 	evalErr(fmt.Sprintf("pack %s", collect(options...)))
-}
-
-// Wait — Wait for a window to be destroyed
-//
-// # Description
-//
-// Wait command waits for 'w' to be destroyed. This is typically used to wait
-// for a user to finish interacting with a dialog box before using the result
-// of that interaction.
-//
-// While the Wwait command is waiting it processes events in the normal
-// fashion, so the application will continue to respond to user interactions.
-// If an event handler invokes Wait again, the nested call to Wait must
-// complete before the outer call can complete.
-func (w *Window) Wait() {
-	evalErr(fmt.Sprintf("tkwait window %s", w))
 }
 
 // WaitVisibility — Wait for a window to change visibility

@@ -65,40 +65,23 @@ func init() {
 		return
 	}
 
-	cmd, _, _ := createCommandProc.Call(interp, nm, runCmdProxy, 654321, 0) // clientData = 654321, not used.
+	cmd, _, _ := createCommandProc.Call(interp, nm, runCmdProxy, 0, 0)
 	if cmd == 0 {
 		Error = fmt.Errorf("registering event dispatcher proxy failed: %v", getObjResultProc)
 		return
 	}
 
-	s, err := eval(`
-image create photo ico -file embed/gotk.png
-image create photo img -file _examples/gopher.png
-label .l -image img
-ttk::button .b -text Exit -command { destroy . }
-pack .l .b -padx 1m -pady 2m -ipadx 1m -ipady 1m
-. configure -padx 4m -pady 3m
-wm iconphoto . ico
-wm title . photo
-# wm attributes . -topmost true
-tkwait window .`,
-	)
-	trc("s=%s, err=%v", s, err)
+	CollectErrors = true
 
-	// if Error = interp.RegisterCommand("eventDispatcher", eventDispatcher, nil, nil); Error == nil {
-	// 	CollectErrors = true
+	defer func() { CollectErrors = false }()
 
-	// 	defer func() { CollectErrors = false }()
-
-	// 	panic(todo(""))
-	// 	//TODO App = &Window{}
-	// 	//TODO exitHandler = Command(func() { Destroy(App) })
-	// 	//TODO // Set some defaults.
-	// 	//TODO evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
-	// 	//TODO App.Center()
-	// 	//TODO App.IconPhoto(NewPhoto(Data(icon)))
-	// 	//TODO App.WmTitle(filepath.Base(os.Args[0]))
-	// }
+	App = &Window{}
+	exitHandler = Command(func() { Destroy(App) })
+	// Set some defaults.
+	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
+	App.Center()
+	App.IconPhoto(NewPhoto(Data(icon)))
+	App.WmTitle(filepath.Base(os.Args[0]))
 }
 
 func init1(cacheDir string) {
@@ -181,7 +164,6 @@ func init1(cacheDir string) {
 }
 
 func getCacheDir() (r string, err error) {
-	defer func() { trc("168:->(r=%s err=%v)", r, err) }()
 	if r, err = os.UserCacheDir(); err != nil {
 		return "", err
 	}
@@ -194,7 +176,6 @@ func getCacheDir() (r string, err error) {
 	}
 
 	err = os.MkdirAll(r0, 0700)
-	trc("%s -> %v", r, err)
 	tmp, err := os.MkdirTemp("", "tk9.0-")
 	if err != nil {
 		return "", err
@@ -217,11 +198,9 @@ func getCacheDir() (r string, err error) {
 	}
 
 	if err = os.Rename(tmp, r); err == nil {
-		trc("OK %s -> %s", tmp, r)
 		return r, nil
 	}
 
-	trc("NOT OK: %s %v", tmp, err)
 	cleanupDirs = append(cleanupDirs, tmp)
 	return tmp, nil
 }
@@ -239,31 +218,11 @@ func tclResult() string {
 			r++
 		}
 		if n != 0 {
-			return unsafe.String((*byte)(unsafe.Pointer(r0)), n)
+			return string(unsafe.Slice((*byte)(unsafe.Pointer(r0)), n)) // Result can be retained.
 		}
 	}
 
 	return ""
-}
-
-func eval(code string) (r string, err error) {
-	if dmesgs {
-		defer func() {
-			dmesg("code=%s -> r=%v err=%v", code, r, err)
-		}()
-	}
-	cs, err := cString(code)
-	if err != nil {
-		return "", err
-	}
-
-	defer allocator.UintptrFree(cs)
-
-	if r0, _, _ := evalExProc.Call(interp, cs, uintptr(len(code)), tcl_eval_direct); r0 == tcl_ok {
-		return tclResult(), nil
-	}
-
-	return "", fmt.Errorf("%s", tclResult())
 }
 
 func cString(s string) (r uintptr, err error) {
@@ -297,23 +256,7 @@ func setResult(s string) (err error) {
 	return nil
 }
 
-//TODO func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
-//TODO 	id, err := strconv.Atoi(args[1])
-//TODO 	if err != nil {
-//TODO 		panic(todo("event dispatcher internal error: %q", args))
-//TODO 	}
-//TODO
-//TODO 	h := handlers[int32(id)]
-//TODO 	r, err := h.handler(h.w, h.data)
-//TODO 	interp.SetResult(tclSafeString(fmt.Sprint(r)))
-//TODO 	if err != nil {
-//TODO 		return libtcl.TCL_ERROR
-//TODO 	}
-//TODO
-//TODO 	return libtcl.TCL_OK
-//TODO }
-
-func goString(p uintptr) string {
+func goString(p uintptr) (r string) { // Result cannot be retained.
 	if p == 0 {
 		return ""
 	}
@@ -321,7 +264,27 @@ func goString(p uintptr) string {
 	var n uintptr
 	for p := p; *(*byte)(unsafe.Pointer(p + n)) != 0; n++ {
 	}
-	return unsafe.String((*byte)(unsafe.Pointer(p)), n)
+	return string(unsafe.Slice((*byte)(unsafe.Pointer(p)), n))
+}
+
+func eval(code string) (r string, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("code=%s -> r=%v err=%v", code, r, err)
+		}()
+	}
+	cs, err := cString(code)
+	if err != nil {
+		return "", err
+	}
+
+	defer allocator.UintptrFree(cs)
+
+	if r0, _, _ := evalExProc.Call(interp, cs, uintptr(len(code)), tcl_eval_direct); r0 == tcl_ok {
+		return tclResult(), nil
+	}
+
+	return "", fmt.Errorf("%s", tclResult())
 }
 
 func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
@@ -337,6 +300,17 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 		return tcl_error
 	}
 
-	setResult(fmt.Sprintf("clientData=%v arg1=%q id=%v", clientData, arg1, id))
+	h := handlers[int32(id)]
+	r, err := h.handler(h.w, h.data)
+	if err != nil {
+		setResult(tclSafeString(fmt.Sprint(err)))
+		return tcl_error
+	}
+
+	if err = setResult(tclSafeString(fmt.Sprint(r))); err != nil {
+		setResult(tclSafeString(fmt.Sprint(err)))
+		return tcl_error
+	}
+
 	return tcl_ok
 }
