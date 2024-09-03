@@ -30,6 +30,8 @@ build_all_targets:
 	GOOS=linux GOARCH=riscv64 go test -o /dev/null -c
 	GOOS=linux GOARCH=s390x go build
 	GOOS=linux GOARCH=s390x go test -o /dev/null -c
+	GOOS=windows GOARCH=386 go build
+	GOOS=windows GOARCH=386 go test -o /dev/null -c
 	GOOS=windows GOARCH=amd64 go build
 	GOOS=windows GOARCH=amd64 go test -o /dev/null -c
 
