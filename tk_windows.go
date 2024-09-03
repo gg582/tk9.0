@@ -319,3 +319,18 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 
 	return tcl_ok
 }
+
+// Finalize releases all resources held, if any. This may include temporary
+// files. Finalize is intended to be called on process shutdown only.
+func Finalize() (err error) {
+	if finished.Swap(1) != 0 {
+		return
+	}
+
+	defer runtime.UnlockOSThread()
+
+	for _, v := range cleanupDirs {
+		err = errors.Join(err, os.RemoveAll(v))
+	}
+	return err
+}
