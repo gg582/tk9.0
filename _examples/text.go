@@ -15,7 +15,7 @@ func main() {
 	var t *TextWidget
 	var scroll *TScrollbarWidget
 	scroll = TScrollbar()
-	t = Text(Fnt(family), Wrap("word"), Padx("2m"), Pady("2m"), Yscrollcommand(func() { scroll.Set(t.Yview()) }))
+	t = Text(Fnt(family+" 10"), Wrap("word"), Padx("2m"), Pady("2m"), Yscrollcommand(func() { scroll.Set(t.Yview()) }))
 	Grid(t, Sticky("news"), Pady("2m"))
 	Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
 	GridRowConfigure(App, 0, Weight(1))
@@ -23,27 +23,26 @@ func main() {
 	Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 
 	t.TagConfigure("bgstipple", Background(Black), Borderwidth(0), Bgstipple(Gray12))
-	t.TagConfigure("big", Fnt(family+" 14 bold"))
-	t.TagConfigure("bold", Fnt(family+" 12 bold italic"))
+	t.TagConfigure("big", Fnt(family+" 12 bold"))
+	t.TagConfigure("bold", Fnt(family+" 10 bold italic"))
 	t.TagConfigure("center", Justify("center"))
 	t.TagConfigure("color1", Background("#a0b7ce"))
 	t.TagConfigure("color2", Foreground(Red))
-	t.TagConfigure("fgstipple", Fgstipple(Gray50))
 	t.TagConfigure("margins", Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
 	t.TagConfigure("overstrike", Overstrike(1))
 	t.TagConfigure("raised", Relief("raised"), Borderwidth(1))
 	t.TagConfigure("right", Justify("right"))
 	t.TagConfigure("spacing", Spacing1("10p"), Spacing2("2p"), Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
-	t.TagConfigure("sub", Offset("-2p"), Fnt(family+" 10"))
+	t.TagConfigure("sub", Offset("-2p"), Fnt(family+" 8"))
 	t.TagConfigure("sunken", Relief("sunken"), Borderwidth(1))
-	t.TagConfigure("super", Offset("4p"), Fnt(family+" 10"))
+	t.TagConfigure("super", Offset("4p"), Fnt(family+" 8"))
 	t.TagConfigure("tiny", Fnt("Times 8 bold"))
 	t.TagConfigure("underline", Underline(1))
-	t.TagConfigure("veryBig", Fnt("Courier 24 bold"))
+	t.TagConfigure("veryBig", Fnt("Courier 22 bold"))
 
 	t.Insert("end", s(`Text widgets like this one allow you to display information in a
 variety of styles.  Display styles are controlled using a mechanism
-called `))
+called `))
 	t.Insert("end", "tags", "bold")
 	t.Insert("end", s(`.  Tags are just textual names that you can apply to one
 or more ranges of characters within a text widget.  You can configure
@@ -68,10 +67,8 @@ available display styles are:
 	t.Insert("end", ".\n")
 
 	t.Insert("end", "\n3.  Stippling.", "big")
-	t.Insert("end", "  You can cause either the ")
+	t.Insert("end", "  You can cause the ")
 	t.Insert("end", "background", "bgstipple")
-	t.Insert("end", " or ")
-	t.Insert("end", "foreground", "fgstipple")
 	t.Insert("end", " information to be drawn with a stipple fill instead of a solid fill.\n")
 
 	t.Insert("end", "\n4.  Underlining.", "big")

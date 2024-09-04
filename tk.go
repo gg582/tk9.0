@@ -12,19 +12,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	// TODO 	"path/filepath"
-	// TODO 	"runtime"
-	// TODO 	"strconv"
 	"strings"
-	// TODO 	"sync"
 	"sync/atomic"
 	"time"
-	// TODO
-	// TODO 	"github.com/evilsocket/islazy/zip"
-	// TODO 	libtcl "modernc.org/libtcl9.0"
-	// TODO 	libtk "modernc.org/libtk9.0"
-	// TODO 	tklib "modernc.org/libtk9.0/library"
-	// TODO 	tcl "modernc.org/tcl9.0"
 )
 
 const (
