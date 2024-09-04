@@ -294,7 +294,7 @@ func eval(code string) (r string, err error) {
 }
 
 func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
-	if argc != 2 {
+	if argc < 2 {
 		setResult(fmt.Sprintf("eventDispatcher internal error: argc=%v", argc))
 		return tcl_error
 	}
