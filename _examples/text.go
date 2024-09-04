@@ -13,9 +13,12 @@ import (
 
 func main() {
 	family := "Helvetica"
-	var t *TextWidget
 	var scroll *TScrollbarWidget
-	t = Text(Fnt(family+" 10"), Wrap("word"), Padx("2m"), Pady("2m"), Yscrollcommand(func(*Window, any) (any, error) { return fmt.Sprintf("%v set", scroll), nil }))
+	// text $w.text -yscrollcommand "$w.scroll set" -setgrid true -width 70 -height 32 -wrap word -font "$family 12"
+	t := Text(Fnt(family+" 10"), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"), Yscrollcommand(
+		func(*Window, any) (any, error) { return fmt.Sprintf("%v set", scroll), nil }),
+	)
+	// ttk::scrollbar $w.scroll -command "$w.text yview"
 	scroll = TScrollbar(Command(func(*Window, any) (any, error) { return fmt.Sprintf("%v yview", t), nil }))
 	Grid(t, Sticky("news"), Pady("2m"))
 	Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
