@@ -5,6 +5,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	. "modernc.org/tk9.0"
@@ -14,8 +15,8 @@ func main() {
 	family := "Helvetica"
 	var t *TextWidget
 	var scroll *TScrollbarWidget
-	scroll = TScrollbar()
-	t = Text(Fnt(family+" 10"), Wrap("word"), Padx("2m"), Pady("2m"), Yscrollcommand(func() { scroll.Set(t.Yview()) }))
+	t = Text(Fnt(family+" 10"), Wrap("word"), Padx("2m"), Pady("2m"), Yscrollcommand(func(*Window, any) (any, error) { return fmt.Sprintf("%v set", scroll), nil }))
+	scroll = TScrollbar(Command(func(*Window, any) (any, error) { return fmt.Sprintf("%v yview", t), nil }))
 	Grid(t, Sticky("news"), Pady("2m"))
 	Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
 	GridRowConfigure(App, 0, Weight(1))

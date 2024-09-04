@@ -300,6 +300,7 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 	}
 
 	arg1 := goString(*(*uintptr)(unsafe.Pointer(argv + unsafe.Sizeof(uintptr(0)))))
+	//TODO as tk_unix
 	id, err := strconv.Atoi(arg1)
 	if err != nil {
 		setResult(fmt.Sprintf("eventDispatcher internal error: argv[1]=%q, err=%v", arg1, err))
