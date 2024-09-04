@@ -4,13 +4,7 @@
 
 package tk9_0 // import "modernc.org/tk9.0"
 
-import (
-	_ "embed"
-)
+import _ "embed"
 
-var (
-	//go:embed embed_windows_arm64/dll.zip
-	dlls []byte
-
-	interp uintptr
-)
+//go:embed embed_windows_arm64/dll.zip
+var dlls []byte

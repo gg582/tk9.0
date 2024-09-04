@@ -39,6 +39,7 @@ var (
 	evalExProc        *windows.Proc
 	getObjResultProc  *windows.Proc
 	getStringProc     *windows.Proc
+	interp            uintptr
 	newStringObjProc  *windows.Proc
 	runCmdProxy       = windows.NewCallbackCDecl(eventDispatcher)
 	setObjResultProc  *windows.Proc

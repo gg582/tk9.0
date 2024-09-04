@@ -63,6 +63,10 @@ Cascading menus (_examples/menu.go)
     40		App.Configure(Mnu(menubar), Width("8c"), Height("6c"), Padx("4m"), Pady("3m")).Center().Wait()
     41	}
 
+![svg](_examples/text.png "text")
+
+Rich text (_examples/text.go).
+
 ![svg](_examples/svg.png "svg")
 
 Using svg (_examples/svg.go).
