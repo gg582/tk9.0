@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"runtime"
 	. "modernc.org/tk9.0"
+	"runtime"
 )
 
 func main() {

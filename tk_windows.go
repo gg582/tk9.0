@@ -39,6 +39,7 @@ var (
 	evalExProc        *windows.Proc
 	getObjResultProc  *windows.Proc
 	getStringProc     *windows.Proc
+	interp            uintptr
 	newStringObjProc  *windows.Proc
 	runCmdProxy       = windows.NewCallbackCDecl(eventDispatcher)
 	setObjResultProc  *windows.Proc
@@ -293,12 +294,13 @@ func eval(code string) (r string, err error) {
 }
 
 func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
-	if argc != 2 {
+	if argc < 2 {
 		setResult(fmt.Sprintf("eventDispatcher internal error: argc=%v", argc))
 		return tcl_error
 	}
 
 	arg1 := goString(*(*uintptr)(unsafe.Pointer(argv + unsafe.Sizeof(uintptr(0)))))
+	//TODO as tk_unix
 	id, err := strconv.Atoi(arg1)
 	if err != nil {
 		setResult(fmt.Sprintf("eventDispatcher internal error: argv[1]=%q, err=%v", arg1, err))

@@ -6,5 +6,5 @@ package tk9_0 // import "modernc.org/tk9.0"
 
 import _ "embed"
 
-//go:embed embed_windows_386/dll.zip
+//go:embed embed_windows_arm64/dll.zip
 var dlls []byte

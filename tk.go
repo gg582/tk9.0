@@ -12,19 +12,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	// TODO 	"path/filepath"
-	// TODO 	"runtime"
-	// TODO 	"strconv"
 	"strings"
-	// TODO 	"sync"
 	"sync/atomic"
 	"time"
-	// TODO
-	// TODO 	"github.com/evilsocket/islazy/zip"
-	// TODO 	libtcl "modernc.org/libtcl9.0"
-	// TODO 	libtk "modernc.org/libtk9.0"
-	// TODO 	tklib "modernc.org/libtk9.0/library"
-	// TODO 	tcl "modernc.org/tcl9.0"
 )
 
 const (
@@ -113,7 +103,6 @@ func tclSafeString(s string) string {
 	}
 	return s
 }
-
 
 // Window represents a Tk window/widget. It implements common widget methods.
 //
@@ -394,7 +383,6 @@ func tclSafeStrings(s ...string) string {
 	}
 	return strings.Join(a, " ")
 }
-
 
 // bind — Arrange for X events to invoke functions
 //
@@ -956,6 +944,78 @@ func (w *Window) Center() *Window {
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html#M9
 func Grid(w Widget, options ...Opt) {
 	evalErr(fmt.Sprintf("grid configure %s %s", w, collect(options...)))
+}
+
+// Grid — Geometry manager that arranges widgets in a grid
+//
+// # Description
+//
+// Query or set the row properties of the index row of the geometry container,
+// window. The valid options are -minsize, -weight, -uniform and -pad. If one
+// or more options are provided, then index may be given as a list of row
+// indices to which the configuration options will operate on. Indices may be
+// integers, window names or the keyword all. For all the options apply to all
+// rows currently occupied by content windows. For a window name, that window
+// must be a content window of this container and the options apply to all rows
+// currently occupied by the container window. The -minsize option sets the
+// minimum size, in screen units, that will be permitted for this row. The
+// -weight option (an integer value) sets the relative weight for apportioning
+// any extra spaces among rows. A weight of zero (0) indicates the row will not
+// deviate from its requested size. A row whose weight is two will grow at
+// twice the rate as a row of weight one when extra space is allocated to the
+// layout. The -uniform option, when a non-empty value is supplied, places the
+// row in a uniform group with other rows that have the same value for
+// -uniform. The space for rows belonging to a uniform group is allocated so
+// that their sizes are always in strict proportion to their -weight values.
+// See THE GRID ALGORITHM below for further details. The -pad option specifies
+// the number of screen units that will be added to the largest window
+// contained completely in that row when the grid geometry manager requests a
+// size from the containing window. If only an option is specified, with no
+// value, the current value of that option is returned. If only the container
+// window and index is specified, all the current settings are returned in a
+// list of “-option value” pairs.
+//
+// More information might be available at the [Tcl/Tk grid] page.
+//
+// [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html#M9
+func GridRowConfigure(w Widget, index int, options ...Opt) {
+	evalErr(fmt.Sprintf("grid rowconfigure %s %v %s", w, index, collect(options...)))
+}
+
+// Grid — Geometry manager that arranges widgets in a grid
+//
+// # Description
+//
+// Query or set the column properties of the index column of the geometry
+// container, window. The valid options are -minsize, -weight, -uniform and
+// -pad. If one or more options are provided, then index may be given as a list
+// of column indices to which the configuration options will operate on.
+// Indices may be integers, window names or the keyword all. For all the
+// options apply to all columns currently occupied be content windows. For a
+// window name, that window must be a content of this container and the options
+// apply to all columns currently occupied be the content. The -minsize option
+// sets the minimum size, in screen units, that will be permitted for this
+// column. The -weight option (an integer value) sets the relative weight for
+// apportioning any extra spaces among columns. A weight of zero (0) indicates
+// the column will not deviate from its requested size. A column whose weight
+// is two will grow at twice the rate as a column of weight one when extra
+// space is allocated to the layout. The -uniform option, when a non-empty
+// value is supplied, places the column in a uniform group with other columns
+// that have the same value for -uniform. The space for columns belonging to a
+// uniform group is allocated so that their sizes are always in strict
+// proportion to their -weight values. See THE GRID ALGORITHM below for further
+// details. The -pad option specifies the number of screen units that will be
+// added to the largest window contained completely in that column when the
+// grid geometry manager requests a size from the containing window. If only an
+// option is specified, with no value, the current value of that option is
+// returned. If only the container window and index is specified, all the
+// current settings are returned in a list of “-option value” pairs.
+//
+// More information might be available at the [Tcl/Tk grid] page.
+//
+// [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html#M9
+func GridColumnConfigure(w Widget, index int, options ...Opt) {
+	evalErr(fmt.Sprintf("grid columnconfigure %s %v %s", w, index, collect(options...)))
 }
 
 // Configure alters the configuration of 'w' and returns 'w'.
@@ -1885,6 +1945,49 @@ func (lc LC) String() string {
 	return fmt.Sprintf("%d.%d", lc.Line, lc.Char)
 }
 
+// Yscrollcommand option.
+//
+// # Description
+//
+// Specifies the prefix for a command used to communicate with vertical
+// scrollbars. This option is treated in the same way as the -xscrollcommand
+// option, except that it is used for vertical scrollbars and is provided by
+// widgets that support vertical scrolling. See the description of
+// -xscrollcommand for details on how this option is used.
+//
+// See also [Event handlers].
+//
+// Known uses:
+//   - [TextWidget] (widget specific)
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk8.6#hdr-Event_handlers
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
+func Yscrollcommand(args ...any) Opt {
+	return newEventHandler("-yscrollcommand", args...)
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Returns a list containing two elements, both of which are real fractions
+// between 0 and 1. The first element gives the position of the first visible
+// pixel of the first character (or image, etc) in the top line in the window,
+// relative to the text as a whole (0.5 means it is halfway through the text,
+// for example). The second element gives the position of the first pixel just
+// after the last visible one in the bottom line of the window, relative to the
+// text as a whole. These are the same values passed to scrollbars via the
+// -yscrollcommand option.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
+func (w *TextWidget) Yview() string {
+	return evalErr(fmt.Sprintf("%s yview", w))
+}
+
 // Text — Create and manipulate 'text' hypertext editing widgets
 //
 // # Description
@@ -2463,4 +2566,19 @@ func (w *MenuWidget) AddSeparator(options ...Opt) {
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
 func (w *MenuWidget) Invoke(index uint) {
 	evalErr(fmt.Sprintf("%s invoke %d", w, index))
+}
+
+// TScrollbar — Control the viewport of a scrollable widget
+//
+// # Description
+//
+// This command is normally invoked by the scrollbar's associated widget from
+// an -xscrollcommand or -yscrollcommand callback. Specifies the visible range
+// to be displayed. first and last are real fractions between 0 and 1.
+//
+// More information might be available at the [Tcl/Tk ttk_scrollbar] page.
+//
+// [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_scrollbar.htm
+func (w *TScrollbarWidget) Set(firstLast string) {
+	evalErr(fmt.Sprintf("%s set %s", w, firstLast))
 }
