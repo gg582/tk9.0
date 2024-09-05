@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"runtime"
 	"strconv"
 
@@ -87,21 +86,18 @@ func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
 	}
 
 	h := handlers[int32(id)]
-	r, err := h.handler(h.w, h.data)
-	if r != nil && r != "" && err == nil && len(args) > 2 {
-		args[1] = fmt.Sprint(r)
-		for i := 2; i < len(args); i++ {
-			args[i] = tclSafeString(args[i])
-		}
-		r, err = eval(strings.Join(args[1:], " "))
+	e := &Event{W: h.w}
+	if len(args) > 2 { // eg.: ["eventDispatcher", "42", "0.1", "0.9"]
+		e.args = args[2:]
 	}
-	interp.SetResult(tclSafeString(fmt.Sprint(r)))
-	if err != nil {
-		interp.SetResult(tclSafeString(fmt.Sprint(err)))
+	switch h.callback(e); {
+	case e.Err != nil:
+		interp.SetResult(tclSafeString(e.Err.Error()))
 		return libtcl.TCL_ERROR
+	default:
+		interp.SetResult("")
+		return libtcl.TCL_OK
 	}
-
-	return libtcl.TCL_OK
 }
 
 func stdlib() (dir string, err error) {

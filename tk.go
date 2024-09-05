@@ -15,6 +15,8 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
+
+	"golang.org/x/net/html"
 )
 
 const (
@@ -227,103 +229,77 @@ func (s stringOption) optionString(w *Window) string {
 	return tclSafeString(string(s))
 }
 
-// EventHandler is invoked when its associated event fires. The 'data' argument
-// is the additional value passed when the handler was registered
-type EventHandler func(w *Window, data any) (any, error)
+// EventHandler is the type used by call backs.
+type EventHandler func(*Event)
 
-// EventDetacher is invoked when the handler is detached. The 'data' argument
-// is the additional value passed when the handler was registered.
-type EventDetacher func(w *Window, data any)
+// Event communicates information with an event handler.
+type Event struct {
+	Err  error   // Even handlers should set Err on failure.
+	W    *Window // Event source
+	args []string
+}
+
+// ScrollSet communicates events to scrollbars. Example:
+//
+//	var scroll *TScrollbarWidget
+//	// tcl: text .text -yscrollcommand ".scroll set"
+//	t := Text(..., Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }))
+func (e *Event) ScrollSet(w Widget) {
+	if len(e.args) > 1 {
+		evalErr(fmt.Sprintf("%s set %s %s", w, e.args[0], e.args[1]))
+	}
+}
+
+// Xview communicates events to views. Example:
+//
+//	var scroll *TScrollbarWidget
+//	t := Text(...)
+//	// tcl: ttk::scrollbar .scroll -command ".text xview"
+//	scroll = TScrollbar(Command(func(e *Event) { e.Xview(t)}))
+func (e *Event) Xview(w Widget) {
+	if len(e.args) > 1 {
+		evalErr(fmt.Sprintf("%s xview %s", w, strings.Join(e.args, " ")))
+	}
+}
+
+// Yview communicates events to views. Example:
+//
+//	var scroll *TScrollbarWidget
+//	t := Text(...)
+//	// tcl: ttk::scrollbar .scroll -command ".text yview"
+//	scroll = TScrollbar(Command(func(e *Event) { e.Yview(t)}))
+func (e *Event) Yview(w Widget) {
+	if len(e.args) > 1 {
+		evalErr(fmt.Sprintf("%s yview %s", w, strings.Join(e.args, " ")))
+	}
+}
 
 type eventHandler struct {
 	data     any
-	detacher EventDetacher
-	handler  EventHandler
+	callback func(*Event)
 	id       int32
 	tcl      string
 	w        *Window
 }
 
-func newEventHandler(option string, args ...any) (r *eventHandler) {
-	if len(args) == 0 {
-		fail(fmt.Errorf("registering event handler: need at least one argument"))
-		return nil
-	}
-
-	var handler EventHandler
-	var detacher EventDetacher
-	var data any
-	for _, v := range args {
-		switch x := v.(type) {
-		case EventHandler:
-			if handler != nil {
-				fail(fmt.Errorf("registering event handler: multiple handling functions"))
-				return nil
-			}
-
-			handler = x
-		case func(*Window, any) (any, error):
-			if handler != nil {
-				fail(fmt.Errorf("registering event handler: multiple handling functions"))
-				return nil
-			}
-
-			handler = x
-		case func():
-			if handler != nil {
-				if detacher != nil {
-					fail(fmt.Errorf("registering event handler: multiple detaching functions"))
-					return nil
-				}
-
-				detacher = func(*Window, any) { x() }
-				break
-			}
-
-			handler = func(*Window, any) (any, error) { x(); return nil, nil }
-		case EventDetacher:
-			if detacher != nil {
-				fail(fmt.Errorf("registering event handler: multiple detaching functions"))
-				return nil
-			}
-
-			detacher = x
-		case func(*Window, any):
-			if detacher != nil {
-				fail(fmt.Errorf("registering event handler: multiple detaching functions"))
-				return nil
-			}
-
-			detacher = x
-		default:
-			if data != nil {
-				fail(fmt.Errorf("registering event handler: multiple data values"))
-				return nil
-			}
-
-			data = x
-		}
-	}
-	if handler == nil {
-		fail(fmt.Errorf("registering event handler: no event handler argument"))
+func newEventHandler(option string, handler any) (r *eventHandler) {
+	var callback func(*Event)
+	switch x := handler.(type) {
+	case EventHandler:
+		callback = x
+	case func(*Event):
+		callback = x
+	case func():
+		callback = func(*Event) { x() }
+	default:
+		fail(fmt.Errorf("registering event handler: unsupported handler type: %T", handler))
 		return nil
 	}
 
 	r = &eventHandler{
-		handler:  handler,
-		detacher: detacher,
-		data:     data,
+		callback: callback,
 		id:       id.Add(1),
 		tcl:      option,
-	}
-	switch {
-	case r.detacher == nil:
-		r.detacher = func(w *Window, v any) { delete(handlers, r.id) }
-	default:
-		r.detacher = func(w *Window, v any) {
-			detacher(w, v)
-			delete(handlers, r.id)
-		}
 	}
 	handlers[r.id] = r
 	return r
@@ -1945,6 +1921,40 @@ func (lc LC) String() string {
 	return fmt.Sprintf("%d.%d", lc.Line, lc.Char)
 }
 
+// Xscrollcommand option.
+//
+// # Description
+//
+// Specifies the prefix for a command used to communicate with horizontal
+// scrollbars. When the view in the widget's window changes (or whenever
+// anything else occurs that could change the display in a scrollbar, such as a
+// change in the total size of the widget's contents), the widget will generate
+// a Tcl command by concatenating the scroll command and two numbers. Each of
+// the numbers is a fraction between 0 and 1, which indicates a position in the
+// document. 0 indicates the beginning of the document, 1 indicates the end,
+// .333 indicates a position one third the way through the document, and so on.
+// The first fraction indicates the first information in the document that is
+// visible in the window, and the second fraction indicates the information
+// just after the last portion that is visible. The command is then passed to
+// the Tcl interpreter for execution. Typically the -xscrollcommand option
+// consists of the path name of a scrollbar widget followed by “set”, e.g.
+// “.x.scrollbar set”: this will cause the scrollbar to be updated whenever the
+// view in the window changes. If this option is not specified, then no command
+// will be executed.
+//
+// See also [Event handlers].
+//
+// Known uses:
+//   - [TextWidget] (widget specific)
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
+func Xscrollcommand(handler any) Opt {
+	return newEventHandler("-xscrollcommand", handler)
+}
+
 // Yscrollcommand option.
 //
 // # Description
@@ -1962,10 +1972,10 @@ func (lc LC) String() string {
 //
 // Additional information might be available at the [Tcl/Tk text] page.
 //
-// [Event handlers]: https://pkg.go.dev/modernc.org/tk8.6#hdr-Event_handlers
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
-func Yscrollcommand(args ...any) Opt {
-	return newEventHandler("-yscrollcommand", args...)
+func Yscrollcommand(handler any) Opt {
+	return newEventHandler("-yscrollcommand", handler)
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -1986,6 +1996,26 @@ func Yscrollcommand(args ...any) Opt {
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
 func (w *TextWidget) Yview() string {
 	return evalErr(fmt.Sprintf("%s yview", w))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Returns a list containing two elements, both of which are real fractions
+// between 0 and 1. The first element gives the position of the first visible
+// pixel of the first character (or image, etc) in the top line in the window,
+// relative to the text as a whole (0.5 means it is halfway through the text,
+// for example). The second element gives the position of the first pixel just
+// after the last visible one in the bottom line of the window, relative to the
+// text as a whole. These are the same values passed to scrollbars via the
+// -xscrollcommand option.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.htm
+func (w *TextWidget) Xview() string {
+	return evalErr(fmt.Sprintf("%s xview", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2044,6 +2074,93 @@ func (w *TextWidget) TagAdd(options ...any) string {
 	}
 	evalErr(fmt.Sprintf("%s tag add %s %s", w, tag, collect(a...)))
 	return tag
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// InsertML inserts ml at the end of 'w', interpreting it pseudo-HTML.
+//
+// It recognizes and treats speciall the <br> tag. Other ML-tags are used as
+// names of configured 'w' tags, if any.
+//
+// Example usage in _examples/text.go.
+func (w *TextWidget) InsertML(ml string) {
+	doc, err := html.Parse(strings.NewReader(ml))
+	if err != nil {
+		fail(err)
+		return
+	}
+
+	var tags []string
+	var body int
+	walk(0, doc, func(lvl int, n *html.Node) bool {
+		switch n.Type {
+		case html.TextNode:
+			if lvl < len(tags) {
+				tags = tags[:lvl]
+			}
+			evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(n.Data), tclSafeStrings(tags[body+1:]...)))
+		case html.ElementNode:
+			switch n.Data {
+			case "br":
+				evalErr(fmt.Sprintf("%s insert end \\n {%s}", w, tclSafeStrings(tags...)))
+			case "body":
+				tags = append(tags, n.Data)
+				body = lvl
+			default:
+				tags = append(tags, n.Data)
+			}
+		default:
+		}
+		return true
+	})
+}
+
+func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)) {
+	for ; n != nil; n = n.NextSibling {
+		if visitor(lvl, n) {
+			walk(lvl+1, n.FirstChild, visitor)
+		}
+	}
+}
+
+func tclFromElementNode(s string) string {
+	a := strings.Fields(s)
+	var prefix, suffix string
+	if s != "" {
+		switch s[0] {
+		case '\n', ' ', '\t':
+			prefix = " "
+		}
+		switch s[len(s)-1] {
+		case '\n', ' ', '\t':
+			suffix = " "
+		}
+	}
+	for i, v := range a {
+		a[i] = tclSafeML(v)
+	}
+	r := fmt.Sprintf("{%s%s%s}", prefix, strings.Join(a, " "), suffix)
+	return r
+}
+
+func tclSafeML(s string) string {
+	const badString = "&;`|*?~<>^()[]{}$\\\n\r\t "
+	if strings.ContainsAny(s, badString) {
+		var b strings.Builder
+		for _, c := range s {
+			switch {
+			case int(c) < len(badChars) && badChars[c]:
+				fmt.Fprintf(&b, "\\x%02x", c)
+			default:
+				b.WriteRune(c)
+			}
+		}
+		s = b.String()
+	}
+	return s
 }
 
 // Fontchooser — control font selection dialog
@@ -2492,7 +2609,7 @@ func (w *CanvasWidget) Graph(script string) *CanvasWidget {
 }
 
 func gnuplot(script string) (out []byte, err error) {
-	f, err := os.CreateTemp("", "tk8.6-")
+	f, err := os.CreateTemp("", "tk9.0-")
 	if err != nil {
 		return nil, err
 	}
@@ -2518,7 +2635,7 @@ func gnuplot(script string) (out []byte, err error) {
 //
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) AddCommand(options ...Opt) {
 	evalErr(fmt.Sprintf("%s add command %s", w, winCollect(w.Window, options...)))
 }
@@ -2531,7 +2648,7 @@ func (w *MenuWidget) AddCommand(options ...Opt) {
 //
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) AddCascade(options ...Opt) {
 	evalErr(fmt.Sprintf("%s add cascade %s", w, winCollect(w.Window, options...)))
 }
@@ -2544,7 +2661,7 @@ func (w *MenuWidget) AddCascade(options ...Opt) {
 //
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) AddSeparator(options ...Opt) {
 	evalErr(fmt.Sprintf("%s add separator %s", w, winCollect(w.Window, options...)))
 }
@@ -2563,7 +2680,7 @@ func (w *MenuWidget) AddSeparator(options ...Opt) {
 //
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
-// [Tcl/Tk menu]: https://www.tcl.tk/man/tcl8.6/TkCmd/menu.htm
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) Invoke(index uint) {
 	evalErr(fmt.Sprintf("%s invoke %d", w, index))
 }
@@ -2578,7 +2695,7 @@ func (w *MenuWidget) Invoke(index uint) {
 //
 // More information might be available at the [Tcl/Tk ttk_scrollbar] page.
 //
-// [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_scrollbar.htm
+// [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tk9.0/TkCmd/ttk_scrollbar.htm
 func (w *TScrollbarWidget) Set(firstLast string) {
 	evalErr(fmt.Sprintf("%s set %s", w, firstLast))
 }

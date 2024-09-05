@@ -65,7 +65,92 @@ Cascading menus (_examples/menu.go)
 
 ![svg](_examples/text.png "text")
 
-Rich text (_examples/text.go).
+Rich text using markup (_examples/text.go).
+
+     1	// Adapted from tk library demos style.tcl
+     2	//
+     3	// See LICENSE-TCLTK for copyright info.
+     4	
+     5	package main
+     6	
+     7	import "strings"
+     8	import . "modernc.org/tk9.0"
+     9	
+    10	func main() {
+    11		family := "Helvetica"
+    12		var scroll *TScrollbarWidget
+    13		t := Text(Fnt(family+" 10"), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }))
+    14		scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
+    15		Grid(t, Sticky("news"), Pady("2m"))
+    16		Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
+    17		GridRowConfigure(App, 0, Weight(1))
+    18		GridColumnConfigure(App, 0, Weight(1))
+    19		Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    20		t.TagConfigure("bgstipple", Background(Black), Borderwidth(0), Bgstipple(Gray12))
+    21		t.TagConfigure("big", Fnt(family+" 12 bold"))
+    22		t.TagConfigure("bold", Fnt(family+" 10 bold italic"))
+    23		t.TagConfigure("center", Justify("center"))
+    24		t.TagConfigure("color1", Background("#a0b7ce"))
+    25		t.TagConfigure("color2", Foreground(Red))
+    26		t.TagConfigure("margins", Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
+    27		t.TagConfigure("overstrike", Overstrike(1))
+    28		t.TagConfigure("raised", Relief("raised"), Borderwidth(1))
+    29		t.TagConfigure("right", Justify("right"))
+    30		t.TagConfigure("spacing", Spacing1("10p"), Spacing2("2p"), Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
+    31		t.TagConfigure("sub", Offset("-2p"), Fnt(family+" 8"))
+    32		t.TagConfigure("sunken", Relief("sunken"), Borderwidth(1))
+    33		t.TagConfigure("super", Offset("4p"), Fnt(family+" 8"))
+    34		t.TagConfigure("tiny", Fnt("Times 8 bold"))
+    35		t.TagConfigure("underline", Underline(1))
+    36		t.TagConfigure("verybig", Fnt("Courier 22 bold"))
+    37		t.InsertML(`Text widgets like this one allow you to display information in a variety of styles. Display styles are controlled using a mechanism called
+    38	<bold>tags</bold>. Tags are just textual names that you can apply to one or more ranges of characters within a text widget. You can configure tags
+    39	with various display styles. If you do this, then the tagged characters will be displayed with the styles you chose. The available display styles are:
+    40	
+    41	<br><br><big>1. Font.</big> You can choose any system font, <verybig>large</verybig> or <tiny>small</tiny>.
+    42	
+    43	<br><br><big>2. Color.</big> You can change either the <color1>background</color1> or <color2>foreground</color2> color, or
+    44	<color1><color2>both</color2></color1>.
+    45	
+    46	<br><br><big>3. Stippling.</big> You can cause the <bgstipple>background</bgstipple> information to be drawn with a stipple fill instead of a solid
+    47	fill.
+    48	
+    49	<br><br><big>4. Underlining.</big> You can <underline>underline</underline> ranges of text.
+    50	
+    51	<br><br><big>5. Overstrikes.</big> You can <overstrike>draw lines through</overstrike> ranges of text.
+    52	
+    53	<br><br><big>6. 3-D effects.</big> You can arrange for the background to be drawn with a border that makes characters appear either
+    54	<raised>raised</raised> or <sunken>sunken</sunken>.
+    55	
+    56	<br><br><big>7. Justification.</big> You can arrange for lines to be displayed <br>left-justified <br><right>right-justified, or</right>
+    57	<br><center>centered.</center>
+    58	
+    59	<br><br><big>8. Superscripts and subscripts.</big> You can control the vertical position of text to generate superscript effects like
+    60	10<super>n</super> or subscript effects like X<sub>i</sub>.
+    61	
+    62	<br><br><big>9. Margins.</big> You can control the amount of extra space left on each side of the text
+    63	
+    64	<br><br><margins>This paragraph is an example of the use of margins. It consists of a single line of text that wraps around on the screen. There are
+    65	two separate left margin values, one for the first display line associated with the text line, and one for the subsequent display lines, which occur
+    66	because of wrapping. There is also a separate specification for the right margin, which is used to choose wrap points for lines.</margins>
+    67	
+    68	<br><br><big>10. Spacing.</big> You can control the spacing of lines with three separate parameters. "Spacing1" tells how much extra space to leave
+    69	above a line, "spacing3" tells how much space to leave below a line, and if a text line wraps, "spacing2" tells how much space to leave between the
+    70	display lines that make up the text line.
+    71	
+    72	<br><spacing>These indented paragraphs illustrate how spacing can be used. Each paragraph is actually a single line in the text widget, which is
+    73	word-wrapped by the widget.</spacing>
+    74	
+    75	<br><spacing>Spacing1 is set to 10 points for this text, which results in relatively large gaps between the paragraphs. Spacing2 is set to 2 points,
+    76	which results in just a bit of extra space within a pararaph. Spacing3 isn't used in this example.</spacing>
+    77	
+    78	<br><spacing>To see where the space is, select ranges of text within these paragraphs. The selection highlight will cover the extra space.</spacing>`)
+    79		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    80	}
+    81	
+    82	func s(s string) string {
+    83		return strings.ReplaceAll(s, "\n", " ")
+    84	}
 
 ![svg](_examples/svg.png "svg")
 

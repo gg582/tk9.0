@@ -218,14 +218,24 @@ func tclResult() string {
 	}
 
 	if r, _, _ = getStringProc.Call(r); r != 0 {
-		r0 := r
-		var n int
-		for ; *(*byte)(unsafe.Pointer(r)) != 0; n++ {
-			r++
-		}
-		if n != 0 {
-			return string(unsafe.Slice((*byte)(unsafe.Pointer(r0)), n)) // Result can be retained.
-		}
+		return goString(r)
+	}
+
+	return ""
+}
+
+func goString(p uintptr) string { // Result can be retained.
+	if p == 0 {
+		return ""
+	}
+
+	p0 := p
+	var n int
+	for ; *(*byte)(unsafe.Pointer(p)) != 0; n++ {
+		p++
+	}
+	if n != 0 {
+		return string(unsafe.Slice((*byte)(unsafe.Pointer(p0)), n))
 	}
 
 	return ""
@@ -262,7 +272,7 @@ func setResult(s string) (err error) {
 	return nil
 }
 
-func goString(p uintptr) (r string) { // Result cannot be retained.
+func goTransientString(p uintptr) (r string) { // Result cannot be retained.
 	if p == 0 {
 		return ""
 	}
@@ -299,8 +309,7 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 		return tcl_error
 	}
 
-	arg1 := goString(*(*uintptr)(unsafe.Pointer(argv + unsafe.Sizeof(uintptr(0)))))
-	//TODO as tk_unix
+	arg1 := goTransientString(*(*uintptr)(unsafe.Pointer(argv + unsafe.Sizeof(uintptr(0)))))
 	id, err := strconv.Atoi(arg1)
 	if err != nil {
 		setResult(fmt.Sprintf("eventDispatcher internal error: argv[1]=%q, err=%v", arg1, err))
@@ -308,18 +317,21 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 	}
 
 	h := handlers[int32(id)]
-	r, err := h.handler(h.w, h.data)
-	if err != nil {
-		setResult(tclSafeString(fmt.Sprint(err)))
-		return tcl_error
+	e := &Event{W: h.w}
+	for i := int32(2); i < argc; i++ {
+		e.args = append(e.args, goString(argv+uintptr(i)*unsafe.Sizeof(uintptr(0))))
 	}
-
-	if err = setResult(tclSafeString(fmt.Sprint(r))); err != nil {
-		setResult(tclSafeString(fmt.Sprint(err)))
+	switch h.callback(e); {
+	case e.Err != nil:
+		setResult(tclSafeString(e.Err.Error()))
 		return tcl_error
-	}
+	default:
+		if setResult("") != nil {
+			return tcl_error
+		}
 
-	return tcl_ok
+		return tcl_ok
+	}
 }
 
 // Finalize releases all resources held, if any. This may include temporary
