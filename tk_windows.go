@@ -12,7 +12,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strconv"
-	"strings"
 	"unsafe"
 
 	"github.com/evilsocket/islazy/zip"
@@ -21,7 +20,6 @@ import (
 )
 
 const (
-	cachePath       = "tk9.0b3"
 	tcl_eval_direct = 0x40000 // tcl9.0b3/generic/tcl.h:978
 	tcl_ok          = 0       // tcl9.0b3/generic/tcl.h:522
 	tcl_error       = 1       // tcl9.0b3/generic/tcl.h:523
@@ -73,21 +71,7 @@ func init() {
 		return
 	}
 
-	CollectErrors = true
-
-	defer func() { CollectErrors = false }()
-
-	App = &Window{}
-	exitHandler = Command(func() { Destroy(App) })
-	// Set some defaults.
-	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
-	App.Center()
-	App.IconPhoto(NewPhoto(Data(icon)))
-	base := filepath.Base(os.Args[0])
-	if strings.HasSuffix(base, ".exe") {
-		base = base[:len(base)-len(".exe")]
-	}
-	App.WmTitle(base)
+	setDefaults()
 }
 
 func init1(cacheDir string) {
@@ -319,7 +303,7 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 	h := handlers[int32(id)]
 	e := &Event{W: h.w}
 	for i := int32(2); i < argc; i++ {
-		e.args = append(e.args, goString(argv+uintptr(i)*unsafe.Sizeof(uintptr(0))))
+		e.args = append(e.args, goString(*(*uintptr)(unsafe.Pointer(argv + uintptr(i)*unsafe.Sizeof(uintptr(0))))))
 	}
 	switch h.callback(e); {
 	case e.Err != nil:
