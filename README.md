@@ -199,6 +199,8 @@ A simple calculator (_examples/calc.go).
 
 ![font](_examples/font.png "font")
 
+A font previewer (_examples/font.go).
+
      1	package main
      2	
      3	import "fmt"
