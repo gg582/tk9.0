@@ -108,6 +108,7 @@ dlls: download
 	rm -f embed_windows_$(GOARCH)/dll.zip
 	zip embed_windows_$(GOARCH)/dll.zip *.dll
 	rm -f *.dll
+<<<<<<< HEAD
 
 dlls_windows_arm64: download
 	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
@@ -140,3 +141,5 @@ dlls_windows_arm64: download
 	rm -f embed_windows_$(GOARCH)/dll.zip
 	zip embed_windows_$(GOARCH)/dll.zip *.dll
 	rm -f *.dll
+=======
+>>>>>>> ok

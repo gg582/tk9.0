@@ -170,22 +170,12 @@
 //
 // # Event handlers
 //
-// The Command() and similar options expect arguments that must be one of:
+// The Command() and similar options expect an argument that must be one of:
 //
-// - EventHandler or a function literal of signature func(*Window, any) (any, error).
+// - An EventHandler or a function literal of the same signature.
 //
-// - EventDetacher or a function literal of signature func(*Window, any).
-//
-// - Any other type, used as the additonal 'data' argument when invoking the event handler/detacher.
-//
-// Each of the three types must be present at most once and only the event handler is mandatory.
-// The event detacher and additional data are both optional.
-//
-// For convenience, additionally type 'func()' literals are accepted as well.
-// They are converted internally to EventHandler and or EventDetacher. The
-// first occurrence is used as an EventHandler if it was not yet specified or
-// as an EventDetacher if that was not yet specified. The second instance is
-// used as an EventDetacher if that was not yet specified.
+// - A func(). This can be used when the handler does not need the associated
+// Event instance.
 //
 // # Specially handled types
 //

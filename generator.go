@@ -836,9 +836,9 @@ func (j *job) main() {
 		}
 		switch ok := handlers[v.goName]; {
 		case ok:
-			j.w("\n//\n// [Event handlers]: https://pkg.go.dev/modernc.org/tk8.6#hdr-Event_handlers")
-			j.w("\nfunc %s(args ...any) Opt {", v.goName)
-			j.w("\n\treturn newEventHandler(%q, args...)", v.tclName)
+			j.w("\n//\n// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers")
+			j.w("\nfunc %s(handler any) Opt {", v.goName)
+			j.w("\n\treturn newEventHandler(%q, handler)", v.tclName)
 			j.w("\n}")
 		default:
 			j.w("\nfunc %s(val any) Opt {", v.goName)
@@ -1013,7 +1013,7 @@ func (j *job) pageLink(page string) {
 
 	page = page[:len(page)-len(".html")]
 	j.w("\n//\n// More information might be available at the [Tcl/Tk %s] page.", page)
-	j.w("\n//\n// [Tcl/Tk %s]: https://www.tcl.tk/man/tcl8.6/TkCmd/%[1]s.htm ", page)
+	j.w("\n//\n// [Tcl/Tk %s]: https://www.tcl.tk/man/tcl9.0/TkCmd/%[1]s.html", page)
 }
 
 func (j *job) manual(fn string, doc *document, nfo *pageInfo) {
