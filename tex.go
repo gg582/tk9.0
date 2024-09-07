@@ -280,4 +280,3 @@ func TeX(src string, scale float64) (png []byte) {
 
 	return b
 }
-

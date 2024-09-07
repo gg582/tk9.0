@@ -126,9 +126,7 @@ func setDefaults() {
 	App.Center()
 	App.IconPhoto(NewPhoto(Data(icon)))
 	base := filepath.Base(os.Args[0])
-	if strings.HasSuffix(base, ".exe") {
-		base = base[:len(base)-len(".exe")]
-	}
+	base = strings.TrimSuffix(base, ".exe")
 	App.WmTitle(base)
 	if nm := os.Getenv(ThemeEnvVar); nm != "" {
 		eval(fmt.Sprintf("ttk::style theme use %s", tclSafeString(nm)))

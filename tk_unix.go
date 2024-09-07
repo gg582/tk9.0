@@ -91,7 +91,7 @@ func getCacheDir() (r string, err error) {
 		return r, nil
 	}
 
-	err = os.MkdirAll(r0, 0700)
+	os.MkdirAll(r0, 0700)
 	tmp, err := os.MkdirTemp("", "tk9.0-")
 	if err != nil {
 		return "", err

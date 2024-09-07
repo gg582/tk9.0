@@ -7,19 +7,15 @@
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
-	"bytes"
 	_ "embed"
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
 	"testing"
 
 	_ "github.com/adrg/xdg"       // generator.go
 	_ "github.com/expr-lang/expr" // examples
 	_ "golang.org/x/net/html"     // generator.go
-	"modernc.org/knuth/tex"
 	_ "modernc.org/ngrab/lib" // generator.go
 )
 
