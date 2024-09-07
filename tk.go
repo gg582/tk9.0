@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -2136,10 +2137,13 @@ func (w *TextWidget) InsertML(ml string) {
 			case "body":
 				tags = append(tags, n.Data)
 				body = lvl
+			//TODO case "img"
+			//TODO case "tex"
+			//TODO case "texi"
+			//TODO case "win"
 			default:
 				tags = append(tags, n.Data)
 			}
-		default:
 		}
 		return true
 	})
@@ -2764,6 +2768,8 @@ func StyleThemeStyles(themeName ...string) []string {
 //
 // Return the name of the current theme.
 //
+// Additional information might be available at the [Tcl/Tk style] page.
+//
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 func StyleThemeGet(themeName ...string) []string {
 	return parseList(evalErr("ttk::style theme use"))
@@ -2778,4 +2784,57 @@ func StyleThemeGet(themeName ...string) []string {
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 func StyleThemeUse(themeName string) []string {
 	return parseList(evalErr(fmt.Sprintf("ttk::style theme use %s", themeName)))
+}
+
+// tk — Manipulate Tk internal state
+//
+// # Description
+//
+// Sets and queries the current scaling factor used by Tk to convert between
+// physical units (for example, points, inches, or millimeters) and pixels. The
+// number argument is a floating point number that specifies the number of
+// pixels per point on window's display. If the window argument is omitted, it
+// defaults to the main window. If the number argument is omitted, the current
+// value of the scaling factor is returned.
+//
+// A “point” is a unit of measurement equal to 1/72 inch. A scaling factor of
+// 1.0 corresponds to 1 pixel per point, which is equivalent to a standard 72
+// dpi monitor. A scaling factor of 1.25 would mean 1.25 pixels per point,
+// which is the setting for a 90 dpi monitor; setting the scaling factor to
+// 1.25 on a 72 dpi monitor would cause everything in the application to be
+// displayed 1.25 times as large as normal. The initial value for the scaling
+// factor is set when the application starts, based on properties of the
+// installed monitor, but it can be changed at any time. Measurements made
+// after the scaling factor is changed will use the new scaling factor, but it
+// is undefined whether existing widgets will resize themselves dynamically to
+// accommodate the new scaling factor.
+//
+// - [Displayof] window
+//
+// - Number
+//
+// Additional information might be available at the [Tcl/Tk tk] page.
+//
+// [Tcl/Tk tk]: https://www.tcl.tk/man/tcl9.0/TkCmd/tk.html
+func TkScaling(options ...any) float64 {
+	var a []Opt
+	for _, v := range options {
+		switch x := v.(type) {
+		case Opts:
+			a = append(a, x)
+		case Opt:
+			a = append(a, x)
+		default:
+			a = append(a, stringOption(fmt.Sprint(x)))
+		}
+	}
+	if s := evalErr(fmt.Sprintf("tk scaling %s", collect(a...))); s != "" {
+		n, err := strconv.ParseFloat(s, 64)
+		if err == nil {
+			return n
+		}
+
+		fail(err)
+	}
+	return 1
 }

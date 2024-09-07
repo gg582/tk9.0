@@ -334,6 +334,24 @@ Interlocked tori plot on canvas (_examples/tori_canvas.go).
     36		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
     37	}
 
+![tex](_examples/tex.png "TeX")
+
+Rendering plain TeX without runtime dependencies (_examples/tex.go).
+
+     1	package main
+     2	
+     3	import . "modernc.org/tk9.0"
+     4	
+     5	const tex = `$$\sin x = {{e^{ix}-e^{-ix}}\over 2i}$$`
+     6	
+     7	func main() {
+     8		Pack(
+     9			Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*72/TkScaling()/600))))),
+    10			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    11		)
+    12		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    13	}
+
 Documentation at [pkg.go.dev].
 
 [pkg.go.dev]: https://pkg.go.dev/modernc.org/tk9.0
