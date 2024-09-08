@@ -5,6 +5,7 @@
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
+	"bytes"
 	"context"
 	_ "embed"
 	"encoding/base64"
@@ -121,13 +122,12 @@ func setDefaults() {
 
 	App = &Window{}
 	exitHandler = Command(func() { Destroy(App) })
-	// Set some defaults.
 	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
-	App.Center()
 	App.IconPhoto(NewPhoto(Data(icon)))
 	base := filepath.Base(os.Args[0])
 	base = strings.TrimSuffix(base, ".exe")
 	App.WmTitle(base)
+	App.Configure(Padx("4m"), Pady("3m")).Center()
 	if nm := os.Getenv(ThemeEnvVar); nm != "" {
 		eval(fmt.Sprintf("ttk::style theme use %s", tclSafeString(nm)))
 	}
@@ -2108,12 +2108,40 @@ func (w *TextWidget) TagAdd(options ...any) string {
 //
 // InsertML inserts ml at the end of 'w', interpreting it pseudo-HTML.
 //
-// It recognizes and treats speciall the <br> tag. Other ML-tags are used as
+// It recognizes and treats specially the <br> tag. Other ML-tags are used as
 // names of configured 'w' tags, if any.
 //
+// The <img> tag is reserved for embedded images. You can inline the image
+// directly this way
+//
+//	InsertML("Hello ", NewPhoto(...), Align("baseline"), " world!")
+//
 // Example usage in _examples/text.go.
-func (w *TextWidget) InsertML(ml string) {
-	doc, err := html.Parse(strings.NewReader(ml))
+func (w *TextWidget) InsertML(list ...any) {
+	var ml bytes.Buffer
+	for i := 0; i < len(list); i++ {
+		switch x := list[i].(type) {
+		case string:
+			ml.WriteString(x)
+		case *Img:
+			var opts Opts
+			for j := i+1; j < len(list); j++ {
+				if x, ok := list[j].(Opt); ok {
+					opts = append(opts, x)
+				}
+			}
+			fmt.Fprintf(&ml, "<img src=%q", x)
+			for _, v := range opts {
+				fmt.Fprintf(&ml, " opt=%q", v.optionString(w.Window))
+				i++
+			}
+			ml.WriteString(">")
+		default:
+			fmt.Fprintf(&ml, "[%T=%v]", x, x)
+		}
+	}
+	trc("====\n%s\n----", ml.Bytes())
+	doc, err := html.Parse(&ml)
 	if err != nil {
 		fail(err)
 		return
@@ -2135,7 +2163,18 @@ func (w *TextWidget) InsertML(ml string) {
 			case "body":
 				tags = append(tags, n.Data)
 				body = lvl
-			//TODO case "img"
+			case "img":
+				var src string
+				var opts []string
+				for _, v := range n.Attr {
+					switch v.Key {
+					case "src":
+						src = v.Val
+					case "opt":
+						opts = append(opts, v.Val)
+					}
+				}
+				evalErr(fmt.Sprintf("%v image create end -image %s %s", w, src, strings.Join(opts, " ")))
 			//TODO case "tex"
 			//TODO case "texi"
 			//TODO case "win"
@@ -2145,6 +2184,14 @@ func (w *TextWidget) InsertML(ml string) {
 		}
 		return true
 	})
+}
+
+// Align option.
+//
+// Known uses:
+//   - [Text] (widget specific, applies to embedded images)
+func Align(val any) Opt {
+	return rawOption(fmt.Sprintf(`-align %s`, optionString(val)))
 }
 
 func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)) {
@@ -2176,7 +2223,7 @@ func tclFromElementNode(s string) string {
 }
 
 func tclSafeML(s string) string {
-	const badString = "&;`|*?~<>^()[]{}$\\\n\r\t "
+	const badString = "&;`|*?~<>^[]{}$\\\n\r\t "
 	if strings.ContainsAny(s, badString) {
 		var b strings.Builder
 		for _, c := range s {

@@ -226,7 +226,7 @@ A font previewer (_examples/font.go).
     23			m[font] = true
     24			tag := fmt.Sprintf("t%v", i)
     25			t.TagConfigure(tag, Fnt(NewFont(Family(font))))
-    26			t.InsertML(fmt.Sprintf("%s: <%s>Lorem ipsum dolor sit amet, consectetur adipiscing elit...<%[2]s><br>", font, tag))
+    26			t.Insert("end", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
     27		}
     28		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
     29	}

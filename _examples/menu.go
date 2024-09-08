@@ -37,5 +37,5 @@ func main() {
 	menubar.AddCascade(Lbl("Help"), Underline(0), Mnu(helpMenu))
 
 	App.WmTitle(fmt.Sprintf("%s on %s", App.WmTitle(""), runtime.GOOS))
-	App.Configure(Mnu(menubar), Width("8c"), Height("6c"), Padx("4m"), Pady("3m")).Center().Wait()
+	App.Configure(Mnu(menubar), Width("8c"), Height("6c")).Wait()
 }

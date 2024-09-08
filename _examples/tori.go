@@ -36,5 +36,5 @@ func main() {
 		Label(Image(NewPhoto(Width(800), Height(600)).Graph(script))),
 		TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
 	)
-	App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+	App.Center().Wait()
 }

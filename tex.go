@@ -1,7 +1,13 @@
+// The original code in this file comes from
+//
+// https://git.sr.ht/~sbinet/star-tex/tree/main/item/cmd/dvi-cnv
+//
+// and is
+//
 // Copyright ©2021 The star-tex Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE-STAR-TEX file.
-
+//
 // Modifications are
 //
 // Copyright 2024 The tk9.0-go Authors. All rights reserved.
@@ -130,7 +136,7 @@ func (pr *renderer) DrawRule(x, y, w, h int32, c color.Color) {
 		return
 	}
 
-	r := image.Rect(int(pr.pixels(x+0)), int(pr.pixels(y+0)), int(pr.pixels(x+w)), int(pr.pixels(y-h)))
+	r := image.Rect(int(pr.pixels(x)), int(pr.pixels(y)), int(pr.pixels(x+w)), int(pr.pixels(y-h)))
 	draw.Draw(pr.img, r, image.NewUniform(c), image.Point{}, draw.Over)
 	pr.union(r)
 }
@@ -142,7 +148,7 @@ func (pr *renderer) EOP() {
 
 	img := pr.img.SubImage(pr.bound)
 	if pr.scale != 1.0 {
-		img = imaging.Resize(img, int(float64(pr.bound.Min.X)*pr.scale+0.5), 0, imaging.Lanczos)
+		img = imaging.Resize(img, int(float64(pr.bound.Max.X-pr.bound.Min.X)*pr.scale+0.5), 0, imaging.Lanczos)
 	}
 	if err := png.Encode(&pr.out, img); err != nil {
 		pr.setErr(fmt.Errorf("could not encode PNG image: %w", err))
@@ -250,7 +256,8 @@ func dvi2png(r io.Reader, scale float64) (png []byte, err error) {
 }
 
 // TeX renders TeX 'src' as a png file that shows the TeX "snippet" in a fixed
-// 600 dpi resolution. The result is afterwards resized by 'scale' factor.
+// 600 dpi resolution. The result is afterwards resized using the 'scale'
+// factor.
 //
 // Only plain Tex and the default Computer Modern fonts are supported. To get
 // rid of the page number rendered by default, the function prepends
@@ -267,6 +274,7 @@ func TeX(src string, scale float64) (png []byte) {
 		&stderr,
 		tex.WithInputFile("x.tex", strings.NewReader(fmt.Sprintf("\\footline={}\n%s\n\\bye\n", src))),
 		tex.WithDVIFile(&dvi),
+		tex.WithLogFile(io.Discard),
 	); err != nil {
 		fail(fmt.Errorf("FAIL err=%v\nstdout=%s\nstderr=%s", err, stdout.Bytes(), stderr.Bytes()))
 		return nil

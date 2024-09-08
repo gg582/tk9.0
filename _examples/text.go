@@ -59,5 +59,5 @@ which is word-wrapped by the widget.</spacing>
 to 2 points, which results in just a bit of extra space within a pararaph. Spacing3 isn't used in this example.</spacing>
 <br><spacing>To see where the space is, select ranges of text within these paragraphs. The selection highlight will cover the extra
 space.</spacing>`)
-	App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+	App.Center().Wait()
 }

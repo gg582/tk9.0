@@ -11,7 +11,7 @@ require (
 	golang.org/x/net v0.28.0
 	golang.org/x/sys v0.24.0
 	modernc.org/fileutil v1.3.0
-	modernc.org/knuth v0.3.0
+	modernc.org/knuth v0.4.0
 	modernc.org/libc v1.60.1
 	modernc.org/libtcl9.0 v0.12.1
 	modernc.org/libtk9.0 v0.10.1

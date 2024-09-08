@@ -27,30 +27,28 @@ var (
 	}
 )
 
-func handler(_ *Window, val any) (any, error) {
-	switch key := val.(rune); key {
-	case 'C':
-		out.Configure(Txt(""))
-	case '=':
-		x, err := expr.Eval(out.Txt(), nil)
-		if err != nil {
-			MessageBox(Icon("error"), Msg(err.Error()), Title("Error"))
-			x = ""
-		}
-		out.Configure(Txt(x))
-	default:
-		out.Configure(Txt(out.Txt() + string(key)))
-	}
-	return nil, nil
-}
-
 func main() {
 	out = Label(Height(2), Anchor("e"), Txt("(123+232)/(123-10)"))
 	Grid(out, Columnspan(4), Sticky("e"))
 	var b *ButtonWidget
 	for i, c := range "C()/789*456-123+0.=" {
-		h := Command(handler, c)
-		b = Button(Txt(string(c)), h)
+		h := Command(func() {
+			c := c
+			switch c {
+			case 'C':
+				out.Configure(Txt(""))
+			case '=':
+				x, err := expr.Eval(out.Txt(), nil)
+				if err != nil {
+					MessageBox(Icon("error"), Msg(err.Error()), Title("Error"))
+					x = ""
+				}
+				out.Configure(Txt(x))
+			default:
+				out.Configure(Txt(out.Txt() + string(c)))
+			}
+		})
+		b = Button(Txt(string(c)), Width(-4), h)
 		Grid(b, Row(i/4+1), Column(i%4), Sticky("news"), Ipadx("1.5m"), Ipady("2.6m"))
 		Bind(App, string(c), h)
 		for _, v := range m[c] {
@@ -58,5 +56,5 @@ func main() {
 		}
 	}
 	Grid(b, Columnspan(2))
-	App.Wait()
+	App.Configure(Padx(0), Pady(0)).Wait()
 }

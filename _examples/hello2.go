@@ -6,5 +6,5 @@ import . "modernc.org/tk9.0"
 
 func main() {
 	Pack(TExit(Txt("Hello")), Ipadx(10), Ipady(5), Padx(20), Pady(10))
-	App.Configure(Padx("4m"), Pady("3m")).Wait()
+	App.Wait()
 }

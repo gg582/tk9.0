@@ -23,7 +23,7 @@ func main() {
 		m[font] = true
 		tag := fmt.Sprintf("t%v", i)
 		t.TagConfigure(tag, Fnt(NewFont(Family(font))))
-		t.InsertML(fmt.Sprintf("%s: <%s>Lorem ipsum dolor sit amet, consectetur adipiscing elit...<%[2]s><br>", font, tag))
+		t.Insert("end", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
 	}
-	App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+	App.Center().Wait()
 }
