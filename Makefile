@@ -80,8 +80,9 @@ win65:
 	rsync \
 		-avP \
 		--rsync-path='wsl rsync' \
-		--exclude \*.gz \
 		--exclude .git/ \
+		--exclude \*.gz \
+		--exclude html/ \
 		.  \
 		win65:src/modernc.org/tk9.0
 

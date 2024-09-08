@@ -4,12 +4,16 @@ go 1.22
 
 require (
 	github.com/adrg/xdg v0.5.0
+	github.com/disintegration/imaging v1.6.2
 	github.com/evilsocket/islazy v1.11.0
 	github.com/expr-lang/expr v1.16.9
+	golang.org/x/image v0.20.0
 	golang.org/x/net v0.28.0
 	golang.org/x/sys v0.24.0
 	modernc.org/fileutil v1.3.0
-	modernc.org/libtcl9.0 v0.12.0
+	modernc.org/knuth v0.4.0
+	modernc.org/libc v1.60.1
+	modernc.org/libtcl9.0 v0.12.1
 	modernc.org/libtk9.0 v0.10.1
 	modernc.org/memory v1.8.0
 	modernc.org/ngrab v0.1.0
@@ -28,7 +32,6 @@ require (
 	modernc.org/libXft v0.9.0 // indirect
 	modernc.org/libXrender v0.8.9 // indirect
 	modernc.org/libbsd v0.10.0 // indirect
-	modernc.org/libc v1.59.5 // indirect
 	modernc.org/libexpat v0.9.9 // indirect
 	modernc.org/libfontconfig v0.7.0 // indirect
 	modernc.org/libfreetype v0.8.0 // indirect
@@ -36,4 +39,5 @@ require (
 	modernc.org/libxcb v0.9.0 // indirect
 	modernc.org/libz v0.16.3 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
+	modernc.org/token v1.1.0 // indirect
 )

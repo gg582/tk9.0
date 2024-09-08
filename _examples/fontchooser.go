@@ -14,5 +14,5 @@ func main() {
 		TExit(),
 		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
 	)
-	App.Configure(Padx("4m"), Pady("3m")).Wait()
+	App.Wait()
 }

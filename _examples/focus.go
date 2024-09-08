@@ -11,5 +11,5 @@ func main() {
 	Grid(Label(Txt("A:")), a, TButton(Txt("Focus A"), Command(func() { Focus(a) })), style)
 	Grid(Label(Txt("B:")), b, TButton(Txt("Focus B"), Command(func() { Focus(b) })), style)
 	Grid(TExit(), Columnspan(3), style)
-	App.Configure(Padx("4m"), Pady("3m")).Wait()
+	App.Wait()
 }

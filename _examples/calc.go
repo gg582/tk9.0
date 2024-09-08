@@ -24,9 +24,9 @@ func main() {
 					out.Configure(Txt(out.Txt() + string(c)))
 				}
 			},
-		))
+		), Width(-4))
 		Grid(b, Row(i/4+1), Column(i%4), Sticky("news"), Ipadx("1.5m"), Ipady("2.6m"))
 	}
 	Grid(b, Columnspan(2))
-	App.Wait()
+	App.Configure(Padx(0), Pady(0)).Wait()
 }
