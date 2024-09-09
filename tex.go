@@ -24,8 +24,8 @@ import (
 	"image/draw"
 	"image/png"
 	"io"
-	"strings"
 	"runtime"
+	"strings"
 
 	"github.com/disintegration/imaging"
 	"golang.org/x/image/font"

@@ -5,7 +5,6 @@ import _ "embed"
 
 //go:embed gotk.png
 var icon []byte
-var k = TkScaling() * 72 / 600
 
 func main() {
 	var scroll *TScrollbarWidget
