@@ -2106,17 +2106,24 @@ func (w *TextWidget) TagAdd(options ...any) string {
 //
 // # Description
 //
-// InsertML inserts ml at the end of 'w', interpreting it pseudo-HTML.
+// InsertML inserts 'ml' at the end of 'w', interpreting it as a HTML-like
+// markup language.
 //
-// It recognizes and treats specially the <br> tag. Other ML-tags are used as
-// names of configured 'w' tags, if any.
+// It recognizes and treats accordingly the <br> tag.
 //
 // The <img> tag is reserved for embedded images. You can inline the image
-// directly, for example.
+// directly:
 //
-//	InsertML("Hello ", NewPhoto(...), Align("top"), " world!")
+//	InsertML("Hello", NewPhoto(...), Align("top"), "world!")
 //
-// Example usage in _examples/text.go.
+// The <embed> tag is reserved for embedded widgets. You can inline a widget
+// directly:
+//
+//	InsertML("Hello", Button(Txt("Foo")), Align("center"), "world!")
+//
+// Other ML-tags are used as names of configured 'w' tags, if any.
+//
+// Example usage in _examples/embed.go.
 func (w *TextWidget) InsertML(list ...any) {
 	var ml bytes.Buffer
 	for i := 0; i < len(list); i++ {
@@ -2139,8 +2146,22 @@ func (w *TextWidget) InsertML(list ...any) {
 				i++
 			}
 			ml.WriteString(">")
-		default:
-			fmt.Fprintf(&ml, "[%T=%v]", x, x)
+		case Widget:
+			var opts Opts
+			for j := i + 1; j < len(list); j++ {
+				x, ok := list[j].(Opt)
+				if !ok {
+					break
+				}
+
+				opts = append(opts, x)
+			}
+			fmt.Fprintf(&ml, "<embed src=%q", x)
+			for _, v := range opts {
+				fmt.Fprintf(&ml, " opt=%q", v.optionString(w.Window))
+				i++
+			}
+			ml.WriteString(">")
 		}
 	}
 	doc, err := html.Parse(&ml)
@@ -2163,6 +2184,8 @@ func (w *TextWidget) InsertML(list ...any) {
 				switch id {
 				case 0:
 					s := strings.ReplaceAll(toks[i], "\\$", "$")
+					s = strings.ReplaceAll(s, "&lt;", "<")
+					s = strings.ReplaceAll(s, "&gt;", ">")
 					evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(s), tclSafeStrings(tags[body+1:]...)))
 				default:
 					img := NewPhoto(Data(TeX(toks[i], k)))
@@ -2188,7 +2211,18 @@ func (w *TextWidget) InsertML(list ...any) {
 					}
 				}
 				evalErr(fmt.Sprintf("%v image create end -image %s %s", w, src, strings.Join(opts, " ")))
-			//TODO case "win"
+			case "embed":
+				var src string
+				var opts []string
+				for _, v := range n.Attr {
+					switch v.Key {
+					case "src":
+						src = v.Val
+					case "opt":
+						opts = append(opts, v.Val)
+					}
+				}
+				evalErr(fmt.Sprintf("%v window create end -window %s %s", w, src, strings.Join(opts, " ")))
 			default:
 				tags = append(tags, n.Data)
 			}

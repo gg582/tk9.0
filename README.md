@@ -14,7 +14,7 @@ Using embedded images (_examples/photo.go).
      8	
      9	func main() {
     10		Pack(Label(Image(NewPhoto(Data(gopher)))), TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    11		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    11		App.Center().Wait()
     12	}
 
 ![menu](_examples/menu.png "menu")
@@ -25,8 +25,8 @@ Cascading menus (_examples/menu.go)
      2	
      3	import (
      4		"fmt"
-     5		"runtime"
-     6		. "modernc.org/tk9.0"
+     5		. "modernc.org/tk9.0"
+     6		"runtime"
      7	)
      8	
      9	func main() {
@@ -60,7 +60,7 @@ Cascading menus (_examples/menu.go)
     37		menubar.AddCascade(Lbl("Help"), Underline(0), Mnu(helpMenu))
     38	
     39		App.WmTitle(fmt.Sprintf("%s on %s", App.WmTitle(""), runtime.GOOS))
-    40		App.Configure(Mnu(menubar), Width("8c"), Height("6c"), Padx("4m"), Pady("3m")).Center().Wait()
+    40		App.Configure(Mnu(menubar), Width("8c"), Height("6c")).Wait()
     41	}
 
 ![svg](_examples/text.png "text")
@@ -128,7 +128,7 @@ Rich text using markup (_examples/text.go).
     59	to 2 points, which results in just a bit of extra space within a pararaph. Spacing3 isn't used in this example.</spacing>
     60	<br><spacing>To see where the space is, select ranges of text within these paragraphs. The selection highlight will cover the extra
     61	space.</spacing>`)
-    62		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    62		App.Center().Wait()
     63	}
 
 ![svg](_examples/svg.png "svg")
@@ -157,7 +157,7 @@ Using svg (_examples/svg.go).
     20			Label(Image(NewPhoto(Data(svg)))),
     21			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
     22		)
-    23		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    23		App.Center().Wait()
     24	}
 
 ![calc](_examples/calc.png "calc")
@@ -167,7 +167,7 @@ A simple calculator (_examples/calc.go).
      1	package main
      2	
      3	import "github.com/expr-lang/expr"
-     4	import 	. "modernc.org/tk9.0"
+     4	import . "modernc.org/tk9.0"
      5	
      6	func main() {
      7		out := Label(Height(2), Anchor("e"), Txt("(123+232)/(123-10)"))
@@ -190,11 +190,11 @@ A simple calculator (_examples/calc.go).
     24						out.Configure(Txt(out.Txt() + string(c)))
     25					}
     26				},
-    27			))
+    27			), Width(-4))
     28			Grid(b, Row(i/4+1), Column(i%4), Sticky("news"), Ipadx("1.5m"), Ipady("2.6m"))
     29		}
     30		Grid(b, Columnspan(2))
-    31		App.Wait()
+    31		App.Configure(Padx(0), Pady(0)).Wait()
     32	}
 
 ![font](_examples/font.png "font")
@@ -226,14 +226,15 @@ A font previewer (_examples/font.go).
     23			m[font] = true
     24			tag := fmt.Sprintf("t%v", i)
     25			t.TagConfigure(tag, Fnt(NewFont(Family(font))))
-    26			t.Insert("end", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
-    27		}
-    28		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
-    29	}
+    26			t.Insert("end", font+": ")
+    27			t.Insert("end", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
+    28		}
+    29		App.Center().Wait()
+    30	}
 
 ![splot](_examples/splot.png "surface plot")
 
-Surface plot (_examples/splot.go).
+Surface plot (_examples/splot.go). This example requires Gnuplot 5.4+ installation.
 
      1	package main
      2	
@@ -244,12 +245,12 @@ Surface plot (_examples/splot.go).
      7			Label(Image(NewPhoto(Width(800), Height(600)).Graph("set grid; splot x**2+y**2, x**2-y**2"))),
      8			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
      9		)
-    10		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    10		App.Center().Wait()
     11	}
 
 ![tori](_examples/tori.png "interlocked tori")
 
-Interlocked tori plot (_examples/tori.go).
+Interlocked tori plot (_examples/tori.go). This example requires Gnuplot 5.4+ installation.
 
      1	package main
      2	
@@ -289,12 +290,12 @@ Interlocked tori plot (_examples/tori.go).
     36			Label(Image(NewPhoto(Width(800), Height(600)).Graph(script))),
     37			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
     38		)
-    39		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    39		App.Center().Wait()
     40	}
 
 ![tori-canvas](_examples/tori_canvas.png "interlocked tori on canvas")
 
-Interlocked tori plot on canvas (_examples/tori_canvas.go).
+Interlocked tori plot on canvas (_examples/tori_canvas.go). This example requires Gnuplot 5.4+ installation.
 
      1	package main
      2	
@@ -331,26 +332,60 @@ Interlocked tori plot on canvas (_examples/tori_canvas.go).
     33			Canvas(Width(800), Height(600), Background(White)).Graph(script),
     34			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
     35		)
-    36		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    36		App.Center().Wait()
     37	}
 
 ![tex](_examples/tex.png "TeX")
 
-Rendering plain TeX without runtime dependencies (_examples/tex.go).
+Rendering plain TeX (_examples/tex.go). No runtime dependencies required.
 
      1	package main
      2	
      3	import . "modernc.org/tk9.0"
      4	
-     5	const tex = `$$\sin x = {{e^{ix}-e^{-ix}}\over 2i}$$`
+     5	const tex = `$$\int _0 ^\infty {{\sin ax \sin bx}\over{x^2}}\,dx = {\pi a\over 2}$$`
      6	
      7	func main() {
      8		Pack(
-     9			Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*72/TkScaling()/600))))),
+     9			Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*TkScaling()*72/600))))),
     10			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
     11		)
-    12		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    12		App.Center().Wait()
     13	}
+
+![embed](_examples/tex.png "embed")
+
+Embedding pictures, TeX and widgets (_examples/embed.go).
+
+     1	package main
+     2	
+     3	import . "modernc.org/tk9.0"
+     4	import _ "embed"
+     5	
+     6	//go:embed gotk.png
+     7	var icon []byte
+     8	var k = TkScaling() * 72 / 600
+     9	
+    10	func main() {
+    11		var scroll *TScrollbarWidget
+    12		t := Text(Fnt("helvetica 10"), Height(15), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("4p"), Pady("4p"), Pady("12p"))
+    13		scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
+    14		Grid(t, Sticky("news"), Pady("2m"))
+    15		Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
+    16		GridRowConfigure(App, 0, Weight(1))
+    17		GridColumnConfigure(App, 0, Weight(1))
+    18		Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    19		t.TagConfigure("c", Justify("center"))
+    20		t.TagConfigure("e", Offset("-2p"))
+    21		t.TagConfigure("t", Fnt("times"))
+    22		t.InsertML(`<c>Hello Go + Tk`, NewPhoto(Data(icon)), Padx("4p"), `users!</c>
+    23	<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t> $Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$ users! (\$inline math\$)</c>
+    24	<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t> $$Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$$ users! (\$\$display math\$\$)</c>
+    25	<br><br>The above exemplifies embeding pictures and <t>T<e>E</e>X</t> scripts. A text widget can also embed other widgets. For example,
+    26	when a`, TButton(Txt("<Tbutton>")), Padx("4p"), Pady("2p"), Align("center"), "and a", TEntry(Textvariable("<TEntry>"), Width(8)), Padx("4p"),
+    27			Pady("2p"), Align("center"), `are part of the markup, they will reflow when their containing text widget is resized.`)
+    28		App.Center().Wait()
+    29	}
 
 Documentation at [pkg.go.dev].
 

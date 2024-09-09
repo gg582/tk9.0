@@ -1,6 +1,6 @@
 // The original code in this file comes from
 //
-// https://git.sr.ht/~sbinet/star-tex/tree/main/item/cmd/dvi-cnv
+//	https://git.sr.ht/~sbinet/star-tex/tree/main/item/cmd/dvi-cnv
 //
 // and is
 //
@@ -257,15 +257,13 @@ func dvi2png(r io.Reader, scale float64) (png []byte, err error) {
 
 // TeX renders TeX 'src' as a png file that shows the TeX "snippet" in a fixed
 // 600 dpi resolution. The result is afterwards resized using the 'scale'
-// factor.
+// factor. Scale factor 1.0 means no resize.
 //
-// Only plain Tex and the default Computer Modern fonts are supported. To get
-// rid of the page number rendered by default, the function prepends
-// "\footline={}\n" to src. Also, "\n\bye\n" is appended to 'src' to make it a
-// complete TeX document.
-//
-// The function has no runtime dependencies.
+// Only plain Tex and the default Computer Modern fonts are supported.
 func TeX(src string, scale float64) (png []byte) {
+	// To get rid of the page number rendered by default, the function prepends
+	// "\footline={}\n" to src. Also, "\n\bye\n" is appended to 'src' to make it a
+	// complete TeX document.
 	var stdout, stderr, dvi bytes.Buffer
 	if err := tex.Main(
 		strings.NewReader("\\input plain \\input x"),
