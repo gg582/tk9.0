@@ -2112,9 +2112,9 @@ func (w *TextWidget) TagAdd(options ...any) string {
 // names of configured 'w' tags, if any.
 //
 // The <img> tag is reserved for embedded images. You can inline the image
-// directly this way
+// directly, for example.
 //
-//	InsertML("Hello ", NewPhoto(...), Align("baseline"), " world!")
+//	InsertML("Hello ", NewPhoto(...), Align("top"), " world!")
 //
 // Example usage in _examples/text.go.
 func (w *TextWidget) InsertML(list ...any) {
@@ -2151,14 +2151,24 @@ func (w *TextWidget) InsertML(list ...any) {
 
 	var tags []string
 	var body int
+	k := TkScaling() * 72 / 600
 	walk(0, doc, func(lvl int, n *html.Node) bool {
 		switch n.Type {
 		case html.TextNode:
 			if lvl < len(tags) {
 				tags = tags[:lvl]
 			}
-			//TODO TeX
-			evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(n.Data), tclSafeStrings(tags[body+1:]...)))
+			ids, toks := tokenize(n.Data)
+			for i, id := range ids {
+				switch id {
+				case 0:
+					s := strings.ReplaceAll(toks[i], "\\$", "$")
+					evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(s), tclSafeStrings(tags[body+1:]...)))
+				default:
+					img := NewPhoto(Data(TeX(toks[i], k)))
+					evalErr(fmt.Sprintf("%v image create end -image %s -align top", w, img))
+				}
+			}
 		case html.ElementNode:
 			switch n.Data {
 			case "br":
@@ -2187,6 +2197,19 @@ func (w *TextWidget) InsertML(list ...any) {
 	})
 }
 
+func tokenize(s string) (ids []int, toks []string) {
+	for {
+		id, len := mlToken(s)
+		if len == 0 {
+			return ids, toks
+		}
+
+		ids = append(ids, id)
+		toks = append(toks, s[:len])
+		s = s[len:]
+	}
+}
+
 func tclFromElementNode(s string) string {
 	a := strings.Fields(s)
 	var prefix, suffix string
@@ -2207,6 +2230,14 @@ func tclFromElementNode(s string) string {
 	return r
 }
 
+var badMLChars = [...]bool{
+	'}':  true,
+	'\\': true,
+	'\n': true,
+	'\r': true,
+	'\t': true,
+}
+
 func tclSafeML(s string) string {
 	// const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
 	const badString = "}\\\n\r\t "
@@ -2214,7 +2245,7 @@ func tclSafeML(s string) string {
 		var b strings.Builder
 		for _, c := range s {
 			switch {
-			case int(c) < len(badChars) && badChars[c]:
+			case int(c) < len(badMLChars) && badMLChars[c]:
 				fmt.Fprintf(&b, "\\x%02x", c)
 			default:
 				b.WriteRune(c)

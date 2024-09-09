@@ -70,23 +70,7 @@ func TestTokenizer(t *testing.T) {
 		{"x$a$$y", []int{0, 2, 0}, []string{"x", "$a$$", "y"}},
 		{"x\\$0$a\\$1b$$\\$y", []int{0, 2, 0}, []string{"x\\$0", "$a\\$1b$$", "\\$y"}},
 	} {
-		var ids []int
-		var toks []string
-		//trc(" test.s=%q", test.s)
-		for s := test.s; ; {
-			id, len := mlToken(s)
-			//trc("\ts=%q id=%v len=%v", s[len:], id, len)
-			if len == 0 {
-				break
-			}
-
-			ids = append(ids, id)
-			toks = append(toks, s[:len])
-			if len == 0 {
-				break
-			}
-			s = s[len:]
-		}
+		ids, toks := tokenize(test.s)
 		if g, e := fmt.Sprintf("%v %q", ids, toks), fmt.Sprintf("%v %q", test.ids, test.toks); g != e {
 			t.Errorf("#%3v: `%s`\ngot %s\nexp %s", i, test.s, g, e)
 		}
