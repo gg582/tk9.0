@@ -27,7 +27,7 @@ func main() {
 	t.TagConfigure("super", Offset("4p"), Fnt("helvetica 8"))
 	t.TagConfigure("tiny", Fnt("times 8 bold"))
 	t.TagConfigure("underline", Underline(1))
-	t.TagConfigure("verybig", Fnt("courier 22 bold"))
+	t.TagConfigure("verybig", Fnt(CourierFont()+" 22 bold"))
 	t.InsertML(`Text widgets like this one allow you to display information in a variety of styles. Display styles are controlled
 using a mechanism called <bold>tags</bold>. Tags are just textual names that you can apply to one or more ranges of characters within a
 text widget. You can configure tags with various display styles. If you do this, then the tagged characters will be displayed with the

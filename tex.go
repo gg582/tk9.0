@@ -25,6 +25,7 @@ import (
 	"image/png"
 	"io"
 	"strings"
+	"runtime"
 
 	"github.com/disintegration/imaging"
 	"golang.org/x/image/font"
@@ -284,4 +285,13 @@ func TeX(src string, scale float64) (png []byte) {
 	}
 
 	return b
+}
+
+// CourierFont returns "{courier new}" on Windows and "courier" elsewhere.
+func CourierFont() string {
+	if runtime.GOOS == "windows" {
+		return "{courier new}"
+	}
+
+	return "courier"
 }
