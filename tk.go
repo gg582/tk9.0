@@ -2140,7 +2140,7 @@ func (w *TextWidget) InsertML(list ...any) {
 			fmt.Fprintf(&ml, "[%T=%v]", x, x)
 		}
 	}
-	trc("====\n%s\n----", ml.Bytes())
+	// trc("====\n%s\n----", ml.Bytes())
 	doc, err := html.Parse(&ml)
 	if err != nil {
 		fail(err)

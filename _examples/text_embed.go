@@ -9,9 +9,8 @@ var scale = TkScaling()*72/600
 const tex = `$Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$`
 
 func main() {
-	println(scale)
 	var scroll *TScrollbarWidget
-	t := Text(Fnt("helvetica 10"), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
+	t := Text(Fnt("helvetica 10"), Height(10), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("4p"), Pady("4p"), Pady("12p"))
 	scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
 	Grid(t, Sticky("news"), Pady("2m"))
 	Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
@@ -19,8 +18,11 @@ func main() {
 	GridColumnConfigure(App, 0, Weight(1))
 	Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	t.TagConfigure("center", Justify("center"))
-	t.InsertML(`Hello Go`, NewPhoto(Data(icon)), Padx("1m"),`programmers!`)
-	t.InsertML(`<br><br>Hello TeX`, NewPhoto(Data(TeX(tex, scale))), Padx("1m"), `users!`)
-	t.InsertML(`<br><br>Hello TeX`, NewPhoto(Data(TeX("$"+tex+"$", scale))), Padx("1m"), `users!`)
+	t.TagConfigure("c", Justify("center"))
+	t.TagConfigure("t", Fnt("times"))
+	t.TagConfigure("e", Offset("-2p"))
+	t.InsertML("<c>Hello Go + Tk", NewPhoto(Data(icon)), Padx("4p"),"users!</c>")
+	t.InsertML("<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t>", NewPhoto(Data(TeX(tex, scale))), Padx("4p"), Align("top"), "users! (Text formula)</c>")
+	t.InsertML("<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t>", NewPhoto(Data(TeX("$"+tex+"$", scale))), Padx("4p"), Align("top"), "users! (Display formula)</c>")
 	App.Center().Wait()
 }
