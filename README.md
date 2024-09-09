@@ -226,11 +226,10 @@ A font previewer (_examples/font.go).
     23			m[font] = true
     24			tag := fmt.Sprintf("t%v", i)
     25			t.TagConfigure(tag, Fnt(NewFont(Family(font))))
-    26			t.Insert("end", font+": ")
-    27			t.Insert("end", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
-    28		}
-    29		App.Center().Wait()
-    30	}
+    26			t.Insert("end", font+": ", "", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
+    27		}
+    28		App.Center().Wait()
+    29	}
 
 ![splot](_examples/splot.png "surface plot")
 
