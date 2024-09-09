@@ -266,7 +266,6 @@ func dvi2png(r io.Reader, scale float64) (png []byte, err error) {
 //
 // The function has no runtime dependencies.
 func TeX(src string, scale float64) (png []byte) {
-	//TODO do not write plain.log to current directory which may not even be writable.
 	var stdout, stderr, dvi bytes.Buffer
 	if err := tex.Main(
 		strings.NewReader("\\input plain \\input x"),

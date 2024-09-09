@@ -5,7 +5,8 @@ import _ "embed"
 
 //go:embed gotk.png
 var icon []byte
-var scale = TkScaling()*72/600
+var k = TkScaling() * 72 / 600
+
 const tex = `$Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$`
 
 func main() {
@@ -17,12 +18,11 @@ func main() {
 	GridRowConfigure(App, 0, Weight(1))
 	GridColumnConfigure(App, 0, Weight(1))
 	Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-	t.TagConfigure("center", Justify("center"))
 	t.TagConfigure("c", Justify("center"))
-	t.TagConfigure("t", Fnt("times"))
 	t.TagConfigure("e", Offset("-2p"))
-	t.InsertML("<c>Hello Go + Tk", NewPhoto(Data(icon)), Padx("4p"),"users!</c>")
-	t.InsertML("<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t>", NewPhoto(Data(TeX(tex, scale))), Padx("4p"), Align("top"), "users! (Text formula)</c>")
-	t.InsertML("<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t>", NewPhoto(Data(TeX("$"+tex+"$", scale))), Padx("4p"), Align("top"), "users! (Display formula)</c>")
+	t.TagConfigure("t", Fnt("times"))
+	t.InsertML(`<c>Hello Go + Tk`, NewPhoto(Data(icon)), Padx("4p"), `users!</c>
+<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t>`, NewPhoto(Data(TeX(tex, k))), Padx("4p"), Align("top"), `users! (Text formula)</c>
+<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t>`, NewPhoto(Data(TeX("$"+tex+"$", k))), Padx("4p"), Align("top"), `users! (Display formula)</c>`)
 	App.Center().Wait()
 }

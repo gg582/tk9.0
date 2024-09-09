@@ -2125,10 +2125,13 @@ func (w *TextWidget) InsertML(list ...any) {
 			ml.WriteString(x)
 		case *Img:
 			var opts Opts
-			for j := i+1; j < len(list); j++ {
-				if x, ok := list[j].(Opt); ok {
-					opts = append(opts, x)
+			for j := i + 1; j < len(list); j++ {
+				x, ok := list[j].(Opt)
+				if !ok {
+					break
 				}
+
+				opts = append(opts, x)
 			}
 			fmt.Fprintf(&ml, "<img src=%q", x)
 			for _, v := range opts {
@@ -2140,7 +2143,6 @@ func (w *TextWidget) InsertML(list ...any) {
 			fmt.Fprintf(&ml, "[%T=%v]", x, x)
 		}
 	}
-	// trc("====\n%s\n----", ml.Bytes())
 	doc, err := html.Parse(&ml)
 	if err != nil {
 		fail(err)
@@ -2155,6 +2157,7 @@ func (w *TextWidget) InsertML(list ...any) {
 			if lvl < len(tags) {
 				tags = tags[:lvl]
 			}
+			//TODO TeX
 			evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(n.Data), tclSafeStrings(tags[body+1:]...)))
 		case html.ElementNode:
 			switch n.Data {
@@ -2175,8 +2178,6 @@ func (w *TextWidget) InsertML(list ...any) {
 					}
 				}
 				evalErr(fmt.Sprintf("%v image create end -image %s %s", w, src, strings.Join(opts, " ")))
-			//TODO case "tex"
-			//TODO case "texi"
 			//TODO case "win"
 			default:
 				tags = append(tags, n.Data)
@@ -2184,22 +2185,6 @@ func (w *TextWidget) InsertML(list ...any) {
 		}
 		return true
 	})
-}
-
-// Align option.
-//
-// Known uses:
-//   - [Text] (widget specific, applies to embedded images)
-func Align(val any) Opt {
-	return rawOption(fmt.Sprintf(`-align %s`, optionString(val)))
-}
-
-func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)) {
-	for ; n != nil; n = n.NextSibling {
-		if visitor(lvl, n) {
-			walk(lvl+1, n.FirstChild, visitor)
-		}
-	}
 }
 
 func tclFromElementNode(s string) string {
@@ -2223,7 +2208,8 @@ func tclFromElementNode(s string) string {
 }
 
 func tclSafeML(s string) string {
-	const badString = "&;`|*?~<>^[]{}$\\\n\r\t "
+	// const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
+	const badString = "}\\\n\r\t "
 	if strings.ContainsAny(s, badString) {
 		var b strings.Builder
 		for _, c := range s {
@@ -2237,6 +2223,22 @@ func tclSafeML(s string) string {
 		s = b.String()
 	}
 	return s
+}
+
+// Align option.
+//
+// Known uses:
+//   - [Text] (widget specific, applies to embedded images)
+func Align(val any) Opt {
+	return rawOption(fmt.Sprintf(`-align %s`, optionString(val)))
+}
+
+func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)) {
+	for ; n != nil; n = n.NextSibling {
+		if visitor(lvl, n) {
+			walk(lvl+1, n.FirstChild, visitor)
+		}
+	}
 }
 
 // Fontchooser — control font selection dialog

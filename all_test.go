@@ -17,6 +17,7 @@ import (
 	_ "github.com/expr-lang/expr" // examples
 	_ "golang.org/x/net/html"     // generator.go
 	_ "modernc.org/ngrab/lib"     // generator.go
+	_ "modernc.org/rec/lib"       // generator.go
 )
 
 func TestMain(m *testing.M) {
@@ -35,14 +36,59 @@ func TestMain(m *testing.M) {
 	os.Exit(rc)
 }
 
-//go:embed _examples/gopher.png
-var gopher []byte
+func TestTokenizer(t *testing.T) {
+	for i, test := range []struct {
+		s    string
+		ids  []int
+		toks []string
+	}{
+		{},
+		{"a", []int{0}, []string{"a"}},
+		{"\\$", []int{0}, []string{"\\$"}},
+		{"\\$\\$", []int{0}, []string{"\\$\\$"}},
+		{"\\$\\$\\$", []int{0}, []string{"\\$\\$\\$"}},
 
-func Test(t *testing.T) {
-	img := NewPhoto(Data(gopher))
-	if img == nil || Error != nil {
-		t.Fatal(Error)
+		{"\\$\\$\\$\\$", []int{0}, []string{"\\$\\$\\$\\$"}},
+		{"a\\$", []int{0}, []string{"a\\$"}},
+		{"a\\$\\$", []int{0}, []string{"a\\$\\$"}},
+		{"a\\$\\$\\$", []int{0}, []string{"a\\$\\$\\$"}},
+		{"a\\$\\$\\$\\$", []int{0}, []string{"a\\$\\$\\$\\$"}},
+
+		{"$a$", []int{1}, []string{"$a$"}},
+		{"$$a$", []int{2}, []string{"$$a$"}},
+		{"$$a$$", []int{2}, []string{"$$a$$"}},
+		{"$a$$", []int{2}, []string{"$a$$"}},
+		{"x$a$", []int{0, 1}, []string{"x", "$a$"}},
+
+		{"x$$a$", []int{0, 2}, []string{"x", "$$a$"}},
+		{"x$$a$$", []int{0, 2}, []string{"x", "$$a$$"}},
+		{"x$a$$", []int{0, 2}, []string{"x", "$a$$"}},
+		{"x$a$y", []int{0, 1, 0}, []string{"x", "$a$", "y"}},
+		{"x$$a$y", []int{0, 2, 0}, []string{"x", "$$a$", "y"}},
+
+		{"x$$a$$y", []int{0, 2, 0}, []string{"x", "$$a$$", "y"}},
+		{"x$a$$y", []int{0, 2, 0}, []string{"x", "$a$$", "y"}},
+		{"x\\$0$a\\$1b$$\\$y", []int{0, 2, 0}, []string{"x\\$0", "$a\\$1b$$", "\\$y"}},
+	} {
+		var ids []int
+		var toks []string
+		//trc(" test.s=%q", test.s)
+		for s := test.s; ; {
+			id, len := mlToken(s)
+			//trc("\ts=%q id=%v len=%v", s[len:], id, len)
+			if len == 0 {
+				break
+			}
+
+			ids = append(ids, id)
+			toks = append(toks, s[:len])
+			if len == 0 {
+				break
+			}
+			s = s[len:]
+		}
+		if g, e := fmt.Sprintf("%v %q", ids, toks), fmt.Sprintf("%v %q", test.ids, test.toks); g != e {
+			t.Errorf("#%3v: `%s`\ngot %s\nexp %s", i, test.s, g, e)
+		}
 	}
-
-	t.Log(img.String())
 }
