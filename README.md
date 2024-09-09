@@ -353,7 +353,7 @@ Rendering plain TeX (_examples/tex.go). No runtime dependencies required.
     12		App.Center().Wait()
     13	}
 
-![embed](_examples/tex.png "embed")
+![embed](_examples/embed.png "embed")
 
 Embedding pictures, TeX and widgets (_examples/embed.go).
 
