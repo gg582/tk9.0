@@ -239,13 +239,15 @@ Surface plot (_examples/splot.go). This example requires Gnuplot 5.4+ installati
      2	
      3	import . "modernc.org/tk9.0"
      4	
-     5	func main() {
-     6		Pack(
-     7			Label(Image(NewPhoto(Width(800), Height(600)).Graph("set grid; splot x**2+y**2, x**2-y**2"))),
-     8			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-     9		)
-    10		App.Center().Wait()
-    11	}
+     5	var cm = int(TkScaling()*72/2.54+0.5)
+     6	
+     7	func main() {
+     8		Pack(
+     9			Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph("set grid; splot x**2+y**2, x**2-y**2"))),
+    10			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    11		)
+    12		App.Center().Wait()
+    13	}
 
 ![tori](_examples/tori.png "interlocked tori")
 
@@ -281,16 +283,17 @@ Interlocked tori plot (_examples/tori.go). This example requires Gnuplot 5.4+ in
     28	set format cb "%.1f"
     29	set pm3d depthorder
     30	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with pm3d,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with pm3d
-    31	unset multiplot
-    32	`
-    33	
-    34	func main() {
-    35		Pack(
-    36			Label(Image(NewPhoto(Width(800), Height(600)).Graph(script))),
-    37			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    38		)
-    39		App.Center().Wait()
-    40	}
+    31	unset multiplot`
+    32	
+    33	var cm = int(TkScaling()*72/2.54+0.5)
+    34	
+    35	func main() {
+    36		Pack(
+    37			Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph(script))),
+    38			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    39		)
+    40		App.Center().Wait()
+    41	}
 
 ![tori-canvas](_examples/tori_canvas.png "interlocked tori on canvas")
 
@@ -323,16 +326,17 @@ Interlocked tori plot on canvas (_examples/tori_canvas.go). This example require
     25	set rrange [ * : * ] noreverse writeback
     26	set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front  noinvert bdefault
     27	NO_ANIMATION = 1
-    28	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with lines
-    29	`
-    30	
-    31	func main() {
-    32		Pack(
-    33			Canvas(Width(800), Height(600), Background(White)).Graph(script),
-    34			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    35		)
-    36		App.Center().Wait()
-    37	}
+    28	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with lines`
+    29	
+    30	var cm = int(TkScaling()*72/2.54+0.5)
+    31	
+    32	func main() {
+    33		Pack(
+    34			Canvas(Width(20*cm), Height(15*cm), Background(White)).Graph(script),
+    35			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    36		)
+    37		App.Center().Wait()
+    38	}
 
 ![tex](_examples/tex.png "TeX")
 
