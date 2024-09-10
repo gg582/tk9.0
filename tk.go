@@ -14,6 +14,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync/atomic"
@@ -115,6 +117,14 @@ func tclSafeString(s string) string {
 	return s
 }
 
+func tclSafeList(list ...any) string {
+	var a []string
+	for _, v := range list {
+		a = append(a, tclSafeString(fmt.Sprint(v)))
+	}
+	return strings.Join(a, " ")
+}
+
 func setDefaults() {
 	CollectErrors = true
 
@@ -129,7 +139,7 @@ func setDefaults() {
 	App.WmTitle(base)
 	App.Configure(Padx("4m"), Pady("3m")).Center()
 	if nm := os.Getenv(ThemeEnvVar); nm != "" {
-		eval(fmt.Sprintf("ttk::style theme use %s", tclSafeString(nm)))
+		StyleThemeUse(nm)
 	}
 }
 
@@ -1547,12 +1557,12 @@ func Focus(options ...Opt) string {
 	return evalErr(fmt.Sprintf("focus %s", collect(options...)))
 }
 
-// Font represents a Tk font.
-type Font struct {
+// FontFace represents a Tk font.
+type FontFace struct {
 	name string
 }
 
-func (f *Font) optionString(_ *Window) (r string) {
+func (f *FontFace) optionString(_ *Window) (r string) {
 	if f != nil {
 		return f.name
 	}
@@ -1561,7 +1571,7 @@ func (f *Font) optionString(_ *Window) (r string) {
 }
 
 // String implements fmt.Stringer.
-func (f *Font) String() string {
+func (f *FontFace) String() string {
 	return f.optionString(nil)
 }
 
@@ -1631,7 +1641,7 @@ func (f *Font) String() string {
 // Additional information might be available at the [Tcl/Tk font] page.
 //
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
-func NewFont(options ...Opt) *Font {
+func NewFont(options ...Opt) *FontFace {
 	nm := fmt.Sprintf("font%v", id.Add(1))
 	code := fmt.Sprintf("font create %s %s", nm, collect(options...))
 	r, err := eval(code)
@@ -1640,7 +1650,7 @@ func NewFont(options ...Opt) *Font {
 		return nil
 	}
 
-	return &Font{name: nm}
+	return &FontFace{name: nm}
 }
 
 // FontFamilies — Create and inspect fonts.
@@ -1707,7 +1717,7 @@ func parseList(s string) (r []string) {
 // Additional information might be available at the [Tcl/Tk font] page.
 //
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
-func (f *Font) Delete() {
+func (f *FontFace) Delete() {
 	evalErr(fmt.Sprintf("font delete %s", f))
 }
 
@@ -1947,63 +1957,6 @@ func (lc LC) String() string {
 	return fmt.Sprintf("%d.%d", lc.Line, lc.Char)
 }
 
-// Xscrollcommand option.
-//
-// # Description
-//
-// Specifies the prefix for a command used to communicate with horizontal
-// scrollbars. When the view in the widget's window changes (or whenever
-// anything else occurs that could change the display in a scrollbar, such as a
-// change in the total size of the widget's contents), the widget will generate
-// a Tcl command by concatenating the scroll command and two numbers. Each of
-// the numbers is a fraction between 0 and 1, which indicates a position in the
-// document. 0 indicates the beginning of the document, 1 indicates the end,
-// .333 indicates a position one third the way through the document, and so on.
-// The first fraction indicates the first information in the document that is
-// visible in the window, and the second fraction indicates the information
-// just after the last portion that is visible. The command is then passed to
-// the Tcl interpreter for execution. Typically the -xscrollcommand option
-// consists of the path name of a scrollbar widget followed by “set”, e.g.
-// “.x.scrollbar set”: this will cause the scrollbar to be updated whenever the
-// view in the window changes. If this option is not specified, then no command
-// will be executed.
-//
-// See also [Event handlers].
-//
-// Known uses:
-//   - [TextWidget] (widget specific)
-//
-// Additional information might be available at the [Tcl/Tk text] page.
-//
-// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
-// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
-func Xscrollcommand(handler any) Opt {
-	return newEventHandler("-xscrollcommand", handler)
-}
-
-// Yscrollcommand option.
-//
-// # Description
-//
-// Specifies the prefix for a command used to communicate with vertical
-// scrollbars. This option is treated in the same way as the -xscrollcommand
-// option, except that it is used for vertical scrollbars and is provided by
-// widgets that support vertical scrolling. See the description of
-// -xscrollcommand for details on how this option is used.
-//
-// See also [Event handlers].
-//
-// Known uses:
-//   - [TextWidget] (widget specific)
-//
-// Additional information might be available at the [Tcl/Tk text] page.
-//
-// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
-// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
-func Yscrollcommand(handler any) Opt {
-	return newEventHandler("-yscrollcommand", handler)
-}
-
 // Text — Create and manipulate 'text' hypertext editing widgets
 //
 // # Description
@@ -2121,7 +2074,14 @@ func (w *TextWidget) TagAdd(options ...any) string {
 //
 //	InsertML("Hello", Button(Txt("Foo")), Align("center"), "world!")
 //
-// Other ML-tags are used as names of configured 'w' tags, if any.
+// The <pre> tag works similarly to HTML, ie. white space and line breaks are
+// kept. To make the content of a <pre> rendered in monospace, configure the
+// tag, for example:
+//
+//	t.TagConfigure("pre", Font(CourierFont(), 10)
+//
+// Other ML-tags are used as names of configured 'w' tags, if configured,
+// ignored otherwise.
 //
 // Example usage in _examples/embed.go.
 func (w *TextWidget) InsertML(list ...any) {
@@ -2179,14 +2139,19 @@ func (w *TextWidget) InsertML(list ...any) {
 			if lvl < len(tags) {
 				tags = tags[:lvl]
 			}
+			tags := tags[body+1:]
+			for _, v := range tags {
+				if v == "pre" {
+					evalErr(fmt.Sprintf("%s insert end %s %s", w, tclSafeString(unescapeML(n.Data)), tclSafeStrings(tags...)))
+					return true
+				}
+			}
+
 			ids, toks := tokenize(n.Data)
 			for i, id := range ids {
 				switch id {
 				case 0:
-					s := strings.ReplaceAll(toks[i], "\\$", "$")
-					s = strings.ReplaceAll(s, "&lt;", "<")
-					s = strings.ReplaceAll(s, "&gt;", ">")
-					evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(s), tclSafeStrings(tags[body+1:]...)))
+					evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(unescapeML(toks[i])), tclSafeStrings(tags...)))
 				default:
 					img := NewPhoto(Data(TeX(toks[i], k)))
 					evalErr(fmt.Sprintf("%v image create end -image %s -align top", w, img))
@@ -2229,6 +2194,13 @@ func (w *TextWidget) InsertML(list ...any) {
 		}
 		return true
 	})
+}
+
+func unescapeML(s string) string {
+	s = strings.ReplaceAll(s, "\\$", "$")
+	s = strings.ReplaceAll(s, "&lt;", "<")
+	s = strings.ReplaceAll(s, "&gt;", ">")
+	return s
 }
 
 func tokenize(s string) (ids []int, toks []string) {
@@ -2333,7 +2305,7 @@ func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)
 // Specifies/returns the title of the dialog. Has no effect on platforms where
 // the font selection dialog does not support titles.
 //
-//   - [Font]
+//   - [FontFace]
 //
 // Specifies/returns the font that is currently selected in the dialog if it is
 // visible, or that will be initially selected when the dialog is shown (if
@@ -2843,61 +2815,6 @@ func (w *TScrollbarWidget) Set(firstLast string) {
 	evalErr(fmt.Sprintf("%s set %s", w, firstLast))
 }
 
-// ttk::style — Manipulate style database
-//
-// # Description
-//
-// Returns a list of all known themes.
-//
-// Additional information might be available at the [Tcl/Tk style] page.
-//
-// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-func StyleThemeNames() []string {
-	return parseList(evalErr("ttk::style theme names"))
-}
-
-// ttk::style — Manipulate style database
-//
-// # Description
-//
-// Returns a list of all styles in themeName. If themeName is omitted, the
-// current theme is used.
-//
-// Additional information might be available at the [Tcl/Tk style] page.
-//
-// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-func StyleThemeStyles(themeName ...string) []string {
-	var s string
-	if len(themeName) != 0 {
-		s = tclSafeString(themeName[0])
-	}
-	return parseList(evalErr(fmt.Sprintf("ttk::style theme styles %s", s)))
-}
-
-// ttk::style — Manipulate style database
-//
-// # Description
-//
-// Return the name of the current theme.
-//
-// Additional information might be available at the [Tcl/Tk style] page.
-//
-// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-func StyleThemeGet(themeName ...string) []string {
-	return parseList(evalErr("ttk::style theme use"))
-}
-
-// ttk::style — Manipulate style database
-//
-// # Description
-//
-// Sets the current theme to themeName, and refreshes all widgets.
-//
-// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-func StyleThemeUse(themeName string) []string {
-	return parseList(evalErr(fmt.Sprintf("ttk::style theme use %s", themeName)))
-}
-
 // tk — Manipulate Tk internal state
 //
 // # Description
@@ -2949,4 +2866,229 @@ func TkScaling(options ...any) float64 {
 		fail(err)
 	}
 	return 1
+}
+
+// Font option.
+//
+// Specifies the font to use when drawing text inside the widget.
+// The value may have any of the forms described in the font manual
+// page under FONT DESCRIPTION.
+//
+// Known uses:
+//   - [Button]
+//   - [Checkbutton]
+//   - [Entry]
+//   - [Fontchooser] (command specific)
+//   - [Label]
+//   - [Labelframe]
+//   - [Listbox]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
+//   - [Menu]
+//   - [Menubutton]
+//   - [Message]
+//   - [Radiobutton]
+//   - [Scale]
+//   - [Spinbox]
+//   - [TEntry]
+//   - [TLabel]
+//   - [TProgressbar]
+//   - [TextWidget.TagConfigure] (command specific)
+//   - [Text]
+func Font(list ...any) Opt {
+	return rawOption(fmt.Sprintf(`-font {%s}`, tclSafeList(list...)))
+}
+
+// Font — Get the configured option value.
+//
+// Known uses:
+//   - [Button]
+//   - [Checkbutton]
+//   - [Entry]
+//   - [Label]
+//   - [Labelframe]
+//   - [Listbox]
+//   - [Menu]
+//   - [Menubutton]
+//   - [Message]
+//   - [Radiobutton]
+//   - [Scale]
+//   - [Spinbox]
+//   - [TEntry]
+//   - [TLabel]
+//   - [TProgressbar]
+//   - [Text]
+func (w *Window) Font() string {
+	return evalErr(fmt.Sprintf(`%s cget -font`, w))
+}
+
+// + ttk::style configure style ?-option ?value option value...? ?
+// - ttk::style element args
+// 	- ttk::style element create elementName type ?args...?
+// 	- ttk::style element names
+// 	- ttk::style element options element
+// - ttk::style layout style ?layoutSpec?
+// - ttk::style lookup style -option ?state ?default??
+// - ttk::style map style ?-option { statespec value... }?
+// - ttk::style theme args
+// 	- ttk::style theme create themeName ?-parent basedon? ?-settings script... ?
+// 	- ttk::style theme names
+// 	- ttk::style theme settings themeName script
+// 	- ttk::style theme styles ?themeName?
+// 	- ttk::style theme use ?themeName?
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Sets the default value of the specified option(s) in style. If style does
+// not exist, it is created. Example:
+//
+//	StyleConfigure(".", Font("times"), Background(LightBlue))
+//
+// If only style and -option are specified, get the default value for option
+// -option of style style. Example:
+//
+//	StyleConfigure(".", Font)
+//
+// If only style is specified, get the default value for all options of style
+// style. Example:
+//
+//	StyleConfigure(".")
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleConfigure(style string, options ...any) []string {
+	if len(options) == 0 {
+		return parseList(evalErr(fmt.Sprintf("ttk::style configure %s", tclSafeString(style))))
+	}
+
+	if len(options) == 1 {
+		o := options[0]
+		if x, ok := o.(Opt); ok {
+			evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), x.optionString(nil)))
+			return nil
+		}
+
+		if s := funcToTclOption(o); s != "" {
+			trc("", s)
+			return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), s))}
+		}
+
+		return nil
+	}
+
+	var a []string
+	for _, v := range options {
+		switch x := v.(type) {
+		case Opt:
+			a = append(a, x.optionString(nil))
+		default:
+			fail(fmt.Errorf("expected Opt: %T", x))
+			return nil
+		}
+	}
+
+	evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), strings.Join(a, " ")))
+	return nil
+}
+
+func funcToTclOption(fn any) string {
+	t := reflect.TypeOf(fn)
+	if t.Kind() != reflect.Func {
+		fail(fmt.Errorf("expected func() Opt: %T", fn))
+		return ""
+	}
+
+	s := runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name()
+	if s == "" {
+		fail(fmt.Errorf("failed to determine function name"))
+		return ""
+	}
+
+	a := strings.Split(s, ".")
+	if len(a) == 0 {
+		fail(fmt.Errorf("failed to determine function name: %q", s))
+		return ""
+	}
+
+	s = strings.ToLower(a[len(a)-1])
+	if r, ok := replaceOpt[s]; ok {
+		return "-" + r
+	}
+
+	return "-" + s
+}
+
+var replaceOpt = map[string]string{
+	"btn": "button",
+	"lbl": "label",
+	"mnu": "menu",
+	"msg": "message",
+	"txt": "text",
+}
+
+// // ttk::style — Manipulate style database
+// //
+// // # Description
+// //
+// // Returns a list of all known themes.
+// //
+// // Additional information might be available at the [Tcl/Tk style] page.
+// //
+// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// func StyleThemeNames() []string {
+// 	return parseList(evalErr("ttk::style theme names"))
+// }
+//
+// // ttk::style — Manipulate style database
+// //
+// // # Description
+// //
+// // Returns a list of all styles in themeName. If themeName is omitted, the
+// // current theme is used.
+// //
+// // Additional information might be available at the [Tcl/Tk style] page.
+// //
+// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// func StyleThemeStyles(themeName ...string) []string {
+// 	var s string
+// 	if len(themeName) != 0 {
+// 		s = tclSafeString(themeName[0])
+// 	}
+// 	return parseList(evalErr(fmt.Sprintf("ttk::style theme styles %s", s)))
+// }
+//
+// // ttk::style — Manipulate style database
+// //
+// // # Description
+// //
+// // Return the name of the current theme.
+// //
+// // Additional information might be available at the [Tcl/Tk style] page.
+// //
+// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// func StyleThemeGet(themeName ...string) []string {
+// 	return parseList(evalErr("ttk::style theme use"))
+// }
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Without a argument the result is the name of the current theme. Otherwise
+// this command sets the current theme to themeName, and refreshes all widgets.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleThemeUse(themeName ...string) string {
+	s := ""
+	if len(themeName) != 0 {
+		s = fmt.Sprint(themeName[0])
+		if s != "" {
+			s = tclSafeString(s)
+		}
+	}
+	return evalErr(fmt.Sprintf("ttk::style theme use %s", s))
 }

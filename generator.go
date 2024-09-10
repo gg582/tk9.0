@@ -499,13 +499,12 @@ var (
 		"Postcommand":     true,
 		"Tearoffcommand":  true,
 		"Validatecommand": true,
-		//TODO "Xscrollcommand":  true,
-		//TODO "Yscrollcommand":  true,
+		"Xscrollcommand":  true,
+		"Yscrollcommand":  true,
 	}
 
 	hideOpts = map[string]bool{
-		"Xscrollcommand": true, //TODO
-		"Yscrollcommand": true, //TODO
+		"Font": true,
 	}
 
 	hideOptMethods = map[string]bool{
@@ -514,7 +513,6 @@ var (
 
 	replaceOpt = map[string]string{
 		"Button":  "Btn",
-		"Font":    "Fnt",
 		"Label":   "Lbl",
 		"Menu":    "Mnu",
 		"Message": "Msg",
@@ -524,7 +522,6 @@ var (
 
 func main() {
 	makeTokenizer()
-	return //TODO-
 	w := bytes.NewBuffer(nil)
 	w.WriteString(header)
 	defer func() {
@@ -568,9 +565,9 @@ func makeTokenizer() {
 	args := []string{
 		"-lexstring", "mlToken",
 		"-pkg", "tk9_0",
-		`([^$]|\\\$)*`,           // Not TeX, incl. "\$"
-		`\$([^$]|\\\$)*\$`,       // $TeX$ or $$TeX$$, incl. $Te\$X$
-		`\$\$?([^$]|\\\$)*\$\$?`, // $TeX$ or $$TeX$$, incl. $Te\$X$
+		`([^$]|\\\$)*`,         // Not TeX, incl. "\$"
+		`\$([^$]|\\\$)*\$`,     // $TeX$, incl. $Te\$X$
+		`\$\$([^$]|\\\$)*\$\$`, // $$TeX$$, incl. $Te\$X$
 	}
 	var b bytes.Buffer
 	rc, err := rec.Main(args, &b, io.Discard)

@@ -2,7 +2,7 @@
 
 ![photo](_examples/photo.png "photo")
 
-Using embedded images (_examples/photo.go).
+Using Go embedded images (_examples/photo.go).
 
      1	package main
      2	
@@ -73,7 +73,7 @@ Rich text using markup (_examples/text.go).
      4	
      5	func main() {
      6		var scroll *TScrollbarWidget
-     7		t := Text(Fnt("helvetica 10"), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
+     7		t := Text(Font("helvetica", 10), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
      8		scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
      9		Grid(t, Sticky("news"), Pady("2m"))
     10		Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
@@ -81,8 +81,8 @@ Rich text using markup (_examples/text.go).
     12		GridColumnConfigure(App, 0, Weight(1))
     13		Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
     14		t.TagConfigure("bgstipple", Background(Black), Borderwidth(0), Bgstipple(Gray12))
-    15		t.TagConfigure("big", Fnt("helvetica 12 bold"))
-    16		t.TagConfigure("bold", Fnt("helvetica 10 bold italic"))
+    15		t.TagConfigure("big", Font("helvetica", 12, "bold"))
+    16		t.TagConfigure("bold", Font("helvetica", 10, "bold", "italic"))
     17		t.TagConfigure("center", Justify("center"))
     18		t.TagConfigure("color1", Background("#a0b7ce"))
     19		t.TagConfigure("color2", Foreground(Red))
@@ -91,12 +91,12 @@ Rich text using markup (_examples/text.go).
     22		t.TagConfigure("raised", Relief("raised"), Borderwidth(1))
     23		t.TagConfigure("right", Justify("right"))
     24		t.TagConfigure("spacing", Spacing1("10p"), Spacing2("2p"), Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
-    25		t.TagConfigure("sub", Offset("-2p"), Fnt("helvetica 8"))
+    25		t.TagConfigure("sub", Offset("-2p"), Font("helvetica", 8))
     26		t.TagConfigure("sunken", Relief("sunken"), Borderwidth(1))
-    27		t.TagConfigure("super", Offset("4p"), Fnt("helvetica 8"))
-    28		t.TagConfigure("tiny", Fnt("times 8 bold"))
+    27		t.TagConfigure("super", Offset("4p"), Font("helvetica", 8))
+    28		t.TagConfigure("tiny", Font("times", 8, "bold"))
     29		t.TagConfigure("underline", Underline(1))
-    30		t.TagConfigure("verybig", Fnt(CourierFont()+" 22 bold"))
+    30		t.TagConfigure("verybig", Font(CourierFont(), 22, "bold"))
     31		t.InsertML(`Text widgets like this one allow you to display information in a variety of styles. Display styles are controlled
     32	using a mechanism called <bold>tags</bold>. Tags are just textual names that you can apply to one or more ranges of characters within a
     33	text widget. You can configure tags with various display styles. If you do this, then the tagged characters will be displayed with the
@@ -225,7 +225,7 @@ A font previewer (_examples/font.go).
     22			}
     23			m[font] = true
     24			tag := fmt.Sprintf("t%v", i)
-    25			t.TagConfigure(tag, Fnt(NewFont(Family(font))))
+    25			t.TagConfigure(tag, Font(NewFont(Family(font))))
     26			t.Insert("end", font+": ", "", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
     27		}
     28		App.Center().Wait()
@@ -354,7 +354,7 @@ Rendering plain TeX (_examples/tex.go). No runtime dependencies required.
 
 ![embed](_examples/embed.png "embed")
 
-Embedding pictures, TeX and widgets (_examples/embed.go).
+Embedding pictures, TeX and other widgets in Text (_examples/embed.go).
 
      1	package main
      2	
@@ -366,7 +366,7 @@ Embedding pictures, TeX and widgets (_examples/embed.go).
      8	
      9	func main() {
     10		var scroll *TScrollbarWidget
-    11		t := Text(Fnt("helvetica 10"), Height(15), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("4p"), Pady("4p"), Pady("12p"))
+    11		t := Text(Font("helvetica", 10), Height(15), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("4p"), Pady("4p"), Pady("12p"))
     12		scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
     13		Grid(t, Sticky("news"), Pady("2m"))
     14		Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
@@ -375,7 +375,7 @@ Embedding pictures, TeX and widgets (_examples/embed.go).
     17		Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
     18		t.TagConfigure("c", Justify("center"))
     19		t.TagConfigure("e", Offset("-2p"))
-    20		t.TagConfigure("t", Fnt("times"))
+    20		t.TagConfigure("t", Font("times"))
     21		t.InsertML(`<c>Hello Go + Tk`, NewPhoto(Data(icon)), Padx("4p"), `users!</c>
     22	<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t> $Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$ users! (\$inline math\$)</c>
     23	<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t> $$Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$$ users! (\$\$display math\$\$)</c>

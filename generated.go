@@ -48,7 +48,6 @@ import "fmt"
 //   - [Compound]
 //   - [Cursor]
 //   - [Disabledforeground]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -172,6 +171,8 @@ type ButtonWidget struct {
 //   - [Selectborderwidth]
 //   - [Selectforeground]
 //   - [Takefocus]
+//   - [Xscrollcommand]
+//   - [Yscrollcommand]
 //
 // # Widget specific options
 //
@@ -351,7 +352,6 @@ type CanvasWidget struct {
 //   - [Compound]
 //   - [Cursor]
 //   - [Disabledforeground]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -546,7 +546,6 @@ type CheckbuttonWidget struct {
 //   - [Borderwidth]
 //   - [Cursor]
 //   - [Exportselection]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -565,6 +564,7 @@ type CheckbuttonWidget struct {
 //   - [Selectforeground]
 //   - [Takefocus]
 //   - [Textvariable]
+//   - [Xscrollcommand]
 //
 // # Widget specific options
 //
@@ -841,7 +841,6 @@ type FrameWidget struct {
 //   - [Compound]
 //   - [Cursor]
 //   - [Disabledforeground]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -931,7 +930,6 @@ type LabelWidget struct {
 //
 //   - [Borderwidth]
 //   - [Cursor]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -1077,7 +1075,6 @@ type LabelframeWidget struct {
 //   - [Cursor]
 //   - [Disabledforeground]
 //   - [Exportselection]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -1089,6 +1086,8 @@ type LabelframeWidget struct {
 //   - [Selectforeground]
 //   - [Setgrid]
 //   - [Takefocus]
+//   - [Xscrollcommand]
+//   - [Yscrollcommand]
 //
 // # Widget specific options
 //
@@ -1172,7 +1171,6 @@ type ListboxWidget struct {
 //   - [Borderwidth]
 //   - [Cursor]
 //   - [Disabledforeground]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Relief]
 //   - [Takefocus]
@@ -1271,7 +1269,6 @@ type MenuWidget struct {
 //   - [Compound]
 //   - [Cursor]
 //   - [Disabledforeground]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -1414,7 +1411,6 @@ type MenubuttonWidget struct {
 //   - [Background]
 //   - [Borderwidth]
 //   - [Cursor]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -1691,7 +1687,6 @@ type PanedwindowWidget struct {
 //   - [Compound]
 //   - [Cursor]
 //   - [Disabledforeground]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -1883,7 +1878,6 @@ type RadiobuttonWidget struct {
 //   - [Background]
 //   - [Borderwidth]
 //   - [Cursor]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -2175,7 +2169,6 @@ type ScrollbarWidget struct {
 //   - [Borderwidth]
 //   - [Cursor]
 //   - [Exportselection]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -2196,6 +2189,7 @@ type ScrollbarWidget struct {
 //   - [Selectforeground]
 //   - [Takefocus]
 //   - [Textvariable]
+//   - [Xscrollcommand]
 //
 // # Widget specific options
 //
@@ -2390,7 +2384,6 @@ type SpinboxWidget struct {
 //   - [Borderwidth]
 //   - [Cursor]
 //   - [Exportselection]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Highlightbackground]
 //   - [Highlightcolor]
@@ -2408,6 +2401,8 @@ type SpinboxWidget struct {
 //   - [Selectforeground]
 //   - [Setgrid]
 //   - [Takefocus]
+//   - [Xscrollcommand]
+//   - [Yscrollcommand]
 //
 // # Widget specific options
 //
@@ -2974,12 +2969,12 @@ type TComboboxWidget struct {
 //
 //   - [Class]
 //   - [Cursor]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Placeholder]
 //   - [Placeholderforeground]
 //   - [Style]
 //   - [Takefocus]
+//   - [Xscrollcommand]
 //
 // # Widget specific options
 //
@@ -3145,7 +3140,6 @@ type TFrameWidget struct {
 //   - [Class]
 //   - [Compound]
 //   - [Cursor]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Image]
 //   - [Justify]
@@ -3541,7 +3535,6 @@ type TPanedwindowWidget struct {
 //   - [Anchor]
 //   - [Class]
 //   - [Cursor]
-//   - [Fnt]
 //   - [Foreground]
 //   - [Justify]
 //   - [Style]
@@ -3926,6 +3919,7 @@ type TSizegripWidget struct {
 //   - [Takefocus]
 //   - [Validate]
 //   - [Validatecommand]
+//   - [Xscrollcommand]
 //
 // # Widget specific options
 //
@@ -4031,6 +4025,8 @@ type TSpinboxWidget struct {
 //   - [Padding]
 //   - [Style]
 //   - [Takefocus]
+//   - [Xscrollcommand]
+//   - [Yscrollcommand]
 //
 // # Widget specific options
 //
@@ -5271,61 +5267,6 @@ func Filetypes(val any) Opt {
 //   - [Pack] (command specific)
 func Fill(val any) Opt {
 	return rawOption(fmt.Sprintf(`-fill %s`, optionString(val)))
-}
-
-// Fnt option.
-//
-// Specifies the font to use when drawing text inside the widget.
-// The value may have any of the forms described in the font manual
-// page under FONT DESCRIPTION.
-//
-// Known uses:
-//   - [Button]
-//   - [Checkbutton]
-//   - [Entry]
-//   - [Fontchooser] (command specific)
-//   - [Label]
-//   - [Labelframe]
-//   - [Listbox]
-//   - [MenuWidget.AddCascade] (command specific)
-//   - [MenuWidget.AddCommand] (command specific)
-//   - [MenuWidget.AddSeparator] (command specific)
-//   - [Menu]
-//   - [Menubutton]
-//   - [Message]
-//   - [Radiobutton]
-//   - [Scale]
-//   - [Spinbox]
-//   - [TEntry]
-//   - [TLabel]
-//   - [TProgressbar]
-//   - [TextWidget.TagConfigure] (command specific)
-//   - [Text]
-func Fnt(val any) Opt {
-	return rawOption(fmt.Sprintf(`-font %s`, optionString(val)))
-}
-
-// Fnt — Get the configured option value.
-//
-// Known uses:
-//   - [Button]
-//   - [Checkbutton]
-//   - [Entry]
-//   - [Label]
-//   - [Labelframe]
-//   - [Listbox]
-//   - [Menu]
-//   - [Menubutton]
-//   - [Message]
-//   - [Radiobutton]
-//   - [Scale]
-//   - [Spinbox]
-//   - [TEntry]
-//   - [TLabel]
-//   - [TProgressbar]
-//   - [Text]
-func (w *Window) Fnt() string {
-	return evalErr(fmt.Sprintf(`%s cget -font`, w))
 }
 
 // Force option.
@@ -8405,6 +8346,49 @@ func X(val any) Opt {
 	return rawOption(fmt.Sprintf(`-x %s`, optionString(val)))
 }
 
+// Xscrollcommand option.
+//
+// See also [Event handlers].
+//
+// Specifies the prefix for a command used to communicate with horizontal
+// scrollbars.
+// When the view in the widget's window changes (or
+// whenever anything else occurs that could change the display in a
+// scrollbar, such as a change in the total size of the widget's
+// contents), the widget will
+// generate a Tcl command by concatenating the scroll command and
+// two numbers.
+// Each of the numbers is a fraction between 0 and 1, which indicates
+// a position in the document.  0 indicates the beginning of the document,
+// 1 indicates the end, .333 indicates a position one third the way through
+// the document, and so on.
+// The first fraction indicates the first information in the document
+// that is visible in the window, and the second fraction indicates
+// the information just after the last portion that is visible.
+// The command is
+// then passed to the Tcl interpreter for execution.  Typically the
+// -xscrollcommand option consists of the path name of a scrollbar
+// widget followed by
+// e.g.
+// this will cause
+// the scrollbar to be updated whenever the view in the window changes.
+// If this option is not specified, then no command will be executed.
+//
+// Known uses:
+//   - [Canvas]
+//   - [Entry]
+//   - [Listbox]
+//   - [Spinbox]
+//   - [TEntry]
+//   - [TSpinbox]
+//   - [TTreeview]
+//   - [Text]
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Xscrollcommand(handler any) Opt {
+	return newEventHandler("-xscrollcommand", handler)
+}
+
 // Xscrollincrement option.
 //
 // Known uses:
@@ -8427,6 +8411,28 @@ func (w *Window) Xscrollincrement() string {
 //   - [Place] (command specific)
 func Y(val any) Opt {
 	return rawOption(fmt.Sprintf(`-y %s`, optionString(val)))
+}
+
+// Yscrollcommand option.
+//
+// See also [Event handlers].
+//
+// Specifies the prefix for a command used to communicate with vertical
+// scrollbars.  This option is treated in the same way as the
+// -xscrollcommand option, except that it is used for vertical
+// scrollbars and is provided by widgets that support vertical scrolling.
+// See the description of -xscrollcommand for details
+// on how this option is used.
+//
+// Known uses:
+//   - [Canvas]
+//   - [Listbox]
+//   - [TTreeview]
+//   - [Text]
+//
+// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
+func Yscrollcommand(handler any) Opt {
+	return newEventHandler("-yscrollcommand", handler)
 }
 
 // Yscrollincrement option.

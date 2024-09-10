@@ -83,10 +83,9 @@
 //
 // # Completeness
 //
-// At the moment the package does not cover all of the functionality C Tcl/Tk
-// provides, but only a minimal subset considered to be usable. Please report
-// needed, but missing and not yet requested Tcl/Tk features at the [issue
-// tracker], thanks.
+// At the moment the package is a [MVP]. It does not cover all of the
+// functionality C Tcl/Tk provides. Please report needed, but missing and not
+// yet requested Tcl/Tk features/APIs at the [issue tracker], thanks.
 //
 // # Error handling
 //
@@ -156,7 +155,6 @@
 // 'Text' and the option as function 'Txt'. The complete list is:
 //
 //   - [Button]  option is renamed to [Btn]
-//   - [Font]    option is renamed to [Fnt]
 //   - [Label]   option is renamed to [Lbl]
 //   - [Menu]    option is renamed to [Mnu]
 //   - [Message] option is renamed to [Msg]
@@ -205,6 +203,13 @@
 // There are several Tcl/Tk tutorials available, for example at
 // [tutorialspoint].
 //
+// # Hacking
+//
+// Merge requests for know issues are always welcome.
+//
+// Please send merge requests for new features/APIs after filling and
+// discussing the additions/changes at the [issue tracker] first.
+//
 // # Notes
 //
 // Most of the documentation is generated directly from the Tcl/Tk
@@ -216,6 +221,7 @@
 // Parts of the documentation are copied and/or modified from the [tcl.tk
 // site], see the LICENSE-TCLTK file for details.
 //
+// [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [XQuartz]: https://en.wikipedia.org/wiki/XQuartz
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
