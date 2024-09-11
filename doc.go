@@ -205,7 +205,7 @@
 //
 // # Hacking
 //
-// Merge requests for know issues are always welcome.
+// Merge requests for known issues are always welcome.
 //
 // Please send merge requests for new features/APIs after filling and
 // discussing the additions/changes at the [issue tracker] first.
