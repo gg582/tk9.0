@@ -30,7 +30,6 @@ const (
 	// StyleThemeUse() will override the default.
 	ThemeEnvVar = "TK9_THEME"
 
-	cachePath      = "tk9.0b3"
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
 )
 

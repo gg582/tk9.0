@@ -30,7 +30,7 @@ set pm3d depthorder
 splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with pm3d,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with pm3d
 unset multiplot`
 
-var cm = int(TkScaling()*72/2.54+0.5)
+var cm = int(TkScaling()*72/2.54 + 0.5)
 
 func main() {
 	Pack(

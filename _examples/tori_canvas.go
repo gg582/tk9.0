@@ -27,7 +27,7 @@ set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front  noinve
 NO_ANIMATION = 1
 splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with lines`
 
-var cm = int(TkScaling()*72/2.54+0.5)
+var cm = int(TkScaling()*72/2.54 + 0.5)
 
 func main() {
 	Pack(

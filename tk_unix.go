@@ -85,7 +85,7 @@ func getCacheDir() (r string, err error) {
 	}
 
 	r0 := filepath.Join(r, "modernc.org")
-	r = filepath.Join(r0, cachePath)
+	r = filepath.Join(r0, libtk.Version)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
 		return r, nil
