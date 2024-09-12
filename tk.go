@@ -2931,7 +2931,7 @@ func (w *Window) Font() string {
 // 	+ ttk::style element create elementName type ?args...?
 // 	+ ttk::style element names
 // 	+ ttk::style element options element
-// - ttk::style layout style ?layoutSpec?
+// + ttk::style layout style ?layoutSpec?
 // - ttk::style lookup style -option ?state ?default??
 // - ttk::style map style ?-option { statespec value... }?
 // - ttk::style theme args
