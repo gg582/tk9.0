@@ -24,11 +24,13 @@ func main() {
 				"Button.padding", Sticky("nswe"), Children(
 					"Button.label", Sticky("nswe"),
 					"Green.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+	opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
 	rb := TButton(Txt("Red"))
 	gb := TButton(Txt("Green"))
-	Pack(rb, gb, TButton(Txt("Apply styles"), Command(func() {
+	Grid(rb, gb, opts)
+	Grid(TButton(Txt("Apply styles"), Command(func() {
 		rb.Configure(Style("Red.Corner.TButton"))
 		gb.Configure(Style("Green.Corner.TButton"))
-	})), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+	})), TExit(), opts)
 	App.Wait()
 }

@@ -419,14 +419,16 @@ Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modify
     24					"Button.padding", Sticky("nswe"), Children(
     25						"Button.label", Sticky("nswe"),
     26						"Green.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
-    27		rb := TButton(Txt("Red"))
-    28		gb := TButton(Txt("Green"))
-    29		Pack(rb, gb, TButton(Txt("Apply styles"), Command(func() {
-    30			rb.Configure(Style("Red.Corner.TButton"))
-    31			gb.Configure(Style("Green.Corner.TButton"))
-    32		})), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    33		App.Wait()
-    34	}
+    27		opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
+    28		rb := TButton(Txt("Red"))
+    29		gb := TButton(Txt("Green"))
+    30		Grid(rb, gb, opts)
+    31		Grid(TButton(Txt("Apply styles"), Command(func() {
+    32			rb.Configure(Style("Red.Corner.TButton"))
+    33			gb.Configure(Style("Green.Corner.TButton"))
+    34		})), TExit(), opts)
+    35		App.Wait()
+    36	}
 
 Documentation at [pkg.go.dev].
 
