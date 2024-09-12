@@ -77,14 +77,56 @@ func TestTokenizer(t *testing.T) {
 	}
 }
 
+func TestTmp0(t *testing.T) {
+	evalErr(`
+set imgred [image create photo -file _examples/red_corner.png]
+set imggreen [image create photo -file _examples/green_corner.png]
+
+ttk::style element create Red.Corner.TButton.indicator image $imgred
+ttk::style element create Green.Corner.TButton.indicator image $imggreen
+
+ttk::style layout Red.Corner.TButton {
+  Button.border -sticky nswe -border 1 -children {
+    Button.focus -sticky nswe -children {
+      Button.padding -sticky nswe -children {
+        Button.label -sticky nswe 
+        Red.Corner.TButton.indicator -side right -sticky ne}}}}
+
+
+ttk::style layout Green.Corner.TButton {
+  Button.border -sticky nswe -border 1 -children {
+    Button.focus -sticky nswe -children {
+      Button.padding -sticky nswe -children {
+        Button.label -sticky nswe 
+        Green.Corner.TButton.indicator -side right -sticky ne}}}}
+
+ttk::button .b -text Red -style Red.Corner.TButton
+ttk::button .b2 -text Green -style Green.Corner.TButton
+
+pack .b .b2
+`)
+	App.Wait()
+}
+
 func TestTmp(t *testing.T) {
-	trc("%q", StyleConfigure("."))
-	trc("", StyleConfigure(".", Font))
-	StyleConfigure(".", Font("courier"))
-	trc("%q", StyleConfigure("."))
-	trc("", StyleConfigure(".", Font))
-	trc("", StyleConfigure(".", Font("helvetica"), Borderwidth(42)))
-	trc("%q", StyleConfigure("."))
+	StyleElementCreate("Red.Corner.TButton.indicator", "image", NewPhoto(File("_examples/red_corner.png")))
+	StyleElementCreate("Green.Corner.TButton.indicator", "image", NewPhoto(File("_examples/green_corner.png")))
+	StyleLayout("Red.Corner.TButton",
+		"Button.border", Sticky("nswe"), Border(1), Children(
+			"Button.focus", Sticky("nswe"), Children(
+				"Button.padding", Sticky("nswe"), Children(
+					"Button.label", Sticky("nswe"),
+					"Red.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+	StyleLayout("Green.Corner.TButton",
+		"Button.border", Sticky("nswe"), Border(1), Children(
+			"Button.focus", Sticky("nswe"), Children(
+				"Button.padding", Sticky("nswe"), Children(
+					"Button.label", Sticky("nswe"),
+					"Green.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+	Pack(TButton(Txt("Red"), Style("Red.Corner.TButton")),
+		TButton(Txt("Green"), Style("Green.Corner.TButton")),
+		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+	App.Wait()
 }
 
 /*

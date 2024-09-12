@@ -389,6 +389,44 @@ Embedding pictures, TeX and other widgets in Text (_examples/embed.go).
     27		App.Center().Wait()
     28	}
 
+![tbutton](_examples/tbutton.png "tbutton")
+
+     1	package main
+     2	
+     3	import _ "embed"
+     4	import . "modernc.org/tk9.0"
+     5	
+     6	//go:embed red_corner.png
+     7	var red []byte
+     8	
+     9	//go:embed green_corner.png
+    10	var green []byte
+    11	
+    12	func main() {
+    13		StyleElementCreate("Red.Corner.TButton.indicator", "image", NewPhoto(Data(red)))
+    14		StyleElementCreate("Green.Corner.TButton.indicator", "image", NewPhoto(Data(green)))
+    15		StyleLayout("Red.Corner.TButton",
+    16			"Button.border", Sticky("nswe"), Border(1), Children(
+    17				"Button.focus", Sticky("nswe"), Children(
+    18					"Button.padding", Sticky("nswe"), Children(
+    19						"Button.label", Sticky("nswe"),
+    20						"Red.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+    21		StyleLayout("Green.Corner.TButton",
+    22			"Button.border", Sticky("nswe"), Border(1), Children(
+    23				"Button.focus", Sticky("nswe"), Children(
+    24					"Button.padding", Sticky("nswe"), Children(
+    25						"Button.label", Sticky("nswe"),
+    26						"Green.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+    27		rb := TButton(Txt("Red"))
+    28		gb := TButton(Txt("Green"))
+    29		Pack(rb, gb, TButton(Txt("Apply styles"), Command(func() {
+    30			rb.Configure(Style("Red.Corner.TButton"))
+    31			gb.Configure(Style("Green.Corner.TButton"))
+    32		})), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    33		App.Wait()
+    34	}
+
 Documentation at [pkg.go.dev].
 
+[Tutorial: Modifying a ttk button's style]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
 [pkg.go.dev]: https://pkg.go.dev/modernc.org/tk9.0

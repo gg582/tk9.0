@@ -95,6 +95,7 @@ var (
 	textVariables = map[*Window]string{} // : tclName
 )
 
+// Returns a single Tcl string, no braces, except {} if returned for s == "".
 func tclSafeString(s string) string {
 	if s == "" {
 		return "{}"
@@ -116,12 +117,62 @@ func tclSafeString(s string) string {
 	return s
 }
 
+// Same as tclSafeStrings but does not escape <>.
+func tclSafeStringBind(s string) string {
+	if s == "" {
+		return "{}"
+	}
+
+	const badString = "&;`'\"|*?~^()[]{}$\\\n\r\t "
+	if strings.ContainsAny(s, badString) {
+		var b strings.Builder
+		for _, c := range s {
+			switch {
+			case int(c) < len(badChars) && badChars[c]:
+				fmt.Fprintf(&b, "\\x%02x", c)
+			default:
+				b.WriteRune(c)
+			}
+		}
+		s = b.String()
+	}
+	return s
+}
+
+// Returns a space separated list of safe Tcl strings.
 func tclSafeList(list ...any) string {
 	var a []string
 	for _, v := range list {
 		a = append(a, tclSafeString(fmt.Sprint(v)))
 	}
 	return strings.Join(a, " ")
+}
+
+// Returns a space separated list of safe Tcl strings.
+func tclSafeStrings(s ...string) string {
+	var a []string
+	for _, v := range s {
+		a = append(a, tclSafeString(v))
+	}
+	return strings.Join(a, " ")
+}
+
+// Returns a Tcl string that is safe inside {...}
+func tclSafeInBraces(s string) string {
+	const badString = "}\\\n\r\t "
+	if strings.ContainsAny(s, badString) {
+		var b strings.Builder
+		for _, c := range s {
+			switch {
+			case int(c) < len(badMLChars) && badMLChars[c]:
+				fmt.Fprintf(&b, "\\x%02x", c)
+			default:
+				b.WriteRune(c)
+			}
+		}
+		s = b.String()
+	}
+	return s
 }
 
 func setDefaults() {
@@ -364,35 +415,6 @@ func optionString(v any) string {
 	default:
 		return tclSafeString(fmt.Sprint(v))
 	}
-}
-
-func tclSafeStringBind(s string) string {
-	if s == "" {
-		return "{}"
-	}
-
-	const badString = "&;`'\"|*?~^()[]{}$\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badChars) && badChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
-}
-
-func tclSafeStrings(s ...string) string {
-	var a []string
-	for _, v := range s {
-		a = append(a, tclSafeString(v))
-	}
-	return strings.Join(a, " ")
 }
 
 // bind — Arrange for X events to invoke functions
@@ -2229,7 +2251,7 @@ func tclFromElementNode(s string) string {
 		}
 	}
 	for i, v := range a {
-		a[i] = tclSafeML(v)
+		a[i] = tclSafeInBraces(v)
 	}
 	r := fmt.Sprintf("{%s%s%s}", prefix, strings.Join(a, " "), suffix)
 	return r
@@ -2241,24 +2263,6 @@ var badMLChars = [...]bool{
 	'\n': true,
 	'\r': true,
 	'\t': true,
-}
-
-func tclSafeML(s string) string {
-	// const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
-	const badString = "}\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badMLChars) && badMLChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
 }
 
 // Align option.
@@ -2923,10 +2927,10 @@ func (w *Window) Font() string {
 }
 
 // + ttk::style configure style ?-option ?value option value...? ?
-// - ttk::style element args
-// 	- ttk::style element create elementName type ?args...?
-// 	- ttk::style element names
-// 	- ttk::style element options element
+// + ttk::style element args
+// 	+ ttk::style element create elementName type ?args...?
+// 	+ ttk::style element names
+// 	+ ttk::style element options element
 // - ttk::style layout style ?layoutSpec?
 // - ttk::style lookup style -option ?state ?default??
 // - ttk::style map style ?-option { statespec value... }?
@@ -3027,6 +3031,143 @@ var replaceOpt = map[string]string{
 	"mnu": "menu",
 	"msg": "message",
 	"txt": "text",
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Creates a new element in the current theme of type type. The only
+// cross-platform built-in element type is image (see ttk_image(n)) but themes
+// may define other element types (see Ttk_RegisterElementFactory). On suitable
+// versions of Windows an element factory is registered to create Windows theme
+// elements (see ttk_vsapi(n)). Examples:
+//
+//	StyleElementCreate("TSpinbox.uparrow", "from", "default") // Inherit the existing element from theme 'default'.
+//
+//	StyleElementCreate("Red.Corner.TButton.indicator", "image", NewPhoto(File("red_corner.png")), Width(10))
+//
+//	imageN := NewPhoto(...)
+//	StyleElementCreate("TCheckbutton.indicator", "image", image5, "disabled selected", image6, "disabled alternate",
+//		image8, "disabled", image9, "alternate", image7, "!selected", image4, Width(20), Border(4), Sticky("w"))
+//
+// After the type "image" comes a list of one or more images. Every image is
+// optionally followed by a space separated list of states the image applies
+// to. An exclamation mark before the state is a negation.
+//
+// Additional information might be available at the [Tcl/Tk modyfying a button]
+// and [Tcl/Tk style] pages.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Tcl/Tk modyfying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
+func StyleElementCreate(elementName, typ string, options ...any) string {
+	// ttk::style element create TRadiobutton.indicator image {pyimage11 {disabled selected} pyimage12 disabled pyimage13 !selected pyimage10} -width 20 -border 4 -sticky w
+	var a, b []string
+	for _, v := range options {
+		switch x := v.(type) {
+		case *Img:
+			a = append(a, x.optionString(nil))
+		case Opt:
+			b = append(b, x.optionString(nil))
+		default:
+			switch s := strings.Fields(fmt.Sprint(v)); {
+			case len(s) == 1:
+				a = append(a, tclSafeInBraces(s[0]))
+			default:
+				for i, v := range s {
+					s[i] = tclSafeInBraces(v)
+				}
+				a = append(a, fmt.Sprintf("{%s}", strings.Join(s, " ")))
+			}
+		}
+	}
+	switch {
+	case len(a) == 2 && a[0] == "from":
+		return evalErr(fmt.Sprintf("ttk::style element create from %s", a[1]))
+	default:
+		return evalErr(fmt.Sprintf("ttk::style element create {%s} image {%s} %s", tclSafeInBraces(elementName), strings.Join(a, " "), strings.Join(b, " ")))
+	}
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Returns the list of elements defined in the current theme.
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleElementNames() []string {
+	return parseList(evalErr("ttk::style element names"))
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Returns the list of element's options.
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleElementOptions(element string) []string {
+	return parseList(evalErr(fmt.Sprintf("ttk::style element options %s", tclSafeString(element))))
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Define the widget layout for style style. See LAYOUTS below for the format
+// of layoutSpec. If layoutSpec is omitted, return the layout specification for
+// style style. Example:
+//
+//	StyleLayout("Red.Corner.Button",
+//		"Button.border", Sticky("nswe"), Border(1), Children(
+//			"Button.focus", Sticky("nswe"), Children(
+//				"Button.padding", Sticky("nswe"), Children(
+//					"Button.label", Sticky("nswe"),
+//					"Red.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+//
+// Additional information might be available at the [Tcl/Tk modyfying a button]
+// and [Tcl/Tk style] pages.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Tcl/Tk modyfying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
+func StyleLayout(style string, options ...any) string {
+	if len(options) == 0 {
+		return evalErr(fmt.Sprintf("ttk::style layout %s", tclSafeString(style)))
+	}
+
+	evalErr(fmt.Sprintf("ttk::style layout %s %s", tclSafeString(style), children("", options...)))
+	return ""
+}
+
+// Border option.
+//
+// Known uses:
+//   - [StyleLayout]
+func Border(val any) Opt {
+	return rawOption(fmt.Sprintf(`-border %s`, optionString(val)))
+}
+
+// Children option.
+//
+// Known uses:
+//   - [StyleLayout]
+//
+// Children describes children of a style layout.
+func Children(list ...any) Opt {
+	return children("-children", list...)
+}
+
+func children(prefixed string, list ...any) Opt {
+	var a []string
+	for _, v := range list {
+		a = append(a, fmt.Sprint(v))
+	}
+	return rawOption(fmt.Sprintf(" %s {%s}", prefixed, strings.Join(a, " ")))
 }
 
 // // ttk::style — Manipulate style database
