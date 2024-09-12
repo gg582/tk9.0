@@ -10,6 +10,7 @@ var red []byte
 var green []byte
 
 func main() {
+	StyleThemeUse("default")
 	StyleElementCreate("Red.Corner.TButton.indicator", "image", NewPhoto(Data(red)))
 	StyleElementCreate("Green.Corner.TButton.indicator", "image", NewPhoto(Data(green)))
 	StyleLayout("Red.Corner.TButton",
