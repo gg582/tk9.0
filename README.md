@@ -391,6 +391,8 @@ Embedding pictures, TeX and other widgets in Text (_examples/embed.go).
 
 ![tbutton](_examples/tbutton.png "tbutton")
 
+Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modifying a ttk button's style]
+
      1	package main
      2	
      3	import _ "embed"
