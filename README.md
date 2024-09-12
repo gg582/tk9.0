@@ -1,4 +1,4 @@
-# tk9.0: The CGo-free cross platform GUI for Go
+# tk9.0: The CGo-free, cross platform GUI for Go
 
 ![photo](_examples/photo.png "photo")
 
