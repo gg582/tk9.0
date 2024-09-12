@@ -423,7 +423,7 @@ Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modify
     28		rb := TButton(Txt("Red"))
     29		gb := TButton(Txt("Green"))
     30		Grid(rb, gb, opts)
-    31		Grid(TButton(Txt("Apply styles"), Command(func() {
+    31		Grid(TButton(Txt("Use style"), Command(func() {
     32			rb.Configure(Style("Red.Corner.TButton"))
     33			gb.Configure(Style("Green.Corner.TButton"))
     34		})), TExit(), opts)

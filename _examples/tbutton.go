@@ -28,7 +28,7 @@ func main() {
 	rb := TButton(Txt("Red"))
 	gb := TButton(Txt("Green"))
 	Grid(rb, gb, opts)
-	Grid(TButton(Txt("Apply styles"), Command(func() {
+	Grid(TButton(Txt("Use style"), Command(func() {
 		rb.Configure(Style("Red.Corner.TButton"))
 		gb.Configure(Style("Green.Corner.TButton"))
 	})), TExit(), opts)
