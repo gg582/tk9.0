@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package tk9.0 is a CGo-free cross platform GUI for Go. It is similar to
+// Package tk9.0 is a CGo-free, cross platform GUI for Go. It is similar to
 // [tkinter] for Python.
 //
 // # Hello world

@@ -2971,12 +2971,10 @@ func StyleConfigure(style string, options ...any) []string {
 	if len(options) == 1 {
 		o := options[0]
 		if x, ok := o.(Opt); ok {
-			evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), x.optionString(nil)))
-			return nil
+			return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), x.optionString(nil)))}
 		}
 
 		if s := funcToTclOption(o); s != "" {
-			trc("", s)
 			return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), s))}
 		}
 
@@ -2994,8 +2992,7 @@ func StyleConfigure(style string, options ...any) []string {
 		}
 	}
 
-	evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), strings.Join(a, " ")))
-	return nil
+	return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), strings.Join(a, " ")))}
 }
 
 func funcToTclOption(fn any) string {
@@ -3150,6 +3147,30 @@ func StyleLayout(style string, options ...any) string {
 //   - [StyleLayout]
 func Border(val any) Opt {
 	return rawOption(fmt.Sprintf(`-border %s`, optionString(val)))
+}
+
+// FocusColor option.
+//
+// Known uses:
+//   - [StyleConfigure]
+func FocusColor(val any) Opt {
+	return rawOption(fmt.Sprintf(`-focuscolor %s`, optionString(val)))
+}
+
+// FocusColor option.
+//
+// Known uses:
+//   - [StyleConfigure]
+func FocusThickness(val any) Opt {
+	return rawOption(fmt.Sprintf(`-focusthickness %s`, optionString(val)))
+}
+
+// FocusSolid option.
+//
+// Known uses:
+//   - [StyleConfigure]
+func FocusSolid(val any) Opt {
+	return rawOption(fmt.Sprintf(`-focussolid %s`, optionString(val)))
 }
 
 // Children option.

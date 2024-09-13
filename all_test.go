@@ -84,14 +84,13 @@ func TestTmp(t *testing.T) {
 	//			Button.padding -sticky nswe -children {
 	//				Button.label -sticky nswe}}}
 
-
-	trc("", evalErr(`ttk::style element options Button.border`))
+	trc("", evalErr(`ttk::style element options TButton.border`))
 	// TRC -background -borderwidth -relief
-	trc("", evalErr(`ttk::style element options Button.focus`))
+	trc("", evalErr(`ttk::style element options TButton.focus`))
 	// TRC -focuscolor -focusthickness -focussolid
-	trc("", evalErr(`ttk::style element options Button.padding`))
+	trc("", evalErr(`ttk::style element options TButton.padding`))
 	// TRC -padding -relief -shiftrelief
-	trc("", evalErr(`ttk::style element options Button.label`))
+	trc("", evalErr(`ttk::style element options TButton.label`))
 	// TRC -compound -space -text -font -foreground -underline -width -anchor -justify -wraplength -embossed -image -stipple -background
 
 	const svg = `
@@ -103,10 +102,16 @@ func TestTmp(t *testing.T) {
 </svg>`
 
 	Pack(
-		Label(Image(NewPhoto(Data(svg)))),
+		Label(Background("#fff"), Image(NewPhoto(Data(svg)))),
+		Button(Txt("foo")),
+		TButton(Txt("bar")),
 		TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
 	)
-	App.Center().Wait()
+	StyleConfigure("TButton", Borderwidth(10))
+	StyleConfigure("TButton", FocusColor(Blue))
+	StyleConfigure("TButton", FocusThickness(10))
+	StyleConfigure("TButton", FocusSolid(true))
+	App.Configure(Background("#fff")).Center().Wait()
 }
 
 /*
