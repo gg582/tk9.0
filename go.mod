@@ -13,7 +13,7 @@ require (
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.4.0
 	modernc.org/libc v1.60.1
-	modernc.org/libtcl9.0 v0.13.1
+	modernc.org/libtcl9.0 v0.13.2
 	modernc.org/libtk9.0 v0.11.0
 	modernc.org/memory v1.8.0
 	modernc.org/ngrab v0.1.0
