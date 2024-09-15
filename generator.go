@@ -505,6 +505,8 @@ var (
 
 	hideOpts = map[string]bool{
 		"Font": true,
+		"From": true,
+		"To":   true,
 	}
 
 	hideOptMethods = map[string]bool{
@@ -536,7 +538,7 @@ func main() {
 		}
 	}()
 
-	nFilesDir := filepath.Join(xdg.ConfigHome, "ccgo", "v4", "libtk9.0", goos, goarch, "tcl"+libtk.Version, "doc")
+	nFilesDir := filepath.Join(xdg.ConfigHome, "ccgo", "v4", "libtk9.0", goos, goarch, libtk.Version, "doc")
 	fmt.Printf("nFilesDir=%s\n", nFilesDir)
 	util.MustShell(true, nil, "sh", "-c", fmt.Sprintf("rm -rf %s", tempDir))
 	util.MustShell(true, nil, "mkdir", "-p", tempDir)

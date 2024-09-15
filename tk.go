@@ -690,7 +690,7 @@ func (m *Img) Height() string {
 //
 // The following options may be specified:
 //
-//  - [From] x1 y1 x2 y2
+//   - [From] x1 y1 x2 y2
 //
 // Specifies a rectangular sub-region of the source image to be copied. (x1,y1)
 // and (x2,y2) specify diagonally opposite corners of the rectangle. If x2 and
@@ -698,7 +698,7 @@ func (m *Img) Height() string {
 // source image. The pixels copied will include the left and top edges of the
 // specified rectangle but not the bottom or right edges. If the -from option
 // is not given, the default is the whole source image.
-// 
+//
 // The function returns 'm'.
 //
 // Additional information might be available at the [Tcl/Tk photo] page.
@@ -707,6 +707,30 @@ func (m *Img) Height() string {
 func (m *Img) Copy(src *Img, options ...Opt) (r *Img) {
 	evalErr(fmt.Sprintf("%s copy %s %s", m, src, collect(options...)))
 	return m
+}
+
+// From option.
+//
+// Known uses:
+//   - [Img.Copy]
+//   - [Scale] (widget specific)
+//   - [Spinbox] (widget specific)
+//   - [TScale] (widget specific)
+//   - [TSpinbox] (widget specific)
+func From(val ...any) Opt {
+	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
+}
+
+// To option.
+//
+// Known uses:
+//   - [Img.Copy]
+//   - [Scale] (widget specific)
+//   - [Spinbox] (widget specific)
+//   - [TScale] (widget specific)
+//   - [TSpinbox] (widget specific)
+func To(val ...any) Opt {
+	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
 }
 
 // Graph — use gnuplot to draw on a photo. Graph returns 'm'

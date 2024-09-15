@@ -5350,29 +5350,6 @@ func (w *Window) Format() string {
 	return evalErr(fmt.Sprintf(`%s cget -format`, w))
 }
 
-// From option.
-//
-// Known uses:
-//   - [Img.Copy]
-//   - [Scale] (widget specific)
-//   - [Spinbox] (widget specific)
-//   - [TScale] (widget specific)
-//   - [TSpinbox] (widget specific)
-func From(val ...any) Opt {
-	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
-}
-
-// From — Get the configured option value.
-//
-// Known uses:
-//   - [Scale] (widget specific)
-//   - [Spinbox] (widget specific)
-//   - [TScale] (widget specific)
-//   - [TSpinbox] (widget specific)
-func (w *Window) From() string {
-	return evalErr(fmt.Sprintf(`%s cget -from`, w))
-}
-
 // Gamma option.
 //
 // Known uses:
@@ -5899,7 +5876,7 @@ func (w *Window) Insertunfocussed() string {
 
 // Insertwidth option.
 //
-// Specifies a  value indicating the total width of the insertion cursor.
+// Specifies a non-negative value indicating the total width of the insertion cursor.
 // The value may have any of the forms acceptable to Tk_GetPixels.
 // If a border has been specified for the insertion
 // cursor (using the -insertborderwidth option), the border
@@ -7859,29 +7836,6 @@ func Titleitems(val any) Opt {
 //   - [TTreeview] (widget specific)
 func (w *Window) Titleitems() string {
 	return evalErr(fmt.Sprintf(`%s cget -titleitems`, w))
-}
-
-// To option.
-//
-// Known uses:
-//   - [Img.Copy]
-//   - [Scale] (widget specific)
-//   - [Spinbox] (widget specific)
-//   - [TScale] (widget specific)
-//   - [TSpinbox] (widget specific)
-func To(val ...any) Opt {
-	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
-}
-
-// To — Get the configured option value.
-//
-// Known uses:
-//   - [Scale] (widget specific)
-//   - [Spinbox] (widget specific)
-//   - [TScale] (widget specific)
-//   - [TSpinbox] (widget specific)
-func (w *Window) To() string {
-	return evalErr(fmt.Sprintf(`%s cget -to`, w))
 }
 
 // Tristateimage option.
