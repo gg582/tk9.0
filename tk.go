@@ -699,7 +699,7 @@ func (m *Img) Height() string {
 // specified rectangle but not the bottom or right edges. If the -from option
 // is not given, the default is the whole source image.
 //
-//  - [To] x1 y1 x2 y2
+//   - [To] x1 y1 x2 y2
 //
 // Specifies a rectangular sub-region of the destination image to be affected.
 // (x1,y1) and (x2,y2) specify diagonally opposite corners of the rectangle. If
@@ -707,7 +707,6 @@ func (m *Img) Height() string {
 // the source region (after subsampling and zooming, if specified). If x2 and
 // y2 are specified, the source region will be replicated if necessary to fill
 // the destination region in a tiled fashion.
-//
 //
 // The function returns 'm'.
 //

@@ -430,6 +430,36 @@ Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modify
     35		App.Wait()
     36	}
 
+![b5](_examples/b5.png "b5")
+
+Technology preview of a Bootstrap5-like theme button items (_examples/b5.go).
+
+     1	package main
+     2	
+     3	import (
+     4		. "modernc.org/tk9.0"
+     5		"modernc.org/tk9.0/b5"
+     6	)
+     7	
+     8	func main() {
+     9		StyleThemeUse("default")
+    10		opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
+    11		Grid(TButton(Txt("Primary"), Style(b5.ButtonStyle("Primary.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#0d6efd"}, "#fff"))),
+    12			TButton(Txt("Secondary"), Style(b5.ButtonStyle("Secondary.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d"}, "#fff"))),
+    13			TButton(Txt("Success"), Style(b5.ButtonStyle("Sucess.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754"}, "#fff"))),
+    14			opts)
+    15		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("Danger.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
+    16			TButton(Txt("Warning"), Style(b5.ButtonStyle("Warning.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107"}, "#fff"))),
+    17			TButton(Txt("Info"), Style(b5.ButtonStyle("Info.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0"}, "#fff"))),
+    18			opts)
+    19		Grid(TButton(Txt("Light"), Style(b5.ButtonStyle("Light.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#f8f9fa"}, "#fff"))),
+    20			TButton(Txt("Dark"), Style(b5.ButtonStyle("Dark.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#212529"}, "#fff"))),
+    21			TButton(Txt("Link"), Style(b5.ButtonStyle("Link.B5.TButton", b5.ButtonColors{b5.ButtonText: "#1774fd", b5.ButtonFace: "#fff"}, "#fff"))),
+    22			opts)
+    23		Grid(TExit(), Columnspan(3), opts)
+    24		App.Configure(Background("#fff")).Wait()
+    25	}
+
 Documentation at [pkg.go.dev].
 
 [Tutorial: Modifying a ttk button's style]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style

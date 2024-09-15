@@ -7503,7 +7503,7 @@ func (w *Window) Striped() string {
 //   - [TSizegrip]
 //   - [TSpinbox]
 //   - [TTreeview]
-func Style(val any) Opt {
+func Style(val any) (r Opt) {
 	return rawOption(fmt.Sprintf(`-style %s`, optionString(val)))
 }
 
