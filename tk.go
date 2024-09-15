@@ -182,6 +182,7 @@ func setDefaults() {
 
 	App = &Window{}
 	exitHandler = Command(func() { Destroy(App) })
+	evalErr("option add *background #fff")
 	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
 	App.IconPhoto(NewPhoto(Data(icon)))
 	base := filepath.Base(os.Args[0])
@@ -280,6 +281,19 @@ func winCollect(w *Window, options ...Opt) string {
 	var a []string
 	for _, v := range options {
 		a = append(a, v.optionString(w))
+	}
+	return strings.Join(a, " ")
+}
+
+func collectAny(options ...any) string {
+	var a []string
+	for _, v := range options {
+		switch x := v.(type) {
+		case Opt:
+			a = append(a, x.optionString(nil))
+		default:
+			a = append(a, tclSafeString(fmt.Sprint(x)))
+		}
 	}
 	return strings.Join(a, " ")
 }
@@ -640,13 +654,59 @@ func NewPhoto(options ...Opt) *Img {
 }
 
 // Width — Get the configured option value.
+//
+// Additional information might be available at the [Tcl/Tk photo] page.
+//
+// [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Width() string {
 	return evalErr(fmt.Sprintf(`%s cget -width`, m))
 }
 
 // Height — Get the configured option value.
+//
+// Additional information might be available at the [Tcl/Tk photo] page.
+//
+// [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Height() string {
 	return evalErr(fmt.Sprintf(`%s cget -height`, m))
+}
+
+// // Returns photo data.
+// //
+// // Additional information might be available at the [Tcl/Tk photo] page.
+// //
+// // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
+// func (m *Img) Data(options ...Opt) []byte {
+// 	s := evalErr(fmt.Sprintf("%s data %s", collect(options...)))
+// 	panic(todo("%q", s))
+// }
+
+// photo — Full-color images
+//
+// Copies a region from the image called sourceImage (which must be a photo
+// image) to the image called imageName, possibly with pixel zooming and/or
+// subsampling. If no options are specified, this command copies the whole of
+// sourceImage into imageName, starting at coordinates (0,0) in imageName.
+//
+// The following options may be specified:
+//
+//  - [From] x1 y1 x2 y2
+//
+// Specifies a rectangular sub-region of the source image to be copied. (x1,y1)
+// and (x2,y2) specify diagonally opposite corners of the rectangle. If x2 and
+// y2 are not specified, the default value is the bottom-right corner of the
+// source image. The pixels copied will include the left and top edges of the
+// specified rectangle but not the bottom or right edges. If the -from option
+// is not given, the default is the whole source image.
+// 
+// The function returns 'm'.
+//
+// Additional information might be available at the [Tcl/Tk photo] page.
+//
+// [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
+func (m *Img) Copy(src *Img, options ...Opt) (r *Img) {
+	evalErr(fmt.Sprintf("%s copy %s %s", m, src, collect(options...)))
+	return m
 }
 
 // Graph — use gnuplot to draw on a photo. Graph returns 'm'

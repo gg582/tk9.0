@@ -5353,12 +5353,13 @@ func (w *Window) Format() string {
 // From option.
 //
 // Known uses:
+//   - [Img.Copy]
 //   - [Scale] (widget specific)
 //   - [Spinbox] (widget specific)
 //   - [TScale] (widget specific)
 //   - [TSpinbox] (widget specific)
-func From(val any) Opt {
-	return rawOption(fmt.Sprintf(`-from %s`, optionString(val)))
+func From(val ...any) Opt {
+	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
 }
 
 // From — Get the configured option value.
@@ -7863,12 +7864,13 @@ func (w *Window) Titleitems() string {
 // To option.
 //
 // Known uses:
+//   - [Img.Copy]
 //   - [Scale] (widget specific)
 //   - [Spinbox] (widget specific)
 //   - [TScale] (widget specific)
 //   - [TSpinbox] (widget specific)
-func To(val any) Opt {
-	return rawOption(fmt.Sprintf(`-to %s`, optionString(val)))
+func To(val ...any) Opt {
+	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
 }
 
 // To — Get the configured option value.

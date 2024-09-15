@@ -78,6 +78,7 @@ func TestTokenizer(t *testing.T) {
 }
 
 func TestTmp(t *testing.T) {
+	trc("", TkScaling())
 	// trc("", StyleLayout("TButton"))
 	// 	Button.border -sticky nswe -border 1 -children {
 	//		Button.focus -sticky nswe -children {
@@ -92,6 +93,9 @@ func TestTmp(t *testing.T) {
 	// TRC -padding -relief -shiftrelief
 	trc("", evalErr(`ttk::style element options TButton.label`))
 	// TRC -compound -space -text -font -foreground -underline -width -anchor -justify -wraplength -embossed -image -stipple -background
+	trc("", evalErr(`ttk::style map TButton`))
+	// TRC -relief {{!disabled pressed} sunken}
+	trc("", evalErr(`ttk::style map TButton.border`))
 
 	const svg = `
 <svg width="22cm" height="17cm">

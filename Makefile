@@ -4,10 +4,10 @@
 
 .PHONY:	all clean edit editor test work w65 dlls build_all_targets
 
-TAR = tcl9.0b3-src.tar.gz
-URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
-TAR2 = tk9.0b3-src.tar.gz
-URL2 = http://prdownloads.sourceforge.net/tcl/$(TAR2)
+TAR = tcl-core9.0.0rc0-src.tar.gz
+URL = https://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
+TAR2 = tk9.0.0rc0-src.tar.gz
+URL2 = https://deac-riga.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR2)
 GOOS = $(shell go env GOOS)
 GOARCH = $(shell go env GOARCH)
 
@@ -89,14 +89,14 @@ win65:
 dlls: download
 	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
 	rm -rf ~/tmp/tcl9* ~/tmp/tk9*
-	tar xf tcl9.0b3-src.tar.gz -C ~/tmp
-	tar xf tk9.0b3-src.tar.gz -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0b3/win ; ./configure"
-	make -C ~/tmp/tcl9.0b3/win
-	cp -v ~/tmp/tcl9.0b3/win/libtommath.dll ~/tmp/tcl9.0b3/win/tcl90.dll .
-	sh -c "cd ~/tmp/tk9.0b3/win ; ./configure --with-tcl=$$HOME/tmp/tcl9.0b3/win"
-	make -C ~/tmp/tk9.0b3/win
-	cp -v ~/tmp/tk9.0b3/win/tcl9tk90.dll .
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure"
+	make -C ~/tmp/tcl9.0.0/win
+	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll .
+	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/win"
+	make -C ~/tmp/tk9.0.0/win
+	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll .
 	rm -rf embed_windows/
 	mkdir embed_windows
 	cp ../libtk9.0/library/library.zip .
