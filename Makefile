@@ -5,9 +5,9 @@
 .PHONY:	all clean edit editor test work w65 dlls build_all_targets
 
 TAR = tcl-core9.0.0rc0-src.tar.gz
-URL = https://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
+URL = http://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
 TAR2 = tk9.0.0rc0-src.tar.gz
-URL2 = https://deac-riga.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR2)
+URL2 = http://deac-riga.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR2)
 GOOS = $(shell go env GOOS)
 GOARCH = $(shell go env GOARCH)
 
