@@ -18,7 +18,7 @@ require (
 	modernc.org/memory v1.8.0
 	modernc.org/ngrab v0.1.0
 	modernc.org/rec v0.1.0
-	modernc.org/tcl9.0 v0.13.1
+	modernc.org/tcl9.0 v0.14.2
 )
 
 require (

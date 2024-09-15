@@ -105,5 +105,7 @@ modernc.org/strutil v1.2.0 h1:agBi9dp1I+eOnxXeiZawM8F4LawKv4NzGWSaLfyeNZA=
 modernc.org/strutil v1.2.0/go.mod h1:/mdcBmfOibveCTBxUl5B5l6W+TTH1FXPLHZE6bTosX0=
 modernc.org/tcl9.0 v0.13.1 h1:pFSv8DbGrFyKNrij3TnikUq2VFIhrMusFsHDZx+b6ug=
 modernc.org/tcl9.0 v0.13.1/go.mod h1:st5OZVh4UPY6H0voU5BtP6meZv1xCJX/AaICwDjF1GA=
+modernc.org/tcl9.0 v0.14.2 h1:mOBGCNudCPtT+cJQikpICwhBbqAp7svLP4IzAuL/MuY=
+modernc.org/tcl9.0 v0.14.2/go.mod h1:L6+dyJyqnbUpydBDOJYUe9luDbSQg1z+zFo3nL5MUew=
 modernc.org/token v1.1.0 h1:Xl7Ap9dKaEs5kLoOQeQmPWevfnk/DM5qcLcYlA8ys6Y=
 modernc.org/token v1.1.0/go.mod h1:UGzOrNV1mAFSEB63lOFHIpNRUVMvYTc6yu1SMY/XTDM=
