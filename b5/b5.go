@@ -111,8 +111,7 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 					q2, Sticky("nw"),
 					q3, Sticky("sw"),
 					q4, Sticky("se"),
-					"Button.label", Sticky("nswe"),
-				))))
+					"Button.label", Sticky("nswe")))))
 	StyleConfigure(style, Compound(true))
 	StyleConfigure(style, Foreground(scheme[ButtonText]))
 	StyleConfigure(style, Background(background))
