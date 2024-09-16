@@ -14,7 +14,7 @@ require (
 	modernc.org/knuth v0.4.0
 	modernc.org/libc v1.60.1
 	modernc.org/libtcl9.0 v0.13.2
-	modernc.org/libtk9.0 v0.11.0
+	modernc.org/libtk9.0 v0.12.0
 	modernc.org/memory v1.8.0
 	modernc.org/ngrab v0.1.0
 	modernc.org/rec v0.1.0
@@ -30,17 +30,17 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	modernc.org/fsm v1.2.1 // indirect
 	modernc.org/gc/v3 v3.0.0-20230512134359-466b49aa80e0 // indirect
-	modernc.org/libX11 v0.10.0 // indirect
-	modernc.org/libXau v0.9.0 // indirect
-	modernc.org/libXdmcp v0.11.0 // indirect
+	modernc.org/libX11 v0.11.2 // indirect
+	modernc.org/libXau v0.9.2 // indirect
+	modernc.org/libXdmcp v0.12.0 // indirect
 	modernc.org/libXft v0.10.0 // indirect
 	modernc.org/libXrender v0.9.0 // indirect
-	modernc.org/libbsd v0.11.0 // indirect
+	modernc.org/libbsd v0.11.1 // indirect
 	modernc.org/libexpat v0.10.0 // indirect
 	modernc.org/libfontconfig v0.8.1 // indirect
 	modernc.org/libfreetype v0.9.0 // indirect
 	modernc.org/libmd v0.12.0 // indirect
-	modernc.org/libxcb v0.10.0 // indirect
+	modernc.org/libxcb v0.11.0 // indirect
 	modernc.org/libz v0.16.3 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/regexp v1.7.3 // indirect
