@@ -24,7 +24,6 @@ import (
 	"image/draw"
 	"image/png"
 	"io"
-	"runtime"
 	"strings"
 
 	"github.com/disintegration/imaging"
@@ -285,13 +284,4 @@ func TeX(src string, scale float64) (png []byte) {
 	}
 
 	return b
-}
-
-// CourierFont returns "{courier new}" on Windows and "courier" elsewhere.
-func CourierFont() string {
-	if runtime.GOOS == "windows" {
-		return "{courier new}"
-	}
-
-	return "courier"
 }

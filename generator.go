@@ -567,9 +567,9 @@ func makeTokenizer() {
 	args := []string{
 		"-lexstring", "mlToken",
 		"-pkg", "tk9_0",
-		`([^$]|\\\$)*`,         // Not TeX, incl. "\$"
-		`\$([^$]|\\\$)*\$`,     // $TeX$, incl. $Te\$X$
-		`\$\$([^$]|\\\$)*\$\$`, // $$TeX$$, incl. $Te\$X$
+		`([^$]|\\\$)*`,              // Not TeX, incl. "\$"
+		`\$([^$]|\\\$)*[^\\]\$`,     // $TeX$, incl. $Te\$X$
+		`\$\$([^$]|\\\$)*[^\\]\$\$`, // $$TeX$$, incl. $Te\$X$
 	}
 	var b bytes.Buffer
 	rc, err := rec.Main(args, &b, io.Discard)

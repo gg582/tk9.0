@@ -369,25 +369,37 @@ Embedding pictures, TeX and other widgets in Text (_examples/embed.go).
      7	var icon []byte
      8	
      9	func main() {
-    10		var scroll *TScrollbarWidget
-    11		t := Text(Font("helvetica", 10), Height(15), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("4p"), Pady("4p"), Pady("12p"))
-    12		scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
-    13		Grid(t, Sticky("news"), Pady("2m"))
-    14		Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
-    15		GridRowConfigure(App, 0, Weight(1))
-    16		GridColumnConfigure(App, 0, Weight(1))
-    17		Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    18		t.TagConfigure("c", Justify("center"))
-    19		t.TagConfigure("e", Offset("-2p"))
-    20		t.TagConfigure("t", Font("times"))
-    21		t.InsertML(`<c>Hello Go + Tk`, NewPhoto(Data(icon)), Padx("4p"), `users!</c>
-    22	<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t> $Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$ users! (\$inline math\$)</c>
-    23	<br><br><c>Hello Go + Tk + <t>T<e>E</e>X</t> $$Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$$ users! (\$\$display math\$\$)</c>
-    24	<br><br>The above exemplifies embeding pictures and <t>T<e>E</e>X</t> scripts. A text widget can also embed other widgets. For example,
-    25	when a`, TButton(Txt("<Tbutton>")), Padx("4p"), Pady("2p"), Align("center"), "and a", TEntry(Textvariable("<TEntry>"), Width(8)), Padx("4p"),
-    26			Pady("2p"), Align("center"), `are part of the markup, they will reflow when their containing text widget is resized.`)
-    27		App.Center().Wait()
-    28	}
+    10		fontSize := int(10*TkScaling()/NativeScaling + 0.5)
+    11		font := Font("helvetica", fontSize)
+    12		var scroll *TScrollbarWidget
+    13		t := Text(font, Height(15), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"),
+    14			Padx("4p"), Pady("12p"))
+    15		scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
+    16		Grid(t, Sticky("news"), Pady("2m"))
+    17		Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
+    18		GridRowConfigure(App, 0, Weight(1))
+    19		GridColumnConfigure(App, 0, Weight(1))
+    20		Grid(Exit().Configure(font), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    21		t.TagConfigure("c", Justify("center"))
+    22		t.TagConfigure("e", Offset("-2p"))
+    23		t.TagConfigure("t", Font("times", fontSize))
+    24		sym := " <t>T<e>E</e>X</t> "
+    25		tex := `$Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$`
+    26		t.InsertML(`<c>Hello Go + Tk`, NewPhoto(Data(icon)), Padx("4p"), `users!</c>
+    27	<br><br><c>Hello Go + Tk +`, sym, tex, ` users! (\$inline math\$)</c>
+    28	<br><br><c>Hello Go + Tk +`, sym, `$`+tex+`$`, ` users! (\$\$display math\$\$)</c>
+    29	<br><br>The above exemplifies embeding pictures and`, sym, `scripts. A text widget can also embed other widgets. For example,
+    30	when a`, Button(font, Txt("<Tbutton>")), Padx("4p"), Pady("2p"), Align("center"), `and
+    31	a`, Entry(font, Textvariable("<TEntry>"), Background(White), Width(8)), Padx("4p"), Pady("2p"), Align("center"), `are part of
+    32	the markup, they will reflow when their containing text widget is resized.`)
+    33		App.Center().Wait()
+    34	}
+
+This demo demonstrates additionally some techniques for handling non-default scale factors.
+
+![embed2](_examples/embed2.png "embed2")
+
+The above screen shot was take from '$ TK9_SCALE=1.5 go run _examples/embed.go'.
 
 ![tbutton](_examples/tbutton.png "tbutton")
 

@@ -30,8 +30,16 @@ const (
 	// StyleThemeUse() will override the default.
 	ThemeEnvVar = "TK9_THEME"
 
+	// ScaleEnvVar, if a valid (floating point) number, sets the TkScaling
+	// value at package initialization to NativeScaling*TK9_SCALE.
+	ScaleEnvVar = "TK9_SCALE"
+
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
 )
+
+// NativeScaling is the value returned by TKScaling in package initialization before it is possibly
+// changed using the [ScaleEnvVar] value.
+var NativeScaling float64
 
 // App is the main/root application window.
 var App *Window
@@ -182,16 +190,21 @@ func setDefaults() {
 
 	App = &Window{}
 	exitHandler = Command(func() { Destroy(App) })
-	evalErr("option add *background #fff")
 	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
+	NativeScaling = TkScaling()
+	if s := os.Getenv(ScaleEnvVar); s != "" {
+		if k, err := strconv.ParseFloat(s, 64); err == nil && k >= 0.5 && k <= 5 {
+			TkScaling(k * NativeScaling)
+		}
+	}
+	if nm := os.Getenv(ThemeEnvVar); nm != "" {
+		StyleThemeUse(nm)
+	}
 	App.IconPhoto(NewPhoto(Data(icon)))
 	base := filepath.Base(os.Args[0])
 	base = strings.TrimSuffix(base, ".exe")
 	App.WmTitle(base)
 	App.Configure(Padx("4m"), Pady("3m")).Center()
-	if nm := os.Getenv(ThemeEnvVar); nm != "" {
-		StyleThemeUse(nm)
-	}
 }
 
 // Window represents a Tk window/widget. It implements common widget methods.
@@ -2264,11 +2277,16 @@ func (w *TextWidget) InsertML(list ...any) {
 			ids, toks := tokenize(n.Data)
 			for i, id := range ids {
 				switch id {
+				default:
+					if s := toks[i]; strings.HasPrefix(s, "$$") && strings.HasSuffix(s, "$$") || strings.HasPrefix(s, "$") && strings.HasSuffix(s, "$") {
+						img := NewPhoto(Data(TeX(s, k)))
+						evalErr(fmt.Sprintf("%v image create end -image %s -align top", w, img))
+						break
+					}
+
+					fallthrough
 				case 0:
 					evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(unescapeML(toks[i])), tclSafeStrings(tags...)))
-				default:
-					img := NewPhoto(Data(TeX(toks[i], k)))
-					evalErr(fmt.Sprintf("%v image create end -image %s -align top", w, img))
 				}
 			}
 		case html.ElementNode:
@@ -3345,4 +3363,13 @@ func StyleThemeUse(themeName ...string) string {
 		}
 	}
 	return evalErr(fmt.Sprintf("ttk::style theme use %s", s))
+}
+
+// CourierFont returns "{courier new}" on Windows and "courier" elsewhere.
+func CourierFont() string {
+	if runtime.GOOS == "windows" {
+		return "{courier new}"
+	}
+
+	return "courier"
 }

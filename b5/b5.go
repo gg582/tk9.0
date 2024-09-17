@@ -91,10 +91,10 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	r := width - stroke/2
 	clip := width - stroke
 	corners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], background, background)
-	q1 := "Q1." + style + ".corner"
-	q2 := "Q2." + style + ".corner"
-	q3 := "Q3." + style + ".corner"
-	q4 := "Q4." + style + ".corner"
+	q1 := style + ".corner1"
+	q2 := style + ".corner2"
+	q3 := style + ".corner3"
+	q4 := style + ".corner4"
 	StyleElementCreate(q1, "image", corners[0])
 	StyleElementCreate(q2, "image", corners[1])
 	StyleElementCreate(q3, "image", corners[2])
