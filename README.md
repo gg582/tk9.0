@@ -399,7 +399,7 @@ This demo demonstrates additionally some techniques for handling non-default sca
 
 ![embed2](_examples/embed2.png "embed2")
 
-The above screen shot was take from '$ TK9_SCALE=1.5 go run _examples/embed.go'.
+The above screen shot was take from '$ TK9_SCALE=1.5 go run _examples/embed.go'. (Actual picture is a TODO)
 
 ![tbutton](_examples/tbutton.png "tbutton")
 
@@ -472,7 +472,6 @@ Technology preview of a Bootstrap5-like theme button items (_examples/b5.go).
     24		App.Configure(Background("#fff")).Wait()
     25	}
 
-Documentation at [pkg.go.dev].
+[![Go Reference](https://pkg.go.dev/badge/modernc.org/tk9.0.svg)](https://pkg.go.dev/modernc.org/tk9.0)
 
 [Tutorial: Modifying a ttk button's style]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
-[pkg.go.dev]: https://pkg.go.dev/modernc.org/tk9.0
