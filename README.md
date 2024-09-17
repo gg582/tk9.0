@@ -399,7 +399,7 @@ This demo demonstrates additionally some techniques for handling non-default sca
 
 ![embed2](_examples/embed2.png "embed2")
 
-The above screen shot was take from '$ TK9_SCALE=1.5 go run _examples/embed.go'. (Actual picture is a TODO)
+The above screen shot is from '$ TK9_SCALE=1.2 go run _examples/embed.go'.
 
 ![tbutton](_examples/tbutton.png "tbutton")
 
