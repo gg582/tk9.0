@@ -35,6 +35,8 @@ const (
 	ScaleEnvVar = "TK9_SCALE"
 
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
+	goarch         = runtime.GOARCH
+	goos           = runtime.GOOS
 	libVersion     = "tk9.0.0"
 )
 

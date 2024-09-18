@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build linux && (amd64 || arm64) || darwin && arm64
+//go:build (linux && (amd64 || arm64)) || (darwin && (amd64 || arm64))
 
 package tk9_0 // import "modernc.org/tk9.0"
 
@@ -157,14 +157,14 @@ func getCacheDir() (r string, err error) {
 		return "", err
 	}
 
-	r0 := filepath.Join(r, "modernc.org")
-	r = filepath.Join(r0, libVersion)
+	r0 := filepath.Join(r, "modernc.org", libVersion, goos)
+	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
 		return r, nil
 	}
 
-	err = os.MkdirAll(r0, 0700)
+	os.MkdirAll(r0, 0700)
 	tmp, err := os.MkdirTemp("", "tk9.0-")
 	if err != nil {
 		return "", err
