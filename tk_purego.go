@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build linux && (amd64 || arm64)
+//go:build linux && (amd64 || arm64) || darwin && arm64
 
 package tk9_0 // import "modernc.org/tk9.0"
 
@@ -147,7 +147,7 @@ func init1(cacheDir string) {
 	}
 
 	if r, _, _ := purego.SyscallN(tkInitProc, interp); r != tcl_ok {
-		Error = fmt.Errorf("failed to initialize Tk")
+		Error = fmt.Errorf("failed to initialize Tk: %s", tclResult())
 		return
 	}
 }

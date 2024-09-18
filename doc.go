@@ -79,7 +79,6 @@
 //
 //   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+ executable
 //     available in $PATH.
-//   - darwin (macOS) requires [XQuartz].
 //
 // # Completeness
 //
@@ -222,7 +221,6 @@
 // site], see the LICENSE-TCLTK file for details.
 //
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
-// [XQuartz]: https://en.wikipedia.org/wiki/XQuartz
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter
