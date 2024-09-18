@@ -35,6 +35,7 @@ const (
 	ScaleEnvVar = "TK9_SCALE"
 
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
+	libVersion     = "tk9.0.0"
 )
 
 // NativeScaling is the value returned by TKScaling in package initialization before it is possibly

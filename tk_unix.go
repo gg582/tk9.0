@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !windows
+//go:build !windows && !(linux && amd64)
 
 package tk9_0 // import "modernc.org/tk9.0"
 
@@ -79,7 +79,7 @@ zipfs mount %s %s
 	}
 }
 
-func getCacheDir() (r string, err error) {
+func getCacheDir() (r string, err error) { //TODO consolidate
 	if r, err = os.UserCacheDir(); err != nil {
 		return "", err
 	}

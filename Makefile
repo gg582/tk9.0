@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-.PHONY:	all clean edit editor test work w65 dlls build_all_targets
+.PHONY:	all clean edit editor test work w65 lib_win lib_linux build_all_targets
 
 TAR = tcl-core9.0.0rc0-src.tar.gz
 URL = http://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
@@ -86,7 +86,7 @@ win65:
 		.  \
 		win65:src/modernc.org/tk9.0
 
-dlls: download
+lib_win: download
 	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
 	rm -rf ~/tmp/tcl9* ~/tmp/tk9*
 	tar xf $(TAR) -C ~/tmp
@@ -110,36 +110,51 @@ dlls: download
 	zip embed_windows_$(GOARCH)/dll.zip *.dll
 	rm -f *.dll
 
+lib_linux: download
+	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
+	make -C ~/tmp/tcl9.0.0/unix
+	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
+	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
+	make -C ~/tmp/tk9.0.0/unix
+	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
 
-dlls_windows_arm64: download
-	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
-	if [ "$(GOARCH)" != "arm64" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9**
-	rm -f *.dll
-	tar xf tcl9.0b3-src.tar.gz -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0b3/win ; ./configure --enable-64bit=aarch64"
-	sh -c "cd ~/tmp/tcl9.0b3/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
-	make -C ~/tmp/tcl9.0b3/win
-	cp -v ~/tmp/tcl9.0b3/win/libtommath.dll ~/tmp/tcl9.0b3/win/tcl90.dll .
-	rm -rf ~/tmp/tk9*
-	tar xf tk9.0b3-src.tar.gz -C ~/tmp
-	sh -c "cd ~/tmp/tk9.0b3/win ; ./configure  --enable-64bit=aarch64 --with-tcl=$$HOME/tmp/tcl9.0b3/win"
-	sh -c "cd ~/tmp/tk9.0b3/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' Makefile"
-	# workaround for "no rule for making minizip"
-	echo >> ~/tmp/tk9.0b3/win/Makefile
-	echo "minizip:" >> ~/tmp/tk9.0b3/win/Makefile
-	cp -v ~/tmp/tcl9.0b3/win/minizip.exe ~/tmp/tk9.0b3/win
-	make -C ~/tmp/tk9.0b3/win
-	cp -v ~/tmp/tk9.0b3/win/tcl9tk90.dll .
-	rm -rf embed_windows/
-	mkdir embed_windows
-	cp -v ../libtk9.0/library/library.zip .
-	unzip library.zip
-	rm library.zip
-	mv library/ tk_library/
-	zip -r embed_windows/tk_library.zip tk_library/
-	rm -rf mkdir embed_windows_$(GOARCH)
-	mkdir embed_windows_$(GOARCH)
-	rm -f embed_windows_$(GOARCH)/dll.zip
-	zip embed_windows_$(GOARCH)/dll.zip *.dll
-	rm -f *.dll
+# dlls_windows_arm64: download
+# 	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
+# 	if [ "$(GOARCH)" != "arm64" ]; then exit 1 ; fi
+# 	rm -rf ~/tmp/tcl9**
+# 	rm -f *.dll
+# 	tar xf tcl9.0b3-src.tar.gz -C ~/tmp
+# 	sh -c "cd ~/tmp/tcl9.0b3/win ; ./configure --enable-64bit=aarch64"
+# 	sh -c "cd ~/tmp/tcl9.0b3/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
+# 	make -C ~/tmp/tcl9.0b3/win
+# 	cp -v ~/tmp/tcl9.0b3/win/libtommath.dll ~/tmp/tcl9.0b3/win/tcl90.dll .
+# 	rm -rf ~/tmp/tk9*
+# 	tar xf tk9.0b3-src.tar.gz -C ~/tmp
+# 	sh -c "cd ~/tmp/tk9.0b3/win ; ./configure  --enable-64bit=aarch64 --with-tcl=$$HOME/tmp/tcl9.0b3/win"
+# 	sh -c "cd ~/tmp/tk9.0b3/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' Makefile"
+# 	# workaround for "no rule for making minizip"
+# 	echo >> ~/tmp/tk9.0b3/win/Makefile
+# 	echo "minizip:" >> ~/tmp/tk9.0b3/win/Makefile
+# 	cp -v ~/tmp/tcl9.0b3/win/minizip.exe ~/tmp/tk9.0b3/win
+# 	make -C ~/tmp/tk9.0b3/win
+# 	cp -v ~/tmp/tk9.0b3/win/tcl9tk90.dll .
+# 	rm -rf embed_windows/
+# 	mkdir embed_windows
+# 	cp -v ../libtk9.0/library/library.zip .
+# 	unzip library.zip
+# 	rm library.zip
+# 	mv library/ tk_library/
+# 	zip -r embed_windows/tk_library.zip tk_library/
+# 	rm -rf mkdir embed_windows_$(GOARCH)
+# 	mkdir embed_windows_$(GOARCH)
+# 	rm -f embed_windows_$(GOARCH)/dll.zip
+# 	zip embed_windows_$(GOARCH)/dll.zip *.dll
+# 	rm -f *.dll
