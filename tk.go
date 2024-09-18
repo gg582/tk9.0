@@ -37,7 +37,7 @@ const (
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
 	goarch         = runtime.GOARCH
 	goos           = runtime.GOOS
-	libVersion     = "tk9.0.0"
+	libVersion     = "tk9.0.1"
 )
 
 // NativeScaling is the value returned by TKScaling in package initialization before it is possibly
