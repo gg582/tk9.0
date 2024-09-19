@@ -77,6 +77,13 @@
 //	windows 386
 //	windows amd64
 //
+// Specific to [FreeBSD]:
+//
+//	Note: when building with cross-compiling or CGO_ENABLED=0, add
+//	the following argument to `go` so that these symbols are defined by
+//	making fakecgo the Cgo.
+//	  -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+//
 // # Runtime dependencies
 //
 //   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+ executable
@@ -223,6 +230,7 @@
 // Parts of the documentation are copied and/or modified from the [tcl.tk
 // site], see the LICENSE-TCLTK file for details.
 //
+// [FreeBSD]: https://github.com/ebitengine/purego/blob/ff2c2cce0d0b43e3ed9743fcd3408cbd9187f835/internal/fakecgo/freebsd.go#L15
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
