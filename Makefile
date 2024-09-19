@@ -183,10 +183,10 @@ lib_freebsd: download
 	tar xf $(TAR) -C ~/tmp
 	tar xf $(TAR2) -C ~/tmp
 	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
-	make -C ~/tmp/tcl9.0.0/unix -j2
+	gmake -C ~/tmp/tcl9.0.0/unix -j2
 	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
 	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
-	make -C ~/tmp/tk9.0.0/unix -j2
+	gmake -C ~/tmp/tk9.0.0/unix -j2
 	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
 	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
