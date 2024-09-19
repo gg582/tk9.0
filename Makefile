@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-.PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin build_all_targets
+.PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd build_all_targets
 
 TAR = tcl-core9.0.0rc1-src.tar.gz
 URL = http://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
@@ -110,38 +110,6 @@ lib_win: download
 	zip embed_windows_$(GOARCH)/dll.zip *.dll
 	rm -f *.dll
 
-lib_linux: download
-	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
-	mkdir -p embed/$(GOOS)/$(GOARCH)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
-	make -C ~/tmp/tcl9.0.0/unix
-	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
-	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
-	make -C ~/tmp/tk9.0.0/unix
-	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
-	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
-	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
-	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
-
-lib_darwin: download
-	if [ "$(GOOS)" != "darwin" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
-	mkdir -p embed/$(GOOS)/$(GOARCH)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure"
-	make -C ~/tmp/tcl9.0.0/unix
-	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.dylib embed/$(GOOS)/$(GOARCH)
-	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix --enable-aqua"
-	make -C ~/tmp/tk9.0.0/unix
-	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.dylib ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
-	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.dylib embed/$(GOOS)/$(GOARCH)/*.zip
-	rm -f embed/$(GOOS)/$(GOARCH)/*.dylib embed/$(GOOS)/$(GOARCH)/*.zip
-	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
-
 # dlls_windows_arm64: download
 # 	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
 # 	if [ "$(GOARCH)" != "arm64" ]; then exit 1 ; fi
@@ -174,3 +142,52 @@ lib_darwin: download
 # 	rm -f embed_windows_$(GOARCH)/dll.zip
 # 	zip embed_windows_$(GOARCH)/dll.zip *.dll
 # 	rm -f *.dll
+
+lib_linux: download
+	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
+	make -C ~/tmp/tcl9.0.0/unix -j2
+	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
+	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
+	make -C ~/tmp/tk9.0.0/unix -j2
+	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+
+lib_darwin: download
+	if [ "$(GOOS)" != "darwin" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure"
+	make -C ~/tmp/tcl9.0.0/unix -j2
+	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.dylib embed/$(GOOS)/$(GOARCH)
+	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix --enable-aqua"
+	make -C ~/tmp/tk9.0.0/unix -j2
+	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.dylib ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.dylib embed/$(GOOS)/$(GOARCH)/*.zip
+	rm -f embed/$(GOOS)/$(GOARCH)/*.dylib embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+
+# use gmake
+lib_freebsd: download
+	if [ "$(GOOS)" != "freebsd" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
+	make -C ~/tmp/tcl9.0.0/unix -j2
+	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
+	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
+	make -C ~/tmp/tk9.0.0/unix -j2
+	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip

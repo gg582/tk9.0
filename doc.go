@@ -65,6 +65,7 @@
 //	-------------
 //	darwin  amd64
 //	darwin  arm64
+//	freebsd amd64
 //	linux   386
 //	linux   amd64
 //	linux   arm
@@ -129,8 +130,9 @@
 //
 // Initialization will fail if a Unix process starts on a machine with no
 // X server or the process is started in a way that it has no access to the X
-// server. On the other hand, this package will work on Unix machines with no X
-// server if the process is started remotely using '$ ssh -X foo@bar'.
+// server. On the other hand, this package may work on Unix machines with no X
+// server if the process is started remotely using '$ ssh -X foo@bar' and the X
+// forwarding is enabled/supported.
 //
 // # The options pattern
 //

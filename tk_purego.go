@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build (linux && (amd64 || arm64)) || (darwin && (amd64 || arm64))
+//go:build (linux && (amd64 || arm64)) || (darwin && (amd64 || arm64) || freebsd && amd64)
 
 package tk9_0 // import "modernc.org/tk9.0"
 
@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"strconv"
 	"unsafe"
 
@@ -56,6 +57,12 @@ func init() {
 
 	if init1(cacheDir); Error != nil {
 		return
+	}
+
+	switch goos {
+	case "freebsd":
+		a := []string{cacheDir, os.Getenv("LD_LIBRARY_PATH")}
+		os.Setenv("LD_LIBRARY_PATH", strings.Join(a, string(os.PathSeparator)))
 	}
 
 	var nm uintptr
