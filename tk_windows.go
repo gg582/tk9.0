@@ -5,18 +5,16 @@
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
-	_ "embed"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strconv"
+	"syscall"
 	"unsafe"
 
 	"github.com/evilsocket/islazy/zip"
-	"golang.org/x/sys/windows"
-	libtk "modernc.org/libtk9.0" //TODO do not import
 	"modernc.org/memory"
 )
 
@@ -28,22 +26,19 @@ const (
 )
 
 var (
-	//go:embed embed_windows/tk_library.zip
-	tkLibrary []byte
-
 	// No mutex, the package must be used by a single goroutine only.
 	allocator memory.Allocator
 
-	createCommandProc *windows.Proc
-	evalExProc        *windows.Proc
-	getObjResultProc  *windows.Proc
-	getStringProc     *windows.Proc
+	createCommandProc uintptr
+	evalExProc        uintptr
+	getObjResultProc  uintptr
+	getStringProc     uintptr
 	interp            uintptr
-	newStringObjProc  *windows.Proc
-	runCmdProxy       = windows.NewCallbackCDecl(eventDispatcher)
-	setObjResultProc  *windows.Proc
-	tclDll            *windows.DLL
-	tkDll             *windows.DLL
+	newStringObjProc  uintptr
+	runCmdProxy       = syscall.NewCallback(eventDispatcher)
+	setObjResultProc  uintptr
+	tclBinHandle      syscall.Handle
+	tkBinHandle       syscall.Handle
 )
 
 func init() {
@@ -66,7 +61,7 @@ func init() {
 		return
 	}
 
-	cmd, _, _ := createCommandProc.Call(interp, nm, runCmdProxy, 0, 0)
+	cmd, _, _ := syscall.SyscallN(createCommandProc, interp, nm, runCmdProxy, 0, 0)
 	if cmd == 0 {
 		Error = fmt.Errorf("registering event dispatcher proxy failed: %v", getObjResultProc)
 		return
@@ -89,91 +84,91 @@ func init1(cacheDir string) {
 		return
 	}
 
-	if tclDll, Error = windows.LoadDLL("tcl90.dll"); Error != nil {
+	if tclBinHandle, Error = syscall.LoadLibrary(filepath.Join(cacheDir, tclBin)); Error != nil {
 		return
 	}
 
-	if tkDll, Error = windows.LoadDLL("tcl9tk90.dll"); Error != nil {
+	if tkBinHandle, Error = syscall.LoadLibrary(filepath.Join(cacheDir, tkBin)); Error != nil {
 		return
 	}
 
-	var tclCreateInterp, tclInit, tkInit *windows.Proc
-	if tclCreateInterp, Error = tclDll.FindProc("Tcl_CreateInterp"); Error != nil {
+	var tclCreateInterpProc, tclInitProc, tkInitProc uintptr
+	if tclCreateInterpProc, Error = syscall.GetProcAddress(tclBinHandle, "Tcl_CreateInterp"); Error != nil {
 		return
 	}
 
-	if tclInit, Error = tclDll.FindProc("Tcl_Init"); Error != nil {
+	if tclInitProc, Error = syscall.GetProcAddress(tclBinHandle, "Tcl_Init"); Error != nil {
 		return
 	}
 
-	if createCommandProc, Error = tclDll.FindProc("Tcl_CreateCommand"); Error != nil {
+	if createCommandProc, Error = syscall.GetProcAddress(tclBinHandle, "Tcl_CreateCommand"); Error != nil {
 		return
 	}
 
-	if evalExProc, Error = tclDll.FindProc("Tcl_EvalEx"); Error != nil {
+	if evalExProc, Error = syscall.GetProcAddress(tclBinHandle, "Tcl_EvalEx"); Error != nil {
 		return
 	}
 
-	if setObjResultProc, Error = tclDll.FindProc("Tcl_SetObjResult"); Error != nil {
+	if setObjResultProc, Error = syscall.GetProcAddress(tclBinHandle, "Tcl_SetObjResult"); Error != nil {
 		return
 	}
 
-	if getObjResultProc, Error = tclDll.FindProc("Tcl_GetObjResult"); Error != nil {
+	if getObjResultProc, Error = syscall.GetProcAddress(tclBinHandle, "Tcl_GetObjResult"); Error != nil {
 		return
 	}
 
-	if getStringProc, Error = tclDll.FindProc("Tcl_GetString"); Error != nil {
+	if getStringProc, Error = syscall.GetProcAddress(tclBinHandle, "Tcl_GetString"); Error != nil {
 		return
 	}
 
-	if newStringObjProc, Error = tclDll.FindProc("Tcl_NewStringObj"); Error != nil {
+	if newStringObjProc, Error = syscall.GetProcAddress(tclBinHandle, "Tcl_NewStringObj"); Error != nil {
 		return
 	}
 
-	if tkInit, Error = tkDll.FindProc("Tk_Init"); Error != nil {
+	if tkInitProc, Error = syscall.GetProcAddress(tkBinHandle, "Tk_Init"); Error != nil {
 		return
 	}
 
-	if interp, _, _ = tclCreateInterp.Call(); interp == 0 {
+	if interp, _, _ = syscall.SyscallN(tclCreateInterpProc); interp == 0 {
 		Error = fmt.Errorf("failed to create a Tcl interpreter")
 		return
 	}
 
-	if r, _, _ := tclInit.Call(interp); r != tcl_ok {
+	if r, _, _ := syscall.SyscallN(tclInitProc, interp); r != tcl_ok {
 		Error = fmt.Errorf("failed to initialize the Tcl interpreter")
 		return
 	}
 
-	if _, Error := eval("zipfs mount tk_library.zip /lib/tk"); Error != nil {
+	if _, Error := eval("zipfs mount libtk9.0.0.zip /app"); Error != nil {
 		return
 	}
 
-	if r, _, _ := tkInit.Call(interp); r != tcl_ok {
-		Error = fmt.Errorf("failed to initialize Tk")
+	if r, _, _ := syscall.SyscallN(tkInitProc, interp); r != tcl_ok {
+		Error = fmt.Errorf("failed to initialize Tk: %s", tclResult())
 		return
 	}
 }
 
-func getCacheDir() (r string, err error) { //TODO consolidate
+func getCacheDir() (r string, err error) {
 	if r, err = os.UserCacheDir(); err != nil {
 		return "", err
 	}
 
-	r0 := filepath.Join(r, "modernc.org")
-	r = filepath.Join(r0, libtk.Version)
+	r0 := filepath.Join(r, "modernc.org", libVersion, goos)
+	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
 		return r, nil
 	}
 
-	err = os.MkdirAll(r0, 0700)
+	os.MkdirAll(r0, 0700)
 	tmp, err := os.MkdirTemp("", "tk9.0-")
 	if err != nil {
 		return "", err
 	}
 
-	zf := filepath.Join(tmp, "dll.zip")
-	if err = os.WriteFile(zf, dlls, 0660); err != nil {
+	zf := filepath.Join(tmp, "lib.zip")
+	if err = os.WriteFile(zf, libZip, 0660); err != nil {
 		return "", err
 	}
 
@@ -183,11 +178,6 @@ func getCacheDir() (r string, err error) { //TODO consolidate
 	}
 
 	os.Remove(zf)
-	zf = filepath.Join(tmp, "tk_library.zip")
-	if err = os.WriteFile(zf, tkLibrary, 0660); err != nil {
-		return "", err
-	}
-
 	if err = os.Rename(tmp, r); err == nil {
 		return r, nil
 	}
@@ -196,13 +186,48 @@ func getCacheDir() (r string, err error) { //TODO consolidate
 	return tmp, nil
 }
 
+// Finalize releases all resources held, if any. This may include temporary
+// files. Finalize is intended to be called on process shutdown only.
+func Finalize() (err error) {
+	if finished.Swap(1) != 0 {
+		return
+	}
+
+	defer runtime.UnlockOSThread()
+
+	for _, v := range cleanupDirs {
+		err = errors.Join(err, os.RemoveAll(v))
+	}
+	return err
+}
+
+func eval(code string) (r string, err error) {
+	if dmesgs {
+		defer func() {
+			dmesg("code=%s -> r=%v err=%v", code, r, err)
+		}()
+	}
+	cs, err := cString(code)
+	if err != nil {
+		return "", err
+	}
+
+	defer allocator.UintptrFree(cs)
+
+	if r0, _, _ := syscall.SyscallN(evalExProc, interp, cs, uintptr(len(code)), tcl_eval_direct); r0 == tcl_ok {
+		return tclResult(), nil
+	}
+
+	return "", fmt.Errorf("%s", tclResult())
+}
+
 func tclResult() string {
-	r, _, _ := getObjResultProc.Call(interp)
+	r, _, _ := syscall.SyscallN(getObjResultProc, interp)
 	if r == 0 {
 		return ""
 	}
 
-	if r, _, _ = getStringProc.Call(r); r != 0 {
+	if r, _, _ = syscall.SyscallN(getStringProc, r); r != 0 {
 		return goString(r)
 	}
 
@@ -240,54 +265,6 @@ func cString(s string) (r uintptr, err error) {
 	return r, nil
 }
 
-func setResult(s string) (err error) {
-	cs, err := cString(s)
-	if err != nil {
-		return err
-	}
-
-	defer allocator.UintptrFree(cs)
-
-	obj, _, _ := newStringObjProc.Call(cs, uintptr(len(s)))
-	if obj == 0 {
-		return fmt.Errorf("OOM")
-	}
-
-	setObjResultProc.Call(interp, obj)
-	return nil
-}
-
-func goTransientString(p uintptr) (r string) { // Result cannot be retained.
-	if p == 0 {
-		return ""
-	}
-
-	var n uintptr
-	for p := p; *(*byte)(unsafe.Pointer(p + n)) != 0; n++ {
-	}
-	return string(unsafe.Slice((*byte)(unsafe.Pointer(p)), n))
-}
-
-func eval(code string) (r string, err error) {
-	if dmesgs {
-		defer func() {
-			dmesg("code=%s -> r=%v err=%v", code, r, err)
-		}()
-	}
-	cs, err := cString(code)
-	if err != nil {
-		return "", err
-	}
-
-	defer allocator.UintptrFree(cs)
-
-	if r0, _, _ := evalExProc.Call(interp, cs, uintptr(len(code)), tcl_eval_direct); r0 == tcl_ok {
-		return tclResult(), nil
-	}
-
-	return "", fmt.Errorf("%s", tclResult())
-}
-
 func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 	if argc < 2 {
 		setResult(fmt.Sprintf("eventDispatcher internal error: argc=%v", argc))
@@ -319,17 +296,30 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 	}
 }
 
-// Finalize releases all resources held, if any. This may include temporary
-// files. Finalize is intended to be called on process shutdown only.
-func Finalize() (err error) {
-	if finished.Swap(1) != 0 {
-		return
+func goTransientString(p uintptr) (r string) { // Result cannot be retained.
+	if p == 0 {
+		return ""
 	}
 
-	defer runtime.UnlockOSThread()
-
-	for _, v := range cleanupDirs {
-		err = errors.Join(err, os.RemoveAll(v))
+	var n uintptr
+	for p := p; *(*byte)(unsafe.Pointer(p + n)) != 0; n++ {
 	}
-	return err
+	return string(unsafe.Slice((*byte)(unsafe.Pointer(p)), n))
+}
+
+func setResult(s string) (err error) {
+	cs, err := cString(s)
+	if err != nil {
+		return err
+	}
+
+	defer allocator.UintptrFree(cs)
+
+	obj, _, _ := syscall.SyscallN(newStringObjProc, cs, uintptr(len(s)))
+	if obj == 0 {
+		return fmt.Errorf("OOM")
+	}
+
+	syscall.SyscallN(setObjResultProc, interp, obj)
+	return nil
 }
