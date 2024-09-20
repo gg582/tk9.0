@@ -6,5 +6,11 @@ package tk9_0 // import "modernc.org/tk9.0"
 
 import _ "embed"
 
-//go:embed embed_windows_arm64/dll.zip
-var dlls []byte
+const (
+	tclBin = "tcl90.dll"
+	tkBin  = "tcl9tk90.dll"
+)
+
+
+//go:embed embed/windows/arm64/lib.zip
+var libZip []byte

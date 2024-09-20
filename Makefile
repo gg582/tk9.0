@@ -152,11 +152,12 @@ lib_winarm64: download
 	mkdir -p $(WINARM64)
 	tar xf $(TAR) -C ~/tmp
 	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32"
+	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --enable-64bit=aarch64"
 	sh -c "cd ~/tmp/tcl9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
 	make -C ~/tmp/tcl9.0.0/win -j12
+	cp -v ~/tmp/tcl9.0.0/libtommath/win64-arm/libtommath.dll ~/tmp/tcl9.0.0/win/
 	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WINARM64)
-	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
+	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win  --enable-64bit=aarch64"
 	make -C ~/tmp/tk9.0.0/win -j12
 	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WINARM64)
 	zip -j $(WINARM64)/lib.zip.tmp $(WINARM64)/*.dll $(WINARM64)/*.zip
