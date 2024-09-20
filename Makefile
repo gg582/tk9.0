@@ -17,6 +17,10 @@ WINARM64 = embed/windows/arm64
 build_all_targets:
 	GOOS=darwin GOARCH=arm64 go build
 	GOOS=darwin GOARCH=arm64 go test -o /dev/null -c
+	GOOS=freebsd GOARCH=amd64 go build
+	GOOS=freebsd GOARCH=amd64 go test -o /dev/null -c
+	GOOS=freebsd GOARCH=arm64 go build
+	GOOS=freebsd GOARCH=arm64 go test -o /dev/null -c
 	GOOS=linux GOARCH=386 go build
 	GOOS=linux GOARCH=386 go test -o /dev/null -c
 	GOOS=linux GOARCH=amd64 go build
