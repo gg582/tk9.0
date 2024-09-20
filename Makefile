@@ -111,24 +111,9 @@ win65:
 # 	# rm -f embed/windows/arm64/*.dll embed/windows/arm64/*.zip
 # 	# mv embed/windows/arm64/lib.zip.tmp embed/windows/arm64/lib.zip
 
-lib_win: download
-	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
-	mkdir -p embed/$(GOOS)/$(GOARCH)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure"
-	make -C ~/tmp/tcl9.0.0/win
-	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll embed/$(GOOS)/$(GOARCH)
-	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/win"
-	make -C ~/tmp/tk9.0.0/win
-	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
-	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.dll embed/$(GOOS)/$(GOARCH)/*.zip
-	rm -f embed/$(GOOS)/$(GOARCH)/*.dll embed/$(GOOS)/$(GOARCH)/*.zip
-	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
-
 lib_win64: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+	if [ "$(GOARCH)" != "amd64" ]; then exit 1 ; fi
 	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WIN64)
 	mkdir -p $(WIN64)
 	tar xf $(TAR) -C ~/tmp
@@ -142,6 +127,41 @@ lib_win64: download
 	zip -j $(WIN64)/lib.zip.tmp $(WIN64)/*.dll $(WIN64)/*.zip
 	rm -f $(WIN64)/*.dll $(WIN64)/*.zip
 	mv $(WIN64)/lib.zip.tmp $(WIN64)/lib.zip
+
+lib_win32: download
+	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+	if [ "$(GOARCH)" != "amd64" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WIN32)
+	mkdir -p $(WIN32)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=i686-w64-mingw32"
+	make -C ~/tmp/tcl9.0.0/win -j12
+	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN32)
+	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=i686-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
+	make -C ~/tmp/tk9.0.0/win -j12
+	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN32)
+	zip -j $(WIN32)/lib.zip.tmp $(WIN32)/*.dll $(WIN32)/*.zip
+	rm -f $(WIN32)/*.dll $(WIN32)/*.zip
+	mv $(WIN32)/lib.zip.tmp $(WIN32)/lib.zip
+
+lib_winarm64: download
+	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+	if [ "$(GOARCH)" != "amd64" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WINARM64)
+	mkdir -p $(WINARM64)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32"
+	sh -c "cd ~/tmp/tcl9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
+	make -C ~/tmp/tcl9.0.0/win -j12
+	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WINARM64)
+	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
+	make -C ~/tmp/tk9.0.0/win -j12
+	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WINARM64)
+	zip -j $(WINARM64)/lib.zip.tmp $(WINARM64)/*.dll $(WINARM64)/*.zip
+	rm -f $(WINARM64)/*.dll $(WINARM64)/*.zip
+	mv $(WINARM64)/lib.zip.tmp $(WINARM64)/lib.zip
 
 lib_linux: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
@@ -158,22 +178,6 @@ lib_linux: download
 	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
-
-lib_win32: download
-	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WIN32)
-	mkdir -p $(WIN32)
-	tar xf $(TAR) -C ~/tmp
-	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=i686-w64-mingw32"
-	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN32)
-	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=i686-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
-	make -C ~/tmp/tk9.0.0/win -j12
-	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN32)
-	zip -j $(WIN32)/lib.zip.tmp $(WIN32)/*.dll $(WIN32)/*.zip
-	rm -f $(WIN32)/*.dll $(WIN32)/*.zip
-	mv $(WIN32)/lib.zip.tmp $(WIN32)/lib.zip
 
 lib_darwin: download
 	if [ "$(GOOS)" != "darwin" ]; then exit 1 ; fi
