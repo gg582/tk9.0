@@ -17,10 +17,10 @@ WINARM64 = embed/windows/arm64
 build_all_targets:
 	GOOS=darwin GOARCH=arm64 go build
 	GOOS=darwin GOARCH=arm64 go test -o /dev/null -c
-	GOOS=freebsd GOARCH=amd64 go build
-	GOOS=freebsd GOARCH=amd64 go test -o /dev/null -c
-	GOOS=freebsd GOARCH=arm64 go build
-	GOOS=freebsd GOARCH=arm64 go test -o /dev/null -c
+	GOOS=freebsd GOARCH=amd64 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=amd64 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=arm64 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=arm64 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
 	GOOS=linux GOARCH=386 go build
 	GOOS=linux GOARCH=386 go test -o /dev/null -c
 	GOOS=linux GOARCH=amd64 go build
@@ -92,28 +92,6 @@ win65:
 		--exclude html/ \
 		.  \
 		win65:src/modernc.org/tk9.0
-
-# lib_win_arm64: download
-# 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
-# 	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/windows/arm64
-# 	mkdir -p embed/windows/arm64
-# 	tar xf $(TAR) -C ~/tmp
-# 	tar xf $(TAR2) -C ~/tmp
-# 	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --enable-64bit=arm64 --enable-shared"
-# 	sh -c "cd ~/tmp/tcl9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
-# 	make -C ~/tmp/tcl9.0.0/win
-# 	# cp -v ~/tmp/tcl9.0.0/libtommath/win64-arm/libtommath.dll  ~/tmp/tcl9.0.0/win/tcl90.dll embed/windows/arm64
-# 	# sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --host=aarch64-w64-mingw32 --enable-64bit=aarch64 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
-# 	# sh -c "cd ~/tmp/tk9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *.*"
-# 	# # workaround for "no rule for making minizip"
-# 	# echo >> ~/tmp/tk9.0.0/win/Makefile
-# 	# echo "minizip:" >> ~/tmp/tk9.0.0/win/Makefile
-# 	# cp -v ~/tmp/tcl9.0.0/win/minizip.exe ~/tmp/tk9.0.0/win
-# 	# make -C ~/tmp/tk9.0.0/win
-# 	# cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip embed/windwos/arm64
-# 	# zip -j embed/windows/arm64/lib.zip.tmp embed/windows/arm64/*.dll embed/windows/arm64/*.zip
-# 	# rm -f embed/windows/arm64/*.dll embed/windows/arm64/*.zip
-# 	# mv embed/windows/arm64/lib.zip.tmp embed/windows/arm64/lib.zip
 
 lib_win64: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
