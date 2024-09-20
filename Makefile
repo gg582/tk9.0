@@ -2,14 +2,17 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-.PHONY:	all clean edit editor test work w65 dlls build_all_targets
+.PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd build_all_targets
 
-TAR = tcl9.0b3-src.tar.gz
-URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
-TAR2 = tk9.0b3-src.tar.gz
-URL2 = http://prdownloads.sourceforge.net/tcl/$(TAR2)
+TAR = tcl-core9.0.0rc1-src.tar.gz
+URL = http://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
+TAR2 = tk9.0.0rc1-src.tar.gz
+URL2 = http://deac-riga.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR2)
 GOOS = $(shell go env GOOS)
 GOARCH = $(shell go env GOARCH)
+WIN32 = embed/windows/386
+WIN64 = embed/windows/amd64
+WINARM64 = embed/windows/arm64
 
 build_all_targets:
 	GOOS=darwin GOARCH=arm64 go build
@@ -86,60 +89,121 @@ win65:
 		.  \
 		win65:src/modernc.org/tk9.0
 
-dlls: download
-	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9* ~/tmp/tk9*
-	tar xf tcl9.0b3-src.tar.gz -C ~/tmp
-	tar xf tk9.0b3-src.tar.gz -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0b3/win ; ./configure"
-	make -C ~/tmp/tcl9.0b3/win
-	cp -v ~/tmp/tcl9.0b3/win/libtommath.dll ~/tmp/tcl9.0b3/win/tcl90.dll .
-	sh -c "cd ~/tmp/tk9.0b3/win ; ./configure --with-tcl=$$HOME/tmp/tcl9.0b3/win"
-	make -C ~/tmp/tk9.0b3/win
-	cp -v ~/tmp/tk9.0b3/win/tcl9tk90.dll .
-	rm -rf embed_windows/
-	mkdir embed_windows
-	cp ../libtk9.0/library/library.zip .
-	unzip library.zip
-	rm library.zip
-	mv library/ tk_library/
-	zip -r embed_windows/tk_library.zip tk_library/
-	rm -rf mkdir embed_windows_$(GOARCH)
-	mkdir embed_windows_$(GOARCH)
-	rm -f embed_windows_$(GOARCH)/dll.zip
-	zip embed_windows_$(GOARCH)/dll.zip *.dll
-	rm -f *.dll
+# lib_win_arm64: download
+# 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+# 	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/windows/arm64
+# 	mkdir -p embed/windows/arm64
+# 	tar xf $(TAR) -C ~/tmp
+# 	tar xf $(TAR2) -C ~/tmp
+# 	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --enable-64bit=arm64 --enable-shared"
+# 	sh -c "cd ~/tmp/tcl9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
+# 	make -C ~/tmp/tcl9.0.0/win
+# 	# cp -v ~/tmp/tcl9.0.0/libtommath/win64-arm/libtommath.dll  ~/tmp/tcl9.0.0/win/tcl90.dll embed/windows/arm64
+# 	# sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --host=aarch64-w64-mingw32 --enable-64bit=aarch64 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
+# 	# sh -c "cd ~/tmp/tk9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *.*"
+# 	# # workaround for "no rule for making minizip"
+# 	# echo >> ~/tmp/tk9.0.0/win/Makefile
+# 	# echo "minizip:" >> ~/tmp/tk9.0.0/win/Makefile
+# 	# cp -v ~/tmp/tcl9.0.0/win/minizip.exe ~/tmp/tk9.0.0/win
+# 	# make -C ~/tmp/tk9.0.0/win
+# 	# cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip embed/windwos/arm64
+# 	# zip -j embed/windows/arm64/lib.zip.tmp embed/windows/arm64/*.dll embed/windows/arm64/*.zip
+# 	# rm -f embed/windows/arm64/*.dll embed/windows/arm64/*.zip
+# 	# mv embed/windows/arm64/lib.zip.tmp embed/windows/arm64/lib.zip
 
-
-dlls_windows_arm64: download
+lib_win: download
 	if [ "$(GOOS)" != "windows" ]; then exit 1 ; fi
-	if [ "$(GOARCH)" != "arm64" ]; then exit 1 ; fi
-	rm -rf ~/tmp/tcl9**
-	rm -f *.dll
-	tar xf tcl9.0b3-src.tar.gz -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0b3/win ; ./configure --enable-64bit=aarch64"
-	sh -c "cd ~/tmp/tcl9.0b3/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
-	make -C ~/tmp/tcl9.0b3/win
-	cp -v ~/tmp/tcl9.0b3/win/libtommath.dll ~/tmp/tcl9.0b3/win/tcl90.dll .
-	rm -rf ~/tmp/tk9*
-	tar xf tk9.0b3-src.tar.gz -C ~/tmp
-	sh -c "cd ~/tmp/tk9.0b3/win ; ./configure  --enable-64bit=aarch64 --with-tcl=$$HOME/tmp/tcl9.0b3/win"
-	sh -c "cd ~/tmp/tk9.0b3/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' Makefile"
-	# workaround for "no rule for making minizip"
-	echo >> ~/tmp/tk9.0b3/win/Makefile
-	echo "minizip:" >> ~/tmp/tk9.0b3/win/Makefile
-	cp -v ~/tmp/tcl9.0b3/win/minizip.exe ~/tmp/tk9.0b3/win
-	make -C ~/tmp/tk9.0b3/win
-	cp -v ~/tmp/tk9.0b3/win/tcl9tk90.dll .
-	rm -rf embed_windows/
-	mkdir embed_windows
-	cp -v ../libtk9.0/library/library.zip .
-	unzip library.zip
-	rm library.zip
-	mv library/ tk_library/
-	zip -r embed_windows/tk_library.zip tk_library/
-	rm -rf mkdir embed_windows_$(GOARCH)
-	mkdir embed_windows_$(GOARCH)
-	rm -f embed_windows_$(GOARCH)/dll.zip
-	zip embed_windows_$(GOARCH)/dll.zip *.dll
-	rm -f *.dll
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure"
+	make -C ~/tmp/tcl9.0.0/win
+	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll embed/$(GOOS)/$(GOARCH)
+	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/win"
+	make -C ~/tmp/tk9.0.0/win
+	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.dll embed/$(GOOS)/$(GOARCH)/*.zip
+	rm -f embed/$(GOOS)/$(GOARCH)/*.dll embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+
+lib_win64: download
+	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WIN64)
+	mkdir -p $(WIN64)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=x86_64-w64-mingw32"
+	make -C ~/tmp/tcl9.0.0/win -j12
+	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN64)
+	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=x86_64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
+	make -C ~/tmp/tk9.0.0/win -j12
+	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN64)
+	zip -j $(WIN64)/lib.zip.tmp $(WIN64)/*.dll $(WIN64)/*.zip
+	rm -f $(WIN64)/*.dll $(WIN64)/*.zip
+	mv $(WIN64)/lib.zip.tmp $(WIN64)/lib.zip
+
+lib_linux: download
+	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
+	make -C ~/tmp/tcl9.0.0/unix -j2
+	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
+	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
+	make -C ~/tmp/tk9.0.0/unix -j2
+	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+
+lib_win32: download
+	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* $(WIN32)
+	mkdir -p $(WIN32)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=i686-w64-mingw32"
+	make -C ~/tmp/tcl9.0.0/win -j12
+	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN32)
+	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=i686-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
+	make -C ~/tmp/tk9.0.0/win -j12
+	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN32)
+	zip -j $(WIN32)/lib.zip.tmp $(WIN32)/*.dll $(WIN32)/*.zip
+	rm -f $(WIN32)/*.dll $(WIN32)/*.zip
+	mv $(WIN32)/lib.zip.tmp $(WIN32)/lib.zip
+
+lib_darwin: download
+	if [ "$(GOOS)" != "darwin" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure"
+	make -C ~/tmp/tcl9.0.0/unix -j2
+	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.dylib embed/$(GOOS)/$(GOARCH)
+	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix --enable-aqua"
+	make -C ~/tmp/tk9.0.0/unix -j2
+	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.dylib ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.dylib embed/$(GOOS)/$(GOARCH)/*.zip
+	rm -f embed/$(GOOS)/$(GOARCH)/*.dylib embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+
+# use gmake
+lib_freebsd: download
+	if [ "$(GOOS)" != "freebsd" ]; then exit 1 ; fi
+	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
+	mkdir -p embed/$(GOOS)/$(GOARCH)
+	tar xf $(TAR) -C ~/tmp
+	tar xf $(TAR2) -C ~/tmp
+	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"
+	gmake -C ~/tmp/tcl9.0.0/unix -j2
+	cp -v ~/tmp/tcl9.0.0/unix/libtcl9.0.so embed/$(GOOS)/$(GOARCH)
+	sh -c "cd ~/tmp/tk9.0.0/unix ; ./configure --with-tcl=$$HOME/tmp/tcl9.0.0/unix"
+	gmake -C ~/tmp/tk9.0.0/unix -j2
+	cp -v ~/tmp/tk9.0.0/unix/libtcl9tk9.0.so ~/tmp/tk9.0.0/unix/libtk9.0.0.zip embed/$(GOOS)/$(GOARCH)
+	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
+	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip

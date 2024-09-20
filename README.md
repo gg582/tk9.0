@@ -1,8 +1,8 @@
-# tk9.0: The CGo-free cross platform GUI for Go
+# tk9.0: The CGo-free, cross platform GUI for Go
 
 ![photo](_examples/photo.png "photo")
 
-Using embedded images (_examples/photo.go).
+Using Go embedded images (_examples/photo.go).
 
      1	package main
      2	
@@ -14,7 +14,7 @@ Using embedded images (_examples/photo.go).
      8	
      9	func main() {
     10		Pack(Label(Image(NewPhoto(Data(gopher)))), TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    11		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    11		App.Center().Wait()
     12	}
 
 ![menu](_examples/menu.png "menu")
@@ -25,8 +25,8 @@ Cascading menus (_examples/menu.go)
      2	
      3	import (
      4		"fmt"
-     5		"runtime"
-     6		. "modernc.org/tk9.0"
+     5		. "modernc.org/tk9.0"
+     6		"runtime"
      7	)
      8	
      9	func main() {
@@ -60,7 +60,7 @@ Cascading menus (_examples/menu.go)
     37		menubar.AddCascade(Lbl("Help"), Underline(0), Mnu(helpMenu))
     38	
     39		App.WmTitle(fmt.Sprintf("%s on %s", App.WmTitle(""), runtime.GOOS))
-    40		App.Configure(Mnu(menubar), Width("8c"), Height("6c"), Padx("4m"), Pady("3m")).Center().Wait()
+    40		App.Configure(Mnu(menubar), Width("8c"), Height("6c")).Wait()
     41	}
 
 ![svg](_examples/text.png "text")
@@ -73,7 +73,7 @@ Rich text using markup (_examples/text.go).
      4	
      5	func main() {
      6		var scroll *TScrollbarWidget
-     7		t := Text(Fnt("helvetica 10"), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
+     7		t := Text(Font("helvetica", 10), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
      8		scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
      9		Grid(t, Sticky("news"), Pady("2m"))
     10		Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
@@ -81,8 +81,8 @@ Rich text using markup (_examples/text.go).
     12		GridColumnConfigure(App, 0, Weight(1))
     13		Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
     14		t.TagConfigure("bgstipple", Background(Black), Borderwidth(0), Bgstipple(Gray12))
-    15		t.TagConfigure("big", Fnt("helvetica 12 bold"))
-    16		t.TagConfigure("bold", Fnt("helvetica 10 bold italic"))
+    15		t.TagConfigure("big", Font("helvetica", 12, "bold"))
+    16		t.TagConfigure("bold", Font("helvetica", 10, "bold", "italic"))
     17		t.TagConfigure("center", Justify("center"))
     18		t.TagConfigure("color1", Background("#a0b7ce"))
     19		t.TagConfigure("color2", Foreground(Red))
@@ -91,12 +91,12 @@ Rich text using markup (_examples/text.go).
     22		t.TagConfigure("raised", Relief("raised"), Borderwidth(1))
     23		t.TagConfigure("right", Justify("right"))
     24		t.TagConfigure("spacing", Spacing1("10p"), Spacing2("2p"), Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
-    25		t.TagConfigure("sub", Offset("-2p"), Fnt("helvetica 8"))
+    25		t.TagConfigure("sub", Offset("-2p"), Font("helvetica", 8))
     26		t.TagConfigure("sunken", Relief("sunken"), Borderwidth(1))
-    27		t.TagConfigure("super", Offset("4p"), Fnt("helvetica 8"))
-    28		t.TagConfigure("tiny", Fnt("times 8 bold"))
+    27		t.TagConfigure("super", Offset("4p"), Font("helvetica", 8))
+    28		t.TagConfigure("tiny", Font("times", 8, "bold"))
     29		t.TagConfigure("underline", Underline(1))
-    30		t.TagConfigure("verybig", Fnt("courier 22 bold"))
+    30		t.TagConfigure("verybig", Font(CourierFont(), 22, "bold"))
     31		t.InsertML(`Text widgets like this one allow you to display information in a variety of styles. Display styles are controlled
     32	using a mechanism called <bold>tags</bold>. Tags are just textual names that you can apply to one or more ranges of characters within a
     33	text widget. You can configure tags with various display styles. If you do this, then the tagged characters will be displayed with the
@@ -128,7 +128,7 @@ Rich text using markup (_examples/text.go).
     59	to 2 points, which results in just a bit of extra space within a pararaph. Spacing3 isn't used in this example.</spacing>
     60	<br><spacing>To see where the space is, select ranges of text within these paragraphs. The selection highlight will cover the extra
     61	space.</spacing>`)
-    62		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    62		App.Center().Wait()
     63	}
 
 ![svg](_examples/svg.png "svg")
@@ -157,7 +157,7 @@ Using svg (_examples/svg.go).
     20			Label(Image(NewPhoto(Data(svg)))),
     21			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
     22		)
-    23		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    23		App.Center().Wait()
     24	}
 
 ![calc](_examples/calc.png "calc")
@@ -167,7 +167,7 @@ A simple calculator (_examples/calc.go).
      1	package main
      2	
      3	import "github.com/expr-lang/expr"
-     4	import 	. "modernc.org/tk9.0"
+     4	import . "modernc.org/tk9.0"
      5	
      6	func main() {
      7		out := Label(Height(2), Anchor("e"), Txt("(123+232)/(123-10)"))
@@ -190,11 +190,11 @@ A simple calculator (_examples/calc.go).
     24						out.Configure(Txt(out.Txt() + string(c)))
     25					}
     26				},
-    27			))
+    27			), Width(-4))
     28			Grid(b, Row(i/4+1), Column(i%4), Sticky("news"), Ipadx("1.5m"), Ipady("2.6m"))
     29		}
     30		Grid(b, Columnspan(2))
-    31		App.Wait()
+    31		App.Configure(Padx(0), Pady(0)).Wait()
     32	}
 
 ![font](_examples/font.png "font")
@@ -225,31 +225,33 @@ A font previewer (_examples/font.go).
     22			}
     23			m[font] = true
     24			tag := fmt.Sprintf("t%v", i)
-    25			t.TagConfigure(tag, Fnt(NewFont(Family(font))))
-    26			t.Insert("end", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
+    25			t.TagConfigure(tag, Font(NewFont(Family(font))))
+    26			t.Insert("end", font+": ", "", "Lorem ipsum dolor sit amet, consectetur adipiscing elit...\n", tag)
     27		}
-    28		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    28		App.Center().Wait()
     29	}
 
 ![splot](_examples/splot.png "surface plot")
 
-Surface plot (_examples/splot.go).
+Surface plot (_examples/splot.go). This example requires Gnuplot 5.4+ installation.
 
      1	package main
      2	
      3	import . "modernc.org/tk9.0"
      4	
-     5	func main() {
-     6		Pack(
-     7			Label(Image(NewPhoto(Width(800), Height(600)).Graph("set grid; splot x**2+y**2, x**2-y**2"))),
-     8			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-     9		)
-    10		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
-    11	}
+     5	var cm = int(TkScaling()*72/2.54+0.5)
+     6	
+     7	func main() {
+     8		Pack(
+     9			Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph("set grid; splot x**2+y**2, x**2-y**2"))),
+    10			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    11		)
+    12		App.Center().Wait()
+    13	}
 
 ![tori](_examples/tori.png "interlocked tori")
 
-Interlocked tori plot (_examples/tori.go).
+Interlocked tori plot (_examples/tori.go). This example requires Gnuplot 5.4+ installation.
 
      1	package main
      2	
@@ -281,20 +283,21 @@ Interlocked tori plot (_examples/tori.go).
     28	set format cb "%.1f"
     29	set pm3d depthorder
     30	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with pm3d,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with pm3d
-    31	unset multiplot
-    32	`
-    33	
-    34	func main() {
-    35		Pack(
-    36			Label(Image(NewPhoto(Width(800), Height(600)).Graph(script))),
-    37			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    38		)
-    39		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
-    40	}
+    31	unset multiplot`
+    32	
+    33	var cm = int(TkScaling()*72/2.54+0.5)
+    34	
+    35	func main() {
+    36		Pack(
+    37			Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph(script))),
+    38			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    39		)
+    40		App.Center().Wait()
+    41	}
 
 ![tori-canvas](_examples/tori_canvas.png "interlocked tori on canvas")
 
-Interlocked tori plot on canvas (_examples/tori_canvas.go).
+Interlocked tori plot on canvas (_examples/tori_canvas.go). This example requires Gnuplot 5.4+ installation.
 
      1	package main
      2	
@@ -323,35 +326,152 @@ Interlocked tori plot on canvas (_examples/tori_canvas.go).
     25	set rrange [ * : * ] noreverse writeback
     26	set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front  noinvert bdefault
     27	NO_ANIMATION = 1
-    28	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with lines
-    29	`
-    30	
-    31	func main() {
-    32		Pack(
-    33			Canvas(Width(800), Height(600), Background(White)).Graph(script),
-    34			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    35		)
-    36		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
-    37	}
+    28	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with lines`
+    29	
+    30	var cm = int(TkScaling()*72/2.54+0.5)
+    31	
+    32	func main() {
+    33		Pack(
+    34			Canvas(Width(20*cm), Height(15*cm), Background(White)).Graph(script),
+    35			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+    36		)
+    37		App.Center().Wait()
+    38	}
 
 ![tex](_examples/tex.png "TeX")
 
-Rendering plain TeX without runtime dependencies (_examples/tex.go).
+Rendering plain TeX (_examples/tex.go). No runtime dependencies required.
 
      1	package main
      2	
      3	import . "modernc.org/tk9.0"
      4	
-     5	const tex = `$$\sin x = {{e^{ix}-e^{-ix}}\over 2i}$$`
+     5	const tex = `$$\int _0 ^\infty {{\sin ax \sin bx}\over{x^2}}\,dx = {\pi a\over 2}$$`
      6	
      7	func main() {
      8		Pack(
-     9			Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*72/TkScaling()/600))))),
+     9			Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*TkScaling()*72/600))))),
     10			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
     11		)
-    12		App.Configure(Padx("4m"), Pady("3m")).Center().Wait()
+    12		App.Center().Wait()
     13	}
 
-Documentation at [pkg.go.dev].
+![embed](_examples/embed.png "embed")
 
-[pkg.go.dev]: https://pkg.go.dev/modernc.org/tk9.0
+Embedding pictures, TeX and other widgets in Text (_examples/embed.go).
+
+     1	package main
+     2	
+     3	import . "modernc.org/tk9.0"
+     4	import _ "embed"
+     5	
+     6	//go:embed gotk.png
+     7	var icon []byte
+     8	
+     9	func main() {
+    10		fontSize := int(10*TkScaling()/NativeScaling + 0.5)
+    11		font := Font("helvetica", fontSize)
+    12		var scroll *TScrollbarWidget
+    13		t := Text(font, Height(15), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"),
+    14			Padx("4p"), Pady("12p"))
+    15		scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
+    16		Grid(t, Sticky("news"), Pady("2m"))
+    17		Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
+    18		GridRowConfigure(App, 0, Weight(1))
+    19		GridColumnConfigure(App, 0, Weight(1))
+    20		Grid(Exit().Configure(font), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    21		t.TagConfigure("c", Justify("center"))
+    22		t.TagConfigure("e", Offset("-2p"))
+    23		t.TagConfigure("t", Font("times", fontSize))
+    24		sym := " <t>T<e>E</e>X</t> "
+    25		tex := `$Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$`
+    26		t.InsertML(`<c>Hello Go + Tk`, NewPhoto(Data(icon)), Padx("4p"), `users!</c>
+    27	<br><br><c>Hello Go + Tk +`, sym, tex, ` users! (\$inline math\$)</c>
+    28	<br><br><c>Hello Go + Tk +`, sym, `$`+tex+`$`, ` users! (\$\$display math\$\$)</c>
+    29	<br><br>The above exemplifies embeding pictures and`, sym, `scripts. A text widget can also embed other widgets. For example,
+    30	when a`, Button(font, Txt("<Tbutton>")), Padx("4p"), Pady("2p"), Align("center"), `and
+    31	a`, Entry(font, Textvariable("<TEntry>"), Background(White), Width(8)), Padx("4p"), Pady("2p"), Align("center"), `are part of
+    32	the markup, they will reflow when their containing text widget is resized.`)
+    33		App.Center().Wait()
+    34	}
+
+This demo demonstrates additionally some techniques for handling non-default scale factors.
+
+![embed2](_examples/embed2.png "embed2")
+
+The above screen shot is from '$ TK9_SCALE=1.2 go run _examples/embed.go'.
+
+![tbutton](_examples/tbutton.png "tbutton")
+
+Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modifying a ttk button's style]
+
+     1	package main
+     2	
+     3	import _ "embed"
+     4	import . "modernc.org/tk9.0"
+     5	
+     6	//go:embed red_corner.png
+     7	var red []byte
+     8	
+     9	//go:embed green_corner.png
+    10	var green []byte
+    11	
+    12	func main() {
+    13		StyleElementCreate("Red.Corner.TButton.indicator", "image", NewPhoto(Data(red)))
+    14		StyleElementCreate("Green.Corner.TButton.indicator", "image", NewPhoto(Data(green)))
+    15		StyleLayout("Red.Corner.TButton",
+    16			"Button.border", Sticky("nswe"), Border(1), Children(
+    17				"Button.focus", Sticky("nswe"), Children(
+    18					"Button.padding", Sticky("nswe"), Children(
+    19						"Button.label", Sticky("nswe"),
+    20						"Red.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+    21		StyleLayout("Green.Corner.TButton",
+    22			"Button.border", Sticky("nswe"), Border(1), Children(
+    23				"Button.focus", Sticky("nswe"), Children(
+    24					"Button.padding", Sticky("nswe"), Children(
+    25						"Button.label", Sticky("nswe"),
+    26						"Green.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+    27		opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
+    28		rb := TButton(Txt("Red"))
+    29		gb := TButton(Txt("Green"))
+    30		Grid(rb, gb, opts)
+    31		Grid(TButton(Txt("Use style"), Command(func() {
+    32			rb.Configure(Style("Red.Corner.TButton"))
+    33			gb.Configure(Style("Green.Corner.TButton"))
+    34		})), TExit(), opts)
+    35		App.Wait()
+    36	}
+
+![b5](_examples/b5.png "b5")
+
+Technology preview of a Bootstrap5-like theme button items (_examples/b5.go).
+
+     1	package main
+     2	
+     3	import (
+     4		. "modernc.org/tk9.0"
+     5		"modernc.org/tk9.0/b5"
+     6	)
+     7	
+     8	func main() {
+     9		StyleThemeUse("default")
+    10		opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
+    11		Grid(TButton(Txt("Primary"), Style(b5.ButtonStyle("Primary.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#0d6efd"}, "#fff"))),
+    12			TButton(Txt("Secondary"), Style(b5.ButtonStyle("Secondary.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d"}, "#fff"))),
+    13			TButton(Txt("Success"), Style(b5.ButtonStyle("Sucess.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754"}, "#fff"))),
+    14			opts)
+    15		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("Danger.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
+    16			TButton(Txt("Warning"), Style(b5.ButtonStyle("Warning.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107"}, "#fff"))),
+    17			TButton(Txt("Info"), Style(b5.ButtonStyle("Info.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0"}, "#fff"))),
+    18			opts)
+    19		Grid(TButton(Txt("Light"), Style(b5.ButtonStyle("Light.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#f8f9fa"}, "#fff"))),
+    20			TButton(Txt("Dark"), Style(b5.ButtonStyle("Dark.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#212529"}, "#fff"))),
+    21			TButton(Txt("Link"), Style(b5.ButtonStyle("Link.B5.TButton", b5.ButtonColors{b5.ButtonText: "#1774fd", b5.ButtonFace: "#fff"}, "#fff"))),
+    22			opts)
+    23		Grid(TExit(), Columnspan(3), opts)
+    24		App.Configure(Background("#fff")).Wait()
+    25	}
+
+[![Go Reference](https://pkg.go.dev/badge/modernc.org/tk9.0.svg)](https://pkg.go.dev/modernc.org/tk9.0)
+
+[Tutorial: Modifying a ttk button's style]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style

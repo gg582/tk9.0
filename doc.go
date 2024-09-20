@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package tk9.0 is a CGo-free cross platform GUI for Go. It is similar to
+// Package tk9.0 is a CGo-free, cross platform GUI for Go. It is similar to
 // [tkinter] for Python.
 //
 // # Hello world
@@ -63,7 +63,10 @@
 //
 //	OS      Arch
 //	-------------
+//	darwin  amd64
 //	darwin  arm64
+//	freebsd amd64
+//	freebsd arm64
 //	linux   386
 //	linux   amd64
 //	linux   arm
@@ -75,18 +78,23 @@
 //	windows 386
 //	windows amd64
 //
+// Specific to [FreeBSD]:
+//
+//	Note: when building with cross-compiling or CGO_ENABLED=0, add
+//	the following argument to `go` so that these symbols are defined by
+//	making fakecgo the Cgo.
+//	  -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+//
 // # Runtime dependencies
 //
 //   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+ executable
 //     available in $PATH.
-//   - darwin (macOS) requires [XQuartz].
 //
 // # Completeness
 //
-// At the moment the package does not cover all of the functionality C Tcl/Tk
-// provides, but only a minimal subset considered to be usable. Please report
-// needed, but missing and not yet requested Tcl/Tk features at the [issue
-// tracker], thanks.
+// At the moment the package is a [MVP]. It does not cover all of the
+// functionality C Tcl/Tk provides. Please report needed, but missing and not
+// yet requested Tcl/Tk features/APIs at the [issue tracker], thanks.
 //
 // # Error handling
 //
@@ -130,8 +138,9 @@
 //
 // Initialization will fail if a Unix process starts on a machine with no
 // X server or the process is started in a way that it has no access to the X
-// server. On the other hand, this package will work on Unix machines with no X
-// server if the process is started remotely using '$ ssh -X foo@bar'.
+// server. On the other hand, this package may work on Unix machines with no X
+// server if the process is started remotely using '$ ssh -X foo@bar' and the X
+// forwarding is enabled/supported.
 //
 // # The options pattern
 //
@@ -156,7 +165,6 @@
 // 'Text' and the option as function 'Txt'. The complete list is:
 //
 //   - [Button]  option is renamed to [Btn]
-//   - [Font]    option is renamed to [Fnt]
 //   - [Label]   option is renamed to [Lbl]
 //   - [Menu]    option is renamed to [Mnu]
 //   - [Message] option is renamed to [Msg]
@@ -205,6 +213,13 @@
 // There are several Tcl/Tk tutorials available, for example at
 // [tutorialspoint].
 //
+// # Hacking
+//
+// Merge requests for known issues are always welcome.
+//
+// Please send merge requests for new features/APIs after filling and
+// discussing the additions/changes at the [issue tracker] first.
+//
 // # Notes
 //
 // Most of the documentation is generated directly from the Tcl/Tk
@@ -216,7 +231,8 @@
 // Parts of the documentation are copied and/or modified from the [tcl.tk
 // site], see the LICENSE-TCLTK file for details.
 //
-// [XQuartz]: https://en.wikipedia.org/wiki/XQuartz
+// [FreeBSD]: https://github.com/ebitengine/purego/blob/ff2c2cce0d0b43e3ed9743fcd3408cbd9187f835/internal/fakecgo/freebsd.go#L15
+// [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter

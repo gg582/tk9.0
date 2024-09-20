@@ -4,7 +4,7 @@ import . "modernc.org/tk9.0"
 
 func main() {
 	var scroll *TScrollbarWidget
-	t := Text(Fnt("helvetica 10"), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
+	t := Text(Font("helvetica", 10), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"), Padx("2m"), Pady("2m"))
 	scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
 	Grid(t, Sticky("news"), Pady("2m"))
 	Grid(scroll, Row(0), Column(1), Sticky("nes"), Pady("2m"))
@@ -12,8 +12,8 @@ func main() {
 	GridColumnConfigure(App, 0, Weight(1))
 	Grid(TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	t.TagConfigure("bgstipple", Background(Black), Borderwidth(0), Bgstipple(Gray12))
-	t.TagConfigure("big", Fnt("helvetica 12 bold"))
-	t.TagConfigure("bold", Fnt("helvetica 10 bold italic"))
+	t.TagConfigure("big", Font("helvetica", 12, "bold"))
+	t.TagConfigure("bold", Font("helvetica", 10, "bold", "italic"))
 	t.TagConfigure("center", Justify("center"))
 	t.TagConfigure("color1", Background("#a0b7ce"))
 	t.TagConfigure("color2", Foreground(Red))
@@ -22,12 +22,12 @@ func main() {
 	t.TagConfigure("raised", Relief("raised"), Borderwidth(1))
 	t.TagConfigure("right", Justify("right"))
 	t.TagConfigure("spacing", Spacing1("10p"), Spacing2("2p"), Lmargin1("12m"), Lmargin2("6m"), Rmargin("10m"))
-	t.TagConfigure("sub", Offset("-2p"), Fnt("helvetica 8"))
+	t.TagConfigure("sub", Offset("-2p"), Font("helvetica", 8))
 	t.TagConfigure("sunken", Relief("sunken"), Borderwidth(1))
-	t.TagConfigure("super", Offset("4p"), Fnt("helvetica 8"))
-	t.TagConfigure("tiny", Fnt("times 8 bold"))
+	t.TagConfigure("super", Offset("4p"), Font("helvetica", 8))
+	t.TagConfigure("tiny", Font("times", 8, "bold"))
 	t.TagConfigure("underline", Underline(1))
-	t.TagConfigure("verybig", Fnt("courier 22 bold"))
+	t.TagConfigure("verybig", Font(CourierFont(), 22, "bold"))
 	t.InsertML(`Text widgets like this one allow you to display information in a variety of styles. Display styles are controlled
 using a mechanism called <bold>tags</bold>. Tags are just textual names that you can apply to one or more ranges of characters within a
 text widget. You can configure tags with various display styles. If you do this, then the tagged characters will be displayed with the

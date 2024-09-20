@@ -27,9 +27,6 @@ const (
 )
 
 var (
-	//go:embed embed_windows/tk_library.zip
-	tkLibrary []byte
-
 	// No mutex, the package must be used by a single goroutine only.
 	allocator memory.Allocator
 
@@ -88,11 +85,11 @@ func init1(cacheDir string) {
 		return
 	}
 
-	if tclDll, Error = windows.LoadDLL("tcl90.dll"); Error != nil {
+	if tclDll, Error = windows.LoadDLL(tclBin); Error != nil {
 		return
 	}
 
-	if tkDll, Error = windows.LoadDLL("tcl9tk90.dll"); Error != nil {
+	if tkDll, Error = windows.LoadDLL(tkBin); Error != nil {
 		return
 	}
 
@@ -143,7 +140,7 @@ func init1(cacheDir string) {
 		return
 	}
 
-	if _, Error := eval("zipfs mount tk_library.zip /lib/tk"); Error != nil {
+	if _, Error := eval("zipfs mount libtk9.0.0.zip /app"); Error != nil {
 		return
 	}
 
@@ -158,21 +155,21 @@ func getCacheDir() (r string, err error) {
 		return "", err
 	}
 
-	r0 := filepath.Join(r, "modernc.org")
-	r = filepath.Join(r0, cachePath)
+	r0 := filepath.Join(r, "modernc.org", libVersion, goos)
+	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
 		return r, nil
 	}
 
-	err = os.MkdirAll(r0, 0700)
+	os.MkdirAll(r0, 0700)
 	tmp, err := os.MkdirTemp("", "tk9.0-")
 	if err != nil {
 		return "", err
 	}
 
-	zf := filepath.Join(tmp, "dll.zip")
-	if err = os.WriteFile(zf, dlls, 0660); err != nil {
+	zf := filepath.Join(tmp, "lib.zip")
+	if err = os.WriteFile(zf, libZip, 0660); err != nil {
 		return "", err
 	}
 
@@ -182,11 +179,6 @@ func getCacheDir() (r string, err error) {
 	}
 
 	os.Remove(zf)
-	zf = filepath.Join(tmp, "tk_library.zip")
-	if err = os.WriteFile(zf, tkLibrary, 0660); err != nil {
-		return "", err
-	}
-
 	if err = os.Rename(tmp, r); err == nil {
 		return r, nil
 	}

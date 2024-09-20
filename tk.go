@@ -14,6 +14,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync/atomic"
@@ -28,9 +30,19 @@ const (
 	// StyleThemeUse() will override the default.
 	ThemeEnvVar = "TK9_THEME"
 
-	cachePath      = "tk9.0b3"
+	// ScaleEnvVar, if a valid (floating point) number, sets the TkScaling
+	// value at package initialization to NativeScaling*TK9_SCALE.
+	ScaleEnvVar = "TK9_SCALE"
+
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
+	goarch         = runtime.GOARCH
+	goos           = runtime.GOOS
+	libVersion     = "tk9.0.1"
 )
+
+// NativeScaling is the value returned by TKScaling in package initialization before it is possibly
+// changed using the [ScaleEnvVar] value.
+var NativeScaling float64
 
 // App is the main/root application window.
 var App *Window
@@ -94,6 +106,7 @@ var (
 	textVariables = map[*Window]string{} // : tclName
 )
 
+// Returns a single Tcl string, no braces, except {} if returned for s == "".
 func tclSafeString(s string) string {
 	if s == "" {
 		return "{}"
@@ -115,6 +128,64 @@ func tclSafeString(s string) string {
 	return s
 }
 
+// Same as tclSafeStrings but does not escape <>.
+func tclSafeStringBind(s string) string {
+	if s == "" {
+		return "{}"
+	}
+
+	const badString = "&;`'\"|*?~^()[]{}$\\\n\r\t "
+	if strings.ContainsAny(s, badString) {
+		var b strings.Builder
+		for _, c := range s {
+			switch {
+			case int(c) < len(badChars) && badChars[c]:
+				fmt.Fprintf(&b, "\\x%02x", c)
+			default:
+				b.WriteRune(c)
+			}
+		}
+		s = b.String()
+	}
+	return s
+}
+
+// Returns a space separated list of safe Tcl strings.
+func tclSafeList(list ...any) string {
+	var a []string
+	for _, v := range list {
+		a = append(a, tclSafeString(fmt.Sprint(v)))
+	}
+	return strings.Join(a, " ")
+}
+
+// Returns a space separated list of safe Tcl strings.
+func tclSafeStrings(s ...string) string {
+	var a []string
+	for _, v := range s {
+		a = append(a, tclSafeString(v))
+	}
+	return strings.Join(a, " ")
+}
+
+// Returns a Tcl string that is safe inside {...}
+func tclSafeInBraces(s string) string {
+	const badString = "}\\\n\r\t "
+	if strings.ContainsAny(s, badString) {
+		var b strings.Builder
+		for _, c := range s {
+			switch {
+			case int(c) < len(badMLChars) && badMLChars[c]:
+				fmt.Fprintf(&b, "\\x%02x", c)
+			default:
+				b.WriteRune(c)
+			}
+		}
+		s = b.String()
+	}
+	return s
+}
+
 func setDefaults() {
 	CollectErrors = true
 
@@ -123,14 +194,20 @@ func setDefaults() {
 	App = &Window{}
 	exitHandler = Command(func() { Destroy(App) })
 	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
+	NativeScaling = TkScaling()
+	if s := os.Getenv(ScaleEnvVar); s != "" {
+		if k, err := strconv.ParseFloat(s, 64); err == nil && k >= 0.5 && k <= 5 {
+			TkScaling(k * NativeScaling)
+		}
+	}
+	if nm := os.Getenv(ThemeEnvVar); nm != "" {
+		StyleThemeUse(nm)
+	}
 	App.IconPhoto(NewPhoto(Data(icon)))
 	base := filepath.Base(os.Args[0])
 	base = strings.TrimSuffix(base, ".exe")
 	App.WmTitle(base)
 	App.Configure(Padx("4m"), Pady("3m")).Center()
-	if nm := os.Getenv(ThemeEnvVar); nm != "" {
-		eval(fmt.Sprintf("ttk::style theme use %s", tclSafeString(nm)))
-	}
 }
 
 // Window represents a Tk window/widget. It implements common widget methods.
@@ -220,6 +297,19 @@ func winCollect(w *Window, options ...Opt) string {
 	var a []string
 	for _, v := range options {
 		a = append(a, v.optionString(w))
+	}
+	return strings.Join(a, " ")
+}
+
+func collectAny(options ...any) string {
+	var a []string
+	for _, v := range options {
+		switch x := v.(type) {
+		case Opt:
+			a = append(a, x.optionString(nil))
+		default:
+			a = append(a, tclSafeString(fmt.Sprint(x)))
+		}
 	}
 	return strings.Join(a, " ")
 }
@@ -355,35 +445,6 @@ func optionString(v any) string {
 	default:
 		return tclSafeString(fmt.Sprint(v))
 	}
-}
-
-func tclSafeStringBind(s string) string {
-	if s == "" {
-		return "{}"
-	}
-
-	const badString = "&;`'\"|*?~^()[]{}$\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badChars) && badChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
-}
-
-func tclSafeStrings(s ...string) string {
-	var a []string
-	for _, v := range s {
-		a = append(a, tclSafeString(v))
-	}
-	return strings.Join(a, " ")
 }
 
 // bind — Arrange for X events to invoke functions
@@ -609,13 +670,92 @@ func NewPhoto(options ...Opt) *Img {
 }
 
 // Width — Get the configured option value.
+//
+// Additional information might be available at the [Tcl/Tk photo] page.
+//
+// [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Width() string {
 	return evalErr(fmt.Sprintf(`%s cget -width`, m))
 }
 
 // Height — Get the configured option value.
+//
+// Additional information might be available at the [Tcl/Tk photo] page.
+//
+// [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Height() string {
 	return evalErr(fmt.Sprintf(`%s cget -height`, m))
+}
+
+// // Returns photo data.
+// //
+// // Additional information might be available at the [Tcl/Tk photo] page.
+// //
+// // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
+// func (m *Img) Data(options ...Opt) []byte {
+// 	s := evalErr(fmt.Sprintf("%s data %s", collect(options...)))
+// 	panic(todo("%q", s))
+// }
+
+// photo — Full-color images
+//
+// Copies a region from the image called sourceImage (which must be a photo
+// image) to the image called imageName, possibly with pixel zooming and/or
+// subsampling. If no options are specified, this command copies the whole of
+// sourceImage into imageName, starting at coordinates (0,0) in imageName.
+//
+// The following options may be specified:
+//
+//   - [From] x1 y1 x2 y2
+//
+// Specifies a rectangular sub-region of the source image to be copied. (x1,y1)
+// and (x2,y2) specify diagonally opposite corners of the rectangle. If x2 and
+// y2 are not specified, the default value is the bottom-right corner of the
+// source image. The pixels copied will include the left and top edges of the
+// specified rectangle but not the bottom or right edges. If the -from option
+// is not given, the default is the whole source image.
+//
+//   - [To] x1 y1 x2 y2
+//
+// Specifies a rectangular sub-region of the destination image to be affected.
+// (x1,y1) and (x2,y2) specify diagonally opposite corners of the rectangle. If
+// x2 and y2 are not specified, the default value is (x1,y1) plus the size of
+// the source region (after subsampling and zooming, if specified). If x2 and
+// y2 are specified, the source region will be replicated if necessary to fill
+// the destination region in a tiled fashion.
+//
+// The function returns 'm'.
+//
+// Additional information might be available at the [Tcl/Tk photo] page.
+//
+// [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
+func (m *Img) Copy(src *Img, options ...Opt) (r *Img) {
+	evalErr(fmt.Sprintf("%s copy %s %s", m, src, collect(options...)))
+	return m
+}
+
+// From option.
+//
+// Known uses:
+//   - [Img.Copy]
+//   - [Scale] (widget specific)
+//   - [Spinbox] (widget specific)
+//   - [TScale] (widget specific)
+//   - [TSpinbox] (widget specific)
+func From(val ...any) Opt {
+	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
+}
+
+// To option.
+//
+// Known uses:
+//   - [Img.Copy]
+//   - [Scale] (widget specific)
+//   - [Spinbox] (widget specific)
+//   - [TScale] (widget specific)
+//   - [TSpinbox] (widget specific)
+func To(val ...any) Opt {
+	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
 }
 
 // Graph — use gnuplot to draw on a photo. Graph returns 'm'
@@ -1547,12 +1687,12 @@ func Focus(options ...Opt) string {
 	return evalErr(fmt.Sprintf("focus %s", collect(options...)))
 }
 
-// Font represents a Tk font.
-type Font struct {
+// FontFace represents a Tk font.
+type FontFace struct {
 	name string
 }
 
-func (f *Font) optionString(_ *Window) (r string) {
+func (f *FontFace) optionString(_ *Window) (r string) {
 	if f != nil {
 		return f.name
 	}
@@ -1561,7 +1701,7 @@ func (f *Font) optionString(_ *Window) (r string) {
 }
 
 // String implements fmt.Stringer.
-func (f *Font) String() string {
+func (f *FontFace) String() string {
 	return f.optionString(nil)
 }
 
@@ -1631,7 +1771,7 @@ func (f *Font) String() string {
 // Additional information might be available at the [Tcl/Tk font] page.
 //
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
-func NewFont(options ...Opt) *Font {
+func NewFont(options ...Opt) *FontFace {
 	nm := fmt.Sprintf("font%v", id.Add(1))
 	code := fmt.Sprintf("font create %s %s", nm, collect(options...))
 	r, err := eval(code)
@@ -1640,7 +1780,7 @@ func NewFont(options ...Opt) *Font {
 		return nil
 	}
 
-	return &Font{name: nm}
+	return &FontFace{name: nm}
 }
 
 // FontFamilies — Create and inspect fonts.
@@ -1707,7 +1847,7 @@ func parseList(s string) (r []string) {
 // Additional information might be available at the [Tcl/Tk font] page.
 //
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
-func (f *Font) Delete() {
+func (f *FontFace) Delete() {
 	evalErr(fmt.Sprintf("font delete %s", f))
 }
 
@@ -1947,63 +2087,6 @@ func (lc LC) String() string {
 	return fmt.Sprintf("%d.%d", lc.Line, lc.Char)
 }
 
-// Xscrollcommand option.
-//
-// # Description
-//
-// Specifies the prefix for a command used to communicate with horizontal
-// scrollbars. When the view in the widget's window changes (or whenever
-// anything else occurs that could change the display in a scrollbar, such as a
-// change in the total size of the widget's contents), the widget will generate
-// a Tcl command by concatenating the scroll command and two numbers. Each of
-// the numbers is a fraction between 0 and 1, which indicates a position in the
-// document. 0 indicates the beginning of the document, 1 indicates the end,
-// .333 indicates a position one third the way through the document, and so on.
-// The first fraction indicates the first information in the document that is
-// visible in the window, and the second fraction indicates the information
-// just after the last portion that is visible. The command is then passed to
-// the Tcl interpreter for execution. Typically the -xscrollcommand option
-// consists of the path name of a scrollbar widget followed by “set”, e.g.
-// “.x.scrollbar set”: this will cause the scrollbar to be updated whenever the
-// view in the window changes. If this option is not specified, then no command
-// will be executed.
-//
-// See also [Event handlers].
-//
-// Known uses:
-//   - [TextWidget] (widget specific)
-//
-// Additional information might be available at the [Tcl/Tk text] page.
-//
-// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
-// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
-func Xscrollcommand(handler any) Opt {
-	return newEventHandler("-xscrollcommand", handler)
-}
-
-// Yscrollcommand option.
-//
-// # Description
-//
-// Specifies the prefix for a command used to communicate with vertical
-// scrollbars. This option is treated in the same way as the -xscrollcommand
-// option, except that it is used for vertical scrollbars and is provided by
-// widgets that support vertical scrolling. See the description of
-// -xscrollcommand for details on how this option is used.
-//
-// See also [Event handlers].
-//
-// Known uses:
-//   - [TextWidget] (widget specific)
-//
-// Additional information might be available at the [Tcl/Tk text] page.
-//
-// [Event handlers]: https://pkg.go.dev/modernc.org/tk9.0#hdr-Event_handlers
-// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
-func Yscrollcommand(handler any) Opt {
-	return newEventHandler("-yscrollcommand", handler)
-}
-
 // Text — Create and manipulate 'text' hypertext editing widgets
 //
 // # Description
@@ -2106,17 +2189,31 @@ func (w *TextWidget) TagAdd(options ...any) string {
 //
 // # Description
 //
-// InsertML inserts ml at the end of 'w', interpreting it pseudo-HTML.
+// InsertML inserts 'ml' at the end of 'w', interpreting it as a HTML-like
+// markup language.
 //
-// It recognizes and treats specially the <br> tag. Other ML-tags are used as
-// names of configured 'w' tags, if any.
+// It recognizes and treats accordingly the <br> tag.
 //
 // The <img> tag is reserved for embedded images. You can inline the image
-// directly this way
+// directly:
 //
-//	InsertML("Hello ", NewPhoto(...), Align("baseline"), " world!")
+//	InsertML("Hello", NewPhoto(...), Align("top"), "world!")
 //
-// Example usage in _examples/text.go.
+// The <embed> tag is reserved for embedded widgets. You can inline a widget
+// directly:
+//
+//	InsertML("Hello", Button(Txt("Foo")), Align("center"), "world!")
+//
+// The <pre> tag works similarly to HTML, ie. white space and line breaks are
+// kept. To make the content of a <pre> rendered in monospace, configure the
+// tag, for example:
+//
+//	t.TagConfigure("pre", Font(CourierFont(), 10)
+//
+// Other ML-tags are used as names of configured 'w' tags, if configured,
+// ignored otherwise.
+//
+// Example usage in _examples/embed.go.
 func (w *TextWidget) InsertML(list ...any) {
 	var ml bytes.Buffer
 	for i := 0; i < len(list); i++ {
@@ -2125,10 +2222,13 @@ func (w *TextWidget) InsertML(list ...any) {
 			ml.WriteString(x)
 		case *Img:
 			var opts Opts
-			for j := i+1; j < len(list); j++ {
-				if x, ok := list[j].(Opt); ok {
-					opts = append(opts, x)
+			for j := i + 1; j < len(list); j++ {
+				x, ok := list[j].(Opt)
+				if !ok {
+					break
 				}
+
+				opts = append(opts, x)
 			}
 			fmt.Fprintf(&ml, "<img src=%q", x)
 			for _, v := range opts {
@@ -2136,11 +2236,24 @@ func (w *TextWidget) InsertML(list ...any) {
 				i++
 			}
 			ml.WriteString(">")
-		default:
-			fmt.Fprintf(&ml, "[%T=%v]", x, x)
+		case Widget:
+			var opts Opts
+			for j := i + 1; j < len(list); j++ {
+				x, ok := list[j].(Opt)
+				if !ok {
+					break
+				}
+
+				opts = append(opts, x)
+			}
+			fmt.Fprintf(&ml, "<embed src=%q", x)
+			for _, v := range opts {
+				fmt.Fprintf(&ml, " opt=%q", v.optionString(w.Window))
+				i++
+			}
+			ml.WriteString(">")
 		}
 	}
-	trc("====\n%s\n----", ml.Bytes())
 	doc, err := html.Parse(&ml)
 	if err != nil {
 		fail(err)
@@ -2149,13 +2262,36 @@ func (w *TextWidget) InsertML(list ...any) {
 
 	var tags []string
 	var body int
+	k := TkScaling() * 72 / 600
 	walk(0, doc, func(lvl int, n *html.Node) bool {
 		switch n.Type {
 		case html.TextNode:
 			if lvl < len(tags) {
 				tags = tags[:lvl]
 			}
-			evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(n.Data), tclSafeStrings(tags[body+1:]...)))
+			tags := tags[body+1:]
+			for _, v := range tags {
+				if v == "pre" {
+					evalErr(fmt.Sprintf("%s insert end %s %s", w, tclSafeString(unescapeML(n.Data)), tclSafeStrings(tags...)))
+					return true
+				}
+			}
+
+			ids, toks := tokenize(n.Data)
+			for i, id := range ids {
+				switch id {
+				default:
+					if s := toks[i]; strings.HasPrefix(s, "$$") && strings.HasSuffix(s, "$$") || strings.HasPrefix(s, "$") && strings.HasSuffix(s, "$") {
+						img := NewPhoto(Data(TeX(s, k)))
+						evalErr(fmt.Sprintf("%v image create end -image %s -align top", w, img))
+						break
+					}
+
+					fallthrough
+				case 0:
+					evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(unescapeML(toks[i])), tclSafeStrings(tags...)))
+				}
+			}
 		case html.ElementNode:
 			switch n.Data {
 			case "br":
@@ -2175,9 +2311,18 @@ func (w *TextWidget) InsertML(list ...any) {
 					}
 				}
 				evalErr(fmt.Sprintf("%v image create end -image %s %s", w, src, strings.Join(opts, " ")))
-			//TODO case "tex"
-			//TODO case "texi"
-			//TODO case "win"
+			case "embed":
+				var src string
+				var opts []string
+				for _, v := range n.Attr {
+					switch v.Key {
+					case "src":
+						src = v.Val
+					case "opt":
+						opts = append(opts, v.Val)
+					}
+				}
+				evalErr(fmt.Sprintf("%v window create end -window %s %s", w, src, strings.Join(opts, " ")))
 			default:
 				tags = append(tags, n.Data)
 			}
@@ -2186,19 +2331,23 @@ func (w *TextWidget) InsertML(list ...any) {
 	})
 }
 
-// Align option.
-//
-// Known uses:
-//   - [Text] (widget specific, applies to embedded images)
-func Align(val any) Opt {
-	return rawOption(fmt.Sprintf(`-align %s`, optionString(val)))
+func unescapeML(s string) string {
+	s = strings.ReplaceAll(s, "\\$", "$")
+	s = strings.ReplaceAll(s, "&lt;", "<")
+	s = strings.ReplaceAll(s, "&gt;", ">")
+	return s
 }
 
-func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)) {
-	for ; n != nil; n = n.NextSibling {
-		if visitor(lvl, n) {
-			walk(lvl+1, n.FirstChild, visitor)
+func tokenize(s string) (ids []int, toks []string) {
+	for {
+		id, len := mlToken(s)
+		if len == 0 {
+			return ids, toks
 		}
+
+		ids = append(ids, id)
+		toks = append(toks, s[:len])
+		s = s[len:]
 	}
 }
 
@@ -2216,27 +2365,34 @@ func tclFromElementNode(s string) string {
 		}
 	}
 	for i, v := range a {
-		a[i] = tclSafeML(v)
+		a[i] = tclSafeInBraces(v)
 	}
 	r := fmt.Sprintf("{%s%s%s}", prefix, strings.Join(a, " "), suffix)
 	return r
 }
 
-func tclSafeML(s string) string {
-	const badString = "&;`|*?~<>^[]{}$\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badChars) && badChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
+var badMLChars = [...]bool{
+	'}':  true,
+	'\\': true,
+	'\n': true,
+	'\r': true,
+	'\t': true,
+}
+
+// Align option.
+//
+// Known uses:
+//   - [Text] (widget specific, applies to embedded images)
+func Align(val any) Opt {
+	return rawOption(fmt.Sprintf(`-align %s`, optionString(val)))
+}
+
+func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)) {
+	for ; n != nil; n = n.NextSibling {
+		if visitor(lvl, n) {
+			walk(lvl+1, n.FirstChild, visitor)
 		}
-		s = b.String()
 	}
-	return s
 }
 
 // Fontchooser — control font selection dialog
@@ -2266,7 +2422,7 @@ func tclSafeML(s string) string {
 // Specifies/returns the title of the dialog. Has no effect on platforms where
 // the font selection dialog does not support titles.
 //
-//   - [Font]
+//   - [FontFace]
 //
 // Specifies/returns the font that is currently selected in the dialog if it is
 // visible, or that will be initially selected when the dialog is shown (if
@@ -2776,61 +2932,6 @@ func (w *TScrollbarWidget) Set(firstLast string) {
 	evalErr(fmt.Sprintf("%s set %s", w, firstLast))
 }
 
-// ttk::style — Manipulate style database
-//
-// # Description
-//
-// Returns a list of all known themes.
-//
-// Additional information might be available at the [Tcl/Tk style] page.
-//
-// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-func StyleThemeNames() []string {
-	return parseList(evalErr("ttk::style theme names"))
-}
-
-// ttk::style — Manipulate style database
-//
-// # Description
-//
-// Returns a list of all styles in themeName. If themeName is omitted, the
-// current theme is used.
-//
-// Additional information might be available at the [Tcl/Tk style] page.
-//
-// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-func StyleThemeStyles(themeName ...string) []string {
-	var s string
-	if len(themeName) != 0 {
-		s = tclSafeString(themeName[0])
-	}
-	return parseList(evalErr(fmt.Sprintf("ttk::style theme styles %s", s)))
-}
-
-// ttk::style — Manipulate style database
-//
-// # Description
-//
-// Return the name of the current theme.
-//
-// Additional information might be available at the [Tcl/Tk style] page.
-//
-// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-func StyleThemeGet(themeName ...string) []string {
-	return parseList(evalErr("ttk::style theme use"))
-}
-
-// ttk::style — Manipulate style database
-//
-// # Description
-//
-// Sets the current theme to themeName, and refreshes all widgets.
-//
-// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-func StyleThemeUse(themeName string) []string {
-	return parseList(evalErr(fmt.Sprintf("ttk::style theme use %s", themeName)))
-}
-
 // tk — Manipulate Tk internal state
 //
 // # Description
@@ -2882,4 +2983,396 @@ func TkScaling(options ...any) float64 {
 		fail(err)
 	}
 	return 1
+}
+
+// Font option.
+//
+// Specifies the font to use when drawing text inside the widget.
+// The value may have any of the forms described in the font manual
+// page under FONT DESCRIPTION.
+//
+// Known uses:
+//   - [Button]
+//   - [Checkbutton]
+//   - [Entry]
+//   - [Fontchooser] (command specific)
+//   - [Label]
+//   - [Labelframe]
+//   - [Listbox]
+//   - [MenuWidget.AddCascade] (command specific)
+//   - [MenuWidget.AddCommand] (command specific)
+//   - [MenuWidget.AddSeparator] (command specific)
+//   - [Menu]
+//   - [Menubutton]
+//   - [Message]
+//   - [Radiobutton]
+//   - [Scale]
+//   - [Spinbox]
+//   - [TEntry]
+//   - [TLabel]
+//   - [TProgressbar]
+//   - [TextWidget.TagConfigure] (command specific)
+//   - [Text]
+func Font(list ...any) Opt {
+	return rawOption(fmt.Sprintf(`-font {%s}`, tclSafeList(list...)))
+}
+
+// Font — Get the configured option value.
+//
+// Known uses:
+//   - [Button]
+//   - [Checkbutton]
+//   - [Entry]
+//   - [Label]
+//   - [Labelframe]
+//   - [Listbox]
+//   - [Menu]
+//   - [Menubutton]
+//   - [Message]
+//   - [Radiobutton]
+//   - [Scale]
+//   - [Spinbox]
+//   - [TEntry]
+//   - [TLabel]
+//   - [TProgressbar]
+//   - [Text]
+func (w *Window) Font() string {
+	return evalErr(fmt.Sprintf(`%s cget -font`, w))
+}
+
+// + ttk::style configure style ?-option ?value option value...? ?
+// + ttk::style element args
+// 	+ ttk::style element create elementName type ?args...?
+// 	+ ttk::style element names
+// 	+ ttk::style element options element
+// + ttk::style layout style ?layoutSpec?
+// - ttk::style lookup style -option ?state ?default??
+// - ttk::style map style ?-option { statespec value... }?
+// - ttk::style theme args
+// 	- ttk::style theme create themeName ?-parent basedon? ?-settings script... ?
+// 	- ttk::style theme names
+// 	- ttk::style theme settings themeName script
+// 	- ttk::style theme styles ?themeName?
+// 	- ttk::style theme use ?themeName?
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Sets the default value of the specified option(s) in style. If style does
+// not exist, it is created. Example:
+//
+//	StyleConfigure(".", Font("times"), Background(LightBlue))
+//
+// If only style and -option are specified, get the default value for option
+// -option of style style. Example:
+//
+//	StyleConfigure(".", Font)
+//
+// If only style is specified, get the default value for all options of style
+// style. Example:
+//
+//	StyleConfigure(".")
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleConfigure(style string, options ...any) []string {
+	if len(options) == 0 {
+		return parseList(evalErr(fmt.Sprintf("ttk::style configure %s", tclSafeString(style))))
+	}
+
+	if len(options) == 1 {
+		o := options[0]
+		if x, ok := o.(Opt); ok {
+			return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), x.optionString(nil)))}
+		}
+
+		if s := funcToTclOption(o); s != "" {
+			return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), s))}
+		}
+
+		return nil
+	}
+
+	var a []string
+	for _, v := range options {
+		switch x := v.(type) {
+		case Opt:
+			a = append(a, x.optionString(nil))
+		default:
+			fail(fmt.Errorf("expected Opt: %T", x))
+			return nil
+		}
+	}
+
+	return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), strings.Join(a, " ")))}
+}
+
+func funcToTclOption(fn any) string {
+	t := reflect.TypeOf(fn)
+	if t.Kind() != reflect.Func {
+		fail(fmt.Errorf("expected func() Opt: %T", fn))
+		return ""
+	}
+
+	s := runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name()
+	if s == "" {
+		fail(fmt.Errorf("failed to determine function name"))
+		return ""
+	}
+
+	a := strings.Split(s, ".")
+	if len(a) == 0 {
+		fail(fmt.Errorf("failed to determine function name: %q", s))
+		return ""
+	}
+
+	s = strings.ToLower(a[len(a)-1])
+	if r, ok := replaceOpt[s]; ok {
+		return "-" + r
+	}
+
+	return "-" + s
+}
+
+var replaceOpt = map[string]string{
+	"btn": "button",
+	"lbl": "label",
+	"mnu": "menu",
+	"msg": "message",
+	"txt": "text",
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Creates a new element in the current theme of type type. The only
+// cross-platform built-in element type is image (see ttk_image(n)) but themes
+// may define other element types (see Ttk_RegisterElementFactory). On suitable
+// versions of Windows an element factory is registered to create Windows theme
+// elements (see ttk_vsapi(n)). Examples:
+//
+//	StyleElementCreate("TSpinbox.uparrow", "from", "default") // Inherit the existing element from theme 'default'.
+//
+//	StyleElementCreate("Red.Corner.TButton.indicator", "image", NewPhoto(File("red_corner.png")), Width(10))
+//
+//	imageN := NewPhoto(...)
+//	StyleElementCreate("TCheckbutton.indicator", "image", image5, "disabled selected", image6, "disabled alternate",
+//		image8, "disabled", image9, "alternate", image7, "!selected", image4, Width(20), Border(4), Sticky("w"))
+//
+// After the type "image" comes a list of one or more images. Every image is
+// optionally followed by a space separated list of states the image applies
+// to. An exclamation mark before the state is a negation.
+//
+// Additional information might be available at the [Tcl/Tk modyfying a button]
+// and [Tcl/Tk style] pages.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Tcl/Tk modyfying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
+func StyleElementCreate(elementName, typ string, options ...any) string {
+	// ttk::style element create TRadiobutton.indicator image {pyimage11 {disabled selected} pyimage12 disabled pyimage13 !selected pyimage10} -width 20 -border 4 -sticky w
+	var a, b []string
+	for _, v := range options {
+		switch x := v.(type) {
+		case *Img:
+			a = append(a, x.optionString(nil))
+		case Opt:
+			b = append(b, x.optionString(nil))
+		default:
+			switch s := strings.Fields(fmt.Sprint(v)); {
+			case len(s) == 1:
+				a = append(a, tclSafeInBraces(s[0]))
+			default:
+				for i, v := range s {
+					s[i] = tclSafeInBraces(v)
+				}
+				a = append(a, fmt.Sprintf("{%s}", strings.Join(s, " ")))
+			}
+		}
+	}
+	switch {
+	case len(a) == 2 && a[0] == "from":
+		return evalErr(fmt.Sprintf("ttk::style element create from %s", a[1]))
+	default:
+		return evalErr(fmt.Sprintf("ttk::style element create {%s} image {%s} %s", tclSafeInBraces(elementName), strings.Join(a, " "), strings.Join(b, " ")))
+	}
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Returns the list of elements defined in the current theme.
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleElementNames() []string {
+	return parseList(evalErr("ttk::style element names"))
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Returns the list of element's options.
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleElementOptions(element string) []string {
+	return parseList(evalErr(fmt.Sprintf("ttk::style element options %s", tclSafeString(element))))
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Define the widget layout for style style. See LAYOUTS below for the format
+// of layoutSpec. If layoutSpec is omitted, return the layout specification for
+// style style. Example:
+//
+//	StyleLayout("Red.Corner.Button",
+//		"Button.border", Sticky("nswe"), Border(1), Children(
+//			"Button.focus", Sticky("nswe"), Children(
+//				"Button.padding", Sticky("nswe"), Children(
+//					"Button.label", Sticky("nswe"),
+//					"Red.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+//
+// Additional information might be available at the [Tcl/Tk modyfying a button]
+// and [Tcl/Tk style] pages.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Tcl/Tk modyfying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
+func StyleLayout(style string, options ...any) string {
+	if len(options) == 0 {
+		return evalErr(fmt.Sprintf("ttk::style layout %s", tclSafeString(style)))
+	}
+
+	evalErr(fmt.Sprintf("ttk::style layout %s %s", tclSafeString(style), children("", options...)))
+	return ""
+}
+
+// Border option.
+//
+// Known uses:
+//   - [StyleLayout]
+func Border(val any) Opt {
+	return rawOption(fmt.Sprintf(`-border %s`, optionString(val)))
+}
+
+// FocusColor option.
+//
+// Known uses:
+//   - [StyleConfigure]
+func FocusColor(val any) Opt {
+	return rawOption(fmt.Sprintf(`-focuscolor %s`, optionString(val)))
+}
+
+// FocusColor option.
+//
+// Known uses:
+//   - [StyleConfigure]
+func FocusThickness(val any) Opt {
+	return rawOption(fmt.Sprintf(`-focusthickness %s`, optionString(val)))
+}
+
+// FocusSolid option.
+//
+// Known uses:
+//   - [StyleConfigure]
+func FocusSolid(val any) Opt {
+	return rawOption(fmt.Sprintf(`-focussolid %s`, optionString(val)))
+}
+
+// Children option.
+//
+// Known uses:
+//   - [StyleLayout]
+//
+// Children describes children of a style layout.
+func Children(list ...any) Opt {
+	return children("-children", list...)
+}
+
+func children(prefixed string, list ...any) Opt {
+	var a []string
+	for _, v := range list {
+		a = append(a, fmt.Sprint(v))
+	}
+	return rawOption(fmt.Sprintf(" %s {%s}", prefixed, strings.Join(a, " ")))
+}
+
+// // ttk::style — Manipulate style database
+// //
+// // # Description
+// //
+// // Returns a list of all known themes.
+// //
+// // Additional information might be available at the [Tcl/Tk style] page.
+// //
+// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// func StyleThemeNames() []string {
+// 	return parseList(evalErr("ttk::style theme names"))
+// }
+//
+// // ttk::style — Manipulate style database
+// //
+// // # Description
+// //
+// // Returns a list of all styles in themeName. If themeName is omitted, the
+// // current theme is used.
+// //
+// // Additional information might be available at the [Tcl/Tk style] page.
+// //
+// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// func StyleThemeStyles(themeName ...string) []string {
+// 	var s string
+// 	if len(themeName) != 0 {
+// 		s = tclSafeString(themeName[0])
+// 	}
+// 	return parseList(evalErr(fmt.Sprintf("ttk::style theme styles %s", s)))
+// }
+//
+// // ttk::style — Manipulate style database
+// //
+// // # Description
+// //
+// // Return the name of the current theme.
+// //
+// // Additional information might be available at the [Tcl/Tk style] page.
+// //
+// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// func StyleThemeGet(themeName ...string) []string {
+// 	return parseList(evalErr("ttk::style theme use"))
+// }
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Without a argument the result is the name of the current theme. Otherwise
+// this command sets the current theme to themeName, and refreshes all widgets.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleThemeUse(themeName ...string) string {
+	s := ""
+	if len(themeName) != 0 {
+		s = fmt.Sprint(themeName[0])
+		if s != "" {
+			s = tclSafeString(s)
+		}
+	}
+	return evalErr(fmt.Sprintf("ttk::style theme use %s", s))
+}
+
+// CourierFont returns "{courier new}" on Windows and "courier" elsewhere.
+func CourierFont() string {
+	if runtime.GOOS == "windows" {
+		return "{courier new}"
+	}
+
+	return "courier"
 }

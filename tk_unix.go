@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !windows
+//go:build !windows && !((linux && (amd64 || arm64)) || (darwin && (amd64 || arm64)) || freebsd && (amd64 || arm64))
 
 package tk9_0 // import "modernc.org/tk9.0"
 
@@ -79,13 +79,13 @@ zipfs mount %s %s
 	}
 }
 
-func getCacheDir() (r string, err error) {
+func getCacheDir() (r string, err error) { //TODO consolidate
 	if r, err = os.UserCacheDir(); err != nil {
 		return "", err
 	}
 
 	r0 := filepath.Join(r, "modernc.org")
-	r = filepath.Join(r0, cachePath)
+	r = filepath.Join(r0, libtk.Version)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
 		return r, nil

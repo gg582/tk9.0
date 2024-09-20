@@ -22,6 +22,7 @@ import (
 	util "modernc.org/fileutil/ccgo"
 	libtk "modernc.org/libtk9.0"
 	ngrab "modernc.org/ngrab/lib"
+	"modernc.org/rec/lib"
 )
 
 const (
@@ -498,13 +499,14 @@ var (
 		"Postcommand":     true,
 		"Tearoffcommand":  true,
 		"Validatecommand": true,
-		//TODO "Xscrollcommand":  true,
-		//TODO "Yscrollcommand":  true,
+		"Xscrollcommand":  true,
+		"Yscrollcommand":  true,
 	}
 
 	hideOpts = map[string]bool{
-		"Xscrollcommand": true, //TODO
-		"Yscrollcommand": true, //TODO
+		"Font": true,
+		"From": true,
+		"To":   true,
 	}
 
 	hideOptMethods = map[string]bool{
@@ -513,7 +515,6 @@ var (
 
 	replaceOpt = map[string]string{
 		"Button":  "Btn",
-		"Font":    "Fnt",
 		"Label":   "Lbl",
 		"Menu":    "Mnu",
 		"Message": "Msg",
@@ -522,6 +523,7 @@ var (
 )
 
 func main() {
+	makeTokenizer()
 	w := bytes.NewBuffer(nil)
 	w.WriteString(header)
 	defer func() {
@@ -536,7 +538,7 @@ func main() {
 		}
 	}()
 
-	nFilesDir := filepath.Join(xdg.ConfigHome, "ccgo", "v4", "libtk9.0", goos, goarch, "tcl"+libtk.Version, "doc")
+	nFilesDir := filepath.Join(xdg.ConfigHome, "ccgo", "v4", "libtk9.0", goos, goarch, libtk.Version, "doc")
 	fmt.Printf("nFilesDir=%s\n", nFilesDir)
 	util.MustShell(true, nil, "sh", "-c", fmt.Sprintf("rm -rf %s", tempDir))
 	util.MustShell(true, nil, "mkdir", "-p", tempDir)
@@ -559,6 +561,29 @@ func main() {
 	htmlFiles := makeHTML(t)
 	j := newJob(w, htmlFiles)
 	j.main()
+}
+
+func makeTokenizer() {
+	args := []string{
+		"-lexstring", "mlToken",
+		"-pkg", "tk9_0",
+		`([^$]|\\\$)*`,              // Not TeX, incl. "\$"
+		`\$([^$]|\\\$)*[^\\]\$`,     // $TeX$, incl. $Te\$X$
+		`\$\$([^$]|\\\$)*[^\\]\$\$`, // $$TeX$$, incl. $Te\$X$
+	}
+	var b bytes.Buffer
+	rc, err := rec.Main(args, &b, io.Discard)
+	if err != nil {
+		panic(err)
+	}
+
+	if rc != 0 {
+		panic(rc)
+	}
+
+	if err = os.WriteFile("mltoken.go", b.Bytes(), 0660); err != nil {
+		panic(err)
+	}
 }
 
 func makeHTML(t *ngrab.Task) (htmlFiles []string) {

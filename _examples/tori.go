@@ -28,12 +28,13 @@ set colorbox vertical user origin 0.9, 0.15 size 0.02, 0.50
 set format cb "%.1f"
 set pm3d depthorder
 splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with pm3d,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with pm3d
-unset multiplot
-`
+unset multiplot`
+
+var cm = int(TkScaling()*72/2.54 + 0.5)
 
 func main() {
 	Pack(
-		Label(Image(NewPhoto(Width(800), Height(600)).Graph(script))),
+		Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph(script))),
 		TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
 	)
 	App.Center().Wait()
