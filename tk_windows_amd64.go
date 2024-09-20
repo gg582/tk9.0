@@ -11,6 +11,5 @@ const (
 	tkBin  = "tcl9tk90.dll"
 )
 
-
 //go:embed embed/windows/amd64/lib.zip
 var libZip []byte
