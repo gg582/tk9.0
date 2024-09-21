@@ -15,32 +15,32 @@ WIN64 = embed/windows/amd64
 WINARM64 = embed/windows/arm64
 
 build_all_targets:
-	GOOS=darwin GOARCH=arm64 go build
-	GOOS=darwin GOARCH=arm64 go test -o /dev/null -c
-	GOOS=freebsd GOARCH=amd64 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
-	GOOS=freebsd GOARCH=amd64 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
-	GOOS=freebsd GOARCH=arm64 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
-	GOOS=freebsd GOARCH=arm64 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
-	GOOS=linux GOARCH=386 go build
-	GOOS=linux GOARCH=386 go test -o /dev/null -c
-	GOOS=linux GOARCH=amd64 go build
-	GOOS=linux GOARCH=amd64 go test -o /dev/null -c
-	GOOS=linux GOARCH=arm go build
-	GOOS=linux GOARCH=arm go test -o /dev/null -c
-	GOOS=linux GOARCH=arm64 go build
-	GOOS=linux GOARCH=arm64 go test -o /dev/null -c
-	GOOS=linux GOARCH=loong64 go build
-	GOOS=linux GOARCH=loong64 go test -o /dev/null -c
-	GOOS=linux GOARCH=ppc64le go build
-	GOOS=linux GOARCH=ppc64le go test -o /dev/null -c
-	GOOS=linux GOARCH=riscv64 go build
-	GOOS=linux GOARCH=riscv64 go test -o /dev/null -c
-	GOOS=linux GOARCH=s390x go build
-	GOOS=linux GOARCH=s390x go test -o /dev/null -c
-	GOOS=windows GOARCH=386 go build
-	GOOS=windows GOARCH=386 go test -o /dev/null -c
-	GOOS=windows GOARCH=amd64 go build
-	GOOS=windows GOARCH=amd64 go test -o /dev/null -c
+	GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build
+	GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=arm64 CGO_ENABLED=0 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=linux GOARCH=386 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=386 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=arm CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=arm CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=loong64 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=loong64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=ppc64le CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=ppc64le CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=riscv64 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=riscv64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=s390x CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=s390x CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=windows GOARCH=386 CGO_ENABLED=0 go build
+	GOOS=windows GOARCH=386 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
 
 all: editor
 	golint 2>&1
