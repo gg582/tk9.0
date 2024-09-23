@@ -65,6 +65,8 @@ Cascading menus (_examples/menu.go)
     40		App.Configure(Mnu(menubar), Width("8c"), Height("6c")).Wait()
     41	}
 
+Menus on darwin are now using the system-managed menu bar.    
+
 ![svg](_examples/text.png "text")
 
 Rich text using markup (_examples/text.go).
