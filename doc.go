@@ -46,12 +46,16 @@
 // click the Hello button. With the tk.dmesg tag the package initialization
 // prints the debug messages path. So we can view it, for example, like this:
 //
-//	$ cat $(go run -tags=tk.dmesg ./_examples/debugging.go)
-//	[27190 debugging] enter [dmesgon.go:32:0 proc.go:7176:doInit1 proc.go:7143:doInit]
-//	[27190 debugging] code=ttk::button ..ttk::button2 -text Hello -command {eventDispatcher 1} -> r=.ttk::button2 err=<nil> [tk.go:304:eval tk.go:304:eval tk.go:291:newChild]
-//	[27190 debugging] code=pack .ttk::button2 -ipadx 10 -ipady 5 -padx 20 -pady 10 -> r= err=<nil> [tk.go:304:eval tk.go:304:eval tk.go:800:Pack]
-//	[27190 debugging] code=destroy . -> r= err=<nil> [tk.go:304:eval tk.go:304:eval tk.go:704:Destroy]
-//	[27190 debugging] code=tkwait window . -> r= err=<nil> [tk.go:304:eval tk.go:304:eval tk.go:809:Wait]
+//	$ go run -tags=tk.dmesg _examples/debugging.go | tee log ; cat $(head -1 log)
+//	...
+//	[27190 debugging] code=wm iconphoto . img2 -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
+//	[27190 debugging] code=wm title . debugging -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
+//	[27190 debugging] code=. configure -padx 4m -pady 3m -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
+//	[27190 debugging] code=tk::PlaceWindow . center -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
+//	[27190 debugging] code=ttk::button ..tbutton4 -text Hello -command {eventDispatcher 3} -> r=.tbutton4 err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:266:newChild]
+//	[27190 debugging] code=pack .tbutton4 -ipadx 10 -ipady 5 -padx 20 -pady 10 -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
+//	[27190 debugging] code=destroy . -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
+//	[27190 debugging] code=tkwait window . -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
 //	$
 //
 // 27190 was the process PID in this particular run. Using the tags allows to

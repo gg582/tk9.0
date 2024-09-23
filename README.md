@@ -155,12 +155,11 @@ Using svg (_examples/svg.go).
     16	</svg>`
     17	
     18	func main() {
-    19		Pack(
-    20			Label(Image(NewPhoto(Data(svg)))),
-    21			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    22		)
-    23		App.Center().Wait()
-    24	}
+    19		Pack(Label(Image(NewPhoto(Data(svg)))),
+    20			TExit(),
+    21			Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    22		App.Center().Wait()
+    23	}
 
 ![calc](_examples/calc.png "calc")
 
@@ -176,28 +175,30 @@ A simple calculator (_examples/calc.go).
      8		Grid(out, Columnspan(4), Sticky("e"))
      9		var b *ButtonWidget
     10		for i, c := range "C()/789*456-123+0.=" {
-    11			b = Button(Txt(string(c)), Command(
-    12				func() {
-    13					switch c {
-    14					case 'C':
-    15						out.Configure(Txt(""))
-    16					case '=':
-    17						x, err := expr.Eval(out.Txt(), nil)
-    18						if err != nil {
-    19							MessageBox(Icon("error"), Msg(err.Error()), Title("Error"))
-    20							x = ""
-    21						}
-    22						out.Configure(Txt(x))
-    23					default:
-    24						out.Configure(Txt(out.Txt() + string(c)))
-    25					}
-    26				},
-    27			), Width(-4))
-    28			Grid(b, Row(i/4+1), Column(i%4), Sticky("news"), Ipadx("1.5m"), Ipady("2.6m"))
-    29		}
-    30		Grid(b, Columnspan(2))
-    31		App.Configure(Padx(0), Pady(0)).Wait()
-    32	}
+    11			b = Button(Txt(string(c)),
+    12				Command(
+    13					func() {
+    14						switch c {
+    15						case 'C':
+    16							out.Configure(Txt(""))
+    17						case '=':
+    18							x, err := expr.Eval(out.Txt(), nil)
+    19							if err != nil {
+    20								MessageBox(Icon("error"), Msg(err.Error()), Title("Error"))
+    21								x = ""
+    22							}
+    23							out.Configure(Txt(x))
+    24						default:
+    25							out.Configure(Txt(out.Txt() + string(c)))
+    26						}
+    27					},
+    28				),
+    29				Width(-4))
+    30			Grid(b, Row(i/4+1), Column(i%4), Sticky("news"), Ipadx("1.5m"), Ipady("2.6m"))
+    31		}
+    32		Grid(b, Columnspan(2))
+    33		App.Configure(Padx(0), Pady(0)).Wait()
+    34	}
 
 ![font](_examples/font.png "font")
 
@@ -241,15 +242,14 @@ Surface plot (_examples/splot.go). This example requires Gnuplot 5.4+ installati
      2	
      3	import . "modernc.org/tk9.0"
      4	
-     5	var cm = int(TkScaling()*72/2.54+0.5)
+     5	var cm = int(TkScaling()*72/2.54 + 0.5)
      6	
      7	func main() {
-     8		Pack(
-     9			Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph("set grid; splot x**2+y**2, x**2-y**2"))),
-    10			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    11		)
-    12		App.Center().Wait()
-    13	}
+     8		Pack(Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph("set grid; splot x**2+y**2, x**2-y**2"))),
+     9			TExit(),
+    10			Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    11		App.Center().Wait()
+    12	}
 
 ![tori](_examples/tori.png "interlocked tori")
 
@@ -287,15 +287,14 @@ Interlocked tori plot (_examples/tori.go). This example requires Gnuplot 5.4+ in
     30	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with pm3d,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with pm3d
     31	unset multiplot`
     32	
-    33	var cm = int(TkScaling()*72/2.54+0.5)
+    33	var cm = int(TkScaling()*72/2.54 + 0.5)
     34	
     35	func main() {
-    36		Pack(
-    37			Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph(script))),
-    38			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    39		)
-    40		App.Center().Wait()
-    41	}
+    36		Pack(Label(Image(NewPhoto(Width(20*cm), Height(15*cm)).Graph(script))),
+    37			TExit(),
+    38			Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    39		App.Center().Wait()
+    40	}
 
 ![tori-canvas](_examples/tori_canvas.png "interlocked tori on canvas")
 
@@ -330,15 +329,14 @@ Interlocked tori plot on canvas (_examples/tori_canvas.go). This example require
     27	NO_ANIMATION = 1
     28	splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos(u)+.5*cos(u)*cos(v),.5*sin(v),sin(u)+.5*sin(u)*cos(v) with lines`
     29	
-    30	var cm = int(TkScaling()*72/2.54+0.5)
+    30	var cm = int(TkScaling()*72/2.54 + 0.5)
     31	
     32	func main() {
-    33		Pack(
-    34			Canvas(Width(20*cm), Height(15*cm), Background(White)).Graph(script),
-    35			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    36		)
-    37		App.Center().Wait()
-    38	}
+    33		Pack(Canvas(Width(20*cm), Height(15*cm), Background(White)).Graph(script),
+    34			TExit(),
+    35			Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    36		App.Center().Wait()
+    37	}
 
 ![tex](_examples/tex.png "TeX")
 
@@ -351,12 +349,11 @@ Rendering plain TeX (_examples/tex.go). No runtime dependencies required.
      5	const tex = `$$\int _0 ^\infty {{\sin ax \sin bx}\over{x^2}}\,dx = {\pi a\over 2}$$`
      6	
      7	func main() {
-     8		Pack(
-     9			Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*TkScaling()*72/600))))),
-    10			TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-    11		)
-    12		App.Center().Wait()
-    13	}
+     8		Pack(Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*TkScaling()*72/600))))),
+     9			TExit(),
+    10			Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    11		App.Center().Wait()
+    12	}
 
 ![embed](_examples/embed.png "embed")
 
@@ -458,17 +455,17 @@ Technology preview of a Bootstrap5-like theme button items (_examples/b5.go).
      8	func main() {
      9		StyleThemeUse("default")
     10		opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
-    11		Grid(TButton(Txt("Primary"), Style(b5.ButtonStyle("Primary.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#0d6efd"}, "#fff"))),
-    12			TButton(Txt("Secondary"), Style(b5.ButtonStyle("Secondary.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d"}, "#fff"))),
-    13			TButton(Txt("Success"), Style(b5.ButtonStyle("Sucess.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754"}, "#fff"))),
+    11		Grid(TButton(Txt("Primary"), Style(b5.ButtonStyle("primary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#0d6efd"}, "#fff"))),
+    12			TButton(Txt("Secondary"), Style(b5.ButtonStyle("secondary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d"}, "#fff"))),
+    13			TButton(Txt("Success"), Style(b5.ButtonStyle("sucess.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754"}, "#fff"))),
     14			opts)
-    15		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("Danger.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
-    16			TButton(Txt("Warning"), Style(b5.ButtonStyle("Warning.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107"}, "#fff"))),
-    17			TButton(Txt("Info"), Style(b5.ButtonStyle("Info.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0"}, "#fff"))),
+    15		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("sanger.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
+    16			TButton(Txt("Warning"), Style(b5.ButtonStyle("warning.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107"}, "#fff"))),
+    17			TButton(Txt("Info"), Style(b5.ButtonStyle("info.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0"}, "#fff"))),
     18			opts)
-    19		Grid(TButton(Txt("Light"), Style(b5.ButtonStyle("Light.B5.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#f8f9fa"}, "#fff"))),
-    20			TButton(Txt("Dark"), Style(b5.ButtonStyle("Dark.B5.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#212529"}, "#fff"))),
-    21			TButton(Txt("Link"), Style(b5.ButtonStyle("Link.B5.TButton", b5.ButtonColors{b5.ButtonText: "#1774fd", b5.ButtonFace: "#fff"}, "#fff"))),
+    19		Grid(TButton(Txt("Light"), Style(b5.ButtonStyle("light.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#f8f9fa"}, "#fff"))),
+    20			TButton(Txt("Dark"), Style(b5.ButtonStyle("dark.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#212529"}, "#fff"))),
+    21			TButton(Txt("Link"), Style(b5.ButtonStyle("link.TButton", b5.ButtonColors{b5.ButtonText: "#1774fd", b5.ButtonFace: "#fff"}, "#fff"))),
     22			opts)
     23		Grid(TExit(), Columnspan(3), opts)
     24		App.Configure(Background("#fff")).Wait()

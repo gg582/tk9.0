@@ -5,8 +5,7 @@ import . "modernc.org/tk9.0"
 func main() {
 	busy := false
 	b := TButton(Txt("Ready"))
-	Pack(
-		b,
+	Pack(b,
 		TButton(Txt("Change"), Command(func() {
 			switch {
 			case busy:
@@ -19,7 +18,6 @@ func main() {
 			busy = !busy
 		})),
 		TExit(),
-		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-	)
+		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	App.Wait()
 }

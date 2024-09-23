@@ -30,9 +30,8 @@ splot cos(u)+.5*cos(u)*cos(v),sin(u)+.5*sin(u)*cos(v),.5*sin(v) with lines,1+cos
 var cm = int(TkScaling()*72/2.54 + 0.5)
 
 func main() {
-	Pack(
-		Canvas(Width(20*cm), Height(15*cm), Background(White)).Graph(script),
-		TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-	)
+	Pack(Canvas(Width(20*cm), Height(15*cm), Background(White)).Graph(script),
+		TExit(),
+		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	App.Center().Wait()
 }
