@@ -91,10 +91,10 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	r := width - stroke/2
 	clip := width - stroke
 	corners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], background, background)
-	q1 := style + ".corner1"
-	q2 := style + ".corner2"
-	q3 := style + ".corner3"
-	q4 := style + ".corner4"
+	q1 := style + ".q1"
+	q2 := style + ".q2"
+	q3 := style + ".q3"
+	q4 := style + ".q4"
 	StyleElementCreate(q1, "image", corners[0])
 	StyleElementCreate(q2, "image", corners[1])
 	StyleElementCreate(q3, "image", corners[2])
@@ -112,14 +112,7 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 					q3, Sticky("sw"),
 					q4, Sticky("se"),
 					"Button.label", Sticky("nswe")))))
-	StyleConfigure(style, Compound(true))
-	StyleConfigure(style, Foreground(scheme[ButtonText]))
-	StyleConfigure(style, Background(background))
-	StyleConfigure(style, Borderwidth(5))
-	StyleConfigure(style, Relief("flat"))
-	StyleConfigure(style, Padding("0"))
-	StyleConfigure(style, FocusColor(Black))
-	StyleConfigure(style, FocusThickness(0))
-	StyleConfigure(style, FocusSolid("solid"))
+	StyleConfigure(style, Background(background), Borderwidth(10), Compound(true), FocusColor(Black), FocusSolid(false),
+		FocusThickness(0), Foreground(scheme[ButtonText]), Padding(0), Relief("flat"), Shiftrelief(0))
 	return style
 }

@@ -3376,3 +3376,315 @@ func CourierFont() string {
 
 	return "courier"
 }
+
+// TButton — Widget that issues a command when pressed
+//
+// # Description
+//
+// Shiftrelief specifies how far the button contents are shifted down and right
+// in the pressed state. This action provides additional skeuomorphic feedback.
+func Shiftrelief(val any) Opt {
+	return rawOption(fmt.Sprintf(`-shiftrelief %s`, optionString(val)))
+}
+
+// Bordercolor — Styling widgets
+//
+// Bordercolor is a styling option of one or more widgets. Please see [Changing
+// Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Bordercolor(val any) Opt {
+	return rawOption(fmt.Sprintf(`-bordercolor %s`, optionString(val)))
+}
+
+// Darkcolor — Styling widgets
+//
+// Darkcolor is a styling option of one or more widgets. Please see [Changing
+// Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Darkcolor(val any) Opt {
+	return rawOption(fmt.Sprintf(`-darkcolor %s`, optionString(val)))
+}
+
+// Lightcolor — Styling widgets
+//
+// Lightcolor is a styling option of one or more widgets. Please see [Changing
+// Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Lightcolor(val any) Opt {
+	return rawOption(fmt.Sprintf(`-lightcolor %s`, optionString(val)))
+}
+
+// Indicatorbackground — Styling widgets
+//
+// Indicatorbackground is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Indicatorbackground(val any) Opt {
+	return rawOption(fmt.Sprintf(`-indicatorbackground %s`, optionString(val)))
+}
+
+// Indicatorcolor — Styling widgets
+//
+// Indicatorcolor is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Indicatorcolor(val any) Opt {
+	return rawOption(fmt.Sprintf(`-indicatorcolor %s`, optionString(val)))
+}
+
+// Indicatormargin — Styling widgets
+//
+// Indicatormargin is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Indicatormargin(val any) Opt {
+	return rawOption(fmt.Sprintf(`-indicatormargin %s`, optionString(val)))
+}
+
+// Indicatorrelief — Styling widgets
+//
+// Indicatorrelief is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Indicatorrelief(val any) Opt {
+	return rawOption(fmt.Sprintf(`-indicatorrelief %s`, optionString(val)))
+}
+
+// Arrowcolor — Styling widgets
+//
+// Arrowcolor is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Arrowcolor(val any) Opt {
+	return rawOption(fmt.Sprintf(`-arrowcolor %s`, optionString(val)))
+}
+
+// Arrowsize — Styling widgets
+//
+// Arrowsize is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Arrowsize(val any) Opt {
+	return rawOption(fmt.Sprintf(`-arrosize %s`, optionString(val)))
+}
+
+// Focusfill — Styling widgets
+//
+// Focusfill is a styling option of a ttk::combobox.
+// More information might be available at the [Tcl/Tk ttk_combobox] page.
+//
+// [Tcl/Tk ttk_combobox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_combobox.html
+func Focusfill(val any) Opt {
+	return rawOption(fmt.Sprintf(`-focusfill %s`, optionString(val)))
+}
+
+// Fieldbackground — Styling widgets
+//
+// Fieldbackground is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Fieldbackground(val any) Opt {
+	return rawOption(fmt.Sprintf(`-fieldbackground %s`, optionString(val)))
+}
+
+// Insertcolor — Styling widgets
+//
+// Insertcolor is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Insertcolor(val any) Opt {
+	return rawOption(fmt.Sprintf(`-insertcolor %s`, optionString(val)))
+}
+
+// Postoffset — Styling widgets
+//
+// Postoffset is a styling option of a ttk::combobox.
+// More information might be available at the [Tcl/Tk ttk_combobox] page.
+//
+// [Tcl/Tk ttk_combobox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_combobox.html
+func Postoffset(val any) Opt {
+	return rawOption(fmt.Sprintf(`-postoffset %s`, optionString(val)))
+}
+
+// Labelmargins — Styling widgets
+//
+// Labelmargins is a styling option of a ttk::labelframe.
+// More information might be available at the [Tcl/Tk ttk_labelframe] page.
+//
+// [Tcl/Tk ttk_labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_labelframe.html
+func Labelmargins(val any) Opt {
+	return rawOption(fmt.Sprintf(`-labelmargins %s`, optionString(val)))
+}
+
+// Labeloutside — Styling widgets
+//
+// Labeloutside is a styling option of a ttk::labelframe.
+// More information might be available at the [Tcl/Tk ttk_labelframe] page.
+//
+// [Tcl/Tk ttk_labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_labelframe.html
+func Labeloutside(val any) Opt {
+	return rawOption(fmt.Sprintf(`-labeloutside %s`, optionString(val)))
+}
+
+// Tabmargins — Styling widgets
+//
+// Tabmargins is a styling option of a ttk::notebook.
+// More information might be available at the [Tcl/Tk ttk_notebook] page.
+//
+// [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
+func Tabmargins(val any) Opt {
+	return rawOption(fmt.Sprintf(`-tabmargins %s`, optionString(val)))
+}
+
+// Tabposition — Styling widgets
+//
+// Tabposition is a styling option of a ttk::notebook.
+// More information might be available at the [Tcl/Tk ttk_notebook] page.
+//
+// [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
+func Tabposition(val any) Opt {
+	return rawOption(fmt.Sprintf(`-tabposition %s`, optionString(val)))
+}
+
+// Sashthickness — Styling widgets
+//
+// Sashthickness is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Sashthickness(val any) Opt {
+	return rawOption(fmt.Sprintf(`-sashthickness %s`, optionString(val)))
+}
+
+// Gripsize — Styling widgets
+//
+// Gripsize is a styling option of a ttk::panedwindow and ttk::scrollbar.
+// More information might be available at the [Tcl/Tk ttk_panedwindow] or
+// [Tcl/Tk ttk_scrollbar] page.
+//
+// [Tcl/Tk ttk_panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_panedwindow.html
+// [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scrollbar.html
+func Gripsize(val any) Opt {
+	return rawOption(fmt.Sprintf(`-tabposition %s`, optionString(val)))
+}
+
+// Maxphase — Styling widgets
+//
+// Maxphase is a styling option of a ttk::progressbar.
+// More information might be available at the [Tcl/Tk ttk_progressbar] page.
+//
+// [Tcl/Tk ttk_progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
+func Maxphase(val any) Opt {
+	return rawOption(fmt.Sprintf(`-maxphase %s`, optionString(val)))
+}
+
+// Period — Styling widgets
+//
+// Period is a styling option of a ttk::progressbar.
+// More information might be available at the [Tcl/Tk ttk_progressbar] page.
+//
+// [Tcl/Tk ttk_progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
+func Period(val any) Opt {
+	return rawOption(fmt.Sprintf(`-period %s`, optionString(val)))
+}
+
+// Groovewidth — Styling widgets
+//
+// Groovewidth is a styling option of a ttk::scale.
+// More information might be available at the [Tcl/Tk ttk_scale] page.
+//
+// [Tcl/Tk ttk_scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scale.html
+func Groovewidth(val any) Opt {
+	return rawOption(fmt.Sprintf(`-groovewidth %s`, optionString(val)))
+}
+
+// Sliderwidth — Styling widgets
+//
+// Sliderwidth is a styling option of a ttk::scale.
+// More information might be available at the [Tcl/Tk ttk_scale] page.
+//
+// [Tcl/Tk ttk_scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scale.html
+func Sliderwidth(val any) Opt {
+	return rawOption(fmt.Sprintf(`-sliderwidth %s`, optionString(val)))
+}
+
+// Troughrelief — Styling widgets
+//
+// Troughrelief is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Troughrelief(val any) Opt {
+	return rawOption(fmt.Sprintf(`-troughrelief %s`, optionString(val)))
+}
+
+// Indent — Styling widgets
+//
+// Indent is a styling option of a ttk::treeview.
+// More information might be available at the [Tcl/Tk ttk_treeview] page.
+//
+// [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func Indent(val any) Opt {
+	return rawOption(fmt.Sprintf(`-indent %s`, optionString(val)))
+}
+
+// Columnseparatorwidth — Styling widgets
+//
+// Columnseparatorwidth is a styling option of a ttk::treeview.
+// More information might be available at the [Tcl/Tk ttk_treeview] page.
+//
+// [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func Columnseparatorwidth(val any) Opt {
+	return rawOption(fmt.Sprintf(`-columnseparatorwidth %s`, optionString(val)))
+}
+
+// Rowheight — Styling widgets
+//
+// Rowheight is a styling option of one or more widgets. Please see
+// [Changing Widget Colors] for details.
+//
+// [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
+func Rowheight(val any) Opt {
+	return rawOption(fmt.Sprintf(`-rowheight %s`, optionString(val)))
+}
+
+// Stripedbackground — Styling widgets
+//
+// Stripedbackground is a styling option of a ttk::treeview.
+// More information might be available at the [Tcl/Tk ttk_treeview] page.
+//
+// [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func Stripedbackground(val any) Opt {
+	return rawOption(fmt.Sprintf(`-stripedbackground %s`, optionString(val)))
+}
+
+// Indicatormargins — Styling widgets
+//
+// Indicatormargins is a styling option of a ttk::treeview.
+// More information might be available at the [Tcl/Tk ttk_treeview] page.
+//
+// [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func Indicatormargins(val any) Opt {
+	return rawOption(fmt.Sprintf(`-indicatormargins %s`, optionString(val)))
+}
+
+// Indicatorsize — Styling widgets
+//
+// Indicatorsize is a styling option of a ttk::treeview.
+// More information might be available at the [Tcl/Tk ttk_treeview] page.
+//
+// [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
+func Indicatorsize(val any) Opt {
+	return rawOption(fmt.Sprintf(`-indicatorsize %s`, optionString(val)))
+}

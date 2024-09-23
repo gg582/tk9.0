@@ -78,8 +78,6 @@ func TestTokenizer(t *testing.T) {
 }
 
 func TestTmp(t *testing.T) {
-	trc("", TkScaling())
-	return //TODO-
 	// trc("", StyleLayout("TButton"))
 	// 	Button.border -sticky nswe -border 1 -children {
 	//		Button.focus -sticky nswe -children {
@@ -88,35 +86,50 @@ func TestTmp(t *testing.T) {
 
 	trc("", evalErr(`ttk::style element options TButton.border`))
 	// TRC -background -borderwidth -relief
+
 	trc("", evalErr(`ttk::style element options TButton.focus`))
 	// TRC -focuscolor -focusthickness -focussolid
+
 	trc("", evalErr(`ttk::style element options TButton.padding`))
 	// TRC -padding -relief -shiftrelief
+
 	trc("", evalErr(`ttk::style element options TButton.label`))
 	// TRC -compound -space -text -font -foreground -underline -width -anchor -justify -wraplength -embossed -image -stipple -background
+
 	trc("", evalErr(`ttk::style map TButton`))
 	// TRC -relief {{!disabled pressed} sunken}
+
 	trc("", evalErr(`ttk::style map TButton.border`))
+	// TRC
+	trc("", evalErr(`ttk::style map TButton.focus`))
+	// TRC
+	trc("", evalErr(`ttk::style map TButton.padding`))
+	// TRC
+	trc("", evalErr(`ttk::style map TButton.label`))
+	// TRC
 
-	const svg = `
-<svg width="22cm" height="17cm">
-	<rect x="100" y="100" width="200" height="150" fill="#fff" stroke-width="10" stroke="#c2dbfe" rx="10" />
-	<rect x="400" y="100" width="200" height="150" fill="#fff" stroke-width="10" stroke="#c2dbfe" rx="20" />
-	<rect x="100" y="350" width="200" height="150" fill="#fff" stroke-width="10" stroke="#c2dbfe" rx="30" />
-	<rect x="400" y="350" width="200" height="150" fill="#fff" stroke-width="10" stroke="#c2dbfe" rx="40" />
-</svg>`
+	// ttk::style configure primary.TButton -foreground #ffffff -background #4582ec -bordercolor #4582ec -darkcolor #4582ec -lightcolor #4582ec -relief raised -focusthickness 0 -focuscolor #ffffff -padding {10 5} -anchor center
+	// ttk::style map primary.TButton -foreground {disabled #c2c3c5} -background {disabled #eaebeb {pressed !disabled} #6a9bef {hover !disabled} #578eed} -bordercolor {disabled #eaebeb} -darkcolor {disabled #eaebeb {pressed !disabled} #6a9bef {hover !disabled} #578eed} -lightcolor {disabled #eaebeb {pressed !disabled} #6a9bef {hover !disabled} #578eed}
 
-	Pack(
-		Label(Background("#fff"), Image(NewPhoto(Data(svg)))),
-		Button(Txt("foo")),
-		TButton(Txt("bar")),
-		TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-	)
-	StyleConfigure("TButton", Borderwidth(10))
-	StyleConfigure("TButton", FocusColor(Blue))
-	StyleConfigure("TButton", FocusThickness(10))
-	StyleConfigure("TButton", FocusSolid(true))
-	App.Configure(Background("#fff")).Center().Wait()
+	// 	const svg = `
+	// <svg width="22cm" height="17cm">
+	// 	<rect x="100" y="100" width="200" height="150" fill="#fff" stroke-width="10" stroke="#c2dbfe" rx="10" />
+	// 	<rect x="400" y="100" width="200" height="150" fill="#fff" stroke-width="10" stroke="#c2dbfe" rx="20" />
+	// 	<rect x="100" y="350" width="200" height="150" fill="#fff" stroke-width="10" stroke="#c2dbfe" rx="30" />
+	// 	<rect x="400" y="350" width="200" height="150" fill="#fff" stroke-width="10" stroke="#c2dbfe" rx="40" />
+	// </svg>`
+
+	// Pack(
+	// 	Label(Background("#fff"), Image(NewPhoto(Data(svg)))),
+	// 	Button(Txt("foo")),
+	// 	TButton(Txt("bar")),
+	// 	TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
+	// )
+	// StyleConfigure("TButton", Borderwidth(10))
+	// StyleConfigure("TButton", FocusColor(Blue))
+	// StyleConfigure("TButton", FocusThickness(10))
+	// StyleConfigure("TButton", FocusSolid(true))
+	// App.Configure(Background("#fff")).Center().Wait()
 }
 
 /*
