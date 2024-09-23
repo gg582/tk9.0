@@ -13,9 +13,11 @@ Using Go embedded images (_examples/photo.go).
      7	var gopher []byte
      8	
      9	func main() {
-    10		Pack(Label(Image(NewPhoto(Data(gopher)))), TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    11		App.Center().Wait()
-    12	}
+    10		Pack(Label(Image(NewPhoto(Data(gopher)))),
+    11			TExit(),
+    12			Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    13		App.Center().Wait()
+    14	}
 
 ![menu](_examples/menu.png "menu")
 
