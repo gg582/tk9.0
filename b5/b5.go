@@ -73,13 +73,14 @@ func getCorners(width, clip, r, strokeWidth int, fill, stroke, background string
 	return re
 }
 
-func getTile(color string) (r *Img) {
+// All sizes in px
+func getTile(width, height int, color string) (r *Img) {
 	if ex, ok := tiles[color]; ok {
 		return ex
 	}
 
-	r = NewPhoto(Width(8), Height(8),
-		Data(fmt.Sprintf(`<svg width="8" height="8" fill=%q><rect width="8" height="8" fill=%[1]q/></svg>`, color)))
+	r = NewPhoto(Width(width), Height(height),
+		Data(fmt.Sprintf(`<svg width="%d" height="%d" fill=%q><rect width="%[1]d" height="%d" fill=%q/></svg>`, width, height, color)))
 	tiles[color] = r
 	return r
 }
@@ -100,7 +101,7 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	StyleElementCreate(q3, "image", corners[2])
 	StyleElementCreate(q4, "image", corners[3])
 	tile := "Tile." + style + ".tile"
-	t := getTile(scheme[ButtonFace])
+	t := getTile(8, 40, scheme[ButtonFace]) //TODO compute 40 wrt scale/DPI
 	StyleElementCreate(tile, "image", t)
 	StyleLayout(style,
 		"Button.border", Sticky("nswe"), Border(1), Children(
