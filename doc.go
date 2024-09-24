@@ -236,10 +236,19 @@
 // Parts of the documentation are copied and/or modified from the [tcl.tk
 // site], see the LICENSE-TCLTK file for details.
 //
+// Parts of the documentation are copied and/or modified from the [tkinter.ttk site]
+// which is
+//
+//	----------------------------------------------------------------------------
+//	© Copyright 2001-2024, Python Software Foundation, licensed under the Python
+//	Software Foundation License Version 2.
+//	----------------------------------------------------------------------------
+//
 // [FreeBSD]: https://github.com/ebitengine/purego/blob/ff2c2cce0d0b43e3ed9743fcd3408cbd9187f835/internal/fakecgo/freebsd.go#L15
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
+// [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
 package tk9_0 // import "modernc.org/tk9.0"

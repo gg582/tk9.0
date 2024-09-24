@@ -108,6 +108,27 @@ func TestTmp(t *testing.T) {
 	trc("", evalErr(`ttk::style map TButton.label`))
 	// TRC
 
+	trc("", evalErr(`ttk::style lookup TButton -font`))
+	trc("", StyleMap("TButton"))
+	trc("", evalErr(`ttk::style map TButton -background [list disabled #d9d9d9  active #ececec] -foreground [list disabled #a3a3a3] -relief [list {pressed !disabled} sunken]`))
+	trc("", StyleMap("TButton"))
+	trc("", StyleMap("TButton",
+		Background, "disabled", "#112233", "active", "#445566",
+		Foreground, "disabled", "#778899",
+		Relief, "pressed", "!disabled", "sunken"))
+	trc("", StyleMap("TButton"))
+
+	/*
+
+	   ttk::style map success.Outline.Toolbutton
+	   	-foreground {disabled #c2c3c5 {pressed !disabled} #ffffff {selected !disabled} #ffffff {hover !disabled} #ffffff}
+	   		-background {{pressed !disabled} #02b875 {selected !disabled} #02b875 {hover !disabled} #02b875}
+	   		-bordercolor {disabled #c2c3c5 {pressed !disabled} #02b875 {selected !disabled} #02b875 {hover !disabled} #02b875}
+	   		-darkcolor {disabled #ffffff {pressed !disabled} #02b875 {selected !disabled} #02b875 {hover !disabled} #02b875}
+	   		-lightcolor {disabled #ffffff {pressed !disabled} #02b875 {selected !disabled} #02b875 {hover !disabled} #02b875}
+
+	*/
+
 	// ttk::style configure primary.TButton -foreground #ffffff -background #4582ec -bordercolor #4582ec -darkcolor #4582ec -lightcolor #4582ec -relief raised -focusthickness 0 -focuscolor #ffffff -padding {10 5} -anchor center
 	// ttk::style map primary.TButton -foreground {disabled #c2c3c5} -background {disabled #eaebeb {pressed !disabled} #6a9bef {hover !disabled} #578eed} -bordercolor {disabled #eaebeb} -darkcolor {disabled #eaebeb {pressed !disabled} #6a9bef {hover !disabled} #578eed} -lightcolor {disabled #eaebeb {pressed !disabled} #6a9bef {hover !disabled} #578eed}
 

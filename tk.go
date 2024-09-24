@@ -3046,8 +3046,8 @@ func (w *Window) Font() string {
 // 	+ ttk::style element names
 // 	+ ttk::style element options element
 // + ttk::style layout style ?layoutSpec?
-// - ttk::style lookup style -option ?state ?default??
-// - ttk::style map style ?-option { statespec value... }?
+// + ttk::style lookup style -option ?state ?default??
+// + ttk::style map style ?-option { statespec value... }?
 // - ttk::style theme args
 // 	- ttk::style theme create themeName ?-parent basedon? ?-settings script... ?
 // 	- ttk::style theme names
@@ -3112,7 +3112,6 @@ func StyleConfigure(style string, options ...any) []string {
 func funcToTclOption(fn any) string {
 	t := reflect.TypeOf(fn)
 	if t.Kind() != reflect.Func {
-		fail(fmt.Errorf("expected func() Opt: %T", fn))
 		return ""
 	}
 
@@ -3253,6 +3252,175 @@ func StyleLayout(style string, options ...any) string {
 
 	evalErr(fmt.Sprintf("ttk::style layout %s %s", tclSafeString(style), children("", options...)))
 	return ""
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Returns the value specified for -option in style style in state state, using
+// the standard lookup rules for element options. state is a list of state
+// names; if omitted, it defaults to all bits off (the “normal” state). If the
+// default argument is present, it is used as a fallback value in case no
+// specification for -option is found. If style does not exist, it is created.
+// For example,
+//
+//	StyleLookup("TButton", Font)
+//
+// may return "TkDefaultFont", depending on the operating system, theme in use
+// and the configured style options.
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleLookup(style string, options ...any) string {
+	for i, v := range options {
+		if s := funcToTclOption(v); s != "" {
+			options[i] = rawOption(s)
+		}
+	}
+
+	return evalErr(fmt.Sprintf("ttk::style lookup %s %s", tclSafeString(style), collectAny(options...)))
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Sets dynamic (state dependent) values of the specified option(s) in style.
+// Each statespec / value pair is examined in order; the value corresponding to
+// the first matching statespec is used. If style does not exist, it is
+// created. If only style and -option are specified, get the dynamic values for
+// option -option of style style. If only style is specified, get the dynamic
+// values for all options of style 'style'.
+//
+// With no options the function returns the currently configured style map for
+// 'style'.  For example,
+//
+//	StyleMap("TButton")
+//
+// may return "-relief {{!disabled pressed} sunken}", depending on the
+// operating system, theme in use and the configured style options.
+//
+// Setting a style map is done by providing a list of options, each option is
+// followed by a list of states and a value. For example:
+//
+//	StyleMap("TButton",
+//		Background, "disabled", "#112233", "active", "#445566",
+//		Foreground, "disabled", "#778899",
+//	        Relief, "pressed", "!disabled", "sunken")
+//
+// # Widget states
+//
+// The widget state is a bitmap of independent state flags.
+//
+//   - active - The mouse cursor is over the widget and pressing a mouse button
+//     will cause some action to occur
+//   - alternate - A widget-specific alternate display format
+//   - background - Windows and Mac have a notion of an “active” or foreground
+//     window. The background state is set for widgets in a background window,
+//     and cleared for those in the foreground window
+//   - disabled - Widget is disabled under program control
+//   - focus - Widget has keyboard focus
+//   - invalid - The widget’s value is invalid
+//   - pressed - Widget is being pressed
+//   - readonly - Widget should not allow user modification
+//   - selected - “On”, “true”, or “current” for things like Checkbuttons and
+//     radiobuttons
+//
+// A state specification is a sequence of state names, optionally prefixed with
+// an exclamation point indicating that the bit is off.
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleMap(style string, options ...any) string {
+	if len(options) == 0 {
+		return evalErr(fmt.Sprintf("ttk::style map %s", tclSafeString(style)))
+	}
+
+	a, err := parseStyleMapOpts(options...)
+	if err != nil {
+		fail(fmt.Errorf("parsing StyleMap options: %v", err))
+		return ""
+	}
+
+	evalErr(fmt.Sprintf("ttk::style map %s %s", tclSafeString(style), strings.Join(a, " ")))
+	return ""
+}
+
+func parseStyleMapOpts(in ...any) (r []string, err error) {
+	for len(in) != 0 {
+		opt := funcToTclOption(in[0])
+		if opt == "" {
+			return nil, fmt.Errorf("expected option, eg. 'Relief' (the function, not Relief(argument)), got %T", in[0])
+		}
+
+		in = in[1:]
+		r = append(r, opt)
+		var list []string
+		for {
+			var states []string
+			for len(in) != 0 {
+				s, ok := in[0].(string)
+				if !ok || !isState(s) {
+					break
+				}
+
+				states = append(states, s)
+				in = in[1:]
+			}
+			if len(in) == 0 {
+				return nil, fmt.Errorf("missing option value")
+			}
+
+			val := tclSafeString(fmt.Sprint(in[0]))
+			in = in[1:]
+
+			var s string
+			switch len(states) {
+			case 0:
+				// nop
+			case 1:
+				s = states[0]
+			default:
+				s = fmt.Sprintf("{%s}", strings.Join(states, " "))
+			}
+			list = append(list, fmt.Sprintf("%s %s", s, val))
+			if len(in) == 0 || funcToTclOption(in[0]) != "" {
+				break
+			}
+		}
+		r = append(r, fmt.Sprintf("{%s}", strings.Join(list, " ")))
+	}
+	return r, nil
+}
+
+func isState(s string) bool {
+	if len(s) == 0 {
+		return false
+	}
+
+	if s[0] == '!' {
+		s = s[1:]
+	}
+
+	switch s {
+	case
+		"active",
+		"alternate",
+		"background",
+		"disabled",
+		"focus",
+		"invalid",
+		"pressed",
+		"readonly",
+		"selected":
+
+		return true
+	default:
+		return false
+	}
 }
 
 // Border option.
