@@ -473,7 +473,23 @@ Technology preview of a Bootstrap5-like theme button items (_examples/b5.go).
     24		App.Configure(Background("#fff")).Wait()
     25	}
 
+----
+
+Darwin
+
+![darwin](_examples/darwin.png "darwin")
+
+FreeBSD
+
+![freebsd](_examples/freebsd.png "freebsd")
+
+Linux
+
 ![linux](_examples/linux.png "linux")
+
+Windows
+
+![windows](_examples/windows.png "windows")
 
 [![Go Reference](https://pkg.go.dev/badge/modernc.org/tk9.0.svg)](https://pkg.go.dev/modernc.org/tk9.0)
 
