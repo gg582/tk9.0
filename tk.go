@@ -487,13 +487,17 @@ func optionString(v any) string {
 // [Tcl/Tk bind]: https://www.tcl.tk/man/tcl9.0/TkCmd/bind.html
 func Bind(options ...any) {
 	a := []string{"bind"}
+	var w *Window
 	for _, v := range options {
 		switch x := v.(type) {
 		case *Window:
+			if w == nil {
+				w = x
+			}
 			a = append(a, x.String())
 		case *eventHandler:
 			x.tcl = ""
-			a = append(a, x.optionString(nil))
+			a = append(a, x.optionString(w))
 		default:
 			a = append(a, tclSafeStringBind(fmt.Sprint(x)))
 		}

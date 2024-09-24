@@ -79,7 +79,7 @@ zipfs mount %s %s
 	}
 }
 
-func getCacheDir() (r string, err error) { //TODO consolidate
+func getCacheDir() (r string, err error) {
 	if r, err = os.UserCacheDir(); err != nil {
 		return "", err
 	}
