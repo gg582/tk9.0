@@ -3075,8 +3075,10 @@ func (w *Window) Font() string {
 //	StyleConfigure(".")
 //
 // Additional information might be available at the [Tcl/Tk style] page.
+// There's also a [Styles and Themes] tutorial at tkdoc.com.
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleConfigure(style string, options ...any) []string {
 	if len(options) == 0 {
 		return parseList(evalErr(fmt.Sprintf("ttk::style configure %s", tclSafeString(style))))
@@ -3165,11 +3167,13 @@ var replaceOpt = map[string]string{
 // optionally followed by a space separated list of states the image applies
 // to. An exclamation mark before the state is a negation.
 //
-// Additional information might be available at the [Tcl/Tk modyfying a button]
+// Additional information might be available at the [Tcl/Tk modifying a button]
 // and [Tcl/Tk style] pages.
+// There's also a [Styles and Themes] tutorial at tkdoc.com.
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-// [Tcl/Tk modyfying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
+// [Tcl/Tk modifying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
+// [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleElementCreate(elementName, typ string, options ...any) string {
 	// ttk::style element create TRadiobutton.indicator image {pyimage11 {disabled selected} pyimage12 disabled pyimage13 !selected pyimage10} -width 20 -border 4 -sticky w
 	var a, b []string
@@ -3206,8 +3210,10 @@ func StyleElementCreate(elementName, typ string, options ...any) string {
 // Returns the list of elements defined in the current theme.
 //
 // Additional information might be available at the [Tcl/Tk style] page.
+// There's also a [Styles and Themes] tutorial at tkdoc.com.
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleElementNames() []string {
 	return parseList(evalErr("ttk::style element names"))
 }
@@ -3219,8 +3225,10 @@ func StyleElementNames() []string {
 // Returns the list of element's options.
 //
 // Additional information might be available at the [Tcl/Tk style] page.
+// There's also a [Styles and Themes] tutorial at tkdoc.com.
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleElementOptions(element string) []string {
 	return parseList(evalErr(fmt.Sprintf("ttk::style element options %s", tclSafeString(element))))
 }
@@ -3240,11 +3248,13 @@ func StyleElementOptions(element string) []string {
 //					"Button.label", Sticky("nswe"),
 //					"Red.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
 //
-// Additional information might be available at the [Tcl/Tk modyfying a button]
+// Additional information might be available at the [Tcl/Tk modifying a button]
 // and [Tcl/Tk style] pages.
+// There's also a [Styles and Themes] tutorial at tkdoc.com.
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-// [Tcl/Tk modyfying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
+// [Tcl/Tk modifying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
+// [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleLayout(style string, options ...any) string {
 	if len(options) == 0 {
 		return evalErr(fmt.Sprintf("ttk::style layout %s", tclSafeString(style)))
@@ -3271,8 +3281,10 @@ func StyleLayout(style string, options ...any) string {
 // and the configured style options.
 //
 // Additional information might be available at the [Tcl/Tk style] page.
+// There's also a [Styles and Themes] tutorial at tkdoc.com.
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleLookup(style string, options ...any) string {
 	for i, v := range options {
 		if s := funcToTclOption(v); s != "" {
@@ -3332,8 +3344,10 @@ func StyleLookup(style string, options ...any) string {
 // an exclamation point indicating that the bit is off.
 //
 // Additional information might be available at the [Tcl/Tk style] page.
+// There's also a [Styles and Themes] tutorial at tkdoc.com.
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleMap(style string, options ...any) string {
 	if len(options) == 0 {
 		return evalErr(fmt.Sprintf("ttk::style map %s", tclSafeString(style)))
@@ -3524,7 +3538,11 @@ func children(prefixed string, list ...any) Opt {
 // Without a argument the result is the name of the current theme. Otherwise
 // this command sets the current theme to themeName, and refreshes all widgets.
 //
+// Additional information might be available at the [Tcl/Tk style] page.
+// There's also a [Styles and Themes] tutorial at tkdoc.com.
+//
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+// [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleThemeUse(themeName ...string) string {
 	s := ""
 	if len(themeName) != 0 {
