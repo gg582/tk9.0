@@ -81,6 +81,7 @@
 //	linux   s390x
 //	windows 386
 //	windows amd64
+//	windows arm64
 //
 // Specific to [FreeBSD]:
 //

@@ -137,7 +137,6 @@ lib_winarm64: download
 	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --enable-64bit=arm64"
 	sh -c "cd ~/tmp/tcl9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
 	make -C ~/tmp/tcl9.0.0/win -j12
-	# cp -v ~/tmp/tcl9.0.0/libtommath/win64-arm/libtommath.dll  ~/tmp/tcl9.0.0/compat/zlib/win64-arm/zlib1.dll ~/tmp/tcl9.0.0/win/
 	cp -v ~/tmp/tcl9.0.0/win/*.dll $(WINARM64)
 	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win  --enable-64bit=arm64"
 	make -C ~/tmp/tk9.0.0/win -j12

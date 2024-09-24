@@ -15,13 +15,14 @@ import (
 //TODO const semantics = None?, Primary, Secondary, Success, Info, Warning, Danger, Dark, Light, Link
 
 const (
-	buttonFocusDecoratorCorner = 9.0 / 96 // The rounded corner is 9px on a 96 DPI display.
-	buttonFocusDecorator       = 4.0 / 96 // 4px on a 96 DPI display.
+	buttonFocusDecoratorCorner = 9 / 96.   // The rounded corner is 9px on a 96 DPI display.
+	buttonFocusDecorator       = 4 / 96.   // 4px on a 96 DPI display.
+	buttonTileHeight           = 40 / 135. // 40px on a 135 DPI display
 )
 
 var (
 	corners = map[cornerKey][4]*Img{}
-	tiles   = map[string]*Img{}
+	tiles   = map[tileKey]*Img{}
 )
 
 type ButtonColor int
@@ -33,6 +34,12 @@ const (
 )
 
 type ButtonColors map[ButtonColor]string
+
+type tileKey struct {
+	width  int
+	height int
+	color  string
+}
 
 type cornerKey struct {
 	width       int
@@ -75,13 +82,14 @@ func getCorners(width, clip, r, strokeWidth int, fill, stroke, background string
 
 // All sizes in px
 func getTile(width, height int, color string) (r *Img) {
-	if ex, ok := tiles[color]; ok {
+	k := tileKey{width, height, color}
+	if ex, ok := tiles[k]; ok {
 		return ex
 	}
 
 	r = NewPhoto(Width(width), Height(height),
 		Data(fmt.Sprintf(`<svg width="%d" height="%d" fill=%q><rect width="%[1]d" height="%d" fill=%q/></svg>`, width, height, color)))
-	tiles[color] = r
+	tiles[k] = r
 	return r
 }
 
@@ -89,6 +97,7 @@ func getTile(width, height int, color string) (r *Img) {
 func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	width := TkScaling() * 72 * buttonFocusDecoratorCorner
 	stroke := TkScaling() * 72 * buttonFocusDecorator
+	th := TkScaling() * 72 * buttonTileHeight
 	r := width - stroke/2
 	clip := width - stroke
 	corners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], background, background)
@@ -101,7 +110,7 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	StyleElementCreate(q3, "image", corners[2])
 	StyleElementCreate(q4, "image", corners[3])
 	tile := "Tile." + style + ".tile"
-	t := getTile(8, 40, scheme[ButtonFace]) //TODO compute 40 wrt scale/DPI
+	t := getTile(8, round(th), scheme[ButtonFace])
 	StyleElementCreate(tile, "image", t)
 	StyleLayout(style,
 		"Button.border", Sticky("nswe"), Border(1), Children(
