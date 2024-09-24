@@ -15,9 +15,9 @@ import (
 //TODO const semantics = None?, Primary, Secondary, Success, Info, Warning, Danger, Dark, Light, Link
 
 const (
-	buttonFocusDecoratorCorner = 9 / 96.   // The rounded corner is 9px on a 96 DPI display.
-	buttonFocusDecorator       = 4 / 96.   // 4px on a 96 DPI display.
-	buttonTileHeight           = 40 / 135. // 40px on a 135 DPI display
+	buttonFocusDecoratorCorner = 9 / 96.  // The rounded corner is 9px on a 96 DPI display.
+	buttonFocusDecorator       = 4 / 96.  // 4px on a 96 DPI display.
+	buttonTileHeight           = 27 / 96. // 27px on a 96 DPI display
 )
 
 var (
@@ -129,13 +129,13 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 }
 
 // package main
-// 
+//
 // import (
 // 	"fmt"
 // 	. "modernc.org/tk9.0"
 // 	"modernc.org/tk9.0/b5"
 // )
-// 
+//
 // func main() {
 // 	StyleThemeUse("default")
 // 	opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}

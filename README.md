@@ -473,6 +473,8 @@ Technology preview of a Bootstrap5-like theme button items (_examples/b5.go).
     24		App.Configure(Background("#fff")).Wait()
     25	}
 
+![linux](_examples/linux.png "linux")
+
 [![Go Reference](https://pkg.go.dev/badge/modernc.org/tk9.0.svg)](https://pkg.go.dev/modernc.org/tk9.0)
 
 [Tutorial: Modifying a ttk button's style]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
