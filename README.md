@@ -475,19 +475,21 @@ Technology preview of a Bootstrap5-like theme button items (_examples/b5.go).
 
 ----
 
-Darwin
+Gallery (_examples/demo.go)
+
+Darwin(macOS) Seqoia 15.0
 
 ![darwin](_examples/darwin.png "darwin")
 
-FreeBSD
+FreeBSD Xfce4
 
 ![freebsd](_examples/freebsd.png "freebsd")
 
-Linux
+Linux Mate 1.26.0
 
 ![linux](_examples/linux.png "linux")
 
-Windows
+Windows 10
 
 ![windows](_examples/windows.png "windows")
 

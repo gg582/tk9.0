@@ -3912,3 +3912,53 @@ func Indicatormargins(val any) Opt {
 func Indicatorsize(val any) Opt {
 	return rawOption(fmt.Sprintf(`-indicatorsize %s`, optionString(val)))
 }
+
+// wm — Communicate with window manager
+//
+// # Description
+//
+// Width and height give the maximum permissible
+// dimensions for window. For gridded windows the dimensions are specified in
+// grid units; otherwise they are specified in pixel units. The window manager
+// will restrict the window's dimensions to be less than or equal to width and
+// height. If width and height are specified, then the command returns an empty
+// string. Otherwise it returns a Tcl list with two elements, which are the
+// maximum width and height currently in effect. The maximum size defaults to
+// the size of the screen. See the sections on geometry management below for
+// more information.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmSetMaxSize(w *Window, width, height int) {
+	evalErr(fmt.Sprintf("wm maxsize %s %v %v", w, width, height))
+}
+
+// wm — Communicate with window manager
+//
+// # Description
+//
+// Returns the  maximum width and height currently in effect. The maximum size defaults to
+// the size of the screen. See the sections on geometry management below for
+// more information.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmMaxSize(w *Window) (width, height int) {
+	a := strings.Fields(evalErr(fmt.Sprintf("wm maxsize %s", w)))
+	if len(a) != 2 {
+		return -1, -1
+	}
+
+	var err error
+	if width, err = strconv.Atoi(a[0]); err != nil {
+		return -1, -1
+	}
+
+	if height, err = strconv.Atoi(a[1]); err != nil {
+		return -1, -1
+	}
+
+	return width, height
+}
