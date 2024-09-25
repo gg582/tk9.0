@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// The b5 package is a work in progress with no stable API yet.
+// The b5 package is a work in progress with no stable API yet. It will eventually become
+// a full theme package.
 package b5 // import "modernc.org/tk9.0/b5"
 
 import (
@@ -95,6 +96,8 @@ func getTile(width, height int, color string) (r *Img) {
 }
 
 // ButtonStyle defines a button style. ATM only when using the "default" theme.
+//
+// This function is intended for prototyping and will be most probably unexported at some time.
 func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	width := TkScaling() * 72 * buttonFocusDecoratorCorner
 	stroke := TkScaling() * 72 * buttonFocusDecorator
@@ -144,7 +147,7 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 // 		TButton(Txt("Secondary"), Style(b5.ButtonStyle("secondary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d"}, "#fff"))),
 // 		TButton(Txt("Success"), Style(b5.ButtonStyle("sucess.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754"}, "#fff"))),
 // 		opts)
-// 	Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("sanger.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
+// 	Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("danger.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
 // 		TButton(Txt("Warning"), Style(b5.ButtonStyle("warning.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107"}, "#fff"))),
 // 		TButton(Txt("Info"), Style(b5.ButtonStyle("info.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0"}, "#fff"))),
 // 		opts)

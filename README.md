@@ -445,7 +445,7 @@ Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modify
 
 ![b5](_examples/b5.png "b5")
 
-Technology preview of a Bootstrap5-like theme button items (_examples/b5.go).
+Technology preview of a Bootstrap 5-like theme buttons (_examples/b5.go). Only a partial prototype at the moment.
 
      1	package main
      2	
