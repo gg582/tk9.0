@@ -16,16 +16,16 @@ var (
 		name string
 		x, y int
 	}{
-		{"tori.go", 900, 400},
 		{"photo.go", 1200, 50},
 		{"tex.go", 1500, 0},
 		{"splot.go", 470, 90},
+		{"tori.go", 1050, 400},
 		{"svg.go", 0, 0},
 		{"font.go", 0, 500},
 		{"text.go", 60, 400},
-		{"embed.go", 460, 600},
-		{"calc.go", 540, 25},
-		{"b5.go", 840, 30},
+		{"embed.go", 460, 700},
+		{"calc.go", 540, 0},
+		{"b5.go", 840, 0},
 	}
 	sleep = flag.Duration("t", time.Second, "")
 )
