@@ -489,10 +489,6 @@ Linux Mate 1.26.0
 
 ![linux](_examples/linux.png "linux")
 
-Windows 10
-
-![windows](_examples/windows.png "windows")
-
 Windows 11
 
 ![windows11](_examples/windows11.png "windows11")
