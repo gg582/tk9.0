@@ -93,6 +93,8 @@ win65:
 		.  \
 		win65:src/modernc.org/tk9.0
 
+lib_win: lib_win64 lib_win32 lib_winarm64
+
 lib_win64: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
 	if [ "$(GOARCH)" != "amd64" ]; then exit 1 ; fi
