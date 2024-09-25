@@ -493,6 +493,10 @@ Windows 10
 
 ![windows](_examples/windows.png "windows")
 
+Windows 11
+
+![windows11](_examples/windows11.png "windows11")
+
 [![Go Reference](https://pkg.go.dev/badge/modernc.org/tk9.0.svg)](https://pkg.go.dev/modernc.org/tk9.0)
 
 [![LiberaPay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/jnml/donate)
