@@ -64,6 +64,8 @@ var (
 
 	exitHandler Opt
 	finished    atomic.Int32
+	forcedX     = -1
+	forcedY     = -1
 	handlers    = map[int32]*eventHandler{}
 	id          atomic.Int32
 	isBuilder   = os.Getenv("MODERNC_BUILDER") != ""
@@ -207,7 +209,35 @@ func setDefaults() {
 	base := filepath.Base(os.Args[0])
 	base = strings.TrimSuffix(base, ".exe")
 	App.WmTitle(base)
+	x, y := -1, -1
+	if os.Getenv("TK9_DEMO") == "1" {
+		for i := 1; i < len(os.Args); i++ {
+			s := os.Args[i]
+			if !strings.HasPrefix(s, "+") {
+				continue
+			}
+
+			a := strings.Split(s[1:], "+")
+			if len(a) != 2 {
+				continue
+			}
+
+			var err error
+			if x, err = strconv.Atoi(a[0]); err != nil || x < 0 {
+				x = -1
+				break
+			}
+
+			if y, err = strconv.Atoi(a[1]); err != nil || y < 0 {
+				y = -1
+			}
+			break
+		}
+	}
 	App.Configure(Padx("4m"), Pady("3m")).Center()
+	if x >= 0 && y >= 0 {
+		forcedX, forcedY = x, y
+	}
 }
 
 // Window represents a Tk window/widget. It implements common widget methods.
@@ -915,6 +945,10 @@ func Pack(options ...Opt) {
 // If an event handler invokes Wait again, the nested call to Wait must
 // complete before the outer call can complete.
 func (w *Window) Wait() {
+	if w == App && forcedX >= 0 && forcedY >= 0 { // Behind TK9_DEMO=1.
+		evalErr(fmt.Sprintf("wm geometry . +%v+%v", forcedX, forcedY)) //TODO add API func
+		forcedX, forcedY = -1, -1                                      // Apply only the first time.
+	}
 	evalErr(fmt.Sprintf("tkwait window %s", w))
 }
 

@@ -4,9 +4,9 @@
 
 .PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd build_all_targets
 
-TAR = tcl-core9.0.0rc1-src.tar.gz
+TAR = tcl-core9.0.0rc2-src.tar.gz
 URL = http://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
-TAR2 = tk9.0.0rc1-src.tar.gz
+TAR2 = tk9.0.0rc2-src.tar.gz
 URL2 = http://deac-riga.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR2)
 GOOS = $(shell go env GOOS)
 GOARCH = $(shell go env GOARCH)
@@ -193,3 +193,15 @@ lib_freebsd: download
 	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+
+# demo: #TODO in code
+# 	TK9_DEMO=1 go run _examples/tori.go +900+400 &
+# 	TK9_DEMO=1 go run _examples/photo.go +1200+50 &
+# 	TK9_DEMO=1 go run _examples/tex.go +1500+0 &
+# 	TK9_DEMO=1 go run _examples/splot.go +470+90 &
+# 	TK9_DEMO=1 go run _examples/svg.go +0+0 &
+# 	TK9_DEMO=1 go run _examples/font.go +0+500 &
+# 	TK9_DEMO=1 go run _examples/text.go +60+400 &
+# 	TK9_DEMO=1 go run _examples/embed.go +460+600 &
+# 	TK9_DEMO=1 go run _examples/calc.go +540+25 &
+# 	TK9_DEMO=1 go run _examples/b5.go +840+30 &
