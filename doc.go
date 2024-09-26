@@ -92,10 +92,7 @@
 //
 // # Builders
 //
-// Builder results available at:
-//
-// https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
-//
+// Builder results available at [modern-c.appspot.com].
 //
 // # Runtime dependencies
 //
@@ -262,6 +259,7 @@
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
+// [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
 // [tkinter]: https://en.wikipedia.org/wiki/Tkinter
