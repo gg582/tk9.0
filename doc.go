@@ -90,6 +90,13 @@
 //	making fakecgo the Cgo.
 //	  -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
 //
+// # Builders
+//
+// Builder results available at:
+//
+// https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
+//
+//
 // # Runtime dependencies
 //
 //   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+ executable
