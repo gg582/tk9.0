@@ -396,7 +396,7 @@ Embedding pictures, TeX and other widgets in Text (_examples/embed.go).
     33		App.Center().Wait()
     34	}
 
-This demo demonstrates additionally some techniques for handling non-default scale factors.
+This program additionally demonstrates some techniques for handling non-default scale factors.
 
 ![embed2](_examples/embed2.png "embed2")
 
@@ -461,7 +461,7 @@ Technology preview of a Bootstrap 5-like theme buttons (_examples/b5.go). Only a
     12			TButton(Txt("Secondary"), Style(b5.ButtonStyle("secondary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d"}, "#fff"))),
     13			TButton(Txt("Success"), Style(b5.ButtonStyle("sucess.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754"}, "#fff"))),
     14			opts)
-    15		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("sanger.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
+    15		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("danger.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
     16			TButton(Txt("Warning"), Style(b5.ButtonStyle("warning.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107"}, "#fff"))),
     17			TButton(Txt("Info"), Style(b5.ButtonStyle("info.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0"}, "#fff"))),
     18			opts)
@@ -477,7 +477,7 @@ Technology preview of a Bootstrap 5-like theme buttons (_examples/b5.go). Only a
 
 Gallery (_examples/demo.go)
 
-Darwin(macOS) Seqoia 15.0
+Darwin(macOS) Sequoia 15.0
 
 ![darwin](_examples/darwin.png "darwin")
 

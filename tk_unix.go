@@ -32,6 +32,11 @@ const (
 
 var (
 	interp *tcl.Interp
+
+	shasig = map[string]string{
+		"tcl_library.zip": "e6b8f12c3920397b35029a9aefa39e43689d596c4b9233812dbf5bc94e5bb7db",
+		"tk_library.zip":  "dc8dc499e849463bc058cfc6fad3fb59b561530302a164813c67ada7221e4f8a",
+	}
 )
 
 func init() {
@@ -88,6 +93,9 @@ func getCacheDir() (r string, err error) {
 	r = filepath.Join(r0, libtk.Version)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
+		if checkSig(r, shasig) {
+			return r, nil
+		}
 		return r, nil
 	}
 

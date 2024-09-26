@@ -147,6 +147,8 @@
 // server if the process is started remotely using '$ ssh -X foo@bar' and the X
 // forwarding is enabled/supported.
 //
+// Darwin port uses the macOS GUI API and does not use X11.
+//
 // # The options pattern
 //
 // Zero or more options can be specified when creating a widget. For example

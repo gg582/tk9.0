@@ -7,9 +7,12 @@
 package main
 
 import (
+	"archive/zip"
 	"bytes"
+	"crypto/sha256"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -20,7 +23,9 @@ import (
 	"github.com/adrg/xdg"
 	"golang.org/x/net/html"
 	util "modernc.org/fileutil/ccgo"
+	tcllib "modernc.org/libtcl9.0/library"
 	libtk "modernc.org/libtk9.0"
+	tklib "modernc.org/libtk9.0/library"
 	ngrab "modernc.org/ngrab/lib"
 	"modernc.org/rec/lib"
 )
@@ -523,6 +528,7 @@ var (
 )
 
 func main() {
+	hashes()
 	makeTokenizer()
 	w := bytes.NewBuffer(nil)
 	w.WriteString(header)
@@ -1299,4 +1305,47 @@ func trc(s string, args ...interface{}) string {
 	fmt.Fprintf(os.Stderr, "%s\n", r)
 	os.Stderr.Sync()
 	return r
+}
+
+func hashes() {
+	filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			panic(err)
+		}
+
+		base := filepath.Base(path)
+		if d.IsDir() || !strings.HasSuffix(base, ".zip") {
+			return nil
+		}
+
+		r, err := zip.OpenReader(path)
+		if err != nil {
+			panic(err)
+		}
+
+		defer r.Close()
+
+		fmt.Printf("// %s\n", path)
+		for _, f := range r.File {
+			// fmt.Printf("Contents of %s:\n", f.Name)
+			r, err := f.Open()
+			if err != nil {
+				panic(err)
+			}
+
+			h := sha256.New()
+			_, err = io.Copy(h, r)
+			r.Close()
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Printf("%q: \"%0x\",\n", f.Name, h.Sum(nil))
+		}
+
+		return nil
+	})
+	fmt.Printf("// other\n")
+	fmt.Printf("%q: \"%0x\",\n", "tcl_library.zip", sha256.Sum256([]byte(tcllib.Zip)))
+	fmt.Printf("%q: \"%0x\",\n", "tk_library.zip", sha256.Sum256([]byte(tklib.Zip)))
 }

@@ -159,7 +159,11 @@ func getCacheDir() (r string, err error) {
 	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
-		return r, nil
+		if checkSig(r, shasig) {
+			return r, nil
+		}
+
+		os.RemoveAll(r) // Tampered or corrupted.
 	}
 
 	os.MkdirAll(r0, 0700)

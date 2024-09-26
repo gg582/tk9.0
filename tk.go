@@ -7,10 +7,12 @@ package tk9_0 // import "modernc.org/tk9.0"
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	_ "embed"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -107,6 +109,36 @@ var (
 	//interp and this map.
 	textVariables = map[*Window]string{} // : tclName
 )
+
+func checkSig(dir string, sig map[string]string) bool {
+	return filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if d.IsDir() {
+			return nil
+		}
+
+		base := filepath.Base(path)
+		sum := sig[base]
+		if sum == "" {
+			return nil
+		}
+
+		b, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+
+		if g, e := fmt.Sprintf("%0x", sha256.Sum256(b)), sum; g != e {
+			return fmt.Errorf("check failed: %s %s != %s", path, g, e)
+		}
+
+		delete(sig, base)
+		return nil
+	}) == nil && len(sig) == 0
+}
 
 // Returns a single Tcl string, no braces, except {} if returned for s == "".
 func tclSafeString(s string) string {
