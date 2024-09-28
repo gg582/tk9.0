@@ -62,7 +62,7 @@
 //	[18876 debugging] code=tkwait window . -> r= err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:354:evalErr]
 //	$
 //
-// 27190 was the process PID in this particular run. Using the tags allows to
+// 18876 was the process PID in this particular run. Using the tags allows to
 // inspect the Tcl/Tk code executed during the lifetime of the process.
 //
 // # Supported targets
