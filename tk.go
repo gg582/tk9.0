@@ -53,9 +53,18 @@ var NativeScaling float64
 // App is the main/root application window.
 var App *Window
 
-// CollectErrors selects the behaviour on errors for certain functions that do
-// not return error.
-var CollectErrors bool
+//TODO? ErrorMsg
+
+// Error modes
+const (
+	// Errors will panic with a stack trace.
+	PanicOnError = iota
+	// Errors will be recorded into the Error variable using errors.Join
+	CollectErrors
+)
+
+// ErrorMode selects the action taken on errors.
+var ErrorMode int
 
 // Error records errors when [CollectErrors] is true.
 var Error error
@@ -235,17 +244,17 @@ func tclSafeInBraces(s string) string {
 }
 
 func setDefaults() {
-	CollectErrors = true
+	ErrorMode = CollectErrors
 
-	defer func() { CollectErrors = false }()
+	defer func() { ErrorMode = PanicOnError }()
 
 	App = &Window{}
 	exitHandler = Command(func() { Destroy(App) })
 	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
 	NativeScaling = TkScaling()
 	if s := os.Getenv(ScaleEnvVar); s != "" {
-		if k, err := strconv.ParseFloat(s, 64); err == nil && k >= 0.5 && k <= 5 {
-			TkScaling(k * NativeScaling)
+		if k, err := strconv.ParseFloat(s, 64); err == nil {
+			TkScaling(min(max(k, 0.5), 5) * NativeScaling)
 		}
 	}
 	if nm := os.Getenv(ThemeEnvVar); nm != "" {
@@ -359,14 +368,17 @@ func evalErr(code string) (r string) {
 }
 
 func fail(err error) {
-	if !CollectErrors {
+	switch ErrorMode {
+	default:
+		fallthrough
+	case PanicOnError:
 		if dmesgs {
 			dmesg("PANIC %v", err)
 		}
 		panic(err)
+	case CollectErrors:
+		Error = errors.Join(Error, err)
 	}
-
-	Error = errors.Join(Error, err)
 }
 
 func winCollect(w *Window, options ...Opt) string {

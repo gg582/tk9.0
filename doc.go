@@ -46,16 +46,20 @@
 // click the Hello button. With the tk.dmesg tag the package initialization
 // prints the debug messages path. So we can view it, for example, like this:
 //
-//	$ go run -tags=tk.dmesg _examples/debugging.go | tee log ; cat $(head -1 log)
+//	$ go run -tags=tk.dmesg _examples/debugging.go | tee log
 //	...
-//	[27190 debugging] code=wm iconphoto . img2 -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
-//	[27190 debugging] code=wm title . debugging -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
-//	[27190 debugging] code=. configure -padx 4m -pady 3m -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
-//	[27190 debugging] code=tk::PlaceWindow . center -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
-//	[27190 debugging] code=ttk::button ..tbutton4 -text Hello -command {eventDispatcher 3} -> r=.tbutton4 err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:266:newChild]
-//	[27190 debugging] code=pack .tbutton4 -ipadx 10 -ipady 5 -padx 20 -pady 10 -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
-//	[27190 debugging] code=destroy . -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
-//	[27190 debugging] code=tkwait window . -> r= err=<nil> [tk_purego.go:228:eval tk_purego.go:228:eval tk.go:278:evalErr]
+//	/tmp/debugging-18876-20240928-163046
+//	$ cat /tmp/debugging-18876-20240928-163046
+//	[18876 debugging] enter [dmesgon.go:32:0 proc.go:7278:doInit1 proc.go:7245:doInit]
+//	...
+//	[18876 debugging] code=wm iconphoto . img2 -> r= err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:354:evalErr]
+//	[18876 debugging] code=wm title . debugging -> r= err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:354:evalErr]
+//	[18876 debugging] code=. configure -padx 4m -pady 3m -> r= err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:354:evalErr]
+//	[18876 debugging] code=tk::PlaceWindow . center -> r= err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:354:evalErr]
+//	[18876 debugging] code=ttk::button ..tbutton4 -text Hello -command {eventDispatcher 3} -> r=.tbutton4 err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:342:newChild]
+//	[18876 debugging] code=pack .tbutton4 -ipadx 10 -ipady 5 -padx 20 -pady 10 -> r= err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:354:evalErr]
+//	[18876 debugging] code=destroy . -> r= err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:354:evalErr]
+//	[18876 debugging] code=tkwait window . -> r= err=<nil> [tk_purego.go:225:eval tk_purego.go:225:eval tk.go:354:evalErr]
 //	$
 //
 // 27190 was the process PID in this particular run. Using the tags allows to
@@ -102,19 +106,22 @@
 //
 // # Completeness
 //
-// At the moment the package is a [MVP] allowing to build at least simple
-// programs. It does not yet cover all of the functionality C Tcl/Tk provides.
-// Please report needed, but missing and not yet requested Tcl/Tk features/APIs
-// at the [issue tracker], thanks.
+// At the moment the package is a [MVP] allowing to build at least some simple,
+// yet useful programs. The full Tk API is not yet usable. Please report
+// needed, but non-exposed Tk features at the [issue tracker], thanks.
+//
+// Providing feedback about the missing building blocks, bugs and your user
+// experience is invaluable in helping this package to eventually reach version
+// 1. See also [RERO].
 //
 // # Error handling
 //
-// The [CollectErrors] variable selects the behaviour on errors for certain
+// The [ErrorMode] variable selects the behaviour on errors for certain
 // functions that do not return error.
 //
-// When CollectErrors is false, errors will panic, providing a stack trace.
+// When ErrorMode is PanicOnError, the default, errors will panic, providing a stack trace.
 //
-// When CollectErrors is true, errors will be recorded using [errors.Join] in
+// When ErrorMode is CollectErrors, errors will be recorded using [errors.Join] in
 // the [Error] variable.  Even if a function does not return error, it is still
 // possible to handle errors in the usual way when needed, except that Error is
 // now a static variable. That's a problem in the general case, but less so in
@@ -122,7 +129,7 @@
 // documented elsewhere.
 //
 //	// Explicit error handling.
-//	CollectErrors = true
+//	ErrorMode = CollectErrors
 //	if SomeFunnction(someArgument); Error != nil {
 //		... error handling goes here
 //	}
@@ -259,6 +266,7 @@
 //
 // [FreeBSD]: https://github.com/ebitengine/purego/blob/7402fed73989eaf478f4f7905862d0f04537ac8c/internal/fakecgo/freebsd.go#L15
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
+// [RERO]: https://en.wikipedia.org/wiki/Release_early,_release_often
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
 // [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0

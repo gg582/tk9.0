@@ -348,14 +348,13 @@ Rendering plain TeX (_examples/tex.go). No runtime dependencies required.
      2	
      3	import . "modernc.org/tk9.0"
      4	
-     5	const tex = `$$\int _0 ^\infty {{\sin ax \sin bx}\over{x^2}}\,dx = {\pi a\over 2}$$`
-     6	
-     7	func main() {
-     8		Pack(Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*TkScaling()*72/600))))),
-     9			TExit(),
-    10			Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
-    11		App.Center().Wait()
-    12	}
+     5	func main() {
+     6		tex := `$$\int _0 ^\infty {{\sin ax \sin bx}\over{x^2}}\,dx = {\pi a\over 2}$$`
+     7		Pack(Label(Relief("sunken"), Image(NewPhoto(Data(TeX(tex, 2*TkScaling()*72/600))))),
+     8			TExit(),
+     9			Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
+    10		App.Center().Wait()
+    11	}
 
 ![embed](_examples/embed.png "embed")
 
@@ -386,9 +385,9 @@ Embedding pictures, TeX and other widgets in Text (_examples/embed.go).
     23		t.TagConfigure("t", Font("times", fontSize))
     24		sym := " <t>T<e>E</e>X</t> "
     25		tex := `$Q(\xi) = \lambda_1 y_1^2 \sum_{i=2}^n \sum_{j=2}^n y_i b_{ij} y_j$`
-    26		t.InsertML(`<c>Hello Go + Tk`, NewPhoto(Data(icon)), Padx("4p"), `users!</c>
-    27	<br><br><c>Hello Go + Tk +`, sym, tex, ` users! (\$inline math\$)</c>
-    28	<br><br><c>Hello Go + Tk +`, sym, `$`+tex+`$`, ` users! (\$\$display math\$\$)</c>
+    26		t.InsertML(`<c>Hello Go + Tk`, NewPhoto(Data(icon)), Padx("4p"), `users!
+    27	<br><br>Hello Go + Tk +`, sym, tex, ` users! (\$inline math\$)
+    28	<br><br>Hello Go + Tk +`, sym, `$`+tex+`$`, ` users! (\$\$display math\$\$)</c>
     29	<br><br>The above exemplifies embeding pictures and`, sym, `scripts. A text widget can also embed other widgets. For example,
     30	when a`, Button(font, Txt("<Tbutton>")), Padx("4p"), Pady("2p"), Align("center"), `and
     31	a`, Entry(font, Textvariable("<TEntry>"), Background(White), Width(8)), Padx("4p"), Pady("2p"), Align("center"), `are part of
