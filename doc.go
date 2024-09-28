@@ -85,9 +85,10 @@
 //
 // Specific to [FreeBSD]:
 //
-//	Note: when building with cross-compiling or CGO_ENABLED=0, add
-//	the following argument to `go` so that these symbols are defined by
-//	making fakecgo the Cgo.
+// When building with cross-compiling or CGO_ENABLED=0, add the following
+// argument to `go` so that these symbols are defined by making fakecgo the
+// Cgo.
+//
 //	  -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
 //
 // # Builders
@@ -96,14 +97,15 @@
 //
 // # Runtime dependencies
 //
-//   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot 5.4+ executable
+//   - [Img.Graph] and [CanvasWidget.Graph] require the gnuplot executable
 //     available in $PATH.
 //
 // # Completeness
 //
-// At the moment the package is a [MVP]. It does not cover all of the
-// functionality C Tcl/Tk provides. Please report needed, but missing and not
-// yet requested Tcl/Tk features/APIs at the [issue tracker], thanks.
+// At the moment the package is a [MVP] allowing to build at least simple
+// programs. It does not yet cover all of the functionality C Tcl/Tk provides.
+// Please report needed, but missing and not yet requested Tcl/Tk features/APIs
+// at the [issue tracker], thanks.
 //
 // # Error handling
 //
@@ -255,7 +257,7 @@
 // You can support the maintenance and further development of this package at
 // [jnml's LiberaPay] (using PayPal).
 //
-// [FreeBSD]: https://github.com/ebitengine/purego/blob/ff2c2cce0d0b43e3ed9743fcd3408cbd9187f835/internal/fakecgo/freebsd.go#L15
+// [FreeBSD]: https://github.com/ebitengine/purego/blob/7402fed73989eaf478f4f7905862d0f04537ac8c/internal/fakecgo/freebsd.go#L15
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
