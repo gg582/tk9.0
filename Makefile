@@ -2,7 +2,8 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-.PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd build_all_targets
+.PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd \
+	build_all_targets sigtest
 
 TAR = tcl-core9.0.0-src.tar.gz
 URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
@@ -200,14 +201,5 @@ lib_freebsd: download
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
 
-# demo: #TODO in code
-# 	TK9_DEMO=1 go run _examples/tori.go +900+400 &
-# 	TK9_DEMO=1 go run _examples/photo.go +1200+50 &
-# 	TK9_DEMO=1 go run _examples/tex.go +1500+0 &
-# 	TK9_DEMO=1 go run _examples/splot.go +470+90 &
-# 	TK9_DEMO=1 go run _examples/svg.go +0+0 &
-# 	TK9_DEMO=1 go run _examples/font.go +0+500 &
-# 	TK9_DEMO=1 go run _examples/text.go +60+400 &
-# 	TK9_DEMO=1 go run _examples/embed.go +460+600 &
-# 	TK9_DEMO=1 go run _examples/calc.go +540+25 &
-# 	TK9_DEMO=1 go run _examples/b5.go +840+30 &
+sigtest:
+	go run -tags=tk.dmesg _examples/hello.go 2>&1 | tee log-dmesg ; less $(shell head -1 log-dmesg)
