@@ -3,7 +3,7 @@
 # license that can be found in the LICENSE file.
 
 .PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd \
-	build_all_targets sigtest
+	build_all_targets
 
 TAR = tcl-core9.0.0-src.tar.gz
 URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
@@ -200,9 +200,3 @@ lib_freebsd: download
 	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
-
-sigtest:
-	@echo $(shell go env GOOS)/$(shell go env GOARCH)
-	@echo $(GOOS)/$(GOARCH)
-	go build -o /dev/null _examples/hello.go
-	go run -tags=tk.dmesg _examples/hello.go 2>&1 | tee log-dmesg ; head -4 $(shell head -1 log-dmesg)
