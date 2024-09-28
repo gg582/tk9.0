@@ -90,14 +90,15 @@ func getCacheDir() (r string, err error) {
 		return "", err
 	}
 
-	r0 := filepath.Join(r, "modernc.org")
-	r = filepath.Join(r0, libtk.Version)
+	r0 := filepath.Join(r, "modernc.org", libVersion, goos)
+	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
 		if checkSig(r, shasig) {
 			return r, nil
 		}
-		return r, nil
+
+		os.RemoveAll(r) // Tampered or corrupted.
 	}
 
 	os.MkdirAll(r0, 0700)

@@ -115,6 +115,9 @@ var (
 )
 
 func checkSig(dir string, sig map[string]string) (r bool) {
+	if dmesgs {
+		dmesg("checkSig(%q, %q)", dir, sig)
+	}
 	if err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
