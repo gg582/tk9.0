@@ -204,4 +204,5 @@ lib_freebsd: download
 sigtest:
 	@echo $(shell go env GOOS)/$(shell go env GOARCH)
 	@echo $(GOOS)/$(GOARCH)
+	go build -o /dev/null _examples/hello.go
 	go run -tags=tk.dmesg _examples/hello.go 2>&1 | tee log-dmesg ; head -4 $(shell head -1 log-dmesg)
