@@ -202,4 +202,6 @@ lib_freebsd: download
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
 
 sigtest:
-	go run -tags=tk.dmesg _examples/hello.go 2>&1 | tee log-dmesg ; less $(shell head -1 log-dmesg)
+	@echo $(shell go env GOOS)/$(shell go env GOARCH)
+	@echo $(GOOS)/$(GOARCH)
+	go run -tags=tk.dmesg _examples/hello.go 2>&1 | tee log-dmesg ; head -3 $(shell head -1 log-dmesg)
