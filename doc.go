@@ -89,7 +89,7 @@
 // argument to `go` so that these symbols are defined by making fakecgo the
 // Cgo.
 //
-//	  -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+//	-gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
 //
 // # Builders
 //

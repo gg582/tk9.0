@@ -34,7 +34,9 @@ var (
 	interp *tcl.Interp
 
 	shasig = map[string]string{
-		"TODO": "",
+		// other
+		"tcl_library.zip": "ef851d549039c822cd06af0c657c8173006eae90f997bdae11c60c0bdc5a0c1c",
+		"tk_library.zip":  "2afaf3ccb4521fe44d330b4da077d7d433d377f9ffc56f5ce8decd1689e00352",
 	}
 )
 
