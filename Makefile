@@ -4,10 +4,10 @@
 
 .PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd build_all_targets
 
-TAR = tcl-core9.0.0rc2-src.tar.gz
-URL = http://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
-TAR2 = tk9.0.0rc2-src.tar.gz
-URL2 = http://deac-riga.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR2)
+TAR = tcl-core9.0.0-src.tar.gz
+URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
+TAR2 = tk9.0.0-src.tar.gz
+URL2 = http://prdownloads.sourceforge.net/tcl/$(TAR2)
 GOOS = $(shell go env GOOS)
 GOARCH = $(shell go env GOARCH)
 WIN32 = embed/windows/386
@@ -15,6 +15,8 @@ WIN64 = embed/windows/amd64
 WINARM64 = embed/windows/arm64
 
 build_all_targets:
+	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build
+	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
 	GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build
 	GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c
 	GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
@@ -41,6 +43,8 @@ build_all_targets:
 	GOOS=windows GOARCH=386 CGO_ENABLED=0 go test -o /dev/null -c
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build
+	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c
 
 all: editor
 	golint 2>&1

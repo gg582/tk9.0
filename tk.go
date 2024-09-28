@@ -39,7 +39,11 @@ const (
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
 	goarch         = runtime.GOARCH
 	goos           = runtime.GOOS
-	libVersion     = "tk9.0.1"
+	libVersion     = "tk9.0.0"
+
+	tcl_eval_direct = 0x40000 // tcl9.0b3/generic/tcl.h:978
+	tcl_ok          = 0       // tcl9.0b3/generic/tcl.h:522
+	tcl_error       = 1       // tcl9.0b3/generic/tcl.h:523
 )
 
 // NativeScaling is the value returned by TKScaling in package initialization before it is possibly
@@ -110,8 +114,8 @@ var (
 	textVariables = map[*Window]string{} // : tclName
 )
 
-func checkSig(dir string, sig map[string]string) bool {
-	return filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+func checkSig(dir string, sig map[string]string) (r bool) {
+	if err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -137,7 +141,14 @@ func checkSig(dir string, sig map[string]string) bool {
 
 		delete(sig, base)
 		return nil
-	}) == nil && len(sig) == 0
+	}); err != nil || len(sig) != 0 {
+		if dmesgs {
+			dmesg("checkSig(%q) failed: %v", dir, err)
+		}
+		return false
+	}
+
+	return true
 }
 
 // Returns a single Tcl string, no braces, except {} if returned for s == "".

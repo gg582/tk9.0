@@ -19,13 +19,6 @@ import (
 	"modernc.org/memory"
 )
 
-const (
-	tcl_eval_direct = 0x40000 // tcl9.0b3/generic/tcl.h:978
-	tcl_ok          = 0       // tcl9.0b3/generic/tcl.h:522
-	tcl_error       = 1       // tcl9.0b3/generic/tcl.h:523
-
-)
-
 var (
 	// No mutex, the package must be used by a single goroutine only.
 	allocator memory.Allocator
