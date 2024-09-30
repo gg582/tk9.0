@@ -96,13 +96,17 @@ func getTile(width, height int, color string) (r *Img) {
 // ButtonStyle defines a button style. ATM only when using the "default" theme.
 //
 // This function is intended for prototyping and will be most probably unexported at some time.
-func ButtonStyle(style string, colors ButtonColors, background string) string {
+func ButtonStyle(style string, colors ButtonColors, background string, focused bool) string {
 	width := TkScaling() * 72 * buttonFocusDecoratorCorner
 	stroke := TkScaling() * 72 * buttonFocusDecorator
 	th := TkScaling() * 72 * buttonTileHeight
 	r := width - stroke/2
 	clip := width - stroke
-	ocorners := getCorners(round(width), round(width), round(r), round(stroke), colors[ButtonFace], background, background)
+	focus := background
+	if focused {
+		focus = colors[ButtonFocus]
+	}
+	ocorners := getCorners(round(width), round(width), round(r), round(stroke), colors[ButtonFace], focus, background)
 	oq1 := style + ".p1"
 	oq2 := style + ".p2"
 	oq3 := style + ".p3"
@@ -111,7 +115,7 @@ func ButtonStyle(style string, colors ButtonColors, background string) string {
 	StyleElementCreate(oq2, "image", ocorners[1])
 	StyleElementCreate(oq3, "image", ocorners[2])
 	StyleElementCreate(oq4, "image", ocorners[3])
-	icorners := getCorners(round(width), round(clip), round(r), round(stroke), colors[ButtonFace], background, background)
+	icorners := getCorners(round(width), round(clip), round(r), round(stroke), colors[ButtonFace], focus, background)
 	iq1 := style + ".iq1"
 	iq2 := style + ".iq2"
 	iq3 := style + ".iq3"
@@ -137,56 +141,7 @@ func ButtonStyle(style string, colors ButtonColors, background string) string {
 					iq3, Sticky("sw"),
 					iq4, Sticky("se"),
 					"Button.label", Sticky("nswe")))))
-	StyleConfigure(style, Background(background), Borderwidth(0), Compound(true), FocusColor(Black), FocusSolid(false),
-		FocusThickness(0), Foreground(colors[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
-	return style
-}
-
-// FocusedButtonStyle defines a focused button style. ATM only when using the "default" theme.
-//
-// This function is intended for prototyping and will be most probably unexported at some time.
-func FocusedButtonStyle(style string, colors ButtonColors, background string) string {
-	width := TkScaling() * 72 * buttonFocusDecoratorCorner
-	stroke := TkScaling() * 72 * buttonFocusDecorator
-	th := TkScaling() * 72 * buttonTileHeight
-	r := width - stroke/2
-	clip := width - stroke
-	ocorners := getCorners(round(width), round(width), round(r), round(stroke), colors[ButtonFace], colors[ButtonFocus], background)
-	oq1 := style + ".p1"
-	oq2 := style + ".p2"
-	oq3 := style + ".p3"
-	oq4 := style + ".p4"
-	StyleElementCreate(oq1, "image", ocorners[0])
-	StyleElementCreate(oq2, "image", ocorners[1])
-	StyleElementCreate(oq3, "image", ocorners[2])
-	StyleElementCreate(oq4, "image", ocorners[3])
-	icorners := getCorners(round(width), round(clip), round(r), round(stroke), colors[ButtonFace], colors[ButtonFocus], background)
-	iq1 := style + ".iq1"
-	iq2 := style + ".iq2"
-	iq3 := style + ".iq3"
-	iq4 := style + ".iq4"
-	StyleElementCreate(iq1, "image", icorners[0])
-	StyleElementCreate(iq2, "image", icorners[1])
-	StyleElementCreate(iq3, "image", icorners[2])
-	StyleElementCreate(iq4, "image", icorners[3])
-	tile := "Tile." + style + ".tile"
-	t := getTile(8, round(th), colors[ButtonFace])
-	StyleElementCreate(tile, "image", t)
-	StyleLayout(style,
-		"Button.border", Sticky("nswe"), Children(
-			"Button.focus", Sticky("nswe"), Children(
-				oq1, Sticky("ne"),
-				oq2, Sticky("nw"),
-				oq3, Sticky("sw"),
-				oq4, Sticky("se"),
-				"Button.padding", Sticky("nswe"), Children(
-					tile,
-					iq1, Sticky("ne"),
-					iq2, Sticky("nw"),
-					iq3, Sticky("sw"),
-					iq4, Sticky("se"),
-					"Button.label", Sticky("nswe")))))
-	StyleConfigure(style, Background(colors[ButtonFocus]), Borderwidth(0), Compound(true), FocusColor(Black), FocusSolid(false),
+	StyleConfigure(style, Background(focus), Borderwidth(0), Compound(true), FocusColor(Black), FocusSolid(false),
 		FocusThickness(0), Foreground(colors[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
 	return style
 }

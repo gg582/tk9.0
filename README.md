@@ -444,7 +444,9 @@ Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modify
 
 ![b5](_examples/b5.png "b5")
 
-Technology preview of a Bootstrap 5-like theme buttons (_examples/b5.go). Only a partial prototype at the moment.
+Technology preview of a Bootstrap 5-like theme buttons (_examples/b5.go). Only
+a partial prototype/problem study/work in progress at the moment. But it may
+get there, eventually.
 
      1	package main
      2	
@@ -454,23 +456,45 @@ Technology preview of a Bootstrap 5-like theme buttons (_examples/b5.go). Only a
      6	)
      7	
      8	func main() {
-     9		StyleThemeUse("default")
-    10		opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
-    11		Grid(TButton(Txt("Primary"), Style(b5.ButtonStyle("primary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#0d6efd"}, "#fff"))),
-    12			TButton(Txt("Secondary"), Style(b5.ButtonStyle("secondary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d"}, "#fff"))),
-    13			TButton(Txt("Success"), Style(b5.ButtonStyle("sucess.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754"}, "#fff"))),
-    14			opts)
-    15		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("danger.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
-    16			TButton(Txt("Warning"), Style(b5.ButtonStyle("warning.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107"}, "#fff"))),
-    17			TButton(Txt("Info"), Style(b5.ButtonStyle("info.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0"}, "#fff"))),
-    18			opts)
-    19		Grid(TButton(Txt("Light"), Style(b5.ButtonStyle("light.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#f8f9fa"}, "#fff"))),
-    20			TButton(Txt("Dark"), Style(b5.ButtonStyle("dark.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#212529"}, "#fff"))),
-    21			TButton(Txt("Link"), Style(b5.ButtonStyle("link.TButton", b5.ButtonColors{b5.ButtonText: "#1774fd", b5.ButtonFace: "#fff"}, "#fff"))),
-    22			opts)
-    23		Grid(TExit(), Columnspan(3), opts)
-    24		App.Configure(Background("#fff")).Wait()
-    25	}
+     9		background := White
+    10		primary := b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#0d6efd", b5.ButtonFocus: "#98c1fe"}
+    11		secondary := b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d", b5.ButtonFocus: "#c0c4c8"}
+    12		success := b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754", b5.ButtonFocus: "#9dccb6"}
+    13		danger := b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545", b5.ButtonFocus: "#f0a9b0"}
+    14		warning := b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107", b5.ButtonFocus: "#ecd182"}
+    15		info := b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0", b5.ButtonFocus: "#85d5e5"}
+    16		light := b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#f8f9fa", b5.ButtonFocus: "#e9e9ea"}
+    17		dark := b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#212529", b5.ButtonFocus: "#a0a2a4"}
+    18		link := b5.ButtonColors{b5.ButtonText: "#1774fd", b5.ButtonFace: "#fff", b5.ButtonFocus: "#c2dbfe"}
+    19		StyleThemeUse("default")
+    20		opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
+    21		Grid(TButton(Txt("Primary"), Style(b5.ButtonStyle("primary.TButton", primary, background, false))),
+    22			TButton(Txt("Secondary"), Style(b5.ButtonStyle("secondary.TButton", secondary, background, false))),
+    23			TButton(Txt("Success"), Style(b5.ButtonStyle("success.TButton", success, background, false))),
+    24			opts)
+    25		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("danger.TButton", danger, background, false))),
+    26			TButton(Txt("Warning"), Style(b5.ButtonStyle("warning.TButton", warning, background, false))),
+    27			TButton(Txt("Info"), Style(b5.ButtonStyle("info.TButton", info, background, false))),
+    28			opts)
+    29		Grid(TButton(Txt("Light"), Style(b5.ButtonStyle("light.TButton", light, background, false))),
+    30			TButton(Txt("Dark"), Style(b5.ButtonStyle("dark.TButton", dark, background, false))),
+    31			TButton(Txt("Link"), Style(b5.ButtonStyle("link.TButton", link, background, false))),
+    32			opts)
+    33		Grid(TButton(Txt("Primary"), Style(b5.ButtonStyle("focused.primary.TButton", primary, background, true))),
+    34			TButton(Txt("Secondary"), Style(b5.ButtonStyle("focused.secondary.TButton", secondary, background, true))),
+    35			TButton(Txt("Success"), Style(b5.ButtonStyle("focused.success.TButton", success, background, true))),
+    36			opts)
+    37		Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("focused.danger.TButton", danger, background, true))),
+    38			TButton(Txt("Warning"), Style(b5.ButtonStyle("focused.warning.TButton", warning, background, true))),
+    39			TButton(Txt("Info"), Style(b5.ButtonStyle("focused.info.TButton", info, background, true))),
+    40			opts)
+    41		Grid(TButton(Txt("Light"), Style(b5.ButtonStyle("focused.light.TButton", light, background, true))),
+    42			TButton(Txt("Dark"), Style(b5.ButtonStyle("focused.dark.TButton", dark, background, true))),
+    43			TButton(Txt("Link"), Style(b5.ButtonStyle("focused.link.TButton", link, background, true))),
+    44			opts)
+    45		Grid(TExit(), Columnspan(3), opts)
+    46		App.Configure(Background(background)).Wait()
+    47	}
 
 ----
 
