@@ -11,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"unsafe"
 
 	"github.com/evilsocket/islazy/zip"
@@ -283,14 +282,14 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 	}
 
 	arg1 := goTransientString(*(*uintptr)(unsafe.Pointer(argv + unsafe.Sizeof(uintptr(0)))))
-	id, err := strconv.Atoi(arg1)
+	id, e, err := newEvent(arg1)
 	if err != nil {
 		setResult(fmt.Sprintf("eventDispatcher internal error: argv[1]=%q, err=%v", arg1, err))
 		return tcl_error
 	}
 
 	h := handlers[int32(id)]
-	e := &Event{W: h.w}
+	e.W = h.w
 	for i := int32(2); i < argc; i++ {
 		e.args = append(e.args, goString(*(*uintptr)(unsafe.Pointer(argv + uintptr(i)*unsafe.Sizeof(uintptr(0))))))
 	}

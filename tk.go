@@ -121,6 +121,7 @@ var (
 	//TODO remove the associated tcl var on window destroy event both from the
 	//interp and this map.
 	textVariables = map[*Window]string{} // : tclName
+	windowIndex   = map[string]*Window{}
 )
 
 func checkSig(dir string, sig map[string]string) (r bool) {
@@ -356,6 +357,7 @@ func (w *Window) newChild(nm string, options ...Opt) (rw *Window) {
 	if len(tvs) != 0 {
 		rw.Configure(tvs[len(tvs)-1])
 	}
+	windowIndex[rw.fpath] = rw
 	return rw
 }
 
@@ -437,14 +439,55 @@ func (s stringOption) optionString(w *Window) string {
 // EventHandler is the type used by call backs.
 type EventHandler func(*Event)
 
-// Event communicates information with an event handler.
+// Event communicates information with an event handler. All handlers can use the Err field. Simple
+// handlers, like in
+//
+//	Button(..., Command(func(e *Event) {...}))
+//
+// can use the 'W' field, if applicable.  All other fields are valid only in
+// handlers bound using [Bind].
 type Event struct {
 	// Event handlers should set Err on failure.
 	Err error
-	// Event source, if any. This field is bound when the event handler was created.
+	// Event source, if any. This field is set when the event handler was
+	// created.
 	W *Window
 
+	// The window to which the event was reported (the window field from
+	// the event). Valid for all event types.  This field is set when the
+	// event is handled.
+	EventWindow *Window
+	// The number of the last client request processed by the server (the serial
+	// field from the event). Valid for all event types.
+	Serial int64
+
 	args []string
+}
+
+// Called from eventDispatcher. Arg1 is handler id, optionally followed by a
+// list of Bind substitution values.
+func newEvent(arg1 string) (id int, e *Event, err error) {
+	e = &Event{}
+	a := strings.Fields(arg1)
+	if len(a) == 0 {
+		return -1, e, fmt.Errorf("internal error: missing handler ID")
+	}
+
+	if id, err = strconv.Atoi(a[0]); err != nil {
+		return id, e, fmt.Errorf("newEvent: parsing event ID %q: %v", a[0], err)
+	}
+
+	for i, v := range a[1:] {
+		switch i {
+		case 0: // %#
+			if e.Serial, err = strconv.ParseInt(v, 10, 64); err != nil {
+				return id, e, fmt.Errorf("newEvent: parsing event serial %q: %v", v, err)
+			}
+		case 1: // %W
+			e.EventWindow = windowIndex[v]
+		}
+	}
+	return id, e, nil
 }
 
 // ScrollSet communicates events to scrollbars. Example:
@@ -487,6 +530,8 @@ type eventHandler struct {
 	id       int32
 	tcl      string
 	w        *Window
+
+	lateBind bool
 }
 
 func newEventHandler(option string, handler any) (r *eventHandler) {
@@ -518,7 +563,12 @@ func (e *eventHandler) optionString(w *Window) string {
 	}
 
 	e.w = w
-	return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
+	switch {
+	case e.lateBind:
+		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W}}", e.tcl, e.id)
+	default:
+		return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
+	}
 }
 
 func optionString(v any) string {
@@ -588,6 +638,7 @@ func Bind(options ...any) {
 			a = append(a, x.String())
 		case *eventHandler:
 			x.tcl = ""
+			x.lateBind = true
 			a = append(a, x.optionString(w))
 		default:
 			a = append(a, tclSafeStringBind(fmt.Sprint(x)))

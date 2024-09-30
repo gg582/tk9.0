@@ -13,7 +13,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strconv"
 
 	"modernc.org/libc"
 	libtcl "modernc.org/libtcl9.0"
@@ -134,16 +133,17 @@ func eval(code string) (r string, err error) {
 	return interp.Eval(code, tcl.EvalDirect)
 }
 
-func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
-	id, err := strconv.Atoi(args[1])
+func eventDispatcher(data any, interp *tcl.Interp, argv []string) int {
+	id, e, err := newEvent(argv[1])
 	if err != nil {
-		panic(todo("event dispatcher internal error: %q", args))
+		interp.SetResult(fmt.Sprintf("eventDispatcher internal error: argv1=`%s`", argv[1]))
+		return tcl_error
 	}
 
 	h := handlers[int32(id)]
-	e := &Event{W: h.w}
-	if len(args) > 2 { // eg.: ["eventDispatcher", "42", "0.1", "0.9"]
-		e.args = args[2:]
+	e.W = h.w
+	if len(argv) > 2 { // eg.: ["eventDispatcher", "42", "0.1", "0.9"]
+		e.args = argv[2:]
 	}
 	switch h.callback(e); {
 	case e.Err != nil:
