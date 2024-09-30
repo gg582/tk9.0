@@ -347,11 +347,11 @@ func (w *Window) newChild(nm string, options ...Opt) (rw *Window) {
 	}
 	path := fmt.Sprintf("%s.%s%v", w, nm, id.Add(1))
 	options, tvs := w.split(options)
-	code := fmt.Sprintf("%s %s %s", class, path, winCollect(w, options...))
-	r, err := eval(code)
-	rw = &Window{fpath: r}
-	if err != nil {
-		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+	rw = &Window{}
+	code := fmt.Sprintf("%s %s %s", class, path, winCollect(rw, options...))
+	var err error
+	if rw.fpath, err = eval(code); err != nil {
+		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, rw.fpath, err))
 	}
 	if len(tvs) != 0 {
 		rw.Configure(tvs[len(tvs)-1])
@@ -439,8 +439,11 @@ type EventHandler func(*Event)
 
 // Event communicates information with an event handler.
 type Event struct {
-	Err  error   // Even handlers should set Err on failure.
-	W    *Window // Event source
+	// Event handlers should set Err on failure.
+	Err error
+	// Event source, if any. This field is bound when the event handler was created.
+	W *Window
+
 	args []string
 }
 
