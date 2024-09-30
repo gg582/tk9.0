@@ -250,6 +250,8 @@ func setDefaults() {
 	defer func() { ErrorMode = PanicOnError }()
 
 	App = &Window{}
+	windowIndex[""] = App
+	windowIndex["."] = App
 	exitHandler = Command(func() { Destroy(App) })
 	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
 	NativeScaling = TkScaling()
