@@ -623,6 +623,8 @@ func optionString(v any) string {
 //   - If the tag is the name of a toplevel window the binding applies to the toplevel window and all its internal windows.
 //   - If tag has the value all, the binding applies to all windows in the application.
 //
+// Example usage in _examples/events.go.
+//
 // Additional information might be available at the [Tcl/Tk bind] page.
 //
 // [Tcl/Tk bind]: https://www.tcl.tk/man/tcl9.0/TkCmd/bind.html

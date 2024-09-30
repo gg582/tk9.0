@@ -70,14 +70,28 @@ func getCorners(width, clip, r, strokeWidth int, fill, stroke, background string
 </svg>`,
 		width, r, strokeWidth, fill, stroke, background, 2*width)
 	img := NewPhoto(Data(svg))
-	re[0] = NewPhoto(Width(clip), Height(clip))
-	re[0].Copy(img, From(width, width-clip, width+clip, width))
-	re[1] = NewPhoto(Width(clip), Height(clip))
-	re[1].Copy(img, From(width-clip, width-clip, width, width))
-	re[2] = NewPhoto(Width(clip), Height(clip))
-	re[2].Copy(img, From(width-clip, width, width, width+clip))
-	re[3] = NewPhoto(Width(clip), Height(clip))
-	re[3].Copy(img, From(width, width, width+clip, width+clip))
+	switch {
+	case clip < 0:
+		clip = -clip
+		// x1 y1 x2 y2
+		re[0] = NewPhoto(Width(clip), Height(clip))
+		re[0].Copy(img, From(2*width-clip, 0, 2*width, clip))
+		re[1] = NewPhoto(Width(clip), Height(clip))                 //TODO
+		re[1].Copy(img, From(width-clip, width-clip, width, width)) //TODO
+		re[2] = NewPhoto(Width(clip), Height(clip))                 //TODO
+		re[2].Copy(img, From(width-clip, width, width, width+clip)) //TODO
+		re[3] = NewPhoto(Width(clip), Height(clip))                 //TODO
+		re[3].Copy(img, From(width, width, width+clip, width+clip)) //TODO
+	default:
+		re[0] = NewPhoto(Width(clip), Height(clip))
+		re[0].Copy(img, From(width, width-clip, width+clip, width))
+		re[1] = NewPhoto(Width(clip), Height(clip))
+		re[1].Copy(img, From(width-clip, width-clip, width, width))
+		re[2] = NewPhoto(Width(clip), Height(clip))
+		re[2].Copy(img, From(width-clip, width, width, width+clip))
+		re[3] = NewPhoto(Width(clip), Height(clip))
+		re[3].Copy(img, From(width, width, width+clip, width+clip))
+	}
 	corners[k] = re
 	return re
 }
@@ -104,61 +118,91 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	th := TkScaling() * 72 * buttonTileHeight
 	r := width - stroke/2
 	clip := width - stroke
-	corners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], background, background)
-	q1 := style + ".q1"
-	q2 := style + ".q2"
-	q3 := style + ".q3"
-	q4 := style + ".q4"
-	StyleElementCreate(q1, "image", corners[0])
-	StyleElementCreate(q2, "image", corners[1])
-	StyleElementCreate(q3, "image", corners[2])
-	StyleElementCreate(q4, "image", corners[3])
+	ocorners := getCorners(round(width), round(width), round(r), round(stroke), scheme[ButtonFace], background, background)
+	oq1 := style + ".p1"
+	oq2 := style + ".p2"
+	oq3 := style + ".p3"
+	oq4 := style + ".p4"
+	StyleElementCreate(oq1, "image", ocorners[0])
+	StyleElementCreate(oq2, "image", ocorners[1])
+	StyleElementCreate(oq3, "image", ocorners[2])
+	StyleElementCreate(oq4, "image", ocorners[3])
+	icorners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], background, background)
+	iq1 := style + ".iq1"
+	iq2 := style + ".iq2"
+	iq3 := style + ".iq3"
+	iq4 := style + ".iq4"
+	StyleElementCreate(iq1, "image", icorners[0])
+	StyleElementCreate(iq2, "image", icorners[1])
+	StyleElementCreate(iq3, "image", icorners[2])
+	StyleElementCreate(iq4, "image", icorners[3])
 	tile := "Tile." + style + ".tile"
 	t := getTile(8, round(th), scheme[ButtonFace])
 	StyleElementCreate(tile, "image", t)
 	StyleLayout(style,
-		"Button.border", Sticky("nswe"), Border(1), Children(
+		"Button.border", Sticky("nswe"), Children(
 			"Button.focus", Sticky("nswe"), Children(
+				oq1, Sticky("ne"),
+				oq2, Sticky("nw"),
+				oq3, Sticky("sw"),
+				oq4, Sticky("se"),
 				"Button.padding", Sticky("nswe"), Children(
 					tile,
-					q1, Sticky("ne"),
-					q2, Sticky("nw"),
-					q3, Sticky("sw"),
-					q4, Sticky("se"),
+					iq1, Sticky("ne"),
+					iq2, Sticky("nw"),
+					iq3, Sticky("sw"),
+					iq4, Sticky("se"),
 					"Button.label", Sticky("nswe")))))
-	StyleConfigure(style, Background(background), Borderwidth(10), Compound(true), FocusColor(Black), FocusSolid(false),
-		FocusThickness(0), Foreground(scheme[ButtonText]), Padding(0), Relief("flat"), Shiftrelief(0))
+	StyleConfigure(style, Background(background), Borderwidth(0), Compound(true), FocusColor(Black), FocusSolid(false),
+		FocusThickness(0), Foreground(scheme[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
 	return style
 }
 
-// package main
+// FocusedButtonStyle defines a focused button style. ATM only when using the "default" theme.
 //
-// import (
-// 	"fmt"
-// 	. "modernc.org/tk9.0"
-// 	"modernc.org/tk9.0/b5"
-// )
-//
-// func main() {
-// 	StyleThemeUse("default")
-// 	opts := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m")}
-// 	pb := TButton(Txt("Primary"), Style(b5.ButtonStyle("primary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#0d6efd"}, "#fff")))
-// 	Grid(pb,
-// 		TButton(Txt("Secondary"), Style(b5.ButtonStyle("secondary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#6c757d"}, "#fff"))),
-// 		TButton(Txt("Success"), Style(b5.ButtonStyle("sucess.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#198754"}, "#fff"))),
-// 		opts)
-// 	Grid(TButton(Txt("Danger"), Style(b5.ButtonStyle("danger.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#dc3545"}, "#fff"))),
-// 		TButton(Txt("Warning"), Style(b5.ButtonStyle("warning.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#ffc107"}, "#fff"))),
-// 		TButton(Txt("Info"), Style(b5.ButtonStyle("info.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#0dcaf0"}, "#fff"))),
-// 		opts)
-// 	Grid(TButton(Txt("Light"), Style(b5.ButtonStyle("light.TButton", b5.ButtonColors{b5.ButtonText: "#000", b5.ButtonFace: "#f8f9fa"}, "#fff"))),
-// 		TButton(Txt("Dark"), Style(b5.ButtonStyle("dark.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#212529"}, "#fff"))),
-// 		TButton(Txt("Link"), Style(b5.ButtonStyle("link.TButton", b5.ButtonColors{b5.ButtonText: "#1774fd", b5.ButtonFace: "#fff"}, "#fff"))),
-// 		opts)
-// 	Grid(TExit(), Columnspan(3), opts)
-// 	//style2 := b5.ButtonStyle2("primary.TButton", b5.ButtonColors{b5.ButtonText: "#fff", b5.ButtonFace: "#0d6efd", b5.ButtonFocus: "#ff0000"}, "#fff")
-// 	Bind("TButton", "<FocusIn>", Command(func(e *Event) {
-// 		fmt.Println(e)
-// 	}))
-// 	App.Configure(Background("#fff")).Wait()
-// }
+// This function is intended for prototyping and will be most probably unexported at some time.
+func FocusedButtonStyle(style string, scheme ButtonColors, background string) string {
+	width := TkScaling() * 72 * buttonFocusDecoratorCorner
+	stroke := TkScaling() * 72 * buttonFocusDecorator
+	th := TkScaling() * 72 * buttonTileHeight
+	r := width - stroke/2
+	clip := width - stroke
+	ocorners := getCorners(round(width), round(width), round(r), round(stroke), scheme[ButtonFace], scheme[ButtonFocus], background)
+	oq1 := style + ".p1"
+	oq2 := style + ".p2"
+	oq3 := style + ".p3"
+	oq4 := style + ".p4"
+	StyleElementCreate(oq1, "image", ocorners[0])
+	StyleElementCreate(oq2, "image", ocorners[1])
+	StyleElementCreate(oq3, "image", ocorners[2])
+	StyleElementCreate(oq4, "image", ocorners[3])
+	icorners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], scheme[ButtonFocus], background)
+	iq1 := style + ".iq1"
+	iq2 := style + ".iq2"
+	iq3 := style + ".iq3"
+	iq4 := style + ".iq4"
+	StyleElementCreate(iq1, "image", icorners[0])
+	StyleElementCreate(iq2, "image", icorners[1])
+	StyleElementCreate(iq3, "image", icorners[2])
+	StyleElementCreate(iq4, "image", icorners[3])
+	tile := "Tile." + style + ".tile"
+	t := getTile(8, round(th), scheme[ButtonFace])
+	StyleElementCreate(tile, "image", t)
+	StyleLayout(style,
+		"Button.border", Sticky("nswe"), Children(
+			"Button.focus", Sticky("nswe"), Children(
+				oq1, Sticky("ne"),
+				oq2, Sticky("nw"),
+				oq3, Sticky("sw"),
+				oq4, Sticky("se"),
+				"Button.padding", Sticky("nswe"), Children(
+					tile,
+					iq1, Sticky("ne"),
+					iq2, Sticky("nw"),
+					iq3, Sticky("sw"),
+					iq4, Sticky("se"),
+					"Button.label", Sticky("nswe")))))
+	StyleConfigure(style, Background(scheme[ButtonFocus]), Borderwidth(0), Compound(true), FocusColor(Black), FocusSolid(false),
+		FocusThickness(0), Foreground(scheme[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
+	return style
+}
