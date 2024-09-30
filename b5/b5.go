@@ -13,8 +13,6 @@ import (
 	. "modernc.org/tk9.0"
 )
 
-//TODO const semantics = None?, Primary, Secondary, Success, Info, Warning, Danger, Dark, Light, Link
-
 const (
 	buttonFocusDecoratorCorner = 9 / 96.  // The rounded corner is 9px on a 96 DPI display.
 	buttonFocusDecorator       = 4 / 96.  // 4px on a 96 DPI display.
@@ -70,28 +68,14 @@ func getCorners(width, clip, r, strokeWidth int, fill, stroke, background string
 </svg>`,
 		width, r, strokeWidth, fill, stroke, background, 2*width)
 	img := NewPhoto(Data(svg))
-	switch {
-	case clip < 0:
-		clip = -clip
-		// x1 y1 x2 y2
-		re[0] = NewPhoto(Width(clip), Height(clip))
-		re[0].Copy(img, From(2*width-clip, 0, 2*width, clip))
-		re[1] = NewPhoto(Width(clip), Height(clip))                 //TODO
-		re[1].Copy(img, From(width-clip, width-clip, width, width)) //TODO
-		re[2] = NewPhoto(Width(clip), Height(clip))                 //TODO
-		re[2].Copy(img, From(width-clip, width, width, width+clip)) //TODO
-		re[3] = NewPhoto(Width(clip), Height(clip))                 //TODO
-		re[3].Copy(img, From(width, width, width+clip, width+clip)) //TODO
-	default:
-		re[0] = NewPhoto(Width(clip), Height(clip))
-		re[0].Copy(img, From(width, width-clip, width+clip, width))
-		re[1] = NewPhoto(Width(clip), Height(clip))
-		re[1].Copy(img, From(width-clip, width-clip, width, width))
-		re[2] = NewPhoto(Width(clip), Height(clip))
-		re[2].Copy(img, From(width-clip, width, width, width+clip))
-		re[3] = NewPhoto(Width(clip), Height(clip))
-		re[3].Copy(img, From(width, width, width+clip, width+clip))
-	}
+	re[0] = NewPhoto(Width(clip), Height(clip))
+	re[0].Copy(img, From(width, width-clip, width+clip, width))
+	re[1] = NewPhoto(Width(clip), Height(clip))
+	re[1].Copy(img, From(width-clip, width-clip, width, width))
+	re[2] = NewPhoto(Width(clip), Height(clip))
+	re[2].Copy(img, From(width-clip, width, width, width+clip))
+	re[3] = NewPhoto(Width(clip), Height(clip))
+	re[3].Copy(img, From(width, width, width+clip, width+clip))
 	corners[k] = re
 	return re
 }
@@ -112,13 +96,13 @@ func getTile(width, height int, color string) (r *Img) {
 // ButtonStyle defines a button style. ATM only when using the "default" theme.
 //
 // This function is intended for prototyping and will be most probably unexported at some time.
-func ButtonStyle(style string, scheme ButtonColors, background string) string {
+func ButtonStyle(style string, colors ButtonColors, background string) string {
 	width := TkScaling() * 72 * buttonFocusDecoratorCorner
 	stroke := TkScaling() * 72 * buttonFocusDecorator
 	th := TkScaling() * 72 * buttonTileHeight
 	r := width - stroke/2
 	clip := width - stroke
-	ocorners := getCorners(round(width), round(width), round(r), round(stroke), scheme[ButtonFace], background, background)
+	ocorners := getCorners(round(width), round(width), round(r), round(stroke), colors[ButtonFace], background, background)
 	oq1 := style + ".p1"
 	oq2 := style + ".p2"
 	oq3 := style + ".p3"
@@ -127,7 +111,7 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	StyleElementCreate(oq2, "image", ocorners[1])
 	StyleElementCreate(oq3, "image", ocorners[2])
 	StyleElementCreate(oq4, "image", ocorners[3])
-	icorners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], background, background)
+	icorners := getCorners(round(width), round(clip), round(r), round(stroke), colors[ButtonFace], background, background)
 	iq1 := style + ".iq1"
 	iq2 := style + ".iq2"
 	iq3 := style + ".iq3"
@@ -137,7 +121,7 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 	StyleElementCreate(iq3, "image", icorners[2])
 	StyleElementCreate(iq4, "image", icorners[3])
 	tile := "Tile." + style + ".tile"
-	t := getTile(8, round(th), scheme[ButtonFace])
+	t := getTile(8, round(th), colors[ButtonFace])
 	StyleElementCreate(tile, "image", t)
 	StyleLayout(style,
 		"Button.border", Sticky("nswe"), Children(
@@ -154,20 +138,20 @@ func ButtonStyle(style string, scheme ButtonColors, background string) string {
 					iq4, Sticky("se"),
 					"Button.label", Sticky("nswe")))))
 	StyleConfigure(style, Background(background), Borderwidth(0), Compound(true), FocusColor(Black), FocusSolid(false),
-		FocusThickness(0), Foreground(scheme[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
+		FocusThickness(0), Foreground(colors[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
 	return style
 }
 
 // FocusedButtonStyle defines a focused button style. ATM only when using the "default" theme.
 //
 // This function is intended for prototyping and will be most probably unexported at some time.
-func FocusedButtonStyle(style string, scheme ButtonColors, background string) string {
+func FocusedButtonStyle(style string, colors ButtonColors, background string) string {
 	width := TkScaling() * 72 * buttonFocusDecoratorCorner
 	stroke := TkScaling() * 72 * buttonFocusDecorator
 	th := TkScaling() * 72 * buttonTileHeight
 	r := width - stroke/2
 	clip := width - stroke
-	ocorners := getCorners(round(width), round(width), round(r), round(stroke), scheme[ButtonFace], scheme[ButtonFocus], background)
+	ocorners := getCorners(round(width), round(width), round(r), round(stroke), colors[ButtonFace], colors[ButtonFocus], background)
 	oq1 := style + ".p1"
 	oq2 := style + ".p2"
 	oq3 := style + ".p3"
@@ -176,7 +160,7 @@ func FocusedButtonStyle(style string, scheme ButtonColors, background string) st
 	StyleElementCreate(oq2, "image", ocorners[1])
 	StyleElementCreate(oq3, "image", ocorners[2])
 	StyleElementCreate(oq4, "image", ocorners[3])
-	icorners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], scheme[ButtonFocus], background)
+	icorners := getCorners(round(width), round(clip), round(r), round(stroke), colors[ButtonFace], colors[ButtonFocus], background)
 	iq1 := style + ".iq1"
 	iq2 := style + ".iq2"
 	iq3 := style + ".iq3"
@@ -186,7 +170,7 @@ func FocusedButtonStyle(style string, scheme ButtonColors, background string) st
 	StyleElementCreate(iq3, "image", icorners[2])
 	StyleElementCreate(iq4, "image", icorners[3])
 	tile := "Tile." + style + ".tile"
-	t := getTile(8, round(th), scheme[ButtonFace])
+	t := getTile(8, round(th), colors[ButtonFace])
 	StyleElementCreate(tile, "image", t)
 	StyleLayout(style,
 		"Button.border", Sticky("nswe"), Children(
@@ -202,7 +186,7 @@ func FocusedButtonStyle(style string, scheme ButtonColors, background string) st
 					iq3, Sticky("sw"),
 					iq4, Sticky("se"),
 					"Button.label", Sticky("nswe")))))
-	StyleConfigure(style, Background(scheme[ButtonFocus]), Borderwidth(0), Compound(true), FocusColor(Black), FocusSolid(false),
-		FocusThickness(0), Foreground(scheme[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
+	StyleConfigure(style, Background(colors[ButtonFocus]), Borderwidth(0), Compound(true), FocusColor(Black), FocusSolid(false),
+		FocusThickness(0), Foreground(colors[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
 	return style
 }
