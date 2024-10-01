@@ -80,7 +80,7 @@ func TestTokenizer(t *testing.T) {
 // func capitalize(s string) string {
 // 	return strings.ToUpper(string(s[0])) + s[1:]
 // }
-// 
+//
 // func TestTmp(t *testing.T) {
 // 	ErrorMode = CollectErrors
 // 	themes := StyleThemeNames()

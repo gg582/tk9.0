@@ -24,16 +24,16 @@ var (
 	tiles   = map[tileKey]*Img{}
 )
 
-type ButtonColor int
+type Color int
 
 const (
-	_ ButtonColor = iota
+	_ Color = iota
 	ButtonFace
 	ButtonFocus
 	ButtonText
 )
 
-type ButtonColors map[ButtonColor]string
+type Colors map[Color]string
 
 type tileKey struct {
 	width  int
@@ -96,7 +96,7 @@ func getTile(width, height int, color string) (r *Img) {
 // ButtonStyle defines a button style. ATM only when using the "default" theme.
 //
 // This function is intended for prototyping and will be most probably unexported at some time.
-func ButtonStyle(style string, colors ButtonColors, background string, focused bool) string {
+func ButtonStyle(style string, colors Colors, background string, focused bool) string {
 	width := TkScaling() * 72 * buttonFocusDecoratorCorner
 	stroke := TkScaling() * 72 * buttonFocusDecorator
 	th := TkScaling() * 72 * buttonTileHeight
@@ -143,5 +143,6 @@ func ButtonStyle(style string, colors ButtonColors, background string, focused b
 					"Button.label", Sticky("nswe")))))
 	StyleConfigure(style, Background(focus), Borderwidth(0), Compound(true), Focuscolor(focus), Focussolid(false),
 		Focusthickness(0), Foreground(colors[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
+	StyleMap(style, Background, "disabled", "#edeceb")
 	return style
 }
