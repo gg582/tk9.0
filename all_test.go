@@ -9,8 +9,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"slices"
-	"strings"
 	"testing"
 
 	_ "github.com/adrg/xdg"       // generator.go
