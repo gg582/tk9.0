@@ -502,6 +502,282 @@
 //
 // Layout: Treeitem.separator -sticky nswe
 //
+// # "aqua" theme style guide
+//
+// "Button.button" style element options:
+//
+// "Checkbutton.button" style element options:
+//
+// "Combobox.button" style element options:
+//
+// "DisclosureButton.button" style element options:
+//
+// "Entry.field" style element options:
+//
+//   - [Background]
+//   - [Fieldbackground]
+//
+// "GradientButton.button" style element options:
+//
+// "HelpButton.button" style element options:
+//
+// "Horizontal.Scrollbar.leftarrow" style element options:
+//
+//   - [Orient]
+//
+// "Horizontal.Scrollbar.rightarrow" style element options:
+//
+//   - [Orient]
+//
+// "Horizontal.Scrollbar.thumb" style element options:
+//
+//   - [Orient]
+//
+// "Horizontal.Scrollbar.trough" style element options:
+//
+//   - [Orient]
+//
+// "InlineButton.button" style element options:
+//
+// "Labelframe.border" style element options:
+//
+// "Menubutton.button" style element options:
+//
+// "Notebook.client" style element options:
+//
+// "Notebook.tab" style element options:
+//
+// "Progressbar.track" style element options:
+//
+//   - [Maximum]
+//   - [Mode]
+//   - [Orient]
+//   - [Phase]
+//   - [Value]
+//
+// "Radiobutton.button" style element options:
+//
+// "RecessedButton.button" style element options:
+//
+// "RoundedRectButton.button" style element options:
+//
+// "Scale.slider" style element options:
+//
+// "Scale.trough" style element options:
+//
+//   - [From]
+//   - [Orient]
+//   - [To]
+//   - [Value]
+//
+// "Searchbox.field" style element options:
+//
+//   - [Background]
+//   - [Fieldbackground]
+//
+// "SidebarButton.button" style element options:
+//
+// "Spinbox.downarrow" style element options:
+//
+// "Spinbox.field" style element options:
+//
+//   - [Background]
+//   - [Fieldbackground]
+//
+// "Spinbox.uparrow" style element options:
+//
+// "Toolbar.background" style element options:
+//
+// "Toolbutton.border" style element options:
+//
+// "Treeheading.cell" style element options:
+//
+// "Treeitem.indicator" style element options:
+//
+// "Treeview.treearea" style element options:
+//
+// "Vertical.Scrollbar.downarrow" style element options:
+//
+//   - [Orient]
+//
+// "Vertical.Scrollbar.thumb" style element options:
+//
+//   - [Orient]
+//
+// "Vertical.Scrollbar.trough" style element options:
+//
+//   - [Orient]
+//
+// "Vertical.Scrollbar.uparrow" style element options:
+//
+//   - [Orient]
+//
+// "background" style element options:
+//
+// "field" style element options:
+//
+//   - [Fieldbackground]
+//
+// "fill" style element options:
+//
+// "hseparator" style element options:
+//
+// "separator" style element options:
+//
+// "sizegrip" style element options:
+//
+// "vseparator" style element options:
+//
+// "aqua" theme style list
+//
+//	.
+//
+// Style map: -selectforeground { background systemSelectedTextColor !focus systemSelectedTextColor} -foreground { disabled systemDisabledControlTextColor background systemLabelColor} -selectbackground { background systemSelectedTextBackgroundColor !focus systemSelectedTextBackgroundColor}
+//
+//	DisclosureButton
+//
+// Layout: DisclosureButton.button -sticky nswe
+//
+//	GradientButton
+//
+// Layout: GradientButton.button -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}
+//
+//	Heading
+//
+// Layout: Treeheading.cell -sticky nswe Treeheading.image -side right -sticky {} Treeheading.text -side top -sticky {}
+//
+//	HelpButton
+//
+// Layout: HelpButton.button -sticky nswe
+//
+//	Horizontal.TScrollbar
+//
+// Layout: Horizontal.Scrollbar.trough -sticky we -children {Horizontal.Scrollbar.thumb -sticky nswe Horizontal.Scrollbar.rightarrow -side right -sticky {} Horizontal.Scrollbar.leftarrow -side right -sticky {}}
+//
+//	ImageButton
+//
+// Layout: Button.padding -sticky nswe -children {Button.label -sticky nswe}
+//
+// Style map: -foreground { pressed systemLabelColor !pressed systemSecondaryLabelColor }
+//
+//	InlineButton
+//
+// Layout: InlineButton.button -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}
+//
+// Style map: -foreground { disabled systemWindowBackgroundColor }
+//
+//	Item
+//
+// Layout: Treeitem.padding -sticky nswe -children {Treeitem.indicator -side left -sticky {} Treeitem.image -side left -sticky {} Treeitem.text -side left -sticky {}}
+//
+//	Label
+//
+// Layout: Label.fill -sticky nswe -children {Label.text -sticky nswe}
+//
+//	RecessedButton
+//
+// Layout: RecessedButton.button -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}
+//
+// Style map: -font { selected RecessedFont active RecessedFont pressed RecessedFont } -foreground { {disabled selected} systemWindowBackgroundColor3 {disabled !selected} systemDisabledControlTextColor selected systemTextBackgroundColor active white pressed white }
+//
+//	RoundedRectButton
+//
+// Layout: RoundedRectButton.button -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}
+//
+//	Searchbox
+//
+// Layout: Searchbox.field -sticky nswe -border 1 -children {Entry.padding -sticky nswe -children {Entry.textarea -sticky nswe}}
+//
+//	SidebarButton
+//
+// Layout: SidebarButton.button -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}
+//
+// Style map: -foreground { {disabled selected} systemWindowBackgroundColor3 {disabled !selected} systemDisabledControlTextColor selected systemTextColor active systemTextColor pressed systemTextColor }
+//
+//	TButton
+//
+// Layout: Button.button -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}
+//
+// Style map: -foreground { pressed white {alternate !pressed !background} white disabled systemDisabledControlTextColor}
+//
+//	TCheckbutton
+//
+// Layout: Checkbutton.button -sticky nswe -children {Checkbutton.padding -sticky nswe -children {Checkbutton.label -side left -sticky {}}}
+//
+//	TCombobox
+//
+// Layout: Combobox.button -sticky nswe -children {Combobox.padding -sticky nswe -children {Combobox.textarea -sticky nswe}}
+//
+// Style map: -foreground { disabled systemDisabledControlTextColor } -selectbackground { !focus systemUnemphasizedSelectedTextBackgroundColor }
+//
+//	TEntry
+//
+// Layout: Entry.field -sticky nswe -border 1 -children {Entry.padding -sticky nswe -children {Entry.textarea -sticky nswe}}
+//
+// Style map: -foreground { disabled systemDisabledControlTextColor } -selectbackground { !focus systemUnemphasizedSelectedTextBackgroundColor }
+//
+//	TLabelframe
+//
+// Layout: Labelframe.border -sticky nswe
+//
+//	TLabelframe.Label
+//
+// Layout: Label.fill -sticky nswe -children {Label.text -sticky nswe}
+//
+//	TMenubutton
+//
+// Layout: Menubutton.button -sticky nswe -children {Menubutton.padding -sticky nswe -children {Menubutton.label -side left -sticky {}}}
+//
+//	TNotebook
+//
+// Layout: Notebook.client -sticky nswe
+//
+//	TNotebook.Tab
+//
+// Layout: Notebook.tab -sticky nswe -children {Notebook.padding -sticky nswe -children {Notebook.label -sticky nswe}}
+//
+// Style map: -foreground { {background !selected} systemControlTextColor {background selected} black {!background selected} systemSelectedTabTextColor disabled systemDisabledControlTextColor}
+//
+//	TProgressbar
+//
+// Layout: Progressbar.track -sticky nswe
+//
+//	TRadiobutton
+//
+// Layout: Radiobutton.button -sticky nswe -children {Radiobutton.padding -sticky nswe -children {Radiobutton.label -side left -sticky {}}}
+//
+//	TScrollbar
+//
+// -
+//
+//	TSpinbox
+//
+// Layout: Spinbox.buttons -side right -sticky {} -children {Spinbox.uparrow -side top -sticky e Spinbox.downarrow -side bottom -sticky e} Spinbox.field -sticky we -children {Spinbox.textarea -sticky we}
+//
+// Style map: -foreground { disabled systemDisabledControlTextColor } -selectbackground { !focus systemUnemphasizedSelectedTextBackgroundColor }
+//
+//	Tab
+//
+// Layout: Notebook.tab -sticky nswe -children {Notebook.padding -sticky nswe -children {Notebook.label -sticky nswe}}
+//
+//	Toolbar
+//
+// Layout: Toolbar.background -sticky nswe
+//
+//	Toolbutton
+//
+// Layout: Toolbutton.border -sticky nswe -children {Toolbutton.focus -sticky nswe -children {Toolbutton.padding -sticky nswe -children {Toolbutton.label -sticky nswe}}}
+//
+//	Treeview
+//
+// Layout: Treeview.field -sticky nswe -children {Treeview.padding -sticky nswe -children {Treeview.treearea -sticky nswe}}
+//
+// Style map: -background { selected systemSelectedTextBackgroundColor }
+//
+//	Vertical.TScrollbar
+//
+// Layout: Vertical.Scrollbar.trough -sticky ns -children {Vertical.Scrollbar.thumb -sticky nswe Vertical.Scrollbar.downarrow -side bottom -sticky {} Vertical.Scrollbar.uparrow -side bottom -sticky {}}
+//
 // # "clam" theme style guide
 //
 // "Checkbutton.indicator" style element options:
@@ -1531,6 +1807,541 @@
 //	Vertical.TScrollbar
 //
 // Layout: Vertical.Scrollbar.trough -sticky ns -children {Vertical.Scrollbar.uparrow -side top -sticky {} Vertical.Scrollbar.downarrow -side bottom -sticky {} Vertical.Scrollbar.thumb -sticky nswe}PASS
+//
+// # "vista" theme style guide
+//
+// "Combobox.background" style element options:
+//
+// "Combobox.border" style element options:
+//
+// "Combobox.rightdownarrow" style element options:
+//
+// "ComboboxPopdownFrame.background" style element options:
+//
+// "Entry.background" style element options:
+//
+// "Entry.field" style element options:
+//
+// "Horizontal.Progressbar.pbar" style element options:
+//
+// "Horizontal.Scale.slider" style element options:
+//
+// "Horizontal.Scrollbar.grip" style element options:
+//
+// "Horizontal.Scrollbar.leftarrow" style element options:
+//
+// "Horizontal.Scrollbar.rightarrow" style element options:
+//
+// "Horizontal.Scrollbar.thumb" style element options:
+//
+// "Horizontal.Scrollbar.trough" style element options:
+//
+// "Menubutton.dropdown" style element options:
+//
+// "Spinbox.background" style element options:
+//
+// "Spinbox.downarrow" style element options:
+//
+// "Spinbox.field" style element options:
+//
+// "Spinbox.innerbg" style element options:
+//
+// "Spinbox.uparrow" style element options:
+//
+// "Vertical.Progressbar.pbar" style element options:
+//
+// "Vertical.Scale.slider" style element options:
+//
+// "Vertical.Scrollbar.downarrow" style element options:
+//
+// "Vertical.Scrollbar.grip" style element options:
+//
+// "Vertical.Scrollbar.thumb" style element options:
+//
+// "Vertical.Scrollbar.trough" style element options:
+//
+// "Vertical.Scrollbar.uparrow" style element options:
+//
+// "vista" theme style list
+//
+//	.
+//
+// Style map: -foreground {disabled SystemGrayText}
+//
+//	ComboboxPopdownFrame
+//
+// Layout: ComboboxPopdownFrame.background -sticky nswe -border 1 -children {ComboboxPopdownFrame.padding -sticky nswe}
+//
+//	Heading
+//
+// Layout: Treeheading.cell -sticky nswe Treeheading.border -sticky nswe -children {Treeheading.padding -sticky nswe -children {Treeheading.image -side right -sticky {} Treeheading.text -sticky we}}
+//
+//	Horizontal.TProgressbar
+//
+// Layout: Horizontal.Progressbar.trough -sticky nswe -children {Horizontal.Progressbar.pbar -side left -sticky ns Horizontal.Progressbar.ctext -sticky nswe}
+//
+//	Horizontal.TScale
+//
+// Layout: Scale.focus -sticky nswe -children {Horizontal.Scale.trough -sticky nswe -children {Horizontal.Scale.track -sticky we Horizontal.Scale.slider -side left -sticky {}}}
+//
+//	Item
+//
+// Layout: Treeitem.padding -sticky nswe -children {Treeitem.indicator -side left -sticky {} Treeitem.image -side left -sticky {} Treeitem.text -sticky nswe}
+//
+//	Label
+//
+// Layout: Label.fill -sticky nswe -children {Label.text -sticky nswe}
+//
+//	Separator
+//
+// Layout: Treeitem.separator -sticky nswe
+//
+//	TButton
+//
+// Layout: Button.button -sticky nswe -children {Button.focus -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}}
+//
+//	TCheckbutton
+//
+// Layout: Checkbutton.padding -sticky nswe -children {Checkbutton.indicator -side left -sticky {} Checkbutton.focus -side left -sticky w -children {Checkbutton.label -sticky nswe}}
+//
+//	TCombobox
+//
+// Layout: Combobox.border -sticky nswe -children {Combobox.rightdownarrow -side right -sticky ns Combobox.padding -sticky nswe -children {Combobox.background -sticky nswe -children {Combobox.focus -sticky nswe -children {Combobox.textarea -sticky nswe}}}}
+//
+// Style map: -focusfill {{readonly focus} SystemHighlight} -foreground {disabled SystemGrayText {readonly focus} SystemHighlightText} -selectforeground {!focus SystemWindowText} -selectbackground {!focus SystemWindow}
+//
+//	TEntry
+//
+// Layout: Entry.field -sticky nswe -children {Entry.background -sticky nswe -children {Entry.padding -sticky nswe -children {Entry.textarea -sticky nswe}}}
+//
+// Style map: -selectforeground {!focus SystemWindowText} -selectbackground {!focus SystemWindow}
+//
+//	TLabelframe.Label
+//
+// Layout: Label.fill -sticky nswe -children {Label.text -sticky nswe}
+//
+//	TMenubutton
+//
+// Layout: Menubutton.dropdown -side right -sticky ns Menubutton.button -sticky nswe -children {Menubutton.padding -sticky we -children {Menubutton.label -sticky {}}}
+//
+//	TNotebook
+//
+// Layout: Notebook.client -sticky nswe
+//
+//	TNotebook.Tab
+//
+// Layout: Notebook.tab -sticky nswe -children {Notebook.padding -side top -sticky nswe -children {Notebook.focus -side top -sticky nswe -children {Notebook.label -side top -sticky {}}}}
+//
+// Style map: -expand {selected {2 2 2 2}}
+//
+//	TProgressbar
+//
+// -
+//
+//	TRadiobutton
+//
+// Layout: Radiobutton.padding -sticky nswe -children {Radiobutton.indicator -side left -sticky {} Radiobutton.focus -side left -sticky {} -children {Radiobutton.label -sticky nswe}}
+//
+//	TScale
+//
+// -
+//
+//	TSpinbox
+//
+// Layout: Spinbox.field -sticky nswe -children {Spinbox.background -sticky nswe -children {Spinbox.padding -sticky nswe -children {Spinbox.innerbg -sticky nswe -children {Spinbox.textarea -sticky nswe}} Spinbox.uparrow -side top -sticky nse Spinbox.downarrow -side bottom -sticky nse}}
+//
+// Style map: -selectforeground {!focus SystemWindowText} -selectbackground {!focus SystemWindow}
+//
+//	Tab
+//
+// Layout: Notebook.tab -sticky nswe -children {Notebook.padding -side top -sticky nswe -children {Notebook.focus -side top -sticky nswe -children {Notebook.label -side top -sticky {}}}}
+//
+//	Toolbutton
+//
+// Layout: Toolbutton.border -sticky nswe -children {Toolbutton.focus -sticky nswe -children {Toolbutton.padding -sticky nswe -children {Toolbutton.label -sticky nswe}}}
+//
+//	Treeview
+//
+// Layout: Treeview.field -sticky nswe -border 1 -children {Treeview.padding -sticky nswe -children {Treeview.treearea -sticky nswe}}
+//
+// Style map: -foreground {disabled SystemGrayText selected SystemHighlightText} -background {disabled SystemButtonFace selected SystemHighlight}
+//
+//	Treeview.Separator
+//
+// Layout: Treeitem.separator -sticky nswe
+//
+//	Vertical.TProgressbar
+//
+// Layout: Vertical.Progressbar.trough -sticky nswe -children {Vertical.Progressbar.pbar -side bottom -sticky we}
+//
+//	Vertical.TScale
+//
+// Layout: Scale.focus -sticky nswe -children {Vertical.Scale.trough -sticky nswe -children {Vertical.Scale.track -sticky ns Vertical.Scale.slider -side top -sticky {}}}
+//
+// # "winnative" theme style guide
+//
+// "Button.border" style element options:
+//
+//   - [Default]
+//   - [Highlightcolor]
+//   - [Relief]
+//
+// "Checkbutton.indicator" style element options:
+//
+// "Combobox.focus" style element options:
+//
+//   - [Focusfill]
+//
+// "ComboboxPopdownFrame.border" style element options:
+//
+//   - [Background]
+//   - [Borderwidth]
+//   - [Relief]
+//
+// "Radiobutton.indicator" style element options:
+//
+// "Scrollbar.trough" style element options:
+//
+// "Spinbox.downarrow" style element options:
+//
+// "Spinbox.uparrow" style element options:
+//
+// "border" style element options:
+//
+//   - [Relief]
+//
+// "client" style element options:
+//
+// "downarrow" style element options:
+//
+// "field" style element options:
+//
+//   - [Fieldbackground]
+//
+// "focus" style element options:
+//
+// "leftarrow" style element options:
+//
+// "rightarrow" style element options:
+//
+// "sizegrip" style element options:
+//
+// "slider" style element options:
+//
+//   - [Orient]
+//
+// "tab" style element options:
+//
+//   - [Background]
+//   - [Borderwidth]
+//
+// "thumb" style element options:
+//
+//   - [Orient]
+//
+// "uparrow" style element options:
+//
+// "winnative" theme style list
+//
+//	.
+//
+// Style map: -foreground {disabled SystemGrayText} -embossed {disabled 1}
+//
+//	ComboboxPopdownFrame
+//
+// Layout: ComboboxPopdownFrame.border -sticky nswe
+//
+//	Heading
+//
+// Layout: Treeheading.cell -sticky nswe Treeheading.border -sticky nswe -children {Treeheading.padding -sticky nswe -children {Treeheading.image -side right -sticky {} Treeheading.text -sticky we}}
+//
+//	Item
+//
+// Layout: Treeitem.padding -sticky nswe -children {Treeitem.indicator -side left -sticky {} Treeitem.image -side left -sticky {} Treeitem.text -sticky nswe}
+//
+//	Label
+//
+// Layout: Label.fill -sticky nswe -children {Label.text -sticky nswe}
+//
+//	Separator
+//
+// Layout: Treeitem.separator -sticky nswe
+//
+//	TButton
+//
+// Layout: Button.border -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}
+//
+// Style map: -relief {{!disabled pressed} sunken}
+//
+//	TCheckbutton
+//
+// Layout: Checkbutton.padding -sticky nswe -children {Checkbutton.indicator -side left -sticky {} Checkbutton.focus -side left -sticky w -children {Checkbutton.label -sticky nswe}}
+//
+//	TCombobox
+//
+// Layout: Combobox.field -sticky nswe -children {Combobox.downarrow -side right -sticky ns Combobox.padding -sticky nswe -children {Combobox.focus -sticky nswe -children {Combobox.textarea -sticky nswe}}}
+//
+// Style map: -focusfill {{readonly focus} SystemHighlight} -foreground {disabled SystemGrayText {readonly focus} SystemHighlightText} -selectforeground {!focus SystemWindowText} -fieldbackground {readonly SystemButtonFace disabled SystemButtonFace} -selectbackground {!focus SystemWindow}
+//
+//	TEntry
+//
+// Layout: Entry.field -sticky nswe -border 1 -children {Entry.padding -sticky nswe -children {Entry.textarea -sticky nswe}}
+//
+// Style map: -selectforeground {!focus SystemWindowText} -selectbackground {!focus SystemWindow} -fieldbackground {readonly SystemButtonFace disabled SystemButtonFace}
+//
+//	TLabelframe
+//
+// Layout: Labelframe.border -sticky nswe
+//
+//	TLabelframe.Label
+//
+// Layout: Label.fill -sticky nswe -children {Label.text -sticky nswe}
+//
+//	TMenubutton
+//
+// Layout: Menubutton.border -sticky nswe -children {Menubutton.focus -sticky nswe -children {Menubutton.indicator -side right -sticky {} Menubutton.padding -sticky we -children {Menubutton.label -side left -sticky {}}}}
+//
+//	TNotebook
+//
+// Layout: Notebook.client -sticky nswe
+//
+//	TNotebook.Tab
+//
+// Layout: Notebook.tab -sticky nswe -children {Notebook.padding -side top -sticky nswe -children {Notebook.focus -side top -sticky nswe -children {Notebook.label -side top -sticky {}}}}
+//
+// Style map: -expand {selected {2 2 2 0}}
+//
+//	TProgressbar
+//
+// -
+//
+//	TRadiobutton
+//
+// Layout: Radiobutton.padding -sticky nswe -children {Radiobutton.indicator -side left -sticky {} Radiobutton.focus -side left -sticky {} -children {Radiobutton.label -sticky nswe}}
+//
+//	TScale
+//
+// -
+//
+//	TSpinbox
+//
+// Layout: Spinbox.field -side top -sticky we -children {null -side right -sticky {} -children {Spinbox.uparrow -side top -sticky e Spinbox.downarrow -side bottom -sticky e} Spinbox.padding -sticky nswe -children {Spinbox.textarea -sticky nswe}}
+//
+//	Tab
+//
+// Layout: Notebook.tab -sticky nswe -children {Notebook.padding -side top -sticky nswe -children {Notebook.focus -side top -sticky nswe -children {Notebook.label -side top -sticky {}}}}
+//
+//	Toolbutton
+//
+// Layout: Toolbutton.border -sticky nswe -children {Toolbutton.focus -sticky nswe -children {Toolbutton.padding -sticky nswe -children {Toolbutton.label -sticky nswe}}}
+//
+// Style map: -relief {disabled flat selected sunken pressed sunken active raised}
+//
+//	Treeview
+//
+// Layout: Treeview.field -sticky nswe -border 1 -children {Treeview.padding -sticky nswe -children {Treeview.treearea -sticky nswe}}
+//
+// Style map: -foreground {disabled SystemGrayText selected SystemHighlightText} -background {disabled SystemButtonFace selected SystemHighlight}
+//
+//	Treeview.Separator
+//
+// Layout: Treeitem.separator -sticky nswe
+//
+// # "xpnative" theme style guide
+//
+// "Button.button" style element options:
+//
+// "Checkbutton.indicator" style element options:
+//
+// "Combobox.downarrow" style element options:
+//
+// "Combobox.field" style element options:
+//
+// "Entry.field" style element options:
+//
+// "Horizontal.Progressbar.pbar" style element options:
+//
+// "Horizontal.Progressbar.trough" style element options:
+//
+// "Horizontal.Scale.slider" style element options:
+//
+// "Horizontal.Scale.track" style element options:
+//
+// "Horizontal.Scrollbar.grip" style element options:
+//
+// "Horizontal.Scrollbar.thumb" style element options:
+//
+// "Horizontal.Scrollbar.trough" style element options:
+//
+// "Labelframe.border" style element options:
+//
+// "Menubutton.button" style element options:
+//
+// "Menubutton.dropdown" style element options:
+//
+// "NotebookPane.background" style element options:
+//
+// "Radiobutton.indicator" style element options:
+//
+// "Scale.trough" style element options:
+//
+// "Scrollbar.downarrow" style element options:
+//
+// "Scrollbar.leftarrow" style element options:
+//
+// "Scrollbar.rightarrow" style element options:
+//
+// "Scrollbar.uparrow" style element options:
+//
+// "Spinbox.downarrow" style element options:
+//
+// "Spinbox.field" style element options:
+//
+// "Spinbox.uparrow" style element options:
+//
+// "Toolbutton.border" style element options:
+//
+// "Treeheading.border" style element options:
+//
+// "Treeitem.indicator" style element options:
+//
+// "Treeview.field" style element options:
+//
+// "Vertical.Progressbar.pbar" style element options:
+//
+// "Vertical.Progressbar.trough" style element options:
+//
+// "Vertical.Scale.slider" style element options:
+//
+// "Vertical.Scale.track" style element options:
+//
+// "Vertical.Scrollbar.grip" style element options:
+//
+// "Vertical.Scrollbar.thumb" style element options:
+//
+// "Vertical.Scrollbar.trough" style element options:
+//
+// "client" style element options:
+//
+// "sizegrip" style element options:
+//
+// "tab" style element options:
+//
+// "xpnative" theme style list
+//
+//	.
+//
+// Style map: -foreground {disabled SystemGrayText}
+//
+//	Heading
+//
+// Layout: Treeheading.cell -sticky nswe Treeheading.border -sticky nswe -children {Treeheading.padding -sticky nswe -children {Treeheading.image -side right -sticky {} Treeheading.text -sticky we}}
+//
+//	Horizontal.TScale
+//
+// Layout: Scale.focus -sticky nswe -children {Horizontal.Scale.trough -sticky nswe -children {Horizontal.Scale.track -sticky we Horizontal.Scale.slider -side left -sticky {}}}
+//
+//	Horizontal.TScrollbar
+//
+// Layout: Horizontal.Scrollbar.trough -sticky we -children {Horizontal.Scrollbar.leftarrow -side left -sticky {} Horizontal.Scrollbar.rightarrow -side right -sticky {} Horizontal.Scrollbar.thumb -sticky nswe -unit 1 -children {Horizontal.Scrollbar.grip -sticky {}}}
+//
+//	Item
+//
+// Layout: Treeitem.padding -sticky nswe -children {Treeitem.indicator -side left -sticky {} Treeitem.image -side left -sticky {} Treeitem.text -sticky nswe}
+//
+//	Label
+//
+// Layout: Label.fill -sticky nswe -children {Label.text -sticky nswe}
+//
+//	Separator
+//
+// Layout: Treeitem.separator -sticky nswe
+//
+//	TButton
+//
+// Layout: Button.button -sticky nswe -children {Button.focus -sticky nswe -children {Button.padding -sticky nswe -children {Button.label -sticky nswe}}}
+//
+//	TCheckbutton
+//
+// Layout: Checkbutton.padding -sticky nswe -children {Checkbutton.indicator -side left -sticky {} Checkbutton.focus -side left -sticky w -children {Checkbutton.label -sticky nswe}}
+//
+//	TCombobox
+//
+// Layout: Combobox.field -sticky nswe -children {Combobox.downarrow -side right -sticky ns Combobox.padding -sticky nswe -children {Combobox.focus -sticky nswe -children {Combobox.textarea -sticky nswe}}}
+//
+// Style map: -focusfill {{readonly focus} SystemHighlight} -foreground {disabled SystemGrayText {readonly focus} SystemHighlightText} -selectforeground {!focus SystemWindowText} -selectbackground {!focus SystemWindow}
+//
+//	TEntry
+//
+// Layout: Entry.field -sticky nswe -border 1 -children {Entry.padding -sticky nswe -children {Entry.textarea -sticky nswe}}
+//
+// Style map: -selectforeground {!focus SystemWindowText} -selectbackground {!focus SystemWindow}
+//
+//	TLabelframe.Label
+//
+// Layout: Label.fill -sticky nswe -children {Label.text -sticky nswe}
+//
+//	TMenubutton
+//
+// Layout: Menubutton.dropdown -side right -sticky ns Menubutton.button -sticky nswe -children {Menubutton.padding -sticky we -children {Menubutton.label -sticky {}}}
+//
+//	TNotebook
+//
+// Layout: Notebook.client -sticky nswe
+//
+//	TNotebook.Tab
+//
+// Layout: Notebook.tab -sticky nswe -children {Notebook.padding -side top -sticky nswe -children {Notebook.focus -side top -sticky nswe -children {Notebook.label -side top -sticky {}}}}
+//
+// Style map: -expand {selected {2 2 2 2}}
+//
+//	TProgressbar
+//
+// -
+//
+//	TRadiobutton
+//
+// Layout: Radiobutton.padding -sticky nswe -children {Radiobutton.indicator -side left -sticky {} Radiobutton.focus -side left -sticky {} -children {Radiobutton.label -sticky nswe}}
+//
+//	TScale
+//
+// -
+//
+//	TScrollbar
+//
+// -
+//
+//	TSpinbox
+//
+// Layout: Spinbox.field -side top -sticky we -children {null -side right -sticky {} -children {Spinbox.uparrow -side top -sticky e Spinbox.downarrow -side bottom -sticky e} Spinbox.padding -sticky nswe -children {Spinbox.textarea -sticky nswe}}
+//
+// Style map: -selectforeground {!focus SystemWindowText} -selectbackground {!focus SystemWindow}
+//
+//	Tab
+//
+// Layout: Notebook.tab -sticky nswe -children {Notebook.padding -side top -sticky nswe -children {Notebook.focus -side top -sticky nswe -children {Notebook.label -side top -sticky {}}}}
+//
+//	Toolbutton
+//
+// Layout: Toolbutton.border -sticky nswe -children {Toolbutton.focus -sticky nswe -children {Toolbutton.padding -sticky nswe -children {Toolbutton.label -sticky nswe}}}
+//
+//	Treeview
+//
+// Layout: Treeview.field -sticky nswe -border 1 -children {Treeview.padding -sticky nswe -children {Treeview.treearea -sticky nswe}}
+//
+// Style map: -foreground {disabled SystemGrayText selected SystemHighlightText} -background {disabled SystemButtonFace selected SystemHighlight}
+//
+//	Treeview.Separator
+//
+// Layout: Treeitem.separator -sticky nswe
+//
+//	Vertical.TScale
+//
+// Layout: Scale.focus -sticky nswe -children {Vertical.Scale.trough -sticky nswe -children {Vertical.Scale.track -sticky ns Vertical.Scale.slider -side top -sticky {}}}
+//
+//	Vertical.TScrollbar
+//
+// Layout: Vertical.Scrollbar.trough -sticky ns -children {Vertical.Scrollbar.uparrow -side top -sticky {} Vertical.Scrollbar.downarrow -side bottom -sticky {} Vertical.Scrollbar.thumb -sticky nswe -unit 1 -children {Vertical.Scrollbar.grip -sticky {}}}PASS
 //
 // [FreeBSD]: https://github.com/ebitengine/purego/blob/7402fed73989eaf478f4f7905862d0f04537ac8c/internal/fakecgo/freebsd.go#L15
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product

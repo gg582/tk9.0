@@ -141,7 +141,7 @@ func ButtonStyle(style string, colors ButtonColors, background string, focused b
 					iq3, Sticky("sw"),
 					iq4, Sticky("se"),
 					"Button.label", Sticky("nswe")))))
-	StyleConfigure(style, Background(focus), Borderwidth(0), Compound(true), FocusColor(focus), FocusSolid(false),
-		FocusThickness(0), Foreground(colors[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
+	StyleConfigure(style, Background(focus), Borderwidth(0), Compound(true), Focuscolor(focus), Focussolid(false),
+		Focusthickness(0), Foreground(colors[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
 	return style
 }

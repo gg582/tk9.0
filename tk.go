@@ -3602,27 +3602,27 @@ func Border(val any) Opt {
 	return rawOption(fmt.Sprintf(`-border %s`, optionString(val)))
 }
 
-// FocusColor option.
+// Focuscolor option.
 //
 // Known uses:
 //   - [StyleConfigure]
-func FocusColor(val any) Opt {
+func Focuscolor(val any) Opt {
 	return rawOption(fmt.Sprintf(`-focuscolor %s`, optionString(val)))
 }
 
-// FocusColor option.
+// Focusthickness option.
 //
 // Known uses:
 //   - [StyleConfigure]
-func FocusThickness(val any) Opt {
+func Focusthickness(val any) Opt {
 	return rawOption(fmt.Sprintf(`-focusthickness %s`, optionString(val)))
 }
 
-// FocusSolid option.
+// Focussolid option.
 //
 // Known uses:
 //   - [StyleConfigure]
-func FocusSolid(val any) Opt {
+func Focussolid(val any) Opt {
 	return rawOption(fmt.Sprintf(`-focussolid %s`, optionString(val)))
 }
 
