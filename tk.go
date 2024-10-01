@@ -1975,6 +1975,9 @@ func parseList(s string) (r []string) {
 			}
 		default:
 			switch {
+			case v == "{}":
+				r[w] = ""
+				w++
 			case strings.HasPrefix(v, "{"):
 				a = append(a[:0], v[1:])
 				in = true
@@ -3204,10 +3207,10 @@ func (w *Window) Font() string {
 // + ttk::style map style ?-option { statespec value... }?
 // - ttk::style theme args
 // 	- ttk::style theme create themeName ?-parent basedon? ?-settings script... ?
-// 	- ttk::style theme names
+// 	+ ttk::style theme names
 // 	- ttk::style theme settings themeName script
-// 	- ttk::style theme styles ?themeName?
-// 	- ttk::style theme use ?themeName?
+// 	+ ttk::style theme styles ?themeName?
+// 	+ ttk::style theme use ?themeName?
 
 // ttk::style — Manipulate style database
 //
@@ -3641,49 +3644,36 @@ func children(prefixed string, list ...any) Opt {
 	return rawOption(fmt.Sprintf(" %s {%s}", prefixed, strings.Join(a, " ")))
 }
 
-// // ttk::style — Manipulate style database
-// //
-// // # Description
-// //
-// // Returns a list of all known themes.
-// //
-// // Additional information might be available at the [Tcl/Tk style] page.
-// //
-// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-// func StyleThemeNames() []string {
-// 	return parseList(evalErr("ttk::style theme names"))
-// }
+// ttk::style — Manipulate style database
 //
-// // ttk::style — Manipulate style database
-// //
-// // # Description
-// //
-// // Returns a list of all styles in themeName. If themeName is omitted, the
-// // current theme is used.
-// //
-// // Additional information might be available at the [Tcl/Tk style] page.
-// //
-// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-// func StyleThemeStyles(themeName ...string) []string {
-// 	var s string
-// 	if len(themeName) != 0 {
-// 		s = tclSafeString(themeName[0])
-// 	}
-// 	return parseList(evalErr(fmt.Sprintf("ttk::style theme styles %s", s)))
-// }
+// # Description
 //
-// // ttk::style — Manipulate style database
-// //
-// // # Description
-// //
-// // Return the name of the current theme.
-// //
-// // Additional information might be available at the [Tcl/Tk style] page.
-// //
-// // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
-// func StyleThemeGet(themeName ...string) []string {
-// 	return parseList(evalErr("ttk::style theme use"))
-// }
+// Returns a list of all known themes.
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleThemeNames() []string {
+	return parseList(evalErr("ttk::style theme names"))
+}
+
+// ttk::style — Manipulate style database
+//
+// # Description
+//
+// Returns a list of all styles in themeName. If themeName is omitted, the
+// current theme is used.
+//
+// Additional information might be available at the [Tcl/Tk style] page.
+//
+// [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
+func StyleThemeStyles(themeName ...string) []string {
+	var s string
+	if len(themeName) != 0 {
+		s = tclSafeString(themeName[0])
+	}
+	return parseList(evalErr(fmt.Sprintf("ttk::style theme styles %s", s)))
+}
 
 // ttk::style — Manipulate style database
 //
@@ -3698,12 +3688,9 @@ func children(prefixed string, list ...any) Opt {
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleThemeUse(themeName ...string) string {
-	s := ""
+	var s string
 	if len(themeName) != 0 {
-		s = fmt.Sprint(themeName[0])
-		if s != "" {
-			s = tclSafeString(s)
-		}
+		s = tclSafeString(themeName[0])
 	}
 	return evalErr(fmt.Sprintf("ttk::style theme use %s", s))
 }

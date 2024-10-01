@@ -9,6 +9,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"slices"
+	"strings"
 	"testing"
 
 	_ "github.com/adrg/xdg"       // generator.go
@@ -71,6 +73,50 @@ func TestTokenizer(t *testing.T) {
 		ids, toks := tokenize(test.s)
 		if g, e := fmt.Sprintf("%v %q", ids, toks), fmt.Sprintf("%v %q", test.ids, test.toks); g != e {
 			t.Errorf("#%3v: `%s`\ngot %s\nexp %s", i, test.s, g, e)
+		}
+	}
+}
+
+func capitalize(s string) string {
+	return strings.ToUpper(string(s[0])) + s[1:]
+}
+
+func TestTmp(t *testing.T) {
+	ErrorMode = CollectErrors
+	themes := StyleThemeNames()
+	slices.Sort(themes)
+	for _, theme := range themes {
+		fmt.Printf("\n//\n// # %q theme style guide", theme)
+		StyleThemeUse(theme)
+		styles := StyleThemeStyles()
+		slices.Sort(styles)
+		elements := StyleElementNames()
+		slices.Sort(elements)
+		for _, element := range elements {
+			fmt.Printf("\n//\n// %q style element options:\n//", element)
+			options := StyleElementOptions(element)
+			slices.Sort(options)
+			for _, option := range options {
+				fmt.Printf("\n//  - [%s]", capitalize(option[1:]))
+			}
+		}
+		fmt.Printf("\n//\n// %q theme style list", theme)
+		needsep := false
+		for _, style := range styles {
+			if needsep {
+				fmt.Printf("\n//\n// -\n//\n//")
+			}
+			needsep = true
+			fmt.Printf("\n//\n//  %s", style)
+			if s := StyleLayout(style); s != "" {
+				needsep = false
+				fmt.Printf("\n//\n// Layout: %s", s)
+			}
+			if s := strings.TrimSpace(StyleMap(style)); s != "" {
+				needsep = false
+				s = strings.Join(strings.Fields(s), " ")
+				fmt.Printf("\n//\n// Style map: %s", s)
+			}
 		}
 	}
 }
