@@ -150,9 +150,11 @@
 //
 // # Package initialization
 //
-// User code should check if the package variable 'Error' is nil before using
-// this package.  If package initialization failed, the 'Error' variable will
-// be non nil.
+// Package initialization is done lazily. This saves noticeable additional
+// startup time and avoids screen flicker in hybrid programs that use the GUI
+// only on demand.
+//
+// Early package initialization can be enforced by [Initialize].
 //
 // Initialization will fail if a Unix process starts on a machine with no
 // X server or the process is started in a way that it has no access to the X

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !windows && !((linux && (amd64 || arm64)) || (darwin && (amd64 || arm64)) || (freebsd && (amd64 || arm64)))
+//go:build linux && (386 || arm || loong64 || ppc64le || riscv64 || s390x)
 
 package tk9_0 // import "modernc.org/tk9.0"
 
@@ -45,6 +45,14 @@ func init() {
 	}
 
 	runtime.LockOSThread()
+}
+
+func lazyInit() {
+	if initialized {
+		return
+	}
+
+	initialized = true
 	var cacheDir string
 	if cacheDir, Error = getCacheDir(); Error != nil {
 		return
@@ -130,6 +138,14 @@ func eval(code string) (r string, err error) {
 			dmesg("code=%s -> r=%v err=%v", code, r, err)
 		}()
 	}
+
+	if !initialized {
+		lazyInit()
+		if Error != nil {
+			return "", Error
+		}
+	}
+
 	return interp.Eval(code, tcl.EvalDirect)
 }
 

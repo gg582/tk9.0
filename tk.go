@@ -51,7 +51,7 @@ const (
 var NativeScaling float64
 
 // App is the main/root application window.
-var App *Window
+var App = &Window{}
 
 //TODO? ErrorMsg
 
@@ -83,6 +83,7 @@ var (
 	forcedY     = -1
 	handlers    = map[int32]*eventHandler{}
 	id          atomic.Int32
+	initialized bool
 	isBuilder   = os.Getenv("MODERNC_BUILDER") != ""
 
 	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
@@ -245,11 +246,6 @@ func tclSafeInBraces(s string) string {
 }
 
 func setDefaults() {
-	ErrorMode = CollectErrors
-
-	defer func() { ErrorMode = PanicOnError }()
-
-	App = &Window{}
 	windowIndex[""] = App
 	windowIndex["."] = App
 	exitHandler = Command(func() { Destroy(App) })
@@ -4064,4 +4060,10 @@ func WmMaxSize(w *Window) (width, height int) {
 	}
 
 	return width, height
+}
+
+// Initalize enforces the parts of package initialization that are otherwise
+// done lazily. The function may panic if ErrorMode is PanicOnError.
+func Initialize() {
+	lazyInit()
 }

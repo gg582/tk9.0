@@ -3,7 +3,7 @@
 # license that can be found in the LICENSE file.
 
 .PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd \
-	build_all_targets
+	build_all_targets demo
 
 TAR = tcl-core9.0.0-src.tar.gz
 URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
@@ -200,3 +200,6 @@ lib_freebsd: download
 	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+
+demo:
+	cd _examples && go run demo.go

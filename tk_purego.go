@@ -42,12 +42,20 @@ func init() {
 	}
 
 	runtime.LockOSThread()
+}
+
+func lazyInit() {
+	if initialized {
+		return
+	}
+
+	initialized = true
 	var cacheDir string
 	if cacheDir, Error = getCacheDir(); Error != nil {
 		return
 	}
 
-	if init1(cacheDir); Error != nil {
+	if bindLibs(cacheDir); Error != nil {
 		return
 	}
 
@@ -71,7 +79,7 @@ func init() {
 	setDefaults()
 }
 
-func init1(cacheDir string) {
+func bindLibs(cacheDir string) {
 	var wd string
 	if wd, Error = os.Getwd(); Error != nil {
 		return
@@ -213,6 +221,14 @@ func eval(code string) (r string, err error) {
 			dmesg("code=%s -> r=%v err=%v", code, r, err)
 		}()
 	}
+
+	if !initialized {
+		lazyInit()
+		if Error != nil {
+			return "", Error
+		}
+	}
+
 	cs, err := cString(code)
 	if err != nil {
 		return "", err
