@@ -55,8 +55,8 @@ type renderer struct {
 	ctx   kpath.Context
 	err   error
 	faces map[fntkey]font.Face
+	final image.Image
 	img   *image.RGBA
-	out   bytes.Buffer
 	page  int
 	post  dvi.CmdPost
 	pre   dvi.CmdPre
@@ -142,17 +142,13 @@ func (pr *renderer) DrawRule(x, y, w, h int32, c color.Color) {
 }
 
 func (pr *renderer) EOP() {
-	if pr.err != nil && pr.out.Len() != 0 {
+	if pr.err != nil {
 		return
 	}
 
-	img := pr.img.SubImage(pr.bound)
+	pr.final = pr.img.SubImage(pr.bound)
 	if pr.scale != 1.0 {
-		img = imaging.Resize(img, int(float64(pr.bound.Max.X-pr.bound.Min.X)*pr.scale+0.5), 0, imaging.Lanczos)
-	}
-	if err := png.Encode(&pr.out, img); err != nil {
-		pr.setErr(fmt.Errorf("could not encode PNG image: %w", err))
-		return
+		pr.final = imaging.Resize(pr.final, int(float64(pr.bound.Max.X-pr.bound.Min.X)*pr.scale+0.5), 0, imaging.Lanczos)
 	}
 }
 
@@ -222,7 +218,21 @@ func roundF32(v float32) int32 {
 	return int32(v - 0.5)
 }
 
-func dvi2png(r io.Reader, scale float64) (png []byte, err error) {
+func dvi2png(r io.Reader, scale float64) (_ []byte, err error) {
+	img, err := dvi2img(r, scale)
+	if err != nil {
+		return nil, err
+	}
+
+	var out bytes.Buffer
+	if err = png.Encode(&out, img); err != nil {
+		return nil, err
+	}
+
+	return out.Bytes(), nil
+}
+
+func dvi2img(r io.Reader, scale float64) (img image.Image, err error) {
 	ctx := kpath.New()
 	renderer := newRenderer(ctx, scale)
 	vm := dvi.NewMachine(
@@ -252,36 +262,62 @@ func dvi2png(r io.Reader, scale float64) (png []byte, err error) {
 		return nil, fmt.Errorf("could not render DVI program: %w", renderer.err)
 	}
 
-	return renderer.out.Bytes(), nil
+	return renderer.final, nil
 }
 
-// TeX renders TeX 'src' as a png file that shows the TeX "snippet" in a fixed
-// 600 dpi resolution. The result is afterwards resized using the 'scale'
-// factor. Scale factor 1.0 means no resize.
-//
-// Only plain Tex and the default Computer Modern fonts are supported.
-func TeX(src string, scale float64) (png []byte) {
+func tex2dvi(src string) (dvi *bytes.Buffer) {
 	// To get rid of the page number rendered by default, the function prepends
 	// "\footline={}\n" to src. Also, "\n\bye\n" is appended to 'src' to make it a
 	// complete TeX document.
-	var stdout, stderr, dvi bytes.Buffer
+	var stdout, stderr, b bytes.Buffer
 	if err := tex.Main(
 		strings.NewReader("\\input plain \\input x"),
 		&stdout,
 		&stderr,
 		tex.WithInputFile("x.tex", strings.NewReader(fmt.Sprintf("\\footline={}\n%s\n\\bye\n", src))),
-		tex.WithDVIFile(&dvi),
+		tex.WithDVIFile(&b),
 		tex.WithLogFile(io.Discard),
 	); err != nil {
 		fail(fmt.Errorf("FAIL err=%v\nstdout=%s\nstderr=%s", err, stdout.Bytes(), stderr.Bytes()))
 		return nil
 	}
 
-	b, err := dvi2png(&dvi, scale)
+	return &b
+}
+
+// TeX renders TeX 'src' as a png file that shows the TeX "snippet" in a fixed
+// 600 dpi resolution. The result is afterwards resized using the 'scale'
+// factor. Scale factor 1.0 means no resize.
+//
+// Only plain Tex and a subset of some of the default Computer Modern fonts are
+// supported. Many small fonts are not available.
+func TeX(src string, scale float64) (png []byte) {
+	dvi := tex2dvi(src)
+	if dvi == nil {
+		return nil
+	}
+
+	b, err := dvi2png(dvi, scale)
 	if err != nil {
 		fail(err)
 		return nil
 	}
 
 	return b
+}
+
+// TeXImg renders is line Tex but returns an [image.Image].
+func TeXImg(src string, scale float64) (img image.Image) {
+	dvi := tex2dvi(src)
+	if dvi == nil {
+		return nil
+	}
+
+	img, err := dvi2img(dvi, scale)
+	if err != nil {
+		fail(err)
+		return nil
+	}
+
+	return img
 }

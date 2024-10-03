@@ -1274,6 +1274,15 @@ func GridRowConfigure(w Widget, index int, options ...Opt) {
 	evalErr(fmt.Sprintf("grid rowconfigure %s %v %s", w, index, collect(options...)))
 }
 
+// Minsize option.
+//
+// Known uses:
+//   - [GridColumnConfigure]
+//   - [GridRowConfigure]
+func Minsize(val ...any) Opt {
+	return rawOption(fmt.Sprintf(`-minsize %s`, collectAny(val...)))
+}
+
 // Grid — Geometry manager that arranges widgets in a grid
 //
 // # Description
@@ -4066,4 +4075,19 @@ func WmMaxSize(w *Window) (width, height int) {
 // done lazily. The function may panic if ErrorMode is PanicOnError.
 func Initialize() {
 	lazyInit()
+}
+
+// ttk::notebook — Multi-paned container widget
+//
+// # Description
+//
+// Adds a new tab to the notebook. See TAB OPTIONS for the list of available
+// options. If window is currently managed by the notebook but hidden, it is
+// restored to its previous position.
+//
+// More information might be available at the [Tcl/Tk TNotebook] page.
+//
+// [Tcl/Tk TNotebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
+func (w *TNotebookWidget) Add(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add %v", w, winCollect(w.Window, options...)))
 }
