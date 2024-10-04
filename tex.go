@@ -285,6 +285,12 @@ func tex2dvi(src string) (dvi *bytes.Buffer) {
 	return &b
 }
 
+func sanitizeTeX(s string) (r string) {
+	s = strings.TrimSpace(s)
+	a := strings.Fields(s)
+	return strings.Join(a, " ")
+}
+
 // TeX renders TeX 'src' as a png file that shows the TeX "snippet" in a fixed
 // 600 dpi resolution. The result is afterwards resized using the 'scale'
 // factor. Scale factor 1.0 means no resize.
@@ -292,6 +298,11 @@ func tex2dvi(src string) (dvi *bytes.Buffer) {
 // Only plain Tex and a subset of some of the default Computer Modern fonts are
 // supported. Many small fonts are not available.
 func TeX(src string, scale float64) (png []byte) {
+	if src = sanitizeTeX(src); src == "" {
+		fail(fmt.Errorf("empty TeX code"))
+		return nil
+	}
+
 	dvi := tex2dvi(src)
 	if dvi == nil {
 		return nil
@@ -308,6 +319,11 @@ func TeX(src string, scale float64) (png []byte) {
 
 // TeXImg renders is line Tex but returns an [image.Image].
 func TeXImg(src string, scale float64) (img image.Image) {
+	if src = sanitizeTeX(src); src == "" {
+		fail(fmt.Errorf("empty TeX code"))
+		return nil
+	}
+
 	dvi := tex2dvi(src)
 	if dvi == nil {
 		return nil

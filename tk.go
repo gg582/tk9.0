@@ -821,7 +821,7 @@ func NewPhoto(options ...Opt) *Img {
 //
 // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Width() string {
-	return evalErr(fmt.Sprintf(`%s cget -width`, m))
+	return evalErr(fmt.Sprintf(`image width %s`, m))
 }
 
 // Height — Get the configured option value.
@@ -830,7 +830,7 @@ func (m *Img) Width() string {
 //
 // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Height() string {
-	return evalErr(fmt.Sprintf(`%s cget -height`, m))
+	return evalErr(fmt.Sprintf(`image height %s`, m))
 }
 
 // // Returns photo data.
@@ -901,7 +901,7 @@ func From(val ...any) Opt {
 //   - [TScale] (widget specific)
 //   - [TSpinbox] (widget specific)
 func To(val ...any) Opt {
-	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
+	return rawOption(fmt.Sprintf(`-to %s`, collectAny(val...)))
 }
 
 // Graph — use gnuplot to draw on a photo. Graph returns 'm'
@@ -4091,3 +4091,55 @@ func Initialize() {
 func (w *TNotebookWidget) Add(options ...Opt) {
 	evalErr(fmt.Sprintf("%s add %v", w, winCollect(w.Window, options...)))
 }
+
+// tk_dialog — Create modal dialog and wait for response
+//
+// # Description
+//
+// This procedure is part of the Tk script library. It is largely deprecated by
+// the tk_messageBox. Its arguments describe a dialog box:
+//
+//   - window - Name of top-level window to use for dialog. Any existing window
+//     by this name is destroyed.
+//
+//   - title - Text to appear in the window manager's title bar for the dialog.
+//
+//   - text - Message to appear in the top portion of the dialog box.
+//
+//   - bitmap - If non-empty, specifies a bitmap (in a form suitable for
+//     Tk_GetBitmap) to display in the top portion of the dialog, to the left of
+//     the text. If this is an empty string then no bitmap is displayed in the
+//     dialog.
+//
+//   - defaultButton - If this is an integer greater than or equal to zero, then it
+//     gives the index of the button that is to be the default button for the
+//     dialog (0 for the leftmost button, and so on). If negative or an empty
+//     string then there will not be any default button.
+//
+//   - buttons - There will be one button for each of these arguments. Each string
+//     specifies text to display in a button, in order from left to right.
+//
+// After creating a dialog box, tk_dialog waits for the user to select one of
+// the buttons either by clicking on the button with the mouse or by typing
+// return to invoke the default button (if any). Then it returns the index of
+// the selected button: 0 for the leftmost button, 1 for the button next to it,
+// and so on. If the dialog's window is destroyed before the user selects one
+// of the buttons, then -1 is returned.
+//
+// While waiting for the user to respond, tk_dialog sets a local grab. This
+// prevents the user from interacting with the application in any way except to
+// invoke the dialog box.
+// func Dialog(window *Window, title, text, bitmap string, defaultButton int, buttons ...string) (r int) {
+// 	s := evalErr(fmt.Sprintf("tk_dialog %s %s %s", window, tclSafeStrings(title, text, bitmap), tclSafeStrings(buttons...)))
+// 	if s == "" {
+// 		return -1
+// 	}
+// 
+// 	var err error
+// 	if r, err = strconv.Atoi(s); err != nil {
+// 		fail(err)
+// 		return -1
+// 	}
+// 
+// 	return r
+// }
