@@ -50,6 +50,9 @@ func lazyInit() {
 	}
 
 	initialized = true
+
+	defer commonLazyInit()
+
 	var cacheDir string
 	if cacheDir, Error = getCacheDir(); Error != nil {
 		return

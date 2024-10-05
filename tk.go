@@ -125,6 +125,10 @@ var (
 	windowIndex   = map[string]*Window{}
 )
 
+func commonLazyInit() {
+	// Nothing yet.
+}
+
 func checkSig(dir string, sig map[string]string) (r bool) {
 	if dmesgs {
 		dmesg("checkSig(%q, %q)", dir, sig)
@@ -2238,6 +2242,28 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 	return index
 }
 
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Return a range of characters from the text. The return value will be all the
+// characters in the text starting with the one whose index is index1 and
+// ending just before the one whose index is index2 (the character at index2
+// will not be returned). If index2 is omitted then the single character at
+// index1 is returned. If there are no characters in the specified range (e.g.
+// index1 is past the end of the file or index2 is less than or equal to
+// index1) then an empty string is returned. If the specified range contains
+// embedded windows, no information about them is included in the returned
+// string. If multiple index pairs are given, multiple ranges of text will be
+// returned in a list. Invalid ranges will not be represented with empty
+// strings in the list. The ranges are returned in the order passed to pathName
+// get. If the -displaychars option is given, then, within each range, only
+// those characters which are not elided will be returned. This may have the
+// effect that some of the returned ranges are empty strings.
+//TODO func (w *TextWidget) Get(options ...any) (r []string) {
+//TODO 	return parseList(evalErr(fmt.Sprintf("%s get %s", w, collectAny(options...))))
+//TODO }
+
 // LC encodes a text index consisting of a line and char number.
 type LC struct {
 	Line int // 1-based line number within the text content.
@@ -4134,12 +4160,35 @@ func (w *TNotebookWidget) Add(options ...Opt) {
 // 	if s == "" {
 // 		return -1
 // 	}
-// 
+//
 // 	var err error
 // 	if r, err = strconv.Atoi(s); err != nil {
 // 		fail(err)
 // 		return -1
 // 	}
-// 
+//
 // 	return r
 // }
+
+type Ticker struct {
+	eh *eventHandler
+}
+
+func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
+	eh := newEventHandler("", handler)
+	nm := fmt.Sprintf("ticker%v", id.Add(1))
+	s, err := eval(fmt.Sprintf(`proc %s {} {
+	after %v {
+		eventDispatcher %v
+		%[1]s
+	}
+}
+%[1]s
+`, nm, d.Milliseconds(), eh.id))
+	trc("s=%q err=%v", s, err)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Ticker{eh: eh}, nil
+}
