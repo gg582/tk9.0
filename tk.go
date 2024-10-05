@@ -4177,15 +4177,14 @@ type Ticker struct {
 func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
 	eh := newEventHandler("", handler)
 	nm := fmt.Sprintf("ticker%v", id.Add(1))
-	s, err := eval(fmt.Sprintf(`proc %s {} {
+	if _, err = eval(fmt.Sprintf(`proc %s {} {
 	after %v {
 		eventDispatcher %v
 		%[1]s
 	}
 }
 %[1]s
-`, nm, d.Milliseconds(), eh.id))
-	if err != nil {
+`, nm, d.Milliseconds(), eh.id)); err != nil {
 		return nil, err
 	}
 
