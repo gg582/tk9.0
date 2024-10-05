@@ -2260,9 +2260,9 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 // get. If the -displaychars option is given, then, within each range, only
 // those characters which are not elided will be returned. This may have the
 // effect that some of the returned ranges are empty strings.
-//TODO func (w *TextWidget) Get(options ...any) (r []string) {
-//TODO 	return parseList(evalErr(fmt.Sprintf("%s get %s", w, collectAny(options...))))
-//TODO }
+func (w *TextWidget) Get(options ...any) (r string) {
+	return evalErr(fmt.Sprintf("%s get %s", w, collectAny(options...)))
+}
 
 // LC encodes a text index consisting of a line and char number.
 type LC struct {
@@ -4185,7 +4185,6 @@ func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
 }
 %[1]s
 `, nm, d.Milliseconds(), eh.id))
-	trc("s=%q err=%v", s, err)
 	if err != nil {
 		return nil, err
 	}
