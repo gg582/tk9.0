@@ -85,6 +85,7 @@ var (
 	id          atomic.Int32
 	initialized bool
 	isBuilder   = os.Getenv("MODERNC_BUILDER") != ""
+	wmTitle     string
 
 	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
 	//
@@ -264,9 +265,9 @@ func setDefaults() {
 		StyleThemeUse(nm)
 	}
 	App.IconPhoto(NewPhoto(Data(icon)))
-	base := filepath.Base(os.Args[0])
-	base = strings.TrimSuffix(base, ".exe")
-	App.WmTitle(base)
+	wmTitle = filepath.Base(os.Args[0])
+	wmTitle = strings.TrimSuffix(wmTitle, ".exe")
+	App.WmTitle(wmTitle)
 	x, y := -1, -1
 	if os.Getenv("TK9_DEMO") == "1" {
 		for i := 1; i < len(os.Args); i++ {
@@ -459,6 +460,9 @@ type Event struct {
 	// the event). Valid for all event types.  This field is set when the
 	// event is handled.
 	EventWindow *Window
+	// The keysym corresponding to the event, substituted as a textual string.
+	// Valid only for Key and KeyRelease events.
+	Keysym string
 	// The number of the last client request processed by the server (the serial
 	// field from the event). Valid for all event types.
 	Serial int64
@@ -487,6 +491,8 @@ func newEvent(arg1 string) (id int, e *Event, err error) {
 			}
 		case 1: // %W
 			e.EventWindow = windowIndex[v]
+		case 2: // %K
+			e.Keysym = v
 		}
 	}
 	return id, e, nil
@@ -567,7 +573,7 @@ func (e *eventHandler) optionString(w *Window) string {
 	e.w = w
 	switch {
 	case e.lateBind:
-		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W}}", e.tcl, e.id)
+		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K}}", e.tcl, e.id)
 	default:
 		return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
 	}
@@ -654,6 +660,21 @@ func Bind(options ...any) {
 // Img represents a Tk image.
 type Img struct {
 	name string
+}
+
+// image — Create and manipulate images
+//
+// # Description
+//
+// Deletes 'm!. If there are
+// instances of the image displayed in widgets, the image will not actually
+// be deleted until all of the instances are released. However, the association
+// between the instances and the image manager will be dropped. Existing
+// instances will retain their sizes but redisplay as empty areas. If a deleted
+// image is recreated with another call to image create, the existing instances
+// will use the new image.
+func (m *Img) Delete() {
+	evalErr(fmt.Sprintf("image delete %s", m))
 }
 
 // String implements fmt.Stringer.
@@ -2246,6 +2267,31 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 //
 // # Description
 //
+// Undoes the last edit action when the -undo option is true, and returns a
+// list of indices indicating what ranges were changed by the undo operation.
+// An edit action is defined as all the insert and delete commands that are
+// recorded on the undo stack in between two separators. Generates an error
+// when the undo stack is empty. Does nothing when the -undo option is false.
+func (w *TextWidget) Undo() {
+	evalErr(fmt.Sprintf("%s edit undo", w))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// When the -undo option is true, reapplies the last undone edits provided no
+// other edits were done since then, and returns a list of indices indicating
+// what ranges were changed by the redo operation. Generates an error when the
+// redo stack is empty. Does nothing when the -undo option is false.
+func (w *TextWidget) Redo() {
+	evalErr(fmt.Sprintf("%s edit redo", w))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Return a range of characters from the text. The return value will be all the
 // characters in the text starting with the one whose index is index1 and
 // ending just before the one whose index is index2 (the character at index2
@@ -2260,8 +2306,15 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 // get. If the -displaychars option is given, then, within each range, only
 // those characters which are not elided will be returned. This may have the
 // effect that some of the returned ranges are empty strings.
-func (w *TextWidget) Get(options ...any) (r string) {
-	return evalErr(fmt.Sprintf("%s get %s", w, collectAny(options...)))
+//
+// BUG(jnml) [TextWidget.Get] currently supports only one range.
+func (w *TextWidget) Get(options ...any) (r []string) {
+	return []string{evalErr(fmt.Sprintf("%s get %s", w, collectAny(options...)))}
+}
+
+// Text is a shortcut for w.Get("1.0", "end-1c")[0].
+func (w *TextWidget) Text() string {
+	return w.Get("1.0", "end-1c")[0]
 }
 
 // LC encodes a text index consisting of a line and char number.
@@ -4189,4 +4242,15 @@ func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
 	}
 
 	return &Ticker{eh: eh}, nil
+}
+
+// TNotebook — Multi-paned container widget
+//
+// # Description
+//
+// Selects the specified tab. The associated content window will be displayed,
+// and the previously-selected window (if different) is unmapped. If tabid is
+// omitted, returns the widget name of the currently selected pane.
+func (w *TNotebookWidget) Select(tabid any) string {
+	return evalErr(fmt.Sprintf("%s select %s", w, tclSafeString(fmt.Sprint(tabid))))
 }

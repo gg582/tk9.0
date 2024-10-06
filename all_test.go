@@ -118,3 +118,9 @@ func TestTokenizer(t *testing.T) {
 // 		}
 // 	}
 // }
+
+func TestTmp(t *testing.T) {
+	Pack(Label(Txt("Hello World!")))
+	Bind(App, "<Control-Next>", Command(func(e *Event) { fmt.Printf("%q\n", e.Keysym) }))
+	App.Wait()
+}

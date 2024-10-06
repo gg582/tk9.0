@@ -265,24 +265,34 @@ func dvi2img(r io.Reader, scale float64) (img image.Image, err error) {
 	return renderer.final, nil
 }
 
-func tex2dvi(src string) (dvi *bytes.Buffer) {
+func tex2dvi(src string) (dvi *bytes.Buffer, err error) {
 	// To get rid of the page number rendered by default, the function prepends
 	// "\footline={}\n" to src. Also, "\n\bye\n" is appended to 'src' to make it a
 	// complete TeX document.
 	var stdout, stderr, b bytes.Buffer
-	if err := tex.Main(
-		strings.NewReader("\\input plain \\input x"),
+	nm := wmTitle
+	if nm == "plain" {
+		nm += "_"
+	}
+	if err = tex.Main(
+		strings.NewReader(fmt.Sprintf("\\input plain \\input %s", nm)),
 		&stdout,
 		&stderr,
-		tex.WithInputFile("x.tex", strings.NewReader(fmt.Sprintf("\\footline={}\n%s\n\\bye\n", src))),
+		tex.WithInputFile(nm+".tex", strings.NewReader(fmt.Sprintf("\\footline={}\n%s\n\\bye\n", src))),
 		tex.WithDVIFile(&b),
 		tex.WithLogFile(io.Discard),
 	); err != nil {
-		fail(fmt.Errorf("FAIL err=%v\nstdout=%s\nstderr=%s", err, stdout.Bytes(), stderr.Bytes()))
-		return nil
+		a := []string{err.Error()}
+		if b := stdout.Bytes(); len(b) != 0 {
+			a = append(a, string(b))
+		}
+		if b := stderr.Bytes(); len(b) != 0 {
+			a = append(a, string(b))
+		}
+		return nil, fmt.Errorf("%s", strings.Join(a, "\n"))
 	}
 
-	return &b
+	return &b, nil
 }
 
 func sanitizeTeX(s string) (r string) {
@@ -291,24 +301,9 @@ func sanitizeTeX(s string) (r string) {
 	return strings.Join(a, " ")
 }
 
-// TeX renders TeX 'src' as a png file that shows the TeX "snippet" in a fixed
-// 600 dpi resolution. The result is afterwards resized using the 'scale'
-// factor. Scale factor 1.0 means no resize.
-//
-// Only plain Tex and a subset of some of the default Computer Modern fonts are
-// supported. Many small fonts are not available.
+// TeX is like Tex2 but report errors using [ErrorMode] and [Error].
 func TeX(src string, scale float64) (png []byte) {
-	if src = sanitizeTeX(src); src == "" {
-		fail(fmt.Errorf("empty TeX code"))
-		return nil
-	}
-
-	dvi := tex2dvi(src)
-	if dvi == nil {
-		return nil
-	}
-
-	b, err := dvi2png(dvi, scale)
+	b, err := TeX2(src, scale)
 	if err != nil {
 		fail(err)
 		return nil
@@ -317,23 +312,46 @@ func TeX(src string, scale float64) (png []byte) {
 	return b
 }
 
-// TeXImg renders is line Tex but returns an [image.Image].
-func TeXImg(src string, scale float64) (img image.Image) {
+// TeX2 renders TeX 'src' as a png file that shows the TeX "snippet" in a fixed
+// 600 dpi resolution. The result is afterwards resized using the 'scale'
+// factor. Scale factor 1.0 means no resize.
+//
+// Only plain Tex and a subset of some of the default Computer Modern fonts are
+// supported. Many small fonts are not available.
+func TeX2(src string, scale float64) (png []byte, err error) {
 	if src = sanitizeTeX(src); src == "" {
-		fail(fmt.Errorf("empty TeX code"))
-		return nil
+		return nil, fmt.Errorf("empty TeX code")
 	}
 
-	dvi := tex2dvi(src)
-	if dvi == nil {
-		return nil
+	dvi, err := tex2dvi(src)
+	if err != nil {
+		return nil, err
 	}
 
-	img, err := dvi2img(dvi, scale)
+	return dvi2png(dvi, scale)
+}
+
+// TeXImg renders is line TeX but returns an [image.Image].
+func TeXImg(src string, scale float64) (img image.Image) {
+	img, err := TeXImg2(src, scale)
 	if err != nil {
 		fail(err)
 		return nil
 	}
 
 	return img
+}
+
+// TeXImg2 renders is line TeX2 but returns an [image.Image].
+func TeXImg2(src string, scale float64) (img image.Image, err error) {
+	if src = sanitizeTeX(src); src == "" {
+		return nil, fmt.Errorf("empty TeX code")
+	}
+
+	dvi, err := tex2dvi(src)
+	if err != nil {
+		return nil, err
+	}
+
+	return dvi2img(dvi, scale)
 }
