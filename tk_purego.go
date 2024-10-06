@@ -239,11 +239,13 @@ func eval(code string) (r string, err error) {
 
 	defer allocator.UintptrFree(cs)
 
-	if r0, _, _ := purego.SyscallN(evalExProc, interp, cs, uintptr(len(code)), tcl_eval_direct); r0 == tcl_ok {
+	switch r0, _, _ := purego.SyscallN(evalExProc, interp, cs, uintptr(len(code)), tcl_eval_direct); r0 {
+	case tcl_ok, tcl_result:
 		return tclResult(), nil
+	default:
+		return "", fmt.Errorf("%s", tclResult())
 	}
 
-	return "", fmt.Errorf("%s", tclResult())
 }
 
 func tclResult() string {
@@ -313,7 +315,7 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 		setResult(tclSafeString(e.Err.Error()))
 		return tcl_error
 	default:
-		if setResult("") != nil {
+		if setResult(e.Result) != nil {
 			return tcl_error
 		}
 

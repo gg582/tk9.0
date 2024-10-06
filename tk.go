@@ -41,9 +41,10 @@ const (
 	goos           = runtime.GOOS
 	libVersion     = "tk9.0.0"
 
-	tcl_eval_direct = 0x40000 // tcl9.0b3/generic/tcl.h:978
-	tcl_ok          = 0       // tcl9.0b3/generic/tcl.h:522
-	tcl_error       = 1       // tcl9.0b3/generic/tcl.h:523
+	tcl_eval_direct = 0x40000
+	tcl_ok          = 0
+	tcl_error       = 1
+	tcl_result      = 2
 )
 
 // NativeScaling is the value returned by TKScaling in package initialization before it is possibly
@@ -85,7 +86,8 @@ var (
 	id          atomic.Int32
 	initialized bool
 	isBuilder   = os.Getenv("MODERNC_BUILDER") != ""
-	wmTitle     string
+	// variables   = map[*Window]string{}
+	wmTitle string
 
 	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
 	//
@@ -452,6 +454,9 @@ type EventHandler func(*Event)
 type Event struct {
 	// Event handlers should set Err on failure.
 	Err error
+	// Result can be optionally set by the handler. The field is returned by
+	// certain methods, for example [TCheckbuttonWidget.Invoke].
+	Result string
 	// Event source, if any. This field is set when the event handler was
 	// created.
 	W *Window
@@ -2267,11 +2272,56 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 //
 // # Description
 //
+// Copies the selection in the widget to the clipboard, if there is a selection.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Copy() {
+	evalErr(fmt.Sprintf("tk_textCopy %s", w))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Copies the selection in the widget to the clipboard and deletes the
+// selection. If there is no selection in the widget then these keys have no
+// effect.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Cut() {
+	evalErr(fmt.Sprintf("tk_textCut %s", w))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Inserts the contents of the clipboard at the position of the insertion cursor.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Paste() {
+	evalErr(fmt.Sprintf("tk_textPaste %s", w))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Undoes the last edit action when the -undo option is true, and returns a
 // list of indices indicating what ranges were changed by the undo operation.
 // An edit action is defined as all the insert and delete commands that are
 // recorded on the undo stack in between two separators. Generates an error
 // when the undo stack is empty. Does nothing when the -undo option is false.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Undo() {
 	evalErr(fmt.Sprintf("%s edit undo", w))
 }
@@ -2284,6 +2334,10 @@ func (w *TextWidget) Undo() {
 // other edits were done since then, and returns a list of indices indicating
 // what ranges were changed by the redo operation. Generates an error when the
 // redo stack is empty. Does nothing when the -undo option is false.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Redo() {
 	evalErr(fmt.Sprintf("%s edit redo", w))
 }
@@ -2308,6 +2362,10 @@ func (w *TextWidget) Redo() {
 // effect that some of the returned ranges are empty strings.
 //
 // BUG(jnml) [TextWidget.Get] currently supports only one range.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Get(options ...any) (r []string) {
 	return []string{evalErr(fmt.Sprintf("%s get %s", w, collectAny(options...)))}
 }
@@ -4171,6 +4229,39 @@ func (w *TNotebookWidget) Add(options ...Opt) {
 	evalErr(fmt.Sprintf("%s add %v", w, winCollect(w.Window, options...)))
 }
 
+// TNotebook — Multi-paned container widget
+//
+// # Description
+//
+// Selects the specified tab. The associated content window will be displayed,
+// and the previously-selected window (if different) is unmapped. If tabid is
+// omitted, returns the widget name of the currently selected pane.
+//
+// More information might be available at the [Tcl/Tk TNotebook] page.
+//
+// [Tcl/Tk TNotebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
+func (w *TNotebookWidget) Select(tabid any) string {
+	return evalErr(fmt.Sprintf("%s select %s", w, tclSafeString(fmt.Sprint(tabid))))
+}
+
+// TNotebook — Multi-paned container widget
+//
+// # Description
+//
+// Returns the list of windows managed by the notebook, in the index order of
+// their associated tabs.
+//
+// More information might be available at the [Tcl/Tk TNotebook] page.
+//
+// [Tcl/Tk TNotebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
+func (w *TNotebookWidget) Tabs() (r []*Window) {
+	a := parseList(evalErr(fmt.Sprintf("%s tabs", w)))
+	for _, v := range a {
+		r = append(r, windowIndex[v])
+	}
+	return r
+}
+
 // tk_dialog — Create modal dialog and wait for response
 //
 // # Description
@@ -4244,13 +4335,91 @@ func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
 	return &Ticker{eh: eh}, nil
 }
 
-// TNotebook — Multi-paned container widget
+// ttk::checkbutton — On/off widget
 //
 // # Description
 //
-// Selects the specified tab. The associated content window will be displayed,
-// and the previously-selected window (if different) is unmapped. If tabid is
-// omitted, returns the widget name of the currently selected pane.
-func (w *TNotebookWidget) Select(tabid any) string {
-	return evalErr(fmt.Sprintf("%s select %s", w, tclSafeString(fmt.Sprint(tabid))))
+// Toggles between the selected and deselected states and evaluates the
+// associated -command. If the widget is currently selected, sets the -variable
+// to the -offvalue and deselects the widget; otherwise, sets the -variable to
+// the -onvalue. Returns the result of the -command.
+//
+// More information might be available at the [Tcl/Tk TCheckbutton] page.
+//
+// [Tcl/Tk TCheckbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_checkbutton.html
+func (w *TCheckbuttonWidget) Invoke() string {
+	return evalErr(fmt.Sprintf("%s invoke", w))
+}
+
+// // ttk::checkbutton — On/off widget
+// //
+// // # Description
+// //
+// // Set the on/off state of 'w'.
+// func (w *TCheckbuttonWidget) Set(on bool) string {
+// 	return evalErr(fmt.Sprintf("set %s %v", w.variable(cfgVar), on))
+// }
+//
+// func cfgVar(w *Window, nm string) {
+// 	w.Configure(Variable(nm))
+// }
+//
+// func (w *Window) variable(reg func(w *Window, nm string)) (r string) {
+// 	if r, ok := variables[w]; ok {
+// 		return r
+// 	}
+//
+// 	r = fmt.Sprintf("::tk9var%d", id.Add(1))
+// 	variables[w] = r
+// 	if reg != nil {
+// 		reg(w, r)
+// 	}
+// 	return r
+// }
+//
+// // ttk::checkbutton — On/off widget
+// //
+// // # Description
+// //
+// // Get the on/off state of 'w'.
+// func (w *TCheckbuttonWidget) Get() bool {
+// 	return toBool(evalErr(fmt.Sprintf("return $%s", w.variable(cfgVar))))
+// }
+//
+// func toBool(s string) (r bool) {
+// 	switch s {
+// 	case "false", "0":
+// 		return false
+// 	case "true", "1":
+// 		return true
+// 	}
+//
+// 	fail(fmt.Errorf("invalid boolean: %q", s))
+// 	return false
+// }
+
+// checkbutton — Create and manipulate 'checkbutton' boolean selection widgets
+//
+// # Description
+//
+// Selects the checkbutton and sets the associated variable to its “on” value.
+//
+// More information might be available at the [Tcl/Tk checkbutton] page.
+//
+// [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
+func (w *CheckbuttonWidget) Select() {
+	evalErr(fmt.Sprintf("%s select", w))
+}
+
+// checkbutton — Create and manipulate 'checkbutton' boolean selection widgets
+//
+// # Description
+//
+// Deselects the checkbutton and sets the associated variable to its “off” value.
+//
+// More information might be available at the [Tcl/Tk checkbutton] page.
+//
+// [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
+func (w *CheckbuttonWidget) Deselect() {
+	evalErr(fmt.Sprintf("%s deselect", w))
 }
