@@ -271,8 +271,11 @@ func tex2dvi(src string) (dvi *bytes.Buffer, err error) {
 	// complete TeX document.
 	var stdout, stderr, b bytes.Buffer
 	nm := wmTitle
-	if nm == "plain" {
+	switch {
+	case nm == "plain":
 		nm += "_"
+	case nm == "":
+		nm = "x"
 	}
 	if err = tex.Main(
 		strings.NewReader(fmt.Sprintf("\\input plain \\input %s", nm)),
