@@ -25,6 +25,10 @@
 // The CGO_ENABLED=0 is optional and here it only demonstrates the program can
 // be built without CGo.
 //
+// # In action
+//
+//  - [equ] A Plain TeX math editor.
+//
 // # Debugging
 //
 // Consider this program in _examples/debugging.go:
@@ -2349,6 +2353,7 @@
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [RERO]: https://en.wikipedia.org/wiki/Release_early,_release_often
 // [Tkinter]: https://en.wikipedia.org/wiki/Tkinter
+// [equ]: https://pkg.go.dev/modernc.org/equ
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
 // [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=modernc.org%2ftk9.0
