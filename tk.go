@@ -3840,7 +3840,7 @@ func StyleThemeUse(themeName ...string) string {
 // CourierFont returns "{courier new}" on Windows and "courier" elsewhere.
 func CourierFont() string {
 	if runtime.GOOS == "windows" {
-		return "courier ne"
+		return "courier new"
 	}
 
 	return "courier"
