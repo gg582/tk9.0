@@ -1275,6 +1275,10 @@ func Grid(w Widget, options ...Opt) {
 // The anchor value controls how to place the grid within the container window
 // when no row/column has any weight. See THE GRID ALGORITHM below for further
 // details. The default anchor is nw.
+//
+// More information might be available at the [Tcl/Tk grid] page.
+//
+// [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
 func GridAnchor(w *Window, anchor string) string {
 	return evalErr(fmt.Sprintf("grid anchor %s %s", w, tclSafeString(anchor)))
 }
