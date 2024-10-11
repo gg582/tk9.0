@@ -1272,6 +1272,17 @@ func Grid(w Widget, options ...Opt) {
 //
 // # Description
 //
+// The anchor value controls how to place the grid within the container window
+// when no row/column has any weight. See THE GRID ALGORITHM below for further
+// details. The default anchor is nw.
+func GridAnchor(w *Window, anchor string) string {
+	return evalErr(fmt.Sprintf("grid anchor %s %s", w, tclSafeString(anchor)))
+}
+
+// Grid — Geometry manager that arranges widgets in a grid
+//
+// # Description
+//
 // Query or set the row properties of the index row of the geometry container,
 // window. The valid options are -minsize, -weight, -uniform and -pad. If one
 // or more options are provided, then index may be given as a list of row

@@ -10,7 +10,7 @@ func main() {
 	fontSize := int(10*TkScaling()/NativeScaling + 0.5)
 	font := Font("helvetica", fontSize)
 	var scroll *TScrollbarWidget
-	t := Text(font, Height(15), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"),
+	t := Text(font, Height(20), Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }), Setgrid(true), Wrap("word"),
 		Padx("4p"), Pady("12p"))
 	scroll = TScrollbar(Command(func(e *Event) { e.Yview(t) }))
 	Grid(t, Sticky("news"), Pady("2m"))
