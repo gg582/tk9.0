@@ -59,6 +59,8 @@ modernc.org/gc/v3 v3.0.0-20230512134359-466b49aa80e0 h1:Iox2PD9TaVKyyCdDn7A3KuDd
 modernc.org/gc/v3 v3.0.0-20230512134359-466b49aa80e0/go.mod h1:1hU1kIUddpAm7byqo+bfUr4X6PwhHSjb3cNv5yXlzEs=
 modernc.org/knuth v0.5.0 h1:MiOwXq7A3Qd1MZCsJrYzlwtEIroWliRamgkK9eo3ta4=
 modernc.org/knuth v0.5.0/go.mod h1:/3etPTxwTdIg+61dG17pDH6UaoLhQIu+6a2aM+Rf3hA=
+modernc.org/knuth v0.5.1 h1:4ZBeMhgwPcKQ2ISyObPDCXjZSWl4Y8RRPVi4Rf6Nah4=
+modernc.org/knuth v0.5.1/go.mod h1:/3etPTxwTdIg+61dG17pDH6UaoLhQIu+6a2aM+Rf3hA=
 modernc.org/libX11 v0.11.2 h1:tAqv1KVQEDhBqQ/1gfSmEAQtAoOjteOTHZZoiB7AfUQ=
 modernc.org/libX11 v0.11.2/go.mod h1:3AuhC2yIZnqs345bgkN09wZkQxftMkh0VxzG5hlGMHU=
 modernc.org/libXau v0.9.2 h1:zvsrhQm4LZxp9s+PmH4cU3bHtwx8D2N1ZosdOGFgAIw=
