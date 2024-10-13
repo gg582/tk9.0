@@ -27,7 +27,7 @@
 //
 // # In action
 //
-//  - [equ] A Plain TeX math editor.
+//   - [equ] A Plain TeX math editor.
 //
 // # Debugging
 //

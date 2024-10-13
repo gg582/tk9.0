@@ -16,8 +16,13 @@ var libZip []byte
 
 var shasig = map[string]string{
 	// embed/windows/amd64/lib.zip
-	"libtommath.dll": "2d760fefb452665b6af8c8d9d29f3a8378f10fc0847cdd9938ea0cb5edf1d573",
-	"tcl90.dll":      "e10dd6983753a5c4639822bcedb9d0791281c2404e2bf6cbd5fd7ab8aefe47a7",
-	"tcl9tk90.dll":   "9018bcc9159b0d015f748c260486a1a15ff45f7ae000eede57f86dcb18c8f08d",
-	"libtk9.0.0.zip": "b80665940639ac6b345131cd8f0710e8e2efec71771607e614a963515505da48",
+	"libtommath.dll":     "2d760fefb452665b6af8c8d9d29f3a8378f10fc0847cdd9938ea0cb5edf1d573",
+	"tcl90.dll":          "ffe73bcaf947e361561d71a8d93e525c637ca4e2d0b4b4c14c5e0df9756e92b0",
+	"tcl9dde14.dll":      "752748e6975bc56cb941e29c291c18db67e33216b026d49962bf62042584b50e",
+	"tcl9registry13.dll": "0943f57b7bf4a5433a660f5ae6f252fa2f67603af01e916725c48f4fdd6ed658",
+	"tcl9tk90.dll":       "38efd85ac62473ea9615d272b1b923ee3fe8fe9e35d6fa9ebab3f7a0d4aaf795",
+	"tcldde14.dll":       "71ee58d7ddd6213fc2a3d05f089296453c4c8b3de9b7268c2256bbbbab386aab",
+	"tclregistry13.dll":  "e0bfebf0377f3b1671f7d501bb14683cadf382d8181936448d98864eb137acb2",
+	"zlib1.dll":          "04117778e255ed158cf6a4a1e51aa40f49124d9035208218fbfebbe565cf254d",
+	"libtk9.0.0.zip":     "b8873abe39f903e8c0e6e0669083421e020646af9946e16baf30897a64dd5460",
 }
