@@ -109,7 +109,7 @@ lib_win64: download
 	tar xf $(TAR2) -C ~/tmp
 	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=x86_64-w64-mingw32"
 	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN64)
+	cp -v ~/tmp/tcl9.0.0/win/*.dll $(WIN64)
 	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=x86_64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
 	make -C ~/tmp/tk9.0.0/win -j12
 	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN64)
@@ -126,7 +126,7 @@ lib_win32: download
 	tar xf $(TAR2) -C ~/tmp
 	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=i686-w64-mingw32"
 	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN32)
+	cp -v ~/tmp/tcl9.0.0/win/*.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN32)
 	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=i686-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
 	make -C ~/tmp/tk9.0.0/win -j12
 	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN32)
