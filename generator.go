@@ -7,9 +7,12 @@
 package main
 
 import (
+	"archive/zip"
 	"bytes"
+	"crypto/sha256"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -20,7 +23,9 @@ import (
 	"github.com/adrg/xdg"
 	"golang.org/x/net/html"
 	util "modernc.org/fileutil/ccgo"
+	tcllib "modernc.org/libtcl9.0/library"
 	libtk "modernc.org/libtk9.0"
+	tklib "modernc.org/libtk9.0/library"
 	ngrab "modernc.org/ngrab/lib"
 	"modernc.org/rec/lib"
 )
@@ -523,6 +528,7 @@ var (
 )
 
 func main() {
+	hashes()
 	makeTokenizer()
 	w := bytes.NewBuffer(nil)
 	w.WriteString(header)
@@ -986,6 +992,67 @@ func (j *job) widgetStdOpts(xref string, doc *document) (r []string) {
 	return r
 }
 
+func (j *job) widgetStylingOptions(doc *document) (r []string) {
+	for _, n := range doc.sh {
+		if ch := n.FirstChild; ch != nil && strings.Contains(ch.Data, "STYLING OPTIONS") {
+			for n := n.NextSibling; n != nil; n = n.NextSibling {
+				if hasClass(n, "SH") {
+					break
+				}
+
+				if hasClass(n, "PP") {
+					r = append(r, "")
+					continue
+				}
+
+				if ch := n.FirstChild; ch != nil {
+					s := strings.TrimSpace(plain(ch.Data))
+					if strings.HasPrefix(s, "-") {
+						s = s[1:]
+						a := strings.Fields(s)
+						s = fmt.Sprintf(" - [%s] %s", capitalize(a[0]), strings.Join(a[1:], " "))
+						for len(r) != 0 && r[len(r)-1] == "" {
+							r = r[:len(r)-1]
+						}
+					}
+					r = append(r, s)
+				}
+			}
+
+			break
+		}
+	}
+	return r
+}
+
+func capitalize(s string) string {
+	return strings.ToUpper(string(s[0])) + s[1:]
+}
+
+func (j *job) widgetStdStyles(doc *document) (r []string) {
+	for _, n := range doc.sh {
+		if ch := n.FirstChild; ch != nil && strings.Contains(ch.Data, "STANDARD STYLES") {
+			for n := n.NextSibling; n != nil; n = n.NextSibling {
+				if hasClass(n, "SH") {
+					break
+				}
+
+				if hasClass(n, "PP") {
+					r = append(r, "")
+					continue
+				}
+
+				if ch := n.FirstChild; ch != nil {
+					r = append(r, strings.TrimSpace(plain(ch.Data)))
+				}
+			}
+
+			break
+		}
+	}
+	return r
+}
+
 func (j *job) widgetSpecificOpts(xref string, doc *document) (r []*option) {
 	walk(0, doc.root, func(n *html.Node) (dive bool) {
 		if nodeIs(n, "OP") {
@@ -1079,6 +1146,18 @@ func (j *job) widget(fn string, doc *document) {
 			j.w("\n//\n// %s", strings.Join(v.docs, "\n// "))
 		}
 	}
+	if ss := j.widgetStdStyles(doc); len(ss) != 0 {
+		j.w("\n//\n// # Standard styles\n//")
+		for _, v := range ss {
+			j.w("\n// %s", v)
+		}
+	}
+	if sos := j.widgetStylingOptions(doc); len(sos) != 0 {
+		j.w("\n//\n// # Styling options\n//")
+		for _, v := range sos {
+			j.w("\n// %s", v)
+		}
+	}
 	j.w("\nfunc %s(options ...Opt) *%[1]sWidget {", gnm)
 	j.w("\nreturn App.%s(options...)", gnm)
 	j.w("\n}")
@@ -1166,4 +1245,107 @@ func export(s string) (r string) {
 		a[i] = strings.ToUpper(v[:1]) + v[1:]
 	}
 	return strings.Join(a, "")
+}
+
+// origin returns caller's short position, skipping skip frames.
+//
+//lint:ignore U1000 debug helper
+func origin(skip int) string {
+	pc, fn, fl, _ := runtime.Caller(skip)
+	f := runtime.FuncForPC(pc)
+	var fns string
+	if f != nil {
+		fns = f.Name()
+		if x := strings.LastIndex(fns, "."); x > 0 {
+			fns = fns[x+1:]
+		}
+		if strings.HasPrefix(fns, "func") {
+			num := true
+			for _, c := range fns[len("func"):] {
+				if c < '0' || c > '9' {
+					num = false
+					break
+				}
+			}
+			if num {
+				return origin(skip + 2)
+			}
+		}
+	}
+	return fmt.Sprintf("%s:%d:%s", filepath.Base(fn), fl, fns)
+}
+
+// todo prints and return caller's position and an optional message tagged with TODO. Output goes to stderr.
+//
+//lint:ignore U1000 debug helper
+func todo(s string, args ...interface{}) string {
+	switch {
+	case s == "":
+		s = fmt.Sprintf(strings.Repeat("%v ", len(args)), args...)
+	default:
+		s = fmt.Sprintf(s, args...)
+	}
+	r := fmt.Sprintf("%s\n\tTODO %s", origin(2), s)
+	// fmt.Fprintf(os.Stderr, "%s\n", r)
+	// os.Stdout.Sync()
+	return r
+}
+
+// trc prints and return caller's position and an optional message tagged with TRC. Output goes to stderr.
+//
+//lint:ignore U1000 debug helper
+func trc(s string, args ...interface{}) string {
+	switch {
+	case s == "":
+		s = fmt.Sprintf(strings.Repeat("%v ", len(args)), args...)
+	default:
+		s = fmt.Sprintf(s, args...)
+	}
+	r := fmt.Sprintf("%s: TRC %s", origin(2), s)
+	fmt.Fprintf(os.Stderr, "%s\n", r)
+	os.Stderr.Sync()
+	return r
+}
+
+func hashes() {
+	filepath.WalkDir(".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			panic(err)
+		}
+
+		base := filepath.Base(path)
+		if d.IsDir() || !strings.HasSuffix(base, ".zip") {
+			return nil
+		}
+
+		r, err := zip.OpenReader(path)
+		if err != nil {
+			panic(err)
+		}
+
+		defer r.Close()
+
+		fmt.Printf("// %s\n", path)
+		for _, f := range r.File {
+			// fmt.Printf("Contents of %s:\n", f.Name)
+			r, err := f.Open()
+			if err != nil {
+				panic(err)
+			}
+
+			h := sha256.New()
+			_, err = io.Copy(h, r)
+			r.Close()
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Printf("%q: \"%0x\",\n", f.Name, h.Sum(nil))
+		}
+
+		return nil
+	})
+	fmt.Printf("// other\n")
+	fmt.Printf("%q: \"%0x\",\n", "tcl_library.zip", sha256.Sum256([]byte(tcllib.Zip)))
+	fmt.Printf("%q: \"%0x\",\n", "tk_library.zip", sha256.Sum256([]byte(tklib.Zip)))
 }

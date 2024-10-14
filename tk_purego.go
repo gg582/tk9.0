@@ -12,20 +12,12 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"unsafe"
 
 	"github.com/ebitengine/purego"
 	"github.com/evilsocket/islazy/zip"
 	"modernc.org/memory"
-)
-
-const (
-	tcl_eval_direct = 0x40000 // tcl9.0b3/generic/tcl.h:978
-	tcl_ok          = 0       // tcl9.0b3/generic/tcl.h:522
-	tcl_error       = 1       // tcl9.0b3/generic/tcl.h:523
-
 )
 
 var (
@@ -50,12 +42,23 @@ func init() {
 	}
 
 	runtime.LockOSThread()
+}
+
+func lazyInit() {
+	if initialized {
+		return
+	}
+
+	initialized = true
+
+	defer commonLazyInit()
+
 	var cacheDir string
 	if cacheDir, Error = getCacheDir(); Error != nil {
 		return
 	}
 
-	if init1(cacheDir); Error != nil {
+	if bindLibs(cacheDir); Error != nil {
 		return
 	}
 
@@ -79,7 +82,7 @@ func init() {
 	setDefaults()
 }
 
-func init1(cacheDir string) {
+func bindLibs(cacheDir string) {
 	var wd string
 	if wd, Error = os.Getwd(); Error != nil {
 		return
@@ -168,11 +171,15 @@ func getCacheDir() (r string, err error) {
 	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
-		return r, nil
+		if checkSig(r, shasig) {
+			return r, nil
+		}
+
+		os.RemoveAll(r) // Tampered or corrupted.
 	}
 
 	os.MkdirAll(r0, 0700)
-	tmp, err := os.MkdirTemp("", "tk9.0-")
+	tmp, err := os.MkdirTemp(r0, "")
 	if err != nil {
 		return "", err
 	}
@@ -217,6 +224,14 @@ func eval(code string) (r string, err error) {
 			dmesg("code=%s -> r=%v err=%v", code, r, err)
 		}()
 	}
+
+	if !initialized {
+		lazyInit()
+		if Error != nil {
+			return "", Error
+		}
+	}
+
 	cs, err := cString(code)
 	if err != nil {
 		return "", err
@@ -224,11 +239,13 @@ func eval(code string) (r string, err error) {
 
 	defer allocator.UintptrFree(cs)
 
-	if r0, _, _ := purego.SyscallN(evalExProc, interp, cs, uintptr(len(code)), tcl_eval_direct); r0 == tcl_ok {
+	switch r0, _, _ := purego.SyscallN(evalExProc, interp, cs, uintptr(len(code)), tcl_eval_direct); r0 {
+	case tcl_ok, tcl_result:
 		return tclResult(), nil
+	default:
+		return "", fmt.Errorf("%s", tclResult())
 	}
 
-	return "", fmt.Errorf("%s", tclResult())
 }
 
 func tclResult() string {
@@ -282,14 +299,14 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 	}
 
 	arg1 := goTransientString(*(*uintptr)(unsafe.Pointer(argv + unsafe.Sizeof(uintptr(0)))))
-	id, err := strconv.Atoi(arg1)
+	id, e, err := newEvent(arg1)
 	if err != nil {
 		setResult(fmt.Sprintf("eventDispatcher internal error: argv[1]=%q, err=%v", arg1, err))
 		return tcl_error
 	}
 
 	h := handlers[int32(id)]
-	e := &Event{W: h.w}
+	e.W = h.w
 	for i := int32(2); i < argc; i++ {
 		e.args = append(e.args, goString(*(*uintptr)(unsafe.Pointer(argv + uintptr(i)*unsafe.Sizeof(uintptr(0))))))
 	}
@@ -298,7 +315,7 @@ func eventDispatcher(clientData, in uintptr, argc int32, argv uintptr) uintptr {
 		setResult(tclSafeString(e.Err.Error()))
 		return tcl_error
 	default:
-		if setResult("") != nil {
+		if setResult(e.Result) != nil {
 			return tcl_error
 		}
 

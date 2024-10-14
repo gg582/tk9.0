@@ -2,12 +2,13 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-.PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd build_all_targets
+.PHONY:	all clean edit editor test work w65 lib_win lib_linux lib_darwin lib_freebsd \
+	build_all_targets demo
 
-TAR = tcl-core9.0.0rc1-src.tar.gz
-URL = http://kumisystems.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR)
-TAR2 = tk9.0.0rc1-src.tar.gz
-URL2 = http://deac-riga.dl.sourceforge.net/project/tcl/Tcl/9.0.0/$(TAR2)
+TAR = tcl-core9.0.0-src.tar.gz
+URL = http://prdownloads.sourceforge.net/tcl/$(TAR)
+TAR2 = tk9.0.0-src.tar.gz
+URL2 = http://prdownloads.sourceforge.net/tcl/$(TAR2)
 GOOS = $(shell go env GOOS)
 GOARCH = $(shell go env GOARCH)
 WIN32 = embed/windows/386
@@ -15,32 +16,36 @@ WIN64 = embed/windows/amd64
 WINARM64 = embed/windows/arm64
 
 build_all_targets:
-	GOOS=darwin GOARCH=arm64 go build
-	GOOS=darwin GOARCH=arm64 go test -o /dev/null -c
-	GOOS=freebsd GOARCH=amd64 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
-	GOOS=freebsd GOARCH=amd64 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
-	GOOS=freebsd GOARCH=arm64 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
-	GOOS=freebsd GOARCH=arm64 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
-	GOOS=linux GOARCH=386 go build
-	GOOS=linux GOARCH=386 go test -o /dev/null -c
-	GOOS=linux GOARCH=amd64 go build
-	GOOS=linux GOARCH=amd64 go test -o /dev/null -c
-	GOOS=linux GOARCH=arm go build
-	GOOS=linux GOARCH=arm go test -o /dev/null -c
-	GOOS=linux GOARCH=arm64 go build
-	GOOS=linux GOARCH=arm64 go test -o /dev/null -c
-	GOOS=linux GOARCH=loong64 go build
-	GOOS=linux GOARCH=loong64 go test -o /dev/null -c
-	GOOS=linux GOARCH=ppc64le go build
-	GOOS=linux GOARCH=ppc64le go test -o /dev/null -c
-	GOOS=linux GOARCH=riscv64 go build
-	GOOS=linux GOARCH=riscv64 go test -o /dev/null -c
-	GOOS=linux GOARCH=s390x go build
-	GOOS=linux GOARCH=s390x go test -o /dev/null -c
-	GOOS=windows GOARCH=386 go build
-	GOOS=windows GOARCH=386 go test -o /dev/null -c
-	GOOS=windows GOARCH=amd64 go build
-	GOOS=windows GOARCH=amd64 go test -o /dev/null -c
+	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build
+	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build
+	GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=arm64 CGO_ENABLED=0 go build -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=freebsd GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c -gcflags="github.com/ebitengine/purego/internal/fakecgo=-std"
+	GOOS=linux GOARCH=386 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=386 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=arm CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=arm CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=loong64 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=loong64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=ppc64le CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=ppc64le CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=riscv64 CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=riscv64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=linux GOARCH=s390x CGO_ENABLED=0 go build
+	GOOS=linux GOARCH=s390x CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=windows GOARCH=386 CGO_ENABLED=0 go build
+	GOOS=windows GOARCH=386 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
+	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build
+	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c
 
 all: editor
 	golint 2>&1
@@ -93,6 +98,8 @@ win65:
 		.  \
 		win65:src/modernc.org/tk9.0
 
+lib_win: lib_win64 lib_win32 lib_winarm64
+
 lib_win64: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
 	if [ "$(GOARCH)" != "amd64" ]; then exit 1 ; fi
@@ -102,7 +109,7 @@ lib_win64: download
 	tar xf $(TAR2) -C ~/tmp
 	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=x86_64-w64-mingw32"
 	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN64)
+	cp -v ~/tmp/tcl9.0.0/win/*.dll $(WIN64)
 	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=x86_64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
 	make -C ~/tmp/tk9.0.0/win -j12
 	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN64)
@@ -119,7 +126,7 @@ lib_win32: download
 	tar xf $(TAR2) -C ~/tmp
 	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=i686-w64-mingw32"
 	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/win/libtommath.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN32)
+	cp -v ~/tmp/tcl9.0.0/win/*.dll ~/tmp/tcl9.0.0/win/tcl90.dll $(WIN32)
 	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure  --build=x86_64-linux-gnu --host=i686-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win"
 	make -C ~/tmp/tk9.0.0/win -j12
 	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WIN32)
@@ -134,12 +141,11 @@ lib_winarm64: download
 	mkdir -p $(WINARM64)
 	tar xf $(TAR) -C ~/tmp
 	tar xf $(TAR2) -C ~/tmp
-	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --enable-64bit=aarch64"
+	sh -c "cd ~/tmp/tcl9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --enable-64bit=arm64"
 	sh -c "cd ~/tmp/tcl9.0.0/win ; sed -i 's/-DHAVE_CPUID=1/-UHAVE_CPUID/g' *"
 	make -C ~/tmp/tcl9.0.0/win -j12
-	cp -v ~/tmp/tcl9.0.0/libtommath/win64-arm/libtommath.dll  ~/tmp/tcl9.0.0/compat/zlib/win64-arm/zlib1.dll ~/tmp/tcl9.0.0/win/
 	cp -v ~/tmp/tcl9.0.0/win/*.dll $(WINARM64)
-	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win  --enable-64bit=aarch64"
+	sh -c "cd ~/tmp/tk9.0.0/win ; ./configure --build=x86_64-linux-gnu --host=aarch64-w64-mingw32 --with-tcl=$$HOME/tmp/tcl9.0.0/win  --enable-64bit=arm64"
 	make -C ~/tmp/tk9.0.0/win -j12
 	cp -v ~/tmp/tk9.0.0/win/tcl9tk90.dll ~/tmp/tk9.0.0/win/libtk9.0.0.zip $(WINARM64)
 	zip -j $(WINARM64)/lib.zip.tmp $(WINARM64)/*.dll $(WINARM64)/*.zip
@@ -194,3 +200,6 @@ lib_freebsd: download
 	zip -j embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	rm -f embed/$(GOOS)/$(GOARCH)/*.so embed/$(GOOS)/$(GOARCH)/*.zip
 	mv embed/$(GOOS)/$(GOARCH)/lib.zip.tmp embed/$(GOOS)/$(GOARCH)/lib.zip
+
+demo:
+	cd _examples && go run demo.go

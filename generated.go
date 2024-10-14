@@ -2777,6 +2777,46 @@ type ToplevelWidget struct {
 // disabled means that it is not defaultable.
 // The default is normal.
 //
+// # Standard styles
+//
+// Ttk::button widgets support the Toolbutton style in all standard
+// themes, which is useful for creating widgets for toolbars.
+//
+// In the Aqua theme there are several other styles which can be used to
+// produce replicas of many of the different button types that are
+// discussed in Apple's Human Interface Guidelines.  These include
+// DisclosureButton, DisclosureTriangle, HelpButton,
+// ImageButton, InlineButton, GradientButton,
+// RoundedRectButton, and RecessedButton.
+//
+// # Styling options
+//
+// The class name for a ttk::button is TButton.
+//
+// Dynamic states: active, disabled, pressed, readonly.
+//
+// TButton styling options configurable with ttk::style
+// are:
+//   - [Anchor] anchor
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Compound] compound
+//   - [Darkcolor] color
+//   - [Foreground] color
+//   - [Font] font
+//   - [Highlightcolor] color
+//   - [Highlightthickness] amount
+//   - [Lightcolor] color
+//   - [Padding] padding
+//   - [Relief] relief
+//   - [Shiftrelief] amount
+//   - [Width] amount
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
+//
 // [Tcl/Tk ttk_button]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_button.html
 func TButton(options ...Opt) *TButtonWidget {
 	return App.TButton(options...)
@@ -2842,6 +2882,34 @@ type TButtonWidget struct {
 //
 // The name of a global variable whose value is linked to the widget.
 // Defaults to the widget pathname if not specified.
+//
+// # Standard styles
+//
+// Ttk::checkbutton widgets support the Toolbutton style in all
+// standard themes, which is useful for creating widgets for toolbars.
+//
+// # Styling options
+//
+// The class name for a ttk::checkbutton is TCheckbutton.
+//
+// Dynamic states: active, alternate, disabled,
+// pressed, selected, readonly.
+//
+// TCheckbutton styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Compound] compound
+//   - [Foreground] color
+//   - [Indicatorbackground] color
+//   - [Indicatorcolor] color
+//   - [Indicatormargin] padding
+//   - [Indicatorrelief] relief
+//   - [Padding] padding
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_checkbutton.html
 func TCheckbutton(options ...Opt) *TCheckbuttonWidget {
@@ -2930,6 +2998,57 @@ type TCheckbuttonWidget struct {
 //
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
+//
+// # Styling options
+//
+// The class name for a ttk::combobox is TCombobox.
+// The ttk::combobox uses the entry and
+// listbox widgets internally.
+// The listbox frame has a class name of ComboboxPopdownFrame.
+//
+// Dynamic states: disabled, focus, pressed, readonly.
+//
+// TCombobox styling options configurable with ttk::style
+// are:
+//   - [Arrowcolor] color
+//   - [Arrowsize] amount
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Darkcolor] color
+//   - [Focusfill] color
+//   - [Foreground] color
+//   - [Fieldbackground] color
+//   - [Insertcolor] color
+//   - [Insertwidth] amount
+//   - [Lightcolor] color
+//   - [Padding] padding
+//   - [Placeholderforeground] color
+//   - [Postoffset] padding
+//   - [Selectbackground] color
+//   - [Selectforeground] color
+//
+// The ttk::combobox popdown listbox cannot be configured using
+// ttk::style nor via the widget configure command.  The listbox
+// can be configured using the option database.
+//
+// option add *TCombobox*Listbox.background color
+// option add *TCombobox*Listbox.font font
+// option add *TCombobox*Listbox.foreground color
+// option add *TCombobox*Listbox.selectBackground color
+// option add *TCombobox*Listbox.selectForeground color
+//
+// To configure a specific listbox (subject to future change):
+//
+// ComboboxPopdownFrame
+// styling options configurable with ttk::style
+// are:
+//   - [Borderwidth] amount
+//   - [Relief] relief
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_combobox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_combobox.html
 func TCombobox(options ...Opt) *TComboboxWidget {
@@ -3043,6 +3162,32 @@ type TComboboxWidget struct {
 // Specifies an integer value indicating the desired width of the entry window,
 // in average-size characters of the widget's font.
 //
+// # Styling options
+//
+// The class name for a ttk::entry is TEntry.
+//
+// Dynamic states: disabled, focus, readonly.
+//
+// TEntry styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Darkcolor] color
+//   - [Fieldbackground] color
+//   - [Foreground] color
+//   - [Insertcolor] color
+//   - [Insertwidth] amount
+//   - [Lightcolor] color
+//   - [Padding] padding
+//   - [Placeholderforeground] color
+//   - [Relief] relief
+//   - [Selectbackground] color
+//   - [Selectborderwidth] amount
+//   - [Selectforeground] color
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
+//
 // [Tcl/Tk ttk_entry]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_entry.html
 func TEntry(options ...Opt) *TEntryWidget {
 	return App.TEntry(options...)
@@ -3102,6 +3247,20 @@ type TEntryWidget struct {
 // [Height]
 //
 // If specified, the widget's requested height in pixels.
+//
+// # Styling options
+//
+// The class name for a ttk::frame is TFrame.
+//
+// TFrame styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Relief] relief
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_frame]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_frame.html
 func TFrame(options ...Opt) *TFrameWidget {
@@ -3174,6 +3333,24 @@ type TFrameWidget struct {
 // then automatic wrapping is not performed; otherwise
 // the text is split into lines such that no line is longer
 // than the specified value.
+//
+// # Styling options
+//
+// The class name for a ttk::label is TLabel.
+//
+// Dynamic states: disabled, readonly.
+//
+// TLabel styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Compound] compound
+//   - [Foreground] color
+//   - [Font] font
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_label]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_label.html
 func TLabel(options ...Opt) *TLabelWidget {
@@ -3254,6 +3431,36 @@ type TLabelWidget struct {
 //
 // If specified, the widget's requested width in pixels.
 //
+// # Styling options
+//
+// The class name for a ttk::labelframe is TLabelframe.
+// The text label
+// has a class of TLabelframe.Label.
+//
+// Dynamic states: disabled, readonly.
+//
+// TLabelframe styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Borderwidth] amount
+//   - [Darkcolor] color
+//   - [Labelmargins] amount
+//   - [Labeloutside] boolean
+//   - [Lightcolor] color
+//   - [Relief] relief
+//
+// TLabelframe.Label styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Font] font
+//   - [Foreground] color
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
+//
 // [Tcl/Tk ttk_labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_labelframe.html
 func TLabelframe(options ...Opt) *TLabelframeWidget {
 	return App.TLabelframe(options...)
@@ -3313,6 +3520,33 @@ type TLabelframeWidget struct {
 // Specifies the path name of the menu associated with the menubutton.
 // To be on the safe side, the menu ought to be a direct child of the
 // menubutton.
+//
+// # Standard styles
+//
+// Ttk::menubutton widgets support the Toolbutton style in all
+// standard themes, which is useful for creating widgets for toolbars.
+//
+// # Styling options
+//
+// The class name for a ttk::menubutton is TMenubutton.
+//
+// Dynamic states: active, disabled, readonly.
+//
+// TMenubutton styling options configurable with ttk::style
+// are:
+//   - [Arrowsize] amount
+//   - [Background] color
+//   - [Compound] compound
+//   - [Foreground] color
+//   - [Font] font
+//   - [Padding] padding
+//   - [Relief] relief
+//   - [Width] amount
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_menubutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_menubutton.html
 func TMenubutton(options ...Opt) *TMenubuttonWidget {
@@ -3425,6 +3659,39 @@ type TMenubuttonWidget struct {
 // The underlined character is used for mnemonic activation
 // if ttk::notebook::enableTraversal is called.
 //
+// # Styling options
+//
+// The class name for a ttk::notebook is TNotebook.  The tab has
+// a class name of TNotebook.Tab
+//
+// Dynamic states: active, disabled, selected.
+//
+// TNotebook styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Darkcolor] color
+//   - [Foreground] color
+//   - [Lightcolor] color
+//   - [Padding] padding
+//   - [Tabmargins] padding
+//   - [Tabposition] position
+//
+// TNotebook.Tab styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Compound] compound
+//   - [Expand] padding
+//   - [Font] font
+//   - [Foreground] color
+//   - [Padding] padding
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
+//
 // [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
 func TNotebook(options ...Opt) *TNotebookWidget {
 	return App.TNotebook(options...)
@@ -3491,6 +3758,32 @@ type TNotebookWidget struct {
 // An integer specifying the relative stretchability of the pane.
 // When the paned window is resized, the extra space is added
 // or subtracted to each pane proportionally to its -weight.
+//
+// # Styling options
+//
+// The class name for a ttk::panedwindow is TPanedwindow.  The
+// sash has a class name of Sash.
+//
+// TPanedwindow styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//
+// Sash styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Gripsize] size (number of screen units)
+//   - [Handlepad] amount
+//   - [Handlesize] amount
+//   - [Lightcolor] color
+//   - [Sashpad] amount
+//   - [Sashrelief] relief
+//   - [Sashthickness] amount
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_panedwindow.html
 func TPanedwindow(options ...Opt) *TPanedwindowWidget {
@@ -3590,6 +3883,25 @@ type TPanedwindowWidget struct {
 // automatically set to the value of the variable whenever
 // the latter is modified.
 //
+// # Styling options
+//
+// The class name for a ttk::progressbar is TProgressbar.
+//
+// TProgressbar styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Darkcolor] color
+//   - [Lightcolor] color
+//   - [Maxphase]
+//   - [Period]
+//   - [Troughcolor] color
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
+//
 // [Tcl/Tk ttk_progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
 func TProgressbar(options ...Opt) *TProgressbarWidget {
 	return App.TProgressbar(options...)
@@ -3652,6 +3964,34 @@ type TProgressbarWidget struct {
 //
 // The name of a global variable whose value is linked to the widget.
 // Default value is ::selectedButton.
+//
+// # Standard styles
+//
+// Ttk::radiobutton widgets support the Toolbutton style in all
+// standard themes, which is useful for creating widgets for toolbars.
+//
+// # Styling options
+//
+// The class name for a ttk::radiobutton is TRadiobutton.
+//
+// Dynamic states: active, alternate, disabled,
+// pressed, readonly, selected.
+//
+// TRadiobutton styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Compound] compound
+//   - [Foreground] color
+//   - [Indicatorbackground] color
+//   - [Indicatorcolor] color
+//   - [Indicatormargin] padding
+//   - [Indicatorrelief] relief
+//   - [Padding] padding
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_radiobutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_radiobutton.html
 func TRadiobutton(options ...Opt) *TRadiobuttonWidget {
@@ -3734,6 +4074,28 @@ type TRadiobuttonWidget struct {
 // Whenever the scale is manipulated interactively, the variable will be modified
 // to reflect the scale's new value.
 //
+// # Styling options
+//
+// The class name for a ttk::scale is TScale.
+//
+// Dynamic states: active.
+//
+// TScale styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Borderwidth] amount
+//   - [Darkcolor] color
+//   - [Groovewidth] amount
+//   - [Lightcolor] color
+//   - [Sliderwidth] amount
+//   - [Troughcolor] color
+//   - [Troughrelief] relief
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
+//
 // [Tcl/Tk ttk_scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scale.html
 func TScale(options ...Opt) *TScaleWidget {
 	return App.TScale(options...)
@@ -3793,6 +4155,30 @@ type TScaleWidget struct {
 // One of horizontal or vertical.
 // Specifies the orientation of the scrollbar.
 //
+// # Styling options
+//
+// The class name for a ttk::scrollbar is TScrollbar.
+//
+// Dynamic states: active, disabled.
+//
+// TScrollbar (or more specifically Vertical.TScrollbar and
+// Horizontal.TScrollbar) styling options that are configurable with
+// ttk::style are:
+//   - [Arrowcolor] color
+//   - [Arrowsize] amount
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Darkcolor] color (color of the dark part of the 3D relief)
+//   - [Foreground] color
+//   - [Gripsize] size (number of screen units)
+//   - [Lightcolor] color (color of the light part of the 3D relief)
+//   - [Troughcolor] color
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
+//
 // [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scrollbar.html
 func TScrollbar(options ...Opt) *TScrollbarWidget {
 	return App.TScrollbar(options...)
@@ -3837,6 +4223,19 @@ type TScrollbarWidget struct {
 // One of horizontal or vertical.
 // Specifies the orientation of the separator.
 //
+// # Styling options
+//
+// The class name for a ttk::separator is TSeparator.
+//
+// TSeparator styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
+//
 // [Tcl/Tk ttk_separator]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_separator.html
 func TSeparator(options ...Opt) *TSeparatorWidget {
 	return App.TSeparator(options...)
@@ -3874,6 +4273,19 @@ type TSeparatorWidget struct {
 //   - [Cursor]
 //   - [Style]
 //   - [Takefocus]
+//
+// # Styling options
+//
+// The class name for a ttk::sizegrip is TSizegrip.
+//
+// TSizegrip styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_sizegrip]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_sizegrip.html
 func TSizegrip(options ...Opt) *TSizegripWidget {
@@ -3963,6 +4375,34 @@ type TSizegripWidget struct {
 //
 // Must be a proper boolean value.  If on, the spinbox will wrap around the
 // values of data in the widget.
+//
+// # Styling options
+//
+// The class name for a ttk::spinbox is TSpinbox.
+//
+// Dynamic states: active, disabled, focus, readonly.
+//
+// TSpinbox styling options configurable with ttk::style
+// are:
+//   - [Arrowcolor] color
+//   - [Arrowsize] amount
+//   - [Background] color
+//   - [Bordercolor] color
+//   - [Darkcolor] color
+//   - [Fieldbackground] color
+//   - [Foreground] color
+//   - [Insertcolor] color
+//   - [Insertwidth] amount
+//   - [Lightcolor] color
+//   - [Padding] padding
+//   - [Placeholderforeground] color
+//   - [Selectbackground] color
+//   - [Selectforeground] color
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_spinbox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_spinbox.html
 func TSpinbox(options ...Opt) *TSpinboxWidget {
@@ -4082,6 +4522,48 @@ type TSpinboxWidget struct {
 // [Titleitems]
 //
 // Number of items at the top that should not be vertically scrolled. Default is 0.
+//
+// # Styling options
+//
+// The class name for a ttk::treeview is Treeview.
+// The treeview header class name is Heading.
+// The treeview item class name is Item.
+// The treeview cell class name is Cell.
+//
+// Dynamic states: disabled, selected.
+//
+// Treeview styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Fieldbackground] color
+//   - [Font] font
+//   - [Foreground] color
+//   - [Indent] amount
+//   - [Columnseparatorwidth] amount
+//   - [Rowheight] amount
+//   - [Stripedbackground] color
+//
+// Heading styling options configurable with ttk::style
+// are:
+//   - [Background] color
+//   - [Font] font
+//   - [Relief] relief
+//
+// Item styling options configurable with ttk::style
+// are:
+//   - [Foreground] color
+//   - [Indicatormargins] padding
+//   - [Indicatorsize] amount
+//   - [Padding] padding
+//
+// Cell styling options configurable with ttk::style
+// are:
+//   - [Padding] padding
+//
+// Some options are only available for specific themes.
+//
+// See the ttk::style manual page for information on how to configure
+// ttk styles.
 //
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func TTreeview(options ...Opt) *TTreeviewWidget {

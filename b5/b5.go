@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// The b5 package is a work in progress with no stable API yet.
+// The b5 package is a work in progress with no stable API yet. It will eventually become
+// a full theme package.
 package b5 // import "modernc.org/tk9.0/b5"
 
 import (
@@ -12,27 +13,33 @@ import (
 	. "modernc.org/tk9.0"
 )
 
-//TODO const semantics = None?, Primary, Secondary, Success, Info, Warning, Danger, Dark, Light, Link
-
 const (
-	buttonFocusDecoratorCorner = 9.0 / 96 // The rounded corner is 9px on a 96 DPI display.
-	buttonFocusDecorator       = 4.0 / 96 // 4px on a 96 DPI display.
+	buttonFocusDecoratorCorner = 9 / 96.  // The rounded corner is 9px on a 96 DPI display.
+	buttonFocusDecorator       = 4 / 96.  // 4px on a 96 DPI display.
+	buttonTileHeight           = 27 / 96. // 27px on a 96 DPI display
 )
 
 var (
 	corners = map[cornerKey][4]*Img{}
-	tiles   = map[string]*Img{}
+	tiles   = map[tileKey]*Img{}
 )
 
-type ButtonColor int
+type Color int
 
 const (
-	_ ButtonColor = iota
+	_ Color = iota
 	ButtonFace
+	ButtonFocus
 	ButtonText
 )
 
-type ButtonColors map[ButtonColor]string
+type Colors map[Color]string
+
+type tileKey struct {
+	width  int
+	height int
+	color  string
+}
 
 type cornerKey struct {
 	width       int
@@ -73,53 +80,69 @@ func getCorners(width, clip, r, strokeWidth int, fill, stroke, background string
 	return re
 }
 
-func getTile(color string) (r *Img) {
-	if ex, ok := tiles[color]; ok {
+// All sizes in px
+func getTile(width, height int, color string) (r *Img) {
+	k := tileKey{width, height, color}
+	if ex, ok := tiles[k]; ok {
 		return ex
 	}
 
-	r = NewPhoto(Width(8), Height(8),
-		Data(fmt.Sprintf(`<svg width="8" height="8" fill=%q><rect width="8" height="8" fill=%[1]q/></svg>`, color)))
-	tiles[color] = r
+	r = NewPhoto(Width(width), Height(height),
+		Data(fmt.Sprintf(`<svg width="%d" height="%d" fill=%q><rect width="%[1]d" height="%d" fill=%q/></svg>`, width, height, color)))
+	tiles[k] = r
 	return r
 }
 
 // ButtonStyle defines a button style. ATM only when using the "default" theme.
-func ButtonStyle(style string, scheme ButtonColors, background string) string {
+//
+// This function is intended for prototyping and will be most probably unexported at some time.
+func ButtonStyle(style string, colors Colors, background string, focused bool) string {
 	width := TkScaling() * 72 * buttonFocusDecoratorCorner
 	stroke := TkScaling() * 72 * buttonFocusDecorator
+	th := TkScaling() * 72 * buttonTileHeight
 	r := width - stroke/2
 	clip := width - stroke
-	corners := getCorners(round(width), round(clip), round(r), round(stroke), scheme[ButtonFace], background, background)
-	q1 := style + ".corner1"
-	q2 := style + ".corner2"
-	q3 := style + ".corner3"
-	q4 := style + ".corner4"
-	StyleElementCreate(q1, "image", corners[0])
-	StyleElementCreate(q2, "image", corners[1])
-	StyleElementCreate(q3, "image", corners[2])
-	StyleElementCreate(q4, "image", corners[3])
+	focus := background
+	if focused {
+		focus = colors[ButtonFocus]
+	}
+	ocorners := getCorners(round(width), round(width), round(r), round(stroke), colors[ButtonFace], focus, background)
+	oq1 := style + ".p1"
+	oq2 := style + ".p2"
+	oq3 := style + ".p3"
+	oq4 := style + ".p4"
+	StyleElementCreate(oq1, "image", ocorners[0])
+	StyleElementCreate(oq2, "image", ocorners[1])
+	StyleElementCreate(oq3, "image", ocorners[2])
+	StyleElementCreate(oq4, "image", ocorners[3])
+	icorners := getCorners(round(width), round(clip), round(r), round(stroke), colors[ButtonFace], focus, background)
+	iq1 := style + ".iq1"
+	iq2 := style + ".iq2"
+	iq3 := style + ".iq3"
+	iq4 := style + ".iq4"
+	StyleElementCreate(iq1, "image", icorners[0])
+	StyleElementCreate(iq2, "image", icorners[1])
+	StyleElementCreate(iq3, "image", icorners[2])
+	StyleElementCreate(iq4, "image", icorners[3])
 	tile := "Tile." + style + ".tile"
-	t := getTile(scheme[ButtonFace])
+	t := getTile(8, round(th), colors[ButtonFace])
 	StyleElementCreate(tile, "image", t)
 	StyleLayout(style,
-		"Button.border", Sticky("nswe"), Border(1), Children(
+		"Button.border", Sticky("nswe"), Children(
 			"Button.focus", Sticky("nswe"), Children(
+				oq1, Sticky("ne"),
+				oq2, Sticky("nw"),
+				oq3, Sticky("sw"),
+				oq4, Sticky("se"),
 				"Button.padding", Sticky("nswe"), Children(
 					tile,
-					q1, Sticky("ne"),
-					q2, Sticky("nw"),
-					q3, Sticky("sw"),
-					q4, Sticky("se"),
+					iq1, Sticky("ne"),
+					iq2, Sticky("nw"),
+					iq3, Sticky("sw"),
+					iq4, Sticky("se"),
 					"Button.label", Sticky("nswe")))))
-	StyleConfigure(style, Compound(true))
-	StyleConfigure(style, Foreground(scheme[ButtonText]))
-	StyleConfigure(style, Background(background))
-	StyleConfigure(style, Borderwidth(5))
-	StyleConfigure(style, Relief("flat"))
-	StyleConfigure(style, Padding("0"))
-	StyleConfigure(style, FocusColor(Black))
-	StyleConfigure(style, FocusThickness(0))
-	StyleConfigure(style, FocusSolid("solid"))
+	StyleConfigure(style, Background(focus), Borderwidth(0), Compound(true), Focuscolor(focus), Focussolid(false),
+		Focusthickness(0), Foreground(colors[ButtonText]), Padding(round(stroke)), Relief("flat"), Shiftrelief(0))
+	StyleMap(style, Background, "disabled", "#edeceb")
 	return style
 }

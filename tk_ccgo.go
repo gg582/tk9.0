@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !windows && !((linux && (amd64 || arm64)) || (darwin && (amd64 || arm64)) || (freebsd && (amd64 || arm64)))
+//go:build linux && (386 || arm || loong64 || ppc64le || riscv64 || s390x)
 
 package tk9_0 // import "modernc.org/tk9.0"
 
@@ -13,7 +13,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strconv"
 
 	"modernc.org/libc"
 	libtcl "modernc.org/libtcl9.0"
@@ -32,6 +31,12 @@ const (
 
 var (
 	interp *tcl.Interp
+
+	shasig = map[string]string{
+		// other
+		"tcl_library.zip": "ef851d549039c822cd06af0c657c8173006eae90f997bdae11c60c0bdc5a0c1c",
+		"tk_library.zip":  "2afaf3ccb4521fe44d330b4da077d7d433d377f9ffc56f5ce8decd1689e00352",
+	}
 )
 
 func init() {
@@ -40,6 +45,17 @@ func init() {
 	}
 
 	runtime.LockOSThread()
+}
+
+func lazyInit() {
+	if initialized {
+		return
+	}
+
+	initialized = true
+
+	defer commonLazyInit()
+
 	var cacheDir string
 	if cacheDir, Error = getCacheDir(); Error != nil {
 		return
@@ -79,20 +95,24 @@ zipfs mount %s %s
 	}
 }
 
-func getCacheDir() (r string, err error) { //TODO consolidate
+func getCacheDir() (r string, err error) {
 	if r, err = os.UserCacheDir(); err != nil {
 		return "", err
 	}
 
-	r0 := filepath.Join(r, "modernc.org")
-	r = filepath.Join(r0, libtk.Version)
+	r0 := filepath.Join(r, "modernc.org", libVersion, goos)
+	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
-		return r, nil
+		if checkSig(r, shasig) {
+			return r, nil
+		}
+
+		os.RemoveAll(r) // Tampered or corrupted.
 	}
 
 	os.MkdirAll(r0, 0700)
-	tmp, err := os.MkdirTemp("", "tk9.0-")
+	tmp, err := os.MkdirTemp(r0, "")
 	if err != nil {
 		return "", err
 	}
@@ -121,26 +141,35 @@ func eval(code string) (r string, err error) {
 			dmesg("code=%s -> r=%v err=%v", code, r, err)
 		}()
 	}
+
+	if !initialized {
+		lazyInit()
+		if Error != nil {
+			return "", Error
+		}
+	}
+
 	return interp.Eval(code, tcl.EvalDirect)
 }
 
-func eventDispatcher(data any, interp *tcl.Interp, args []string) int {
-	id, err := strconv.Atoi(args[1])
+func eventDispatcher(data any, interp *tcl.Interp, argv []string) int {
+	id, e, err := newEvent(argv[1])
 	if err != nil {
-		panic(todo("event dispatcher internal error: %q", args))
+		interp.SetResult(fmt.Sprintf("eventDispatcher internal error: argv1=`%s`", argv[1]))
+		return tcl_error
 	}
 
 	h := handlers[int32(id)]
-	e := &Event{W: h.w}
-	if len(args) > 2 { // eg.: ["eventDispatcher", "42", "0.1", "0.9"]
-		e.args = args[2:]
+	e.W = h.w
+	if len(argv) > 2 { // eg.: ["eventDispatcher", "42", "0.1", "0.9"]
+		e.args = argv[2:]
 	}
 	switch h.callback(e); {
 	case e.Err != nil:
 		interp.SetResult(tclSafeString(e.Err.Error()))
 		return libtcl.TCL_ERROR
 	default:
-		interp.SetResult("")
+		interp.SetResult(e.Result)
 		return libtcl.TCL_OK
 	}
 }

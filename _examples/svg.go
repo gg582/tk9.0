@@ -16,9 +16,8 @@ const svg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 </svg>`
 
 func main() {
-	Pack(
-		Label(Image(NewPhoto(Data(svg)))),
-		TExit(), Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"),
-	)
+	Pack(Label(Image(NewPhoto(Data(svg)))),
+		TExit(),
+		Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"))
 	App.Center().Wait()
 }

@@ -5,7 +5,6 @@ import (
 )
 
 func main() {
-	CollectErrors = true
 	style := Opts{Padx("1m"), Pady("2m"), Ipadx("1m"), Ipady("1m"), Sticky("e")}
 	in := TEntry(Textvariable("abc"))
 	out := TEntry()
