@@ -4438,3 +4438,34 @@ func (w *CheckbuttonWidget) Select() {
 func (w *CheckbuttonWidget) Deselect() {
 	evalErr(fmt.Sprintf("%s deselect", w))
 }
+
+// font — Create and inspect fonts.
+//
+// # Description
+//
+// Query or modify the desired attributes for the named font called fontname.
+// If no option is specified, returns a list describing all the options and
+// their values for fontname. If a single option is specified with no value,
+// then returns the current value of that attribute. If one or more
+// option-value pairs are specified, then the command modifies the given named
+// font to have the given values; in this case, all widgets using that font
+// will redisplay themselves using the new attributes for the font. See FONT
+// OPTIONS below for a list of the possible attributes.
+//
+// Note that on Aqua/macOS, the system fonts (see PLATFORM SPECIFIC FONTS
+// below) may not be actually altered because they are implemented by the
+// system theme. To achieve the effect of modification, use font actual to get
+// their configuration and font create to synthesize a copy of the font which
+// can be modified.
+//
+// More information might be available at the [Tcl/Tk font] page.
+//
+// [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
+func FontConfigure(name string, options ...any) []string {
+	for i, v := range options {
+		if s := funcToTclOption(v); s != "" {
+			options[i] = rawOption(s)
+		}
+	}
+	return parseList(evalErr(fmt.Sprintf("font configure %s %s", tclSafeString(name), collectAny(options...))))
+}
