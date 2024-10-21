@@ -78,18 +78,17 @@ var (
 	//go:embed embed/gotk.png
 	icon []byte
 
-	cleanupDirs []string
-
-	exitHandler Opt
-	finished    atomic.Int32
-	forcedX     = -1
-	forcedY     = -1
-	handlers    = map[int32]*eventHandler{}
-	id          atomic.Int32
-	initialized bool
-	isBuilder   = os.Getenv("MODERNC_BUILDER") != ""
-	// variables   = map[*Window]string{}
-	wmTitle string
+	autocenterDisabled bool
+	cleanupDirs        []string
+	exitHandler        Opt
+	finished           atomic.Int32
+	forcedX            = -1
+	forcedY            = -1
+	handlers           = map[int32]*eventHandler{}
+	id                 atomic.Int32
+	initialized        bool
+	isBuilder          = os.Getenv("MODERNC_BUILDER") != ""
+	wmTitle            string
 
 	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
 	//
@@ -297,7 +296,7 @@ func setDefaults() {
 			break
 		}
 	}
-	App.Configure(Padx("4m"), Pady("3m")).Center()
+	App.Configure(Padx("4m"), Pady("3m"))
 	if x >= 0 && y >= 0 {
 		forcedX, forcedY = x, y
 	}
@@ -1089,9 +1088,15 @@ func Pack(options ...Opt) {
 // If an event handler invokes Wait again, the nested call to Wait must
 // complete before the outer call can complete.
 func (w *Window) Wait() {
-	if w == App && forcedX >= 0 && forcedY >= 0 { // Behind TK9_DEMO=1.
-		evalErr(fmt.Sprintf("wm geometry . +%v+%v", forcedX, forcedY)) //TODO add API func
-		forcedX, forcedY = -1, -1                                      // Apply only the first time.
+	if w == App {
+		switch {
+		case forcedX >= 0 && forcedY >= 0: // Behind TK9_DEMO=1.
+			evalErr(fmt.Sprintf("wm geometry . +%v+%v", forcedX, forcedY)) //TODO add API func
+			forcedX, forcedY = -1, -1                                      // Apply only the first time.
+		case !autocenterDisabled:
+			autocenterDisabled = true
+			w.Center()
+		}
 	}
 	evalErr(fmt.Sprintf("tkwait window %s", w))
 }
@@ -1171,6 +1176,7 @@ func (w *Window) WmTitle(s string) string {
 
 // Center centers 'w' and returns 'w'.
 func (w *Window) Center() *Window {
+	autocenterDisabled = true
 	evalErr(fmt.Sprintf("tk::PlaceWindow %s center", w))
 	return w
 }
@@ -3076,6 +3082,7 @@ func GetSaveFile(options ...Opt) string {
 //
 // [Tcl/Tk place]: https://www.tcl.tk/man/tcl9.0/TkCmd/place.htm
 func Place(options ...Opt) {
+	autocenterDisabled = true
 	evalErr(fmt.Sprintf("place %s", collect(options...)))
 }
 
