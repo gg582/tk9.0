@@ -12,6 +12,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"image/png"
 	"io/fs"
 	"os"
 	"os/exec"
@@ -23,6 +24,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/mat/besticon/v3/ico"
 	"golang.org/x/net/html"
 )
 
@@ -4468,4 +4470,40 @@ func FontConfigure(name string, options ...any) []string {
 		}
 	}
 	return parseList(evalErr(fmt.Sprintf("font configure %s %s", tclSafeString(name), collectAny(options...))))
+}
+
+var (
+	pngSig = []byte{137, 80, 78, 71, 13, 10, 26, 10} // http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
+	icoSig = []byte{'\x00', '\x00', '\x01', '\x00'}  // https://en.wikipedia.org/wiki/ICO_(file_format)#Header
+)
+
+// Data option.
+//
+// Known uses:
+//   - [NewBitmap] (command specific)
+//   - [NewPhoto] (command specific)
+func Data(val any) Opt {
+	switch x := val.(type) {
+	case []byte:
+		switch {
+		case bytes.HasPrefix(x, pngSig):
+			// ok
+		case bytes.HasPrefix(x, icoSig):
+			b := bytes.NewBuffer(x)
+			img, err := ico.Decode(bytes.NewReader(x))
+			if err != nil {
+				fail(err)
+				return rawOption("")
+			}
+
+			b.Reset()
+			if err := png.Encode(b, img); err != nil {
+				fail(err)
+				return rawOption("")
+			}
+
+			val = b.Bytes()
+		}
+	}
+	return rawOption(fmt.Sprintf(`-data %s`, optionString(val)))
 }

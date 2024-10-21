@@ -5461,15 +5461,6 @@ func (w *Window) Cursor() string {
 	return evalErr(fmt.Sprintf(`%s cget -cursor`, w))
 }
 
-// Data option.
-//
-// Known uses:
-//   - [NewBitmap] (command specific)
-//   - [NewPhoto] (command specific)
-func Data(val any) Opt {
-	return rawOption(fmt.Sprintf(`-data %s`, optionString(val)))
-}
-
 // Default option.
 //
 // Known uses:

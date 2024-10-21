@@ -8,6 +8,7 @@ require (
 	github.com/ebitengine/purego v0.8.0
 	github.com/evilsocket/islazy v1.11.0
 	github.com/expr-lang/expr v1.16.9
+	github.com/mat/besticon/v3 v3.18.0
 	golang.org/x/image v0.20.0
 	golang.org/x/net v0.29.0
 	golang.org/x/sys v0.25.0
@@ -18,7 +19,7 @@ require (
 	modernc.org/libtk9.0 v0.13.0
 	modernc.org/memory v1.8.0
 	modernc.org/ngrab v0.1.0
-	modernc.org/rec v0.1.0
+	modernc.org/rec v0.2.0
 	modernc.org/tcl9.0 v0.15.0
 )
 

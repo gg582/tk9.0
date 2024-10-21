@@ -15,6 +15,10 @@ WIN32 = embed/windows/386
 WIN64 = embed/windows/amd64
 WINARM64 = embed/windows/arm64
 
+all:
+	golint 2>&1
+	staticcheck 2>&1
+
 build_all_targets:
 	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build
 	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
@@ -46,10 +50,6 @@ build_all_targets:
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go test -o /dev/null -c
 	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build
 	GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go test -o /dev/null -c
-
-all: editor
-	golint 2>&1
-	staticcheck 2>&1
 
 clean:
 	rm -f log-* cpu.test mem.test *.out go.work*
