@@ -2413,6 +2413,50 @@ func (lc LC) String() string {
 //
 // # Description
 //
+// This command creates a new image annotation, which will appear in the text
+// at the position given by index. Any number of option-value pairs may be
+// specified to configure the annotation. Returns a unique identifier that may
+// be used as an index to refer to this image. See EMBEDDED IMAGES for
+// information on the options that are supported, and a description of the
+// identifier returned.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) ImageCreate(index any, options ...Opt) {
+	idx := fmt.Sprint(index)
+	evalErr(fmt.Sprintf("%s image create %s %s", w, tclSafeString(idx), collect(options...)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// This command creates a new window annotation, which will appear in the text
+// at the position given by index. Any number of option-value pairs may be
+// specified to configure the annotation. See EMBEDDED WINDOWS for information
+// on the options that are supported. Returns an empty string.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) WindowCreate(index any, options ...Opt) {
+	idx := fmt.Sprint(index)
+	evalErr(fmt.Sprintf("%s window create %s %s", w, tclSafeString(idx), collect(options...)))
+}
+
+// Win option.
+//
+// Known uses:
+//   - [Text] (widget specific, applies to embedded windows)
+func Win(val any) Opt {
+	return rawOption(fmt.Sprintf(`-window %s`, optionString(val)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Returns a list containing two elements, both of which are real fractions
 // between 0 and 1. The first element gives the position of the first visible
 // pixel of the first character (or image, etc) in the top line in the window,
