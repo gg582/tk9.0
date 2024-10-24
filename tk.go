@@ -2555,6 +2555,37 @@ func (w *TextWidget) TagAdd(options ...any) string {
 //
 // # Description
 //
+// Delete a range of characters from the text. If both index1 and index2 are
+// specified, then delete all the characters starting with the one given by
+// index1 and stopping just before index2 (i.e. the character at index2 is not
+// deleted). If index2 does not specify a position later in the text than
+// index1 then no characters are deleted. If index2 is not specified then the
+// single character at index1 is deleted. Attempts to delete characters in a
+// way that would leave the text without a newline as the last character will
+// be tweaked by the text widget to avoid this. In particular, deletion of
+// complete lines of text up to the end of the text will also delete the
+// newline character just before the deleted block so that it is replaced by
+// the new final newline of the text widget. The command returns an empty
+// string. If more indices are given, multiple ranges of text will be deleted.
+// All indices are first checked for validity before any deletions are made.
+// They are sorted and the text is removed from the last range to the first
+// range so deleted text does not cause an undesired index shifting
+// side-effects. If multiple ranges with the same start index are given, then
+// the longest range is used. If overlapping ranges are given, then they will
+// be merged into spans that do not cause deletion of text outside the given
+// ranges due to text shifted during deletion.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Delete(options ...any) {
+	evalErr(fmt.Sprintf("%s delete %s", w, collectAny(options...)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // InsertML inserts 'ml' at the end of 'w', interpreting it as a HTML-like
 // markup language.
 //
