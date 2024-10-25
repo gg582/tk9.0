@@ -2295,6 +2295,54 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 //
 // # Description
 //
+// Returns a list whose elements are the names of all the tags that are active
+// at the character position given by index. If index is omitted, then the
+// return value will describe all of the tags that exist for the text (this
+// includes all tags that have been named in a “pathName tag” widget command
+// but have not been deleted by a “pathName tag delete” widget command, even if
+// no characters are currently marked with the tag). The list will be sorted in
+// order from lowest priority to highest priority.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) TagNames(index string) []string {
+	if index != "" {
+		index = tclSafeString(index)
+	}
+	return parseList(evalErr(fmt.Sprintf("%s tag names %s", w, index)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Deletes all tag information for each of the tagName arguments. The command
+// removes the tags from all characters in the file and also deletes any other
+// information associated with the tags, such as bindings and display
+// information. The command returns an empty string.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) TagDelete(tags ...string) {
+	evalErr(fmt.Sprintf("%s tag delete %s", w, tclSafeStrings(tags...)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Clear makes 'w' empty.
+func (w *TextWidget) Clear() {
+	w.Delete("0.0", "end")
+	w.TagDelete(w.TagNames("")...)
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Copies the selection in the widget to the clipboard, if there is a selection.
 //
 // Additional information might be available at the [Tcl/Tk text] page.
