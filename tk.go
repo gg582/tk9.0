@@ -1075,6 +1075,23 @@ func Pack(options ...Opt) {
 	evalErr(fmt.Sprintf("pack %s", collect(options...)))
 }
 
+// SetResizable — Enable/disable window resizing
+//
+// # Description
+//
+// This command controls whether or not the user may interactively resize a
+// top-level window. If resizing is disabled, then the window's size will be
+// the size from the most recent interactive resize or wm geometry command. If
+// there has been no such operation then the window's natural size will be
+// used.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func (w *Window) SetResizable(width, height bool) {
+	evalErr(fmt.Sprintf("wm resizable %s %v %v", w, width, height))
+}
+
 // Wait — Wait for a window to be destroyed
 //
 // # Description
