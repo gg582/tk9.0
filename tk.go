@@ -2312,6 +2312,51 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 //
 // # Description
 //
+// This command associates a script with the tag given by tagName. Whenever the
+// event sequence given by sequence occurs for a character that has been tagged
+// with tagName, the script will be invoked. This widget command is similar to
+// the bind command except that it operates on characters in a text rather than
+// entire widgets. See the bind manual entry for complete details on the syntax
+// of sequence and the substitutions performed on script before invoking it.
+// A new binding is created, replacing any existing binding for the same sequence and tagName.
+// The only events for which
+// bindings may be specified are those related to the mouse and keyboard (such
+// as Enter, Leave, Button, Motion, and Key) or virtual events. Mouse and
+// keyboard event bindings for a text widget respectively use the current and
+// insert marks described under MARKS above. An Enter event triggers for a tag
+// when the tag first becomes present on the current character, and a Leave
+// event triggers for a tag when it ceases to be present on the current
+// character. Enter and Leave events can happen either because the current mark
+// moved or because the character at that position changed. Note that these
+// events are different than Enter and Leave events for windows. Mouse events
+// are directed to the current character, while keyboard events are directed to
+// the insert character. If a virtual event is used in a binding, that binding
+// can trigger only if the virtual event is defined by an underlying
+// mouse-related or keyboard-related event.
+//
+// It is possible for the current character to have multiple tags, and for each
+// of them to have a binding for a particular event sequence. When this occurs,
+// one binding is invoked for each tag, in order from lowest-priority to
+// highest priority. If there are multiple matching bindings for a single tag,
+// then the most specific binding is chosen (see the manual entry for the bind
+// command for details). continue and break commands within binding scripts are
+// processed in the same way as for bindings created with the bind command.
+//
+// If bindings are created for the widget as a whole using the bind command,
+// then those bindings will supplement the tag bindings. The tag bindings will
+// be invoked first, followed by bindings for the window as a whole.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) TagBind(tag, sequence string, handler any) string {
+	return evalErr(fmt.Sprintf("%s tag bind %s %s %s", w, tclSafeString(tag), tclSafeString(sequence), newEventHandler("", handler).optionString(w.Window)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Returns a list whose elements are the names of all the tags that are active
 // at the character position given by index. If index is omitted, then the
 // return value will describe all of the tags that exist for the text (this
