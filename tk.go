@@ -4254,6 +4254,7 @@ func Tabmargins(val any) Opt {
 // Tabposition — Styling widgets
 //
 // Tabposition is a styling option of a ttk::notebook.
+//
 // More information might be available at the [Tcl/Tk ttk_notebook] page.
 //
 // [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
@@ -4269,6 +4270,70 @@ func Tabposition(val any) Opt {
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Sashthickness(val any) Opt {
 	return rawOption(fmt.Sprintf(`-sashthickness %s`, optionString(val)))
+}
+
+// panedwindow — Create and manipulate 'panedwindow' split container widgets
+//
+// # Description
+//
+// Add one or more windows to the panedwindow, each in a separate pane. The
+// arguments consist of the names of one or more windows followed by pairs of
+// arguments that specify how to manage the windows. Option may have any of the
+// values accepted by the configure subcommand.
+//
+// More information might be available at the [Tcl/Tk panedwindow] page.
+//
+// [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/panedwindow.html
+func (w *PanedwindowWidget) Add(subwindow *Window, options ...Opt) {
+	evalErr(fmt.Sprintf("%s add %s %s", w, subwindow, collect(options...)))
+}
+
+// panedwindow — Create and manipulate 'panedwindow' split container widgets
+//
+// # Description
+//
+// Query or modify the management options for window. If no option is
+// specified, returns a list describing all of the available options for
+// pathName (see Tk_ConfigureInfo for information on the format of this list).
+// If option is specified with no value, then the command returns a list
+// describing the one named option (this list will be identical to the
+// corresponding sublist of the value returned if no option is specified). If
+// one or more option-value pairs are specified, then the command modifies the
+// given widget option(s) to have the given value(s); in this case the command
+// returns an empty string.
+//
+// More information might be available at the [Tcl/Tk panedwindow] page.
+//
+// [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/panedwindow.html
+func (w *PanedwindowWidget) Paneconfigure(subwindow *Window, options ...Opt) string {
+	return evalErr(fmt.Sprintf("%s paneconfigure %s %s", w, subwindow, collect(options...)))
+}
+
+// panedwindow — Create and manipulate 'panedwindow' split container widgets
+//
+// # Description
+//
+// Query a management option for window. Option may be any value allowed by the
+// paneconfigure subcommand.
+//
+// More information might be available at the [Tcl/Tk panedwindow] page.
+//
+// [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/panedwindow.html
+func (w *PanedwindowWidget) Panecget(subwindow *Window, opt any) string {
+	return evalErr(fmt.Sprintf("%s panecget %s %s", w, subwindow, funcToTclOption(opt)))
+}
+
+// ttk::panedwindow — Multi-pane container window
+//
+// # Description
+//
+// Adds a new pane to the window. See PANE OPTIONS for the list of available options.
+//
+// More information might be available at the [Tcl/Tk ttk_panedwindow] page.
+//
+// [Tcl/Tk ttk_panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_panedwindow.html
+func (w *TPanedwindowWidget) Add(subwindow *Window, options ...Opt) {
+	evalErr(fmt.Sprintf("%s add %s %s", w, subwindow, collect(options...)))
 }
 
 // Gripsize — Styling widgets
