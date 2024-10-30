@@ -3371,6 +3371,32 @@ func gnuplot(script string) (out []byte, err error) {
 //
 // # Description
 //
+// Add a new radiobutton entry to the bottom of the menu.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
+func (w *MenuWidget) AddRadiobutton(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add radiobutton %s", w, winCollect(w.Window, options...)))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// Add a new checkbutton entry to the bottom of the menu.
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
+func (w *MenuWidget) AddCheckbutton(options ...Opt) {
+	evalErr(fmt.Sprintf("%s add checkbutton %s", w, winCollect(w.Window, options...)))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
 // Add a new command entry to the bottom of the menu.
 //
 // Additional information might be available at the [Tcl/Tk menu] page.
