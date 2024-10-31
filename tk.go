@@ -4309,6 +4309,29 @@ func (w *PanedwindowWidget) Paneconfigure(subwindow *Window, options ...Opt) str
 	return evalErr(fmt.Sprintf("%s paneconfigure %s %s", w, subwindow, collect(options...)))
 }
 
+// Stretch option.
+//
+// # Description
+//
+// Controls how extra space is allocated to each of the panes. When is one of
+// always, first, last, middle, and never. The panedwindow will calculate the
+// required size of all its panes. Any remaining (or deficit) space will be
+// distributed to those panes marked for stretching. The space will be
+// distributed based on each panes current ratio of the whole. The when values
+// have the following definition:
+//
+//   - always: This pane will always stretch.
+//   - first: Only if this pane is the first pane (left-most or top-most) will it stretch.
+//   - last: Only if this pane is the last pane (right-most or bottom-most) will it stretch. This is the default value.
+//   - middle: Only if this pane is not the first or last pane will it stretch.
+//   - never: This pane will never stretch.
+//
+// Known uses:
+//   - [PanedwindowWidget] (command specific)
+func Stretch(val string) Opt {
+	return rawOption(fmt.Sprintf(`-stretch %s`, tclSafeString(val)))
+}
+
 // panedwindow — Create and manipulate 'panedwindow' split container widgets
 //
 // # Description
