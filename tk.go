@@ -4328,8 +4328,8 @@ func (w *PanedwindowWidget) Paneconfigure(subwindow *Window, options ...Opt) str
 //
 // Known uses:
 //   - [PanedwindowWidget] (command specific)
-func Stretch(val string) Opt {
-	return rawOption(fmt.Sprintf(`-stretch %s`, tclSafeString(val)))
+func Stretch(when string) Opt {
+	return rawOption(fmt.Sprintf(`-stretch %s`, tclSafeString(when)))
 }
 
 // panedwindow — Create and manipulate 'panedwindow' split container widgets
