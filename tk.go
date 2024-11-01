@@ -2357,6 +2357,45 @@ func (w *TextWidget) TagBind(tag, sequence string, handler any) string {
 //
 // # Description
 //
+// Sets the modified flag of the widget to 'v'.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) SetModified(v bool) {
+	evalErr(fmt.Sprintf("%s edit modified %v", w, v))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Returns the modified flag of the widget. The insert, delete, edit undo and
+// edit redo commands or the user can set or clear the modified flag.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Modified() bool {
+	return tclBool(evalErr(fmt.Sprintf("%s edit modified", w)))
+}
+
+func tclBool(s string) bool {
+	switch s {
+	case "1", "true", "yes":
+		return true
+	case "0", "false", "no":
+		return false
+	default:
+		fail(fmt.Errorf("unexpected Tcl bool: %q", s))
+		return false
+	}
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Returns a list whose elements are the names of all the tags that are active
 // at the character position given by index. If index is omitted, then the
 // return value will describe all of the tags that exist for the text (this
@@ -2625,6 +2664,16 @@ func (w *TextWidget) Xview() string {
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) TagConfigure(name string, options ...Opt) {
 	evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(name), collect(options...)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Select all text in 'w'.
+//
+func (w *TextWidget) SelectAll() {
+	evalErr(fmt.Sprintf("%s tag add sel 1.0 end", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -4564,7 +4613,11 @@ func (w *TNotebookWidget) Add(options ...Opt) {
 //
 // [Tcl/Tk TNotebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
 func (w *TNotebookWidget) Select(tabid any) string {
-	return evalErr(fmt.Sprintf("%s select %s", w, tclSafeString(fmt.Sprint(tabid))))
+	var arg string
+	if tabid != nil && tabid != "" {
+		arg = tclSafeString(fmt.Sprint(tabid))
+	}
+	return evalErr(fmt.Sprintf("%s select %s", w, arg))
 }
 
 // TNotebook — Multi-paned container widget
