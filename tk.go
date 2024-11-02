@@ -2671,7 +2671,6 @@ func (w *TextWidget) TagConfigure(name string, options ...Opt) {
 // # Description
 //
 // Select all text in 'w'.
-//
 func (w *TextWidget) SelectAll() {
 	evalErr(fmt.Sprintf("%s tag add sel 1.0 end", w))
 }
@@ -4528,6 +4527,60 @@ func Indicatormargins(val any) Opt {
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func Indicatorsize(val any) Opt {
 	return rawOption(fmt.Sprintf(`-indicatorsize %s`, optionString(val)))
+}
+
+// wm — Communicate with window manager
+//
+// # Description
+//
+// This command is used to manage window manager protocols. The name argument
+// in the wm protocol command is the name of an atom corresponding to a window
+// manager protocol. Examples include WM_DELETE_WINDOW or WM_SAVE_YOURSELF or
+// WM_TAKE_FOCUS.  A window manager protocol is a class of messages sent from a
+// window manager to a Tk application outside of the normal event processing
+// system. The main example is the WM_DELETE_WINDOW protocol; these messages
+// are sent when the user clicks the close widget in the title bar of a window.
+// Handlers for window manager protocols are installed with the wm protocol
+// command. As a rule, if no handler has been installed for a protocol by the
+// wm protocol command then all messages of that protocol are ignored. The
+// WM_DELETE_WINDOW protocol is an exception to this rule. At start-up Tk
+// installs a handler for this protocol, which responds by destroying the
+// window. The wm protocol command can be used to replace this default handler
+// by one which responds differently.
+//
+// The list of available window manager protocols depends on the window
+// manager, but all window managers supported by Tk provide WM_DELETE_WINDOW.
+// On the Windows platform, a WM_SAVE_YOURSELF message is sent on user logout
+// or system restart.
+//
+// If both name and command are specified, then command becomes the handler for
+// the protocol specified by name. The atom for name will be added to window's
+// WM_PROTOCOLS property to tell the window manager that the application has a
+// handler for the protocol specified by name, and command will be invoked in
+// the future whenever the window manager sends a message of that protocol to
+// the Tk application. In this case the wm protocol command returns an empty
+// string. If name is specified but command is not (is nil), then the current
+// handler for name is returned, or an empty string if there is no handler
+// defined for name (as a special case, the default handler for
+// WM_DELETE_WINDOW is not returned). If command is specified as an empty
+// string then the atom for name is removed from the WM_PROTOCOLS property of
+// window and the handler is destroyed; an empty string is returned. Lastly, if
+// neither name nor command is specified, the wm protocol command returns a
+// list of all of the protocols for which handlers are currently defined for
+// window.
+//
+// More information might be available at the [Tcl/Tk wm] page.
+//
+// [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
+func WmProtocol(w *Window, name string, command any) string {
+	switch {
+	case command == nil:
+		return evalErr(fmt.Sprintf("wm protocol %s %s", w, tclSafeString(name)))
+	case command == "":
+		return evalErr(fmt.Sprintf("wm protocol %s %s {}", w, tclSafeString(name)))
+	default:
+		return evalErr(fmt.Sprintf("wm protocol %s %s %s", w, tclSafeString(name), newEventHandler("", command).optionString(w)))
+	}
 }
 
 // wm — Communicate with window manager
