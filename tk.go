@@ -2418,6 +2418,80 @@ func (w *TextWidget) TagNames(index string) []string {
 //
 // # Description
 //
+// Sets the mark named markName to a position just before the character at
+// index. If markName already exists, it is moved from its old position; if it
+// does not exist, a new mark is created. This command returns an empty string.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) MarkSet(markName string, index any) {
+	evalErr(fmt.Sprintf("%s mark set %s %s", w, tclSafeString(markName), tclSafeString(fmt.Sprint(index))))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Searches the text in pathName starting at index for a range of characters
+// that matches pattern. If a match is found, the index of the first character
+// in the match is returned as result; otherwise an empty string is returned.
+// One or more of the following switches (or abbreviations thereof) may be
+// specified to control the search:
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Search(options ...any) string {
+	var switches Opts
+	var args []any
+	for _, v := range options {
+		switch x := v.(type) {
+		case Opt:
+			switches = append(switches, x)
+		default:
+			args = append(args, v)
+		}
+	}
+	return evalErr(fmt.Sprintf("%s search %s %s", w, collect(switches...), tclSafeList(args...)))
+}
+
+// Forward option.
+//
+// Known uses:
+//   - [Text] (widget specific, applies to Search)
+func Forward() Opt {
+	return rawOption(fmt.Sprintf(`-forward`))
+}
+
+// Backward option.
+//
+// Known uses:
+//   - [Text] (widget specific, applies to Search)
+func Backward() Opt {
+	return rawOption(fmt.Sprintf(`-backward`))
+}
+
+// Regexp option.
+//
+// Known uses:
+//   - [Text] (widget specific, applies to Search)
+func Regexp() Opt {
+	return rawOption(fmt.Sprintf(`-regexp`))
+}
+
+// Nocase option.
+//
+// Known uses:
+//   - [Text] (widget specific, applies to Search)
+func Nocase() Opt {
+	return rawOption(fmt.Sprintf(`-nocase`))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Deletes all tag information for each of the tagName arguments. The command
 // removes the tags from all characters in the file and also deletes any other
 // information associated with the tags, such as bindings and display
@@ -4185,6 +4259,35 @@ func CourierFont() string {
 	}
 
 	return "courier"
+}
+
+// button — Create and manipulate 'button' action widgets
+//
+// # Description
+//
+// Invoke the Tcl command associated with the button, if there is one. The
+// return value is the return value from the Tcl command, or an empty string if
+// there is no command associated with the button. This command is ignored if
+// the button's state is disabled.
+//
+// Additional information might be available at the [Tcl/Tk button] page.
+//
+// [Tcl/Tk button]: https://www.tcl.tk/man/tcl9.0/TkCmd/button.html
+func (w *ButtonWidget) Invoke() string {
+	return evalErr(fmt.Sprintf("%s invoke", w))
+}
+
+// TButton — Widget that issues a command when pressed
+//
+// # Description
+//
+// Invokes the command associated with the button.
+//
+// Additional information might be available at the [Tcl/Tk ttk::button] page.
+//
+// [Tcl/Tk ttk::button]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_button.html
+func (w *TButtonWidget) Invoke() string {
+	return evalErr(fmt.Sprintf("%s invoke", w))
 }
 
 // TButton — Widget that issues a command when pressed
