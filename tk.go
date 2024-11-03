@@ -2418,6 +2418,21 @@ func (w *TextWidget) TagNames(index string) []string {
 //
 // # Description
 //
+// If direction is not specified, returns left or right to indicate which of
+// its adjacent characters markName is attached to. If direction is specified,
+// it must be left or right; the gravity of markName is set to the given value.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) MarkGravity(markName, direction string) {
+	evalErr(fmt.Sprintf("%s mark gravity %s %s", w, tclSafeString(markName), tclSafeString(direction)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Sets the mark named markName to a position just before the character at
 // index. If markName already exists, it is moved from its old position; if it
 // does not exist, a new mark is created. This command returns an empty string.
@@ -2427,6 +2442,35 @@ func (w *TextWidget) TagNames(index string) []string {
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) MarkSet(markName string, index any) {
 	evalErr(fmt.Sprintf("%s mark set %s %s", w, tclSafeString(markName), tclSafeString(fmt.Sprint(index))))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Remove the mark corresponding to each of the markName arguments. The removed
+// marks will not be usable in indices and will not be returned by future calls
+// to “pathName mark names”. This command returns an empty string.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) MarkUnset(markName ...string) {
+	evalErr(fmt.Sprintf("%s mark unset %s", w, tclSafeStrings(markName...)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Returns a list whose elements are the names of all the marks that are
+// currently set.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) MarkNames() []string {
+	return parseList(evalErr(fmt.Sprintf("%s mark names", w)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2512,6 +2556,7 @@ func (w *TextWidget) TagDelete(tags ...string) {
 func (w *TextWidget) Clear() {
 	w.Delete("0.0", "end")
 	w.TagDelete(w.TagNames("")...)
+	w.MarkUnset(w.MarkNames()...)
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
