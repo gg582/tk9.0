@@ -2626,6 +2626,59 @@ func (w *TextWidget) Yview() string {
 //
 // # Description
 //
+// Adjusts the view in the window so that the pixel given by fraction appears
+// at the top of the top line of the window. Fraction is a fraction between 0
+// and 1; 0 indicates the first pixel of the first character in the text, 0.33
+// indicates the pixel that is one-third the way through the text; and so on.
+// Values close to 1 will indicate values close to the last pixel in the text
+// (1 actually refers to one pixel beyond the last pixel), but in such cases
+// the widget will never scroll beyond the last pixel, and so a value of 1 will
+// effectively be rounded back to whatever fraction ensures the last pixel is
+// at the bottom of the window, and some other pixel is at the top.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Yviewmoveto(fraction any) string {
+	return evalErr(fmt.Sprintf("%s yview moveto %s", w, tclSafeString(fmt.Sprint(fraction))))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Adjusts the view in the window so that the character given by index is
+// completely visible. If index is already visible then the command does
+// nothing. If index is a short distance out of view, the command adjusts the
+// view just enough to make index visible at the edge of the window. If index
+// is far out of view, then the command centers index in the window.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) See(index any) {
+	evalErr(fmt.Sprintf("%s see %s", w, tclSafeString(fmt.Sprint(index))))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Returns the position corresponding to index in the form line.char where line
+// is the line number and char is the character number. Index may have any of
+// the forms described under INDICES above.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Index(index any) (r string) {
+	return evalErr(fmt.Sprintf("%s index %s", w, tclSafeString(fmt.Sprint(index))))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Returns a list containing two elements, both of which are real fractions
 // between 0 and 1. The first element gives the position of the first visible
 // pixel of the first character (or image, etc) in the top line in the window,
@@ -4923,4 +4976,40 @@ func Data(val any) Opt {
 		}
 	}
 	return rawOption(fmt.Sprintf(`-data %s`, optionString(val)))
+}
+
+// winfo — Return window-related information
+//
+// # Description
+//
+// Returns a decimal string giving window's height in pixels. When a window is
+// first created its height will be 1 pixel; the height will eventually be
+// changed by a geometry manager to fulfil the window's needs. If you need the
+// true height immediately after creating a widget, invoke update to force the
+// geometry manager to arrange it, or use winfo reqheight to get the window's
+// requested height instead of its actual height.
+//
+// More information might be available at the [Tcl/Tk winfo] page.
+//
+// [Tcl/Tk winfo]: https://www.tcl.tk/man/tcl9.0/TkCmd/winfo.html
+func WinfoHeight(w *Window) string {
+	return evalErr(fmt.Sprintf("winfo height %s", w))
+}
+
+// winfo — Return window-related information
+//
+// # Description
+//
+// Returns a decimal string giving window's width in pixels. When a window is
+// first created its width will be 1 pixel; the width will eventually be
+// changed by a geometry manager to fulfil the window's needs. If you need the
+// true width immediately after creating a widget, invoke update to force the
+// geometry manager to arrange it, or use winfo reqwidth to get the window's
+// requested width instead of its actual width.
+//
+// More information might be available at the [Tcl/Tk winfo] page.
+//
+// [Tcl/Tk winfo]: https://www.tcl.tk/man/tcl9.0/TkCmd/winfo.html
+func WinfoWidth(w *Window) string {
+	return evalErr(fmt.Sprintf("winfo width %s", w))
 }
