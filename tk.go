@@ -46,7 +46,9 @@ const (
 	tcl_eval_direct = 0x40000
 	tcl_ok          = 0
 	tcl_error       = 1
-	tcl_result      = 2
+	tcl_return      = 2
+	tcl_break       = 3
+	tcl_continue    = 4
 )
 
 // NativeScaling is the value returned by TKScaling in package initialization before it is possibly
@@ -462,6 +464,8 @@ type Event struct {
 	// created.
 	W *Window
 
+	returnCode int // One of tcl_ok .. tcl_continue
+
 	// The window to which the event was reported (the window field from
 	// the event). Valid for all event types.  This field is set when the
 	// event is handled.
@@ -479,7 +483,7 @@ type Event struct {
 // Called from eventDispatcher. Arg1 is handler id, optionally followed by a
 // list of Bind substitution values.
 func newEvent(arg1 string) (id int, e *Event, err error) {
-	e = &Event{}
+	e = &Event{returnCode: tcl_ok}
 	a := strings.Fields(arg1)
 	if len(a) == 0 {
 		return -1, e, fmt.Errorf("internal error: missing handler ID")
@@ -502,6 +506,31 @@ func newEvent(arg1 string) (id int, e *Event, err error) {
 		}
 	}
 	return id, e, nil
+}
+
+// SetReturnCodeOK sets return code of 'e' to TCL_OK.
+func (e *Event) SetReturnCodeOK() {
+	e.returnCode = tcl_ok
+}
+
+// SetReturnCodeError sets return code of 'e' to TCL_ERROR.
+func (e *Event) SetReturnCodeError() {
+	e.returnCode = tcl_error
+}
+
+// SetReturnCodeReturn sets return code of 'e' to TCL_RETURN.
+func (e *Event) SetReturnCodeReturn() {
+	e.returnCode = tcl_return
+}
+
+// SetReturnCodeBreak sets return code of 'e' to TCL_BREAK.
+func (e *Event) SetReturnCodeBreak() {
+	e.returnCode = tcl_break
+}
+
+// SetReturnCodeContinue sets return code of 'e' to TCL_CONTINUE.
+func (e *Event) SetReturnCodeContinue() {
+	e.returnCode = tcl_continue
 }
 
 // ScrollSet communicates events to scrollbars. Example:
