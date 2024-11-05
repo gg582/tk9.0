@@ -75,6 +75,7 @@ var ErrorMode int
 var Error error
 
 var (
+	_ Opt = (*MenuItem)(nil)
 	_ Widget = (*Window)(nil)
 
 	//go:embed embed/gotk.png
@@ -2386,6 +2387,19 @@ func (w *TextWidget) TagBind(tag, sequence string, handler any) string {
 //
 // # Description
 //
+// Clears the undo and redo stacks.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) EditReset() {
+	evalErr(fmt.Sprintf("%s edit reset", w))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Sets the modified flag of the widget to 'v'.
 //
 // Additional information might be available at the [Tcl/Tk text] page.
@@ -3621,6 +3635,24 @@ func gnuplot(script string) (out []byte, err error) {
 	return exec.CommandContext(ctx, "gnuplot", f.Name()).Output()
 }
 
+// MenuItem represents an entry on a menu.
+type MenuItem struct {
+	id string
+}
+
+// String implements fmt.Stringer.
+func (m *MenuItem) String() string {
+	return m.optionString(nil)
+}
+
+func (m *MenuItem) optionString(_ *Window) string {
+	if m != nil {
+		return m.id
+	}
+
+	return "mnu_non_existing"
+}
+
 // Menu — Create and manipulate 'menu' widgets and menubars
 //
 // # Description
@@ -3630,8 +3662,8 @@ func gnuplot(script string) (out []byte, err error) {
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
-func (w *MenuWidget) AddRadiobutton(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add radiobutton %s", w, winCollect(w.Window, options...)))
+func (w *MenuWidget) AddRadiobutton(options ...Opt) *MenuItem {
+	return &MenuItem{id: evalErr(fmt.Sprintf("%s add radiobutton %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -3643,8 +3675,8 @@ func (w *MenuWidget) AddRadiobutton(options ...Opt) {
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
-func (w *MenuWidget) AddCheckbutton(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add checkbutton %s", w, winCollect(w.Window, options...)))
+func (w *MenuWidget) AddCheckbutton(options ...Opt) *MenuItem {
+	return &MenuItem{id: evalErr(fmt.Sprintf("%s add checkbutton %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -3656,8 +3688,8 @@ func (w *MenuWidget) AddCheckbutton(options ...Opt) {
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
-func (w *MenuWidget) AddCommand(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add command %s", w, winCollect(w.Window, options...)))
+func (w *MenuWidget) AddCommand(options ...Opt) *MenuItem {
+	return &MenuItem{id: evalErr(fmt.Sprintf("%s add command %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -3669,8 +3701,8 @@ func (w *MenuWidget) AddCommand(options ...Opt) {
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
-func (w *MenuWidget) AddCascade(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add cascade %s", w, winCollect(w.Window, options...)))
+func (w *MenuWidget) AddCascade(options ...Opt) *MenuItem {
+	return &MenuItem{id: evalErr(fmt.Sprintf("%s add cascade %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -3682,8 +3714,8 @@ func (w *MenuWidget) AddCascade(options ...Opt) {
 // Additional information might be available at the [Tcl/Tk menu] page.
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
-func (w *MenuWidget) AddSeparator(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add separator %s", w, winCollect(w.Window, options...)))
+func (w *MenuWidget) AddSeparator(options ...Opt) *MenuItem {
+	return &MenuItem{id: evalErr(fmt.Sprintf("%s add separator %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -3703,6 +3735,26 @@ func (w *MenuWidget) AddSeparator(options ...Opt) {
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) Invoke(index uint) {
 	evalErr(fmt.Sprintf("%s invoke %d", w, index))
+}
+
+// Menu — Create and manipulate 'menu' widgets and menubars
+//
+// # Description
+//
+// This command is similar to the configure command, except that it applies to
+// the options for an individual entry, whereas configure applies to the
+// options for the menu as a whole. Options may have any of the values
+// described in the MENU ENTRY OPTIONS section below. If options are specified,
+// options are modified as indicated in the command and the command returns an
+// empty string. If no options are specified, returns a list describing the
+// current options for entry index (see Tk_ConfigureInfo for information on the
+// format of this list).
+//
+// Additional information might be available at the [Tcl/Tk menu] page.
+//
+// [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
+func (w *MenuWidget) EntryConfigure(index uint, options ...Opt) {
+	evalErr(fmt.Sprintf("%s entryconfigure %d %s", w, index, winCollect(w.Window, options...)))
 }
 
 // TScrollbar — Control the viewport of a scrollable widget
