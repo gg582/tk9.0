@@ -75,7 +75,7 @@ var ErrorMode int
 var Error error
 
 var (
-	_ Opt = (*MenuItem)(nil)
+	_ Opt    = (*MenuItem)(nil)
 	_ Widget = (*Window)(nil)
 
 	//go:embed embed/gotk.png
@@ -2381,6 +2381,131 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) TagBind(tag, sequence string, handler any) string {
 	return evalErr(fmt.Sprintf("%s tag bind %s %s %s", w, tclSafeString(tag), tclSafeString(sequence), newEventHandler("", handler).optionString(w.Window)))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
+// Counts the number of relevant things between the two indices. If index1 is
+// after index2, the result will be a negative number (and this holds for each
+// of the possible options). The actual items which are counted depend on the
+// options given. The result is a list of integers, one for the result of each
+// counting option given. Valid counting options are -chars, -displaychars,
+// -displayindices, -displaylines, -indices, -lines, -xpixels and -ypixels. The
+// default value, if no option is specified, is -indices. There is an
+// additional possible option -update which is a modifier. If given (and if the
+// text widget is managed by a geometry manager), then all subsequent options
+// ensure that any possible out of date information is recalculated. This
+// currently only has any effect for the -ypixels count (which, if -update is
+// not given, will use the text widget's current cached value for each line).
+// This -update option is obsoleted by pathName sync, pathName pendingsync and
+// <<WidgetViewSync>>. The count options are interpreted as follows:
+//
+//   - [Chars] Count all characters, whether elided or not. Do not count
+//     embedded windows or images.
+//   - [Displaychars] Count all non-elided characters.
+//   - [Displayindices] Count all non-elided characters, windows and images.
+//   - [Displaylines] Count all display lines (i.e. counting one for each time
+//     a line wraps) from the line of the first index up to, but not including
+//     the display line of the second index. Therefore if they are both on the
+//     same display line, zero will be returned. By definition displaylines are
+//     visible and therefore this only counts portions of actual visible lines.
+//   - [Indices] Count all characters and embedded windows or images (i.e.
+//     everything which counts in text-widget index space), whether they are
+//     elided or not.
+//   - [Lines] Count all logical lines (irrespective of wrapping) from the line
+//     of the first index up to, but not including the line of the second index.
+//     Therefore if they are both on the same line, zero will be returned.
+//     Logical lines are counted whether they are currently visible (non-elided)
+//     or not.
+//   - [Xpixels] Count the number of horizontal pixels from the first pixel of
+//     the first index to (but not including) the first pixel of the second
+//     index. To count the total desired width of the text widget (assuming
+//     wrapping is not enabled), first find the longest line and then use “.text
+//     count -xpixels "${line}.0" "${line}.0 lineend"”.
+//   - [Ypixels] Count the number of vertical pixels from the first pixel of
+//     the first index to (but not including) the first pixel of the second
+//     index. If both indices are on the same display line, zero will be
+//     returned. To count the total number of vertical pixels in the text widget,
+//     use “.text count -ypixels 1.0 end”, and to ensure this is up to date, use
+//     “.text count -update -ypixels 1.0 end”.
+//
+// The command returns a positive or negative integer corresponding to the
+// number of items counted between the two indices. One such integer is
+// returned for each counting option given, so a list is returned if more than
+// one option was supplied. For example “.text count -xpixels -ypixels 1.3 4.5”
+// is perfectly valid and will return a list of two elements.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) Count(options ...any) []string {
+	return parseList(evalErr(fmt.Sprintf("%s count %s", w, collectAny(options...))))
+}
+
+// Displayindices option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Displayindices() Opt {
+	return rawOption("-displayindices")
+}
+
+// Displaylines option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Displaylines() Opt {
+	return rawOption("-displaylines")
+}
+
+// Indices option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Indices() Opt {
+	return rawOption("-indices")
+}
+
+// Lines option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Lines() Opt {
+	return rawOption("-lines")
+}
+
+// Xpixels option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Xpixels() Opt {
+	return rawOption("-xpixels")
+}
+
+// Ypixels option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Ypixels() Opt {
+	return rawOption("-ypixels")
+}
+
+// Chars option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Chars() Opt {
+	return rawOption("-chars")
+}
+
+// Displaychars option.
+//
+// Known uses:
+//   - [TextWidget] (command specific)
+func Displaychars() Opt {
+	return rawOption("-displaychars")
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
