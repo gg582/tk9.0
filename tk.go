@@ -49,6 +49,8 @@ const (
 	tcl_return      = 2
 	tcl_break       = 3
 	tcl_continue    = 4
+
+	exitButtonTooltip = "Quit the application"
 )
 
 // NativeScaling is the value returned by TKScaling in package initialization before it is possibly
@@ -318,13 +320,12 @@ type Window struct {
 func (w *Window) isWidget() {}
 
 // Widget is implemented by every *Window
+//
+// Widget implements Opt. When a Widget instance is used as an Opt, it provides
+// its path name.
 type Widget interface {
 	isWidget()
-	path() string
-}
-
-func (w *Window) path() (r string) {
-	return w.String()
+	optionString(*Window) string
 }
 
 // String implements fmt.Stringer.
@@ -1780,7 +1781,7 @@ func Exit(options ...Opt) *ButtonWidget {
 //
 // The resulting [Window] is a child of 'w'
 func (w *Window) Exit(options ...Opt) *ButtonWidget {
-	return w.Button(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...)
+	return Tooltip(w.Button(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...), exitButtonTooltip).(*ButtonWidget)
 }
 
 // TExit provides a canned [TButton] with default [Txt] "Exit", bound to the
@@ -1796,7 +1797,7 @@ func TExit(options ...Opt) *TButtonWidget {
 //
 // The resulting [Window] is a child of 'w'
 func (w *Window) TExit(options ...Opt) *TButtonWidget {
-	return w.TButton(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...)
+	return Tooltip(w.TButton(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...), exitButtonTooltip).(*TButtonWidget)
 }
 
 type textVarOpt string
@@ -3689,7 +3690,7 @@ func Place(options ...Opt) {
 func (w *Window) Lower(belowThis Widget) {
 	b := ""
 	if belowThis != nil {
-		b = belowThis.path()
+		b = belowThis.optionString(nil)
 	}
 	evalErr(fmt.Sprintf("lower %s %s", w, b))
 }
@@ -3719,7 +3720,7 @@ func (w *Window) Lower(belowThis Widget) {
 func (w *Window) Raise(aboveThis Widget) {
 	b := ""
 	if aboveThis != nil {
-		b = aboveThis.path()
+		b = aboveThis.optionString(nil)
 	}
 	evalErr(fmt.Sprintf("raise %s %s", w, b))
 }
@@ -5517,11 +5518,14 @@ func TooltipOn(v bool) string {
 //   - "--": The -- option marks the end of options. The argument following
 //     this one will be treated as message even if it starts with a -.
 //
+// Tooltip returns 'w'.
+//
 // More information might be available at the [Tklib tooltip] page.
 //
 // [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
-func Tooltip(w Widget, options ...any) {
+func Tooltip(w Widget, options ...any) (r Widget) {
 	evalErr(fmt.Sprintf("tooltip::tooltip %s %s", w, collectAny(options...)))
+	return w
 }
 
 // Heading option.
