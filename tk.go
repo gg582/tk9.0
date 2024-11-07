@@ -80,6 +80,8 @@ var (
 
 	//go:embed embed/gotk.png
 	icon []byte
+	//go:embed embed/tklib/tooltip/tooltip.tcl
+	tooltip []byte
 
 	autocenterDisabled bool
 	cleanupDirs        []string
@@ -133,7 +135,7 @@ var (
 )
 
 func commonLazyInit() {
-	// Nothing yet.
+	eval(string(tooltip))
 }
 
 func checkSig(dir string, sig map[string]string) (r bool) {
@@ -5366,4 +5368,206 @@ func WinfoHeight(w *Window) string {
 // [Tcl/Tk winfo]: https://www.tcl.tk/man/tcl9.0/TkCmd/winfo.html
 func WinfoWidth(w *Window) string {
 	return evalErr(fmt.Sprintf("winfo width %s", w))
+}
+
+// tooltip — Tooltip management
+//
+// # Description
+//
+// Prevents the specified widgets from showing tooltips. pattern is a glob
+// pattern and defaults to matching all widgets.
+//
+// More information might be available at the [Tklib tooltip] page.
+//
+// [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
+func TooltipClear(pattern string) {
+	s := ""
+	if pattern != "" {
+		s = tclSafeString(pattern)
+	}
+	evalErr(fmt.Sprintf("tooltip::tooltip clear %s", s))
+}
+
+// tooltip — Tooltip management
+//
+// # Description
+//
+// Queries or modifies the configuration options of the tooltip. The supported
+// options are -backgroud, -foreground and -font. If one option is specified with
+// no value, returns the value of that option. Otherwise, sets the given
+// options to the corresponding values.
+//
+// More information might be available at the [Tklib tooltip] page.
+//
+// [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
+func TooltipConfigure(options ...any) string {
+	return evalErr(fmt.Sprintf("tooltip::tooltip configure %s", collectAny(options)))
+}
+
+// tooltip — Tooltip management
+//
+// # Description
+//
+// Query or set the hover delay. This is the interval that the pointer must
+// remain over the widget before the tooltip is displayed. The delay is
+// specified in milliseconds and must be greater than or equal to 50 ms. With
+// a negative argument the current delay is returned.
+//
+// More information might be available at the [Tklib tooltip] page.
+//
+// [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
+func TooltipDelay(delay time.Duration) string {
+	s := ""
+	if delay >= 0 {
+		s = optionString(delay)
+	}
+	return evalErr(fmt.Sprintf("tooltip::tooltip delay %s", s))
+}
+
+// tooltip — Tooltip management
+//
+// # Description
+//
+// Enable or disable fading of the tooltip. The fading is enabled by default on
+// Win32 and Aqua. The tooltip will fade away on Leave events instead
+// disappearing.
+//
+// More information might be available at the [Tklib tooltip] page.
+//
+// [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
+func TooltipFade(v bool) string {
+	return evalErr(fmt.Sprintf("tooltip::tooltip fade %v", v))
+}
+
+// tooltip — Tooltip management
+//
+// # Description
+//
+// # Disable all tooltips
+//
+// More information might be available at the [Tklib tooltip] page.
+//
+// [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
+func TooltipOff(v bool) string {
+	return evalErr("tooltip::tooltip off")
+}
+
+// tooltip — Tooltip management
+//
+// # Description
+//
+// Enables tooltips for defined widgets.
+//
+// More information might be available at the [Tklib tooltip] page.
+//
+// [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
+func TooltipOn(v bool) string {
+	return evalErr("tooltip::tooltip on")
+}
+
+// tooltip — Tooltip management
+//
+// # Description
+//
+// This command arranges for widget 'w' to display a tooltip with a
+// message.
+//
+// If the specified widget is a menu, canvas, listbox, ttk::treeview,
+// ttk::notebook or text widget then additional options are used to tie the
+// tooltip to specific menu, canvas or listbox items, ttk::treeview items or
+// column headings, ttk::notebook tabs, or text widget tags.
+//
+//   - [Heading] columnId: This option is used to set a tooltip for a
+//     ttk::treeview column heading. The column does not need to already exist.
+//     You should not use the same identifiers for columns and items in a widget
+//     for which you are using tooltips as their tooltips will be mixed. The
+//     widget must be a ttk::treeview widget.
+//
+//   - [Image] image: The specified (photo) image will be displayed to the left
+//     of the primary tooltip message.
+//
+//   - [Index] index: This option is used to set a tooltip on a menu item. The
+//     index may be either the entry index or the entry label. The widget must be
+//     a menu widget but the entries do not have to exist when the tooltip is
+//     set.
+//
+//   - [Info] info: The specified info text will be displayed as additional
+//     information below the primary tooltip message.
+//
+//   - [Items] items: This option is used to set a tooltip for canvas, listbox
+//     or ttk::treview items. For the canvas widget, the item must already be
+//     present in the canvas and will be found with a find withtag lookup. For
+//     listbox and ttk::treview widgets the item(s) may be created later but the
+//     programmer is responsible for managing the link between the listbox or
+//     ttk::treview item index and the corresponding tooltip. If the listbox or
+//     ttk::treview items are re-ordered, the tooltips will need amending.
+//
+//     If the widget is not a canvas, listbox or ttk::treview then an error is
+//     raised.
+//
+//   - [Tab] tabId: The -tab option can be used to set a tooltip for a
+//     ttk::notebook tab. The tab should already be present when this command is
+//     called, or an error will be returned. The widget must be a ttk::notebook
+//     widget.
+//
+//   - [Tag] name: The -tag option can be used to set a tooltip for a text
+//     widget tag. The tag should already be present when this command is called,
+//     or an error will be returned. The widget must be a text widget.
+//
+//   - "--": The -- option marks the end of options. The argument following
+//     this one will be treated as message even if it starts with a -.
+//
+// More information might be available at the [Tklib tooltip] page.
+//
+// [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
+func Tooltip(w Widget, options ...any) {
+	evalErr(fmt.Sprintf("tooltip::tooltip %s %s", w, collectAny(options...)))
+}
+
+// Heading option.
+//
+// Known uses:
+//   - [Tooltip] (command specific)
+func Heading(columnId string) Opt {
+	return rawOption(fmt.Sprintf(`-heading %s`, optionString(columnId)))
+}
+
+// Index option.
+//
+// Known uses:
+//   - [Tooltip] (command specific)
+func Index(index any) Opt {
+	return rawOption(fmt.Sprintf(`-index %s`, optionString(index)))
+}
+
+// Info option.
+//
+// Known uses:
+//   - [Tooltip] (command specific)
+func Info(info string) Opt {
+	return rawOption(fmt.Sprintf(`-info %s`, optionString(info)))
+}
+
+// Items option.
+//
+// Known uses:
+//   - [Tooltip] (command specific)
+func Items(items ...any) Opt {
+	return rawOption(fmt.Sprintf(`-items %s`, collectAny(items...)))
+}
+
+// Tab option.
+//
+// Known uses:
+//   - [Tooltip] (command specific)
+func Tab(tabId any) Opt {
+	return rawOption(fmt.Sprintf(`-tab %s`, collectAny(tabId)))
+}
+
+// Tag option.
+//
+// Known uses:
+//   - [Tooltip] (command specific)
+func Tag(name string) Opt {
+	return rawOption(fmt.Sprintf(`-tag %s`, optionString(name)))
 }
