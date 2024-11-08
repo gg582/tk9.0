@@ -5202,6 +5202,7 @@ func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
 	return &Ticker{eh: eh}, nil
 }
 
+
 // ttk::checkbutton — On/off widget
 //
 // # Description
@@ -5276,6 +5277,24 @@ func (w *TCheckbuttonWidget) Invoke() string {
 // [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
 func (w *CheckbuttonWidget) Select() {
 	evalErr(fmt.Sprintf("%s select", w))
+}
+
+// checkbutton — Create and manipulate 'checkbutton' boolean selection widgets
+//
+// # Description
+//
+// Does just what would have happened if the user invoked the checkbutton with
+// the mouse: toggle the selection state of the button and invoke the Tcl
+// command associated with the checkbutton, if there is one. The return value
+// is the return value from the Tcl command, or an empty string if there is no
+// command associated with the checkbutton. This command is ignored if the
+// checkbutton's state is disabled.
+//
+// More information might be available at the [Tcl/Tk checkbutton] page.
+//
+// [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
+func (w *CheckbuttonWidget) Invoke() string {
+	return evalErr(fmt.Sprintf("%s invoke", w))
 }
 
 // checkbutton — Create and manipulate 'checkbutton' boolean selection widgets
