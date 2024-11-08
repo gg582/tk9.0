@@ -665,10 +665,14 @@ func optionString(v any) string {
 // assign an arbitrary set of binding tags to a window, the default binding
 // tags provide the following behavior:
 //
-//   - If a tag is the name of an internal window the binding applies to that window.
-//   - If the tag is the name of a class of widgets, such as Button, the binding applies to all widgets in that class.
-//   - If the tag is the name of a toplevel window the binding applies to the toplevel window and all its internal windows.
-//   - If tag has the value all, the binding applies to all windows in the application.
+//   - If a tag is the name of an internal window the binding applies to that
+//     window.
+//   - If the tag is the name of a class of widgets, such as Button, the
+//     binding applies to all widgets in that class.
+//   - If the tag is the name of a toplevel window the binding applies to the
+//     toplevel window and all its internal windows.
+//   - If tag has the value all, the binding applies to all windows in the
+//     application.
 //
 // Example usage in _examples/events.go.
 //
@@ -2954,6 +2958,25 @@ func (w *TextWidget) See(index any) {
 //
 // # Description
 //
+// Returns a list describing all of the ranges of text that have been tagged
+// with tagName. The first two elements of the list describe the first tagged
+// range in the text, the next two elements describe the second range, and so
+// on. The first element of each pair contains the index of the first character
+// of the range, and the second element of the pair contains the index of the
+// character just after the last one in the range. If there are no characters
+// tagged with tag then an empty string is returned.
+//
+// Additional information might be available at the [Tcl/Tk text] page.
+//
+// [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
+func (w *TextWidget) TagRanges(tagName string) (r []string) {
+	return parseList(evalErr(fmt.Sprintf("%s tag ranges %s", w, tclSafeString(tagName))))
+}
+
+// Text — Create and manipulate 'text' hypertext editing widgets
+//
+// # Description
+//
 // Returns the position corresponding to index in the form line.char where line
 // is the line number and char is the character number. Index may have any of
 // the forms described under INDICES above.
@@ -3005,8 +3028,8 @@ func (w *TextWidget) Xview() string {
 // Additional information might be available at the [Tcl/Tk text] page.
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
-func (w *TextWidget) TagConfigure(name string, options ...Opt) {
-	evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(name), collect(options...)))
+func (w *TextWidget) TagConfigure(tagName string, options ...Opt) {
+	evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(tagName), collect(options...)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
