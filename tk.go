@@ -23,7 +23,6 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
-
 	"github.com/mat/besticon/v3/ico"
 	"golang.org/x/net/html"
 )
@@ -336,9 +335,11 @@ func (w *Window) String() (r string) {
 	return r
 }
 
+
 func (w *Window) optionString(_ *Window) string {
 	return w.String()
 }
+
 
 func (w *Window) split(options []Opt) (opts []Opt, tvs []textVarOpt) {
 	for _, v := range options {
@@ -1012,6 +1013,107 @@ func (m *Img) Graph(script string) *Img {
 func Destroy(options ...Opt) {
 	evalErr(fmt.Sprintf("destroy %s", collect(options...)))
 }
+
+//This commands implement listbox and its items' style configuration.
+
+func (l *ListboxWidget) AddItem(index int, items string) {
+    evalErr(fmt.Sprintf("%s insert %d %s", l.fpath, index, items))
+}
+func (l *ListboxWidget) DeleteItem(first int, last int) {
+    evalErr(fmt.Sprintf("%s delete %d %d", l.fpath, first, last))
+}
+
+func (l *ListboxWidget) Index(index int) string {
+    t := evalErr(fmt.Sprintf("%s index %d", l.fpath, index))
+    return t
+}
+
+func (l *ListboxWidget) Selected() []int {
+    t := evalErr(fmt.Sprintf("%s curselection", l.fpath))
+    s := strings.Split(t," ")
+    d := make([]int,0,len(s))
+    for _,i := range s {
+        dec, err := strconv.Atoi(i)
+        if err != nil {
+            continue
+        }
+        d = append(d,dec)
+    }
+    return d
+}
+
+func (l *ListboxWidget) Get(start int, end int) []string {
+    t := evalErr(fmt.Sprintf("%s get %d %d", l.fpath, start, end))
+    s := strings.Split(t, " ")
+    return s
+}
+    
+
+func (l *ListboxWidget) ItemForeground(index int, color string) {
+    evalErr(fmt.Sprintf("%s itemconfigure %d -foreground %s", l.fpath, index, color))
+}
+func (l *ListboxWidget) ItemBackground(index int, color string) {
+    evalErr(fmt.Sprintf("%s itemconfigure %d -background %s", l.fpath, index, color))
+}
+
+func (l *ListboxWidget) ItemSelectForeground(index int, color string) {
+    evalErr(fmt.Sprintf("%s itemconfigure %d -selectforeground %s", l.fpath, index, color))
+}
+
+func (l *ListboxWidget) ItemSelectBackground(index int, color string) {
+    evalErr(fmt.Sprintf("%s itemconfigure %d -selectbackground %s", l.fpath, index, color))
+}
+
+//Relief style should be one of flat, groove, raised, ridge, solid, or sunken
+func (l *ListboxWidget) Relief(style string) {
+    evalErr(fmt.Sprintf("%s configure -relief %s", l.fpath, style))
+}
+
+func (l  *ListboxWidget) Background(color string) {
+    evalErr(fmt.Sprintf("%s configure -background %s", l.fpath,color))
+}
+func (l  *ListboxWidget) Foreground(color string) {
+    evalErr(fmt.Sprintf("%s configure -foreground %s", l.fpath,color))
+}
+
+func (l *ListboxWidget) DisabledBackground(color string) {
+    evalErr(fmt.Sprintf("%s configure -disabledforeground %s", l.fpath, color))
+}
+
+func (l *ListboxWidget) SelectBackground(color string) {
+    evalErr(fmt.Sprintf("%s configure -selectbackground %s", l.fpath, color))
+}
+
+func (l *ListboxWidget) SelectForeground(color string) {
+    evalErr(fmt.Sprintf("%s configure -selectforeground %s", l.fpath,color))
+}
+
+func (l *ListboxWidget) SelectMode(mode string) {
+    evalErr(fmt.Sprintf("%s configure -selectmode %s", l.fpath, mode))
+}
+
+func (l *ListboxWidget) Height(h int) {
+    evalErr(fmt.Sprintf("%s configure -height %d", l.fpath, h))
+}
+
+func (l *ListboxWidget) Width(w int) {
+    evalErr(fmt.Sprintf("%s configure -width %d", l.fpath, w))
+}
+
+
+func (l *ListboxWidget) HighlightThickness(size int) {
+    evalErr(fmt.Sprintf("%s configure -highlightthickness %d", l.fpath, size))
+}
+func (l *ListboxWidget) HighlightColor(color string) {
+    evalErr(fmt.Sprintf("%s configure -highlightcolor %s", l.fpath, color))
+}
+
+func (l *ListboxWidget) HighlightBackground(color string) {
+    evalErr(fmt.Sprintf("%s configure -highlightbackground %s", l.fpath, color))
+}
+
+    
+
 
 // Pack — Geometry manager that packs around edges of cavity
 //

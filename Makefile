@@ -156,6 +156,7 @@ lib_linux: download
 	if [ "$(GOOS)" != "linux" ]; then exit 1 ; fi
 	rm -rf ~/tmp/tcl9* ~/tmp/tk9* embed/$(GOOS)/$(GOARCH)
 	mkdir -p embed/$(GOOS)/$(GOARCH)
+	mkdir ~/tmp
 	tar xf $(TAR) -C ~/tmp
 	tar xf $(TAR2) -C ~/tmp
 	sh -c "cd ~/tmp/tcl9.0.0/unix ; ./configure --disable-dll-unloading"

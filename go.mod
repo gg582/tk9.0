@@ -1,6 +1,8 @@
 module modernc.org/tk9.0
 
-go 1.21
+go 1.22.0
+
+toolchain go1.22.2
 
 require (
 	github.com/adrg/xdg v0.5.0
@@ -10,8 +12,8 @@ require (
 	github.com/expr-lang/expr v1.16.9
 	github.com/mat/besticon/v3 v3.18.0
 	golang.org/x/image v0.20.0
-	golang.org/x/net v0.29.0
-	golang.org/x/sys v0.25.0
+	golang.org/x/net v0.31.0
+	golang.org/x/sys v0.27.0
 	modernc.org/fileutil v1.3.0
 	modernc.org/knuth v0.5.1
 	modernc.org/libc v1.61.0
@@ -31,6 +33,8 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0 // indirect
+	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
+	golang.org/x/tools v0.27.0 // indirect
 	modernc.org/fsm v1.2.1 // indirect
 	modernc.org/gc/v3 v3.0.0-20230512134359-466b49aa80e0 // indirect
 	modernc.org/libX11 v0.11.2 // indirect
