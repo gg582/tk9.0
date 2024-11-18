@@ -1,4 +1,4 @@
-module github.com/yoonjin67/tk9.0
+module modernc.org/tk9.0
 
 go 1.22.0
 
