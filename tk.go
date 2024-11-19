@@ -1023,6 +1023,10 @@ func (l *ListboxWidget) DeleteItem(first int, last int) {
     evalErr(fmt.Sprintf("%s delete %d %d", l.fpath, first, last))
 }
 
+func (l *ListboxWidget) DeleteOne(index int) {
+	l.DeleteItem(index,index)
+}
+
 func (l *ListboxWidget) Index(index int) string {
     t := evalErr(fmt.Sprintf("%s index %d", l.fpath, index))
     return t
@@ -1046,6 +1050,11 @@ func (l *ListboxWidget) Get(start int, end int) []string {
     t := evalErr(fmt.Sprintf("%s get %d %d", l.fpath, start, end))
     s := strings.Split(t, " ")
     return s
+}
+
+func (l *ListboxWidget) GetOne (index int) string {
+	s := evalErr(fmt.Sprintf("%s get %d", l.fpath, index))
+	return s
 }
     
 
@@ -1213,6 +1222,11 @@ func (l *ListboxWidget) HighlightBackground(color string) {
 func Pack(options ...Opt) {
 	evalErr(fmt.Sprintf("pack %s", collect(options...)))
 }
+func Forget(options ...Opt) {
+	evalErr(fmt.Sprintf("pack forget %s", collect(options...)))
+}
+
+
 
 // SetResizable — Enable/disable window resizing
 //
