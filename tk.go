@@ -1222,7 +1222,7 @@ func (l *ListboxWidget) HighlightBackground(color string) {
 func Pack(options ...Opt) {
 	evalErr(fmt.Sprintf("pack %s", collect(options...)))
 }
-func Forget(options ...Opt) {
+func PackForget(options ...Opt) {
 	evalErr(fmt.Sprintf("pack forget %s", collect(options...)))
 }
 
@@ -1446,6 +1446,9 @@ func Grid(w Widget, options ...Opt) {
 	evalErr(fmt.Sprintf("grid configure %s %s", w, collect(options...)))
 }
 
+func GridForget(options ...Opt) {
+    evalErr(fmt.Sprintf("grid forget %s", collect(options...)))
+}
 // Grid — Geometry manager that arranges widgets in a grid
 //
 // # Description
