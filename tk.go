@@ -135,6 +135,10 @@ var (
 	windowIndex   = map[string]*Window{}
 )
 
+func DefaultTheme(theme string, path string) {
+    evalErr(fmt.Sprintf("lappend auto_path \"%s\";package require %s;ttk::style theme use %s", path,theme,theme))
+}
+
 func commonLazyInit() {
 	eval(string(tooltip))
 }

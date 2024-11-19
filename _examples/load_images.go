@@ -140,7 +140,7 @@ func SelectIndex(index int) {
 
 func main() {
     menubar := Menu()
-
+    DefaultTheme("awdark","themes/awthemes-10.4.0")
     fileMenu := menubar.Menu()
     extensions = make([]FileType,0,1)
     extensions = append(extensions, FileType{ "Supported Images", []string {".png",".ico"}, "" } )
@@ -169,21 +169,21 @@ func main() {
 	listbox.Width(4)
 	listbox2.Height(5)
 	listbox2.Width(4)
-	delBtn := Button(Txt("Delete Images"), Command(func () { DeleteSelected() }))
-	selBtn := Button(Txt("Select Images"), Command(func () { SelectImage() }))
+	delBtn := Button(Txt("Delete"), Command(func () { DeleteSelected() }))
+	selBtn := Button(Txt("Select"), Command(func () { SelectImage() }))
 	scroll = TScrollbar(Command(func(e *Event) { e.Yview(listbox) }))
 	scrollx = TScrollbar(Orient("horizontal"),Command(func(e *Event) { e.Xview(listbox) }))
     scroll2 = TScrollbar(Command(func(e *Event) { e.Yview(listbox2) }))
 	scrollx2 = TScrollbar(Orient("horizontal"),Command(func(e *Event) { e.Xview(listbox2) }))
-	Grid(listbox,Row(0),Column(0))
+	Grid(listbox,Row(0),Column(0), Sticky("nes"))
 	Grid(scroll,Row(0),Column(1), Sticky("nes"))
     Grid(scrollx,Row(1),Column(0),  Sticky("nes"))
-	Grid(delBtn,Row(2),Column(0))
-	Grid(listbox2,Row(3),Column(0))
+	Grid(delBtn,Row(2),Column(0), Sticky("nes"))
+	Grid(listbox2,Row(3),Column(0), Sticky("nes"))
 	Grid(scroll2,Row(3),Column(1), Sticky("nes"))
     Grid(scrollx2,Row(4),Column(0), Sticky("nes"))
-	Grid(selBtn,Row(5),Column(0))
+	Grid(selBtn,Row(5),Column(0), Sticky("nes"))
     App.WmTitle(fmt.Sprintf("%s on %s", App.WmTitle(""), runtime.GOOS))
-    App.Configure(Mnu(menubar), Width("10c"), Height("10c")).Wait()
+    App.Configure(Mnu(menubar), Width("80c"), Height("60c")).Wait()
 }
 
