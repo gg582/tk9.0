@@ -23,7 +23,7 @@ func main() {
     l.Width(4)
     selected_varStore := make([]string, 0, 100)
     b := Button(Txt("Get Selected Items"), Command( func() {
-        l2.DeleteItem(0,len(selected_varStore)-1)
+        l2.DeleteItems(0,len(selected_varStore)-1)
         selected_varStore = selected_varStore[:0]
         sel := l.Selected()
         for _, i := range sel {

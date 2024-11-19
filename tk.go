@@ -1019,12 +1019,12 @@ func Destroy(options ...Opt) {
 func (l *ListboxWidget) AddItem(index int, items string) {
     evalErr(fmt.Sprintf("%s insert %d %s", l.fpath, index, items))
 }
-func (l *ListboxWidget) DeleteItem(first int, last int) {
+func (l *ListboxWidget) DeleteItems(first int, last int) {
     evalErr(fmt.Sprintf("%s delete %d %d", l.fpath, first, last))
 }
 
 func (l *ListboxWidget) DeleteOne(index int) {
-	l.DeleteItem(index,index)
+	l.DeleteItems(index,index)
 }
 
 func (l *ListboxWidget) Index(index int) string {
