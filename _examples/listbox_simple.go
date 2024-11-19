@@ -9,11 +9,13 @@ func main() {
     b1 := TButton(Txt("Delete Multiple Items, index (0-1)"), Command( func(){
         if length >= 2 {
             l.DeleteItems(0,1)
+            length-=2
         }
     }))
     b2 := TButton(Txt("Delete One Item, index (0)"), Command( func () {
         if length > 0 {
             l.DeleteOne(0)
+            length-=1
         }
     }))
     
