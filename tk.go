@@ -1028,7 +1028,7 @@ func (l *ListboxWidget) DeleteOne(index int) {
 }
 
 func (l *ListboxWidget) Index(index int) string {
-    t := evalErr(fmt.Sprintf("%s index %d", l.fpath, index))
+    t := evalErr(fmt.Sprintf("%s get %d", l.fpath, index))
     return t
 }
 
