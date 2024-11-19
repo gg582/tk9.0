@@ -1027,10 +1027,6 @@ func (l *ListboxWidget) DeleteOne(index int) {
 	l.DeleteItems(index,index)
 }
 
-func (l *ListboxWidget) Index(index int) string {
-    t := evalErr(fmt.Sprintf("%s get %d", l.fpath, index))
-    return t
-}
 
 func (l *ListboxWidget) Selected() []int {
     t := evalErr(fmt.Sprintf("%s curselection", l.fpath))
