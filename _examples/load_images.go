@@ -24,7 +24,7 @@ func PhotoName(fileName string) string {
 }
 
 func handleFileOpen() {
-    res := GetOpenFile(Multiple(true),Filetypes(extensions))
+    res := GetOpenFile(Multiple(true),Filetypes(extensions)) //다중 선택을 활성화하고 필터를 켭니다.
     s := make([]string,0,1000)
     for _, itm := range res {
         if itm != "" {
@@ -106,8 +106,8 @@ func SelectImage() {
         GridForget(pbutton.Window)
     }
 
-	Grid(imagesLoaded[s[0]], Row(0), Column(4))
-    Grid(pbuttons[s[0]], Row(1), Column(4))
+	Grid(imagesLoaded[s[0]], Row(0), Column(2))
+    Grid(pbuttons[s[0]], Row(0), Column(3))
     cur = imagesLoaded[s[0]]
     pbutton = pbuttons[s[0]]
 }
@@ -127,8 +127,8 @@ func SelectIndex(index int) {
         GridForget(pbutton.Window)
     }
 
-	Grid(imagesLoaded[index], Row(0), Column(4))
-    Grid(pbuttons[index], Row(1), Column(4))
+	Grid(imagesLoaded[index], Row(0), Column(2))
+    Grid(pbuttons[index], Row(0), Column(3))
     cur = imagesLoaded[index]
     pbutton = pbuttons[index]
 }
@@ -140,10 +140,12 @@ func SelectIndex(index int) {
 
 func main() {
     menubar := Menu()
-    DefaultTheme("awdark","themes/awthemes-10.4.0")
+    //DefaultTheme("awdark","themes/awthemes-10.4.0")
+    //테마를 사용하고 싶을 때에는 테마 명과 경로를 지정해 줍니다.
     fileMenu := menubar.Menu()
     extensions = make([]FileType,0,1)
     extensions = append(extensions, FileType{ "Supported Images", []string {".png",".ico"}, "" } )
+    //필터에 png와 ico를 넣어 줍니다.
     fileMenu.AddCommand(Lbl("Open..."), Underline(0), Accelerator("Ctrl+O"), Command(func () {
         handleFileOpen()
         SelectIndex(len(imagesLoaded)-1)
@@ -159,30 +161,31 @@ func main() {
 	listbox2 = Listbox(Yscrollcommand(func(e *Event) { e.ScrollSet(scroll2)}), Xscrollcommand(func(e *Event) { e.ScrollSet(scrollx2)}))
 	listbox.SelectMode("multiple")
 	listbox2 = Listbox()
-	listbox.Background("grey")
+	listbox.Background("white")
 	listbox.SelectBackground("blue")
 	listbox.SelectForeground("yellow")
-	listbox2.Background("black")
+	listbox2.Background("grey")
 	listbox2.SelectBackground("green")
-	listbox2.SelectForeground("grey")
-	listbox.Height(10)
-	listbox.Width(8)
-	listbox2.Height(10)
-	listbox2.Width(8)
+    listbox2.SelectForeground("blue")
+    listbox2.SelectBackground("brown")
+	listbox.Height(5)
+	listbox.Width(4)
+	listbox2.Height(5)
+	listbox2.Width(4)
 	delBtn := Button(Txt("Delete"), Command(func () { DeleteSelected() }))
 	selBtn := Button(Txt("Select"), Command(func () { SelectImage() }))
 	scroll = TScrollbar(Command(func(e *Event) { e.Yview(listbox) }))
 	scrollx = TScrollbar(Orient("horizontal"),Command(func(e *Event) { e.Xview(listbox) }))
     scroll2 = TScrollbar(Command(func(e *Event) { e.Yview(listbox2) }))
 	scrollx2 = TScrollbar(Orient("horizontal"),Command(func(e *Event) { e.Xview(listbox2) }))
-	Grid(listbox,Row(0),Column(0), Sticky("nes"))
-	Grid(scroll,Row(0),Column(1), Sticky("nes"))
-    Grid(scrollx,Row(1),Column(0),  Sticky("nes"))
-	Grid(delBtn,Row(2),Column(0), Sticky("nes"))
-	Grid(listbox2,Row(3),Column(0), Sticky("nes"))
-	Grid(scroll2,Row(3),Column(1), Sticky("nes"))
-    Grid(scrollx2,Row(4),Column(0), Sticky("nes"))
-	Grid(selBtn,Row(5),Column(0), Sticky("nes"))
+	Grid(listbox,Row(1),Column(0), Sticky("nes"))
+	Grid(scroll,Row(1),Column(1), Sticky("nes"))
+    Grid(scrollx,Row(2),Column(0),  Sticky("nes"))
+	Grid(delBtn,Row(3),Column(0), Sticky("nes"))
+	Grid(listbox2,Row(1),Column(2), Sticky("nes"))
+	Grid(scroll2,Row(1),Column(3), Sticky("nes"))
+    Grid(scrollx2,Row(2),Column(2), Sticky("nes"))
+	Grid(selBtn,Row(3),Column(2), Sticky("nes"))
     App.WmTitle(fmt.Sprintf("%s on %s", App.WmTitle(""), runtime.GOOS))
     App.Configure(Mnu(menubar), Width("80c"), Height("60c")).Wait()
 }

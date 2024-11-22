@@ -38,16 +38,16 @@ const (
 	ScaleEnvVar = "TK9_SCALE"
 
 	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
-	goarch         = runtime.GOARCH
-	goos           = runtime.GOOS
-	libVersion     = "tk9.0.0"
+	goarch		 = runtime.GOARCH
+	goos		   = runtime.GOOS
+	libVersion	 = "tk9.0.0"
 
 	tcl_eval_direct = 0x40000
-	tcl_ok          = 0
-	tcl_error       = 1
-	tcl_return      = 2
-	tcl_break       = 3
-	tcl_continue    = 4
+	tcl_ok		  = 0
+	tcl_error	   = 1
+	tcl_return	  = 2
+	tcl_break	   = 3
+	tcl_continue	= 4
 
 	exitButtonTooltip = "Quit the application"
 )
@@ -76,7 +76,7 @@ var ErrorMode int
 var Error error
 
 var (
-	_ Opt    = (*MenuItem)(nil)
+	_ Opt	= (*MenuItem)(nil)
 	_ Widget = (*Window)(nil)
 
 	//go:embed embed/gotk.png
@@ -85,16 +85,16 @@ var (
 	tooltip []byte
 
 	autocenterDisabled bool
-	cleanupDirs        []string
-	exitHandler        Opt
-	finished           atomic.Int32
-	forcedX            = -1
-	forcedY            = -1
-	handlers           = map[int32]*eventHandler{}
-	id                 atomic.Int32
-	initialized        bool
-	isBuilder          = os.Getenv("MODERNC_BUILDER") != ""
-	wmTitle            string
+	cleanupDirs		[]string
+	exitHandler		Opt
+	finished		   atomic.Int32
+	forcedX			= -1
+	forcedY			= -1
+	handlers		   = map[int32]*eventHandler{}
+	id				 atomic.Int32
+	initialized		bool
+	isBuilder		  = os.Getenv("MODERNC_BUILDER") != ""
+	wmTitle			string
 
 	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
 	//
@@ -136,7 +136,7 @@ var (
 )
 
 func DefaultTheme(theme string, path string) {
-    evalErr(fmt.Sprintf("lappend auto_path \"%s\";package require %s;ttk::style theme use %s", path,theme,theme))
+	evalErr(fmt.Sprintf("lappend auto_path \"%s\";package require %s;ttk::style theme use %s", path,theme,theme))
 }
 
 func commonLazyInit() {
@@ -579,9 +579,9 @@ func (e *Event) Yview(w Widget) {
 
 type eventHandler struct {
 	callback func(*Event)
-	id       int32
-	tcl      string
-	w        *Window
+	id	   int32
+	tcl	  string
+	w		*Window
 
 	lateBind bool
 }
@@ -602,8 +602,8 @@ func newEventHandler(option string, handler any) (r *eventHandler) {
 
 	r = &eventHandler{
 		callback: callback,
-		id:       id.Add(1),
-		tcl:      option,
+		id:	   id.Add(1),
+		tcl:	  option,
 	}
 	handlers[r.id] = r
 	return r
@@ -671,13 +671,13 @@ func optionString(v any) string {
 // tags provide the following behavior:
 //
 //   - If a tag is the name of an internal window the binding applies to that
-//     window.
+//	 window.
 //   - If the tag is the name of a class of widgets, such as Button, the
-//     binding applies to all widgets in that class.
+//	 binding applies to all widgets in that class.
 //   - If the tag is the name of a toplevel window the binding applies to the
-//     toplevel window and all its internal windows.
+//	 toplevel window and all its internal windows.
 //   - If tag has the value all, the binding applies to all windows in the
-//     application.
+//	 application.
 //
 // Example usage in _examples/events.go.
 //
@@ -1021,10 +1021,10 @@ func Destroy(options ...Opt) {
 //This commands implement listbox and its items' style configuration.
 
 func (l *ListboxWidget) AddItem(index int, items string) {
-    evalErr(fmt.Sprintf("%s insert %d %s", l.fpath, index, items))
+	evalErr(fmt.Sprintf("%s insert %d %s", l.fpath, index, items))
 }
 func (l *ListboxWidget) DeleteItems(first int, last int) {
-    evalErr(fmt.Sprintf("%s delete %d %d", l.fpath, first, last))
+	evalErr(fmt.Sprintf("%s delete %d %d", l.fpath, first, last))
 }
 
 func (l *ListboxWidget) DeleteOne(index int) {
@@ -1033,95 +1033,95 @@ func (l *ListboxWidget) DeleteOne(index int) {
 
 
 func (l *ListboxWidget) Selected() []int {
-    t := evalErr(fmt.Sprintf("%s curselection", l.fpath))
-    s := strings.Split(t," ")
-    d := make([]int,0,len(s))
-    for _,i := range s {
-        dec, err := strconv.Atoi(i)
-        if err != nil {
-            continue
-        }
-        d = append(d,dec)
-    }
-    return d
+	t := evalErr(fmt.Sprintf("%s curselection", l.fpath))
+	s := strings.Split(t," ")
+	d := make([]int,0,len(s))
+	for _,i := range s {
+		dec, err := strconv.Atoi(i)
+		if err != nil {
+			continue
+		}
+		d = append(d,dec)
+	}
+	return d
 }
 
 func (l *ListboxWidget) Get(start int, end int) []string {
-    t := evalErr(fmt.Sprintf("%s get %d %d", l.fpath, start, end))
-    s := strings.Split(t, " ")
-    return s
+	t := evalErr(fmt.Sprintf("%s get %d %d", l.fpath, start, end))
+	s := strings.Split(t, " ")
+	return s
 }
 
 func (l *ListboxWidget) GetOne (index int) string {
 	s := evalErr(fmt.Sprintf("%s get %d", l.fpath, index))
 	return s
 }
-    
+
 
 func (l *ListboxWidget) ItemForeground(index int, color string) {
-    evalErr(fmt.Sprintf("%s itemconfigure %d -foreground %s", l.fpath, index, color))
+	evalErr(fmt.Sprintf("%s itemconfigure %d -foreground %s", l.fpath, index, color))
 }
 func (l *ListboxWidget) ItemBackground(index int, color string) {
-    evalErr(fmt.Sprintf("%s itemconfigure %d -background %s", l.fpath, index, color))
+	evalErr(fmt.Sprintf("%s itemconfigure %d -background %s", l.fpath, index, color))
 }
 
 func (l *ListboxWidget) ItemSelectForeground(index int, color string) {
-    evalErr(fmt.Sprintf("%s itemconfigure %d -selectforeground %s", l.fpath, index, color))
+	evalErr(fmt.Sprintf("%s itemconfigure %d -selectforeground %s", l.fpath, index, color))
 }
 
 func (l *ListboxWidget) ItemSelectBackground(index int, color string) {
-    evalErr(fmt.Sprintf("%s itemconfigure %d -selectbackground %s", l.fpath, index, color))
+	evalErr(fmt.Sprintf("%s itemconfigure %d -selectbackground %s", l.fpath, index, color))
 }
 
 //Relief style should be one of flat, groove, raised, ridge, solid, or sunken
 func (l *ListboxWidget) Relief(style string) {
-    evalErr(fmt.Sprintf("%s configure -relief %s", l.fpath, style))
+	evalErr(fmt.Sprintf("%s configure -relief %s", l.fpath, style))
 }
 
 func (l  *ListboxWidget) Background(color string) {
-    evalErr(fmt.Sprintf("%s configure -background %s", l.fpath,color))
+	evalErr(fmt.Sprintf("%s configure -background %s", l.fpath,color))
 }
 func (l  *ListboxWidget) Foreground(color string) {
-    evalErr(fmt.Sprintf("%s configure -foreground %s", l.fpath,color))
+	evalErr(fmt.Sprintf("%s configure -foreground %s", l.fpath,color))
 }
 
-func (l *ListboxWidget) DisabledBackground(color string) {
-    evalErr(fmt.Sprintf("%s configure -disabledforeground %s", l.fpath, color))
+func (l *ListboxWidget) DisabledForeground(color string) {
+	evalErr(fmt.Sprintf("%s configure -disabledforeground %s", l.fpath, color))
 }
 
 func (l *ListboxWidget) SelectBackground(color string) {
-    evalErr(fmt.Sprintf("%s configure -selectbackground %s", l.fpath, color))
+	evalErr(fmt.Sprintf("%s configure -selectbackground %s", l.fpath, color))
 }
 
 func (l *ListboxWidget) SelectForeground(color string) {
-    evalErr(fmt.Sprintf("%s configure -selectforeground %s", l.fpath,color))
+	evalErr(fmt.Sprintf("%s configure -selectforeground %s", l.fpath,color))
 }
 
 func (l *ListboxWidget) SelectMode(mode string) {
-    evalErr(fmt.Sprintf("%s configure -selectmode %s", l.fpath, mode))
+	evalErr(fmt.Sprintf("%s configure -selectmode %s", l.fpath, mode))
 }
 
 func (l *ListboxWidget) Height(h int) {
-    evalErr(fmt.Sprintf("%s configure -height %d", l.fpath, h))
+	evalErr(fmt.Sprintf("%s configure -height %d", l.fpath, h))
 }
 
 func (l *ListboxWidget) Width(w int) {
-    evalErr(fmt.Sprintf("%s configure -width %d", l.fpath, w))
+	evalErr(fmt.Sprintf("%s configure -width %d", l.fpath, w))
 }
 
 
 func (l *ListboxWidget) HighlightThickness(size int) {
-    evalErr(fmt.Sprintf("%s configure -highlightthickness %d", l.fpath, size))
+	evalErr(fmt.Sprintf("%s configure -highlightthickness %d", l.fpath, size))
 }
 func (l *ListboxWidget) HighlightColor(color string) {
-    evalErr(fmt.Sprintf("%s configure -highlightcolor %s", l.fpath, color))
+	evalErr(fmt.Sprintf("%s configure -highlightcolor %s", l.fpath, color))
 }
 
 func (l *ListboxWidget) HighlightBackground(color string) {
-    evalErr(fmt.Sprintf("%s configure -highlightbackground %s", l.fpath, color))
+	evalErr(fmt.Sprintf("%s configure -highlightbackground %s", l.fpath, color))
 }
 
-    
+
 
 
 // Pack — Geometry manager that packs around edges of cavity
@@ -1166,11 +1166,11 @@ func (l *ListboxWidget) HighlightBackground(color string) {
 // values:
 //
 //   - "none" - Give the content its requested dimensions plus any internal
-//     padding requested with -ipadx or -ipady. This is the default.
+//	 padding requested with -ipadx or -ipady. This is the default.
 //   - "x" - Stretch the content horizontally to fill the entire width of its
-//     parcel (except leave external padding as specified by -padx).
+//	 parcel (except leave external padding as specified by -padx).
 //   - "y" - Stretch the content vertically to fill the entire height of its parcel
-//     (except leave external padding as specified by -pady).
+//	 (except leave external padding as specified by -pady).
 //   - "both": Stretch the content both horizontally and vertically.
 //
 // .
@@ -1262,7 +1262,7 @@ func (w *Window) Wait() {
 		switch {
 		case forcedX >= 0 && forcedY >= 0: // Behind TK9_DEMO=1.
 			evalErr(fmt.Sprintf("wm geometry . +%v+%v", forcedX, forcedY)) //TODO add API func
-			forcedX, forcedY = -1, -1                                      // Apply only the first time.
+			forcedX, forcedY = -1, -1									  // Apply only the first time.
 		case !autocenterDisabled:
 			autocenterDisabled = true
 			w.Center()
@@ -1447,7 +1447,7 @@ func Grid(w Widget, options ...Opt) {
 }
 
 func GridForget(options ...Opt) {
-    evalErr(fmt.Sprintf("grid forget %s", collect(options...)))
+	evalErr(fmt.Sprintf("grid forget %s", collect(options...)))
 }
 // Grid — Geometry manager that arranges widgets in a grid
 //
@@ -2529,33 +2529,33 @@ func (w *TextWidget) TagBind(tag, sequence string, handler any) string {
 // <<WidgetViewSync>>. The count options are interpreted as follows:
 //
 //   - [Chars] Count all characters, whether elided or not. Do not count
-//     embedded windows or images.
+//	 embedded windows or images.
 //   - [Displaychars] Count all non-elided characters.
 //   - [Displayindices] Count all non-elided characters, windows and images.
 //   - [Displaylines] Count all display lines (i.e. counting one for each time
-//     a line wraps) from the line of the first index up to, but not including
-//     the display line of the second index. Therefore if they are both on the
-//     same display line, zero will be returned. By definition displaylines are
-//     visible and therefore this only counts portions of actual visible lines.
+//	 a line wraps) from the line of the first index up to, but not including
+//	 the display line of the second index. Therefore if they are both on the
+//	 same display line, zero will be returned. By definition displaylines are
+//	 visible and therefore this only counts portions of actual visible lines.
 //   - [Indices] Count all characters and embedded windows or images (i.e.
-//     everything which counts in text-widget index space), whether they are
-//     elided or not.
+//	 everything which counts in text-widget index space), whether they are
+//	 elided or not.
 //   - [Lines] Count all logical lines (irrespective of wrapping) from the line
-//     of the first index up to, but not including the line of the second index.
-//     Therefore if they are both on the same line, zero will be returned.
-//     Logical lines are counted whether they are currently visible (non-elided)
-//     or not.
+//	 of the first index up to, but not including the line of the second index.
+//	 Therefore if they are both on the same line, zero will be returned.
+//	 Logical lines are counted whether they are currently visible (non-elided)
+//	 or not.
 //   - [Xpixels] Count the number of horizontal pixels from the first pixel of
-//     the first index to (but not including) the first pixel of the second
-//     index. To count the total desired width of the text widget (assuming
-//     wrapping is not enabled), first find the longest line and then use “.text
-//     count -xpixels "${line}.0" "${line}.0 lineend"”.
+//	 the first index to (but not including) the first pixel of the second
+//	 index. To count the total desired width of the text widget (assuming
+//	 wrapping is not enabled), first find the longest line and then use “.text
+//	 count -xpixels "${line}.0" "${line}.0 lineend"”.
 //   - [Ypixels] Count the number of vertical pixels from the first pixel of
-//     the first index to (but not including) the first pixel of the second
-//     index. If both indices are on the same display line, zero will be
-//     returned. To count the total number of vertical pixels in the text widget,
-//     use “.text count -ypixels 1.0 end”, and to ensure this is up to date, use
-//     “.text count -update -ypixels 1.0 end”.
+//	 the first index to (but not including) the first pixel of the second
+//	 index. If both indices are on the same display line, zero will be
+//	 returned. To count the total number of vertical pixels in the text widget,
+//	 use “.text count -ypixels 1.0 end”, and to ensure this is up to date, use
+//	 “.text count -update -ypixels 1.0 end”.
 //
 // The command returns a positive or negative integer corresponding to the
 // number of items counted between the two indices. One such integer is
@@ -3602,7 +3602,7 @@ func GetOpenFile(options ...Opt) (r []string) {
 type FileType struct {
 	TypeName   string   // Eg. "Go files"
 	Extensions []string // Eg. []string{".go"}
-	MacType    string   // Eg. "TEXT"
+	MacType	string   // Eg. "TEXT"
 }
 
 // GetSaveFile — pop up a dialog box for the user to select a file to save.
@@ -4430,25 +4430,25 @@ func StyleLookup(style string, options ...any) string {
 //	StyleMap("TButton",
 //		Background, "disabled", "#112233", "active", "#445566",
 //		Foreground, "disabled", "#778899",
-//	        Relief, "pressed", "!disabled", "sunken")
+//			Relief, "pressed", "!disabled", "sunken")
 //
 // # Widget states
 //
 // The widget state is a bitmap of independent state flags.
 //
 //   - active - The mouse cursor is over the widget and pressing a mouse button
-//     will cause some action to occur
+//	 will cause some action to occur
 //   - alternate - A widget-specific alternate display format
 //   - background - Windows and Mac have a notion of an “active” or foreground
-//     window. The background state is set for widgets in a background window,
-//     and cleared for those in the foreground window
+//	 window. The background state is set for widgets in a background window,
+//	 and cleared for those in the foreground window
 //   - disabled - Widget is disabled under program control
 //   - focus - Widget has keyboard focus
 //   - invalid - The widget’s value is invalid
 //   - pressed - Widget is being pressed
 //   - readonly - Widget should not allow user modification
 //   - selected - “On”, “true”, or “current” for things like Checkbuttons and
-//     radiobuttons
+//	 radiobuttons
 //
 // A state specification is a sequence of state names, optionally prefixed with
 // an exclamation point indicating that the bit is off.
@@ -5256,24 +5256,24 @@ func (w *TNotebookWidget) Tabs() (r []*Window) {
 // the tk_messageBox. Its arguments describe a dialog box:
 //
 //   - window - Name of top-level window to use for dialog. Any existing window
-//     by this name is destroyed.
+//	 by this name is destroyed.
 //
 //   - title - Text to appear in the window manager's title bar for the dialog.
 //
 //   - text - Message to appear in the top portion of the dialog box.
 //
 //   - bitmap - If non-empty, specifies a bitmap (in a form suitable for
-//     Tk_GetBitmap) to display in the top portion of the dialog, to the left of
-//     the text. If this is an empty string then no bitmap is displayed in the
-//     dialog.
+//	 Tk_GetBitmap) to display in the top portion of the dialog, to the left of
+//	 the text. If this is an empty string then no bitmap is displayed in the
+//	 dialog.
 //
 //   - defaultButton - If this is an integer greater than or equal to zero, then it
-//     gives the index of the button that is to be the default button for the
-//     dialog (0 for the leftmost button, and so on). If negative or an empty
-//     string then there will not be any default button.
+//	 gives the index of the button that is to be the default button for the
+//	 dialog (0 for the leftmost button, and so on). If negative or an empty
+//	 string then there will not be any default button.
 //
 //   - buttons - There will be one button for each of these arguments. Each string
-//     specifies text to display in a button, in order from left to right.
+//	 specifies text to display in a button, in order from left to right.
 //
 // After creating a dialog box, tk_dialog waits for the user to select one of
 // the buttons either by clicking on the button with the mouse or by typing
@@ -5640,44 +5640,44 @@ func TooltipOn(v bool) string {
 // column headings, ttk::notebook tabs, or text widget tags.
 //
 //   - [Heading] columnId: This option is used to set a tooltip for a
-//     ttk::treeview column heading. The column does not need to already exist.
-//     You should not use the same identifiers for columns and items in a widget
-//     for which you are using tooltips as their tooltips will be mixed. The
-//     widget must be a ttk::treeview widget.
+//	 ttk::treeview column heading. The column does not need to already exist.
+//	 You should not use the same identifiers for columns and items in a widget
+//	 for which you are using tooltips as their tooltips will be mixed. The
+//	 widget must be a ttk::treeview widget.
 //
 //   - [Image] image: The specified (photo) image will be displayed to the left
-//     of the primary tooltip message.
+//	 of the primary tooltip message.
 //
 //   - [Index] index: This option is used to set a tooltip on a menu item. The
-//     index may be either the entry index or the entry label. The widget must be
-//     a menu widget but the entries do not have to exist when the tooltip is
-//     set.
+//	 index may be either the entry index or the entry label. The widget must be
+//	 a menu widget but the entries do not have to exist when the tooltip is
+//	 set.
 //
 //   - [Info] info: The specified info text will be displayed as additional
-//     information below the primary tooltip message.
+//	 information below the primary tooltip message.
 //
 //   - [Items] items: This option is used to set a tooltip for canvas, listbox
-//     or ttk::treview items. For the canvas widget, the item must already be
-//     present in the canvas and will be found with a find withtag lookup. For
-//     listbox and ttk::treview widgets the item(s) may be created later but the
-//     programmer is responsible for managing the link between the listbox or
-//     ttk::treview item index and the corresponding tooltip. If the listbox or
-//     ttk::treview items are re-ordered, the tooltips will need amending.
+//	 or ttk::treview items. For the canvas widget, the item must already be
+//	 present in the canvas and will be found with a find withtag lookup. For
+//	 listbox and ttk::treview widgets the item(s) may be created later but the
+//	 programmer is responsible for managing the link between the listbox or
+//	 ttk::treview item index and the corresponding tooltip. If the listbox or
+//	 ttk::treview items are re-ordered, the tooltips will need amending.
 //
-//     If the widget is not a canvas, listbox or ttk::treview then an error is
-//     raised.
+//	 If the widget is not a canvas, listbox or ttk::treview then an error is
+//	 raised.
 //
 //   - [Tab] tabId: The -tab option can be used to set a tooltip for a
-//     ttk::notebook tab. The tab should already be present when this command is
-//     called, or an error will be returned. The widget must be a ttk::notebook
-//     widget.
+//	 ttk::notebook tab. The tab should already be present when this command is
+//	 called, or an error will be returned. The widget must be a ttk::notebook
+//	 widget.
 //
 //   - [Tag] name: The -tag option can be used to set a tooltip for a text
-//     widget tag. The tag should already be present when this command is called,
-//     or an error will be returned. The widget must be a text widget.
+//	 widget tag. The tag should already be present when this command is called,
+//	 or an error will be returned. The widget must be a text widget.
 //
 //   - "--": The -- option marks the end of options. The argument following
-//     this one will be treated as message even if it starts with a -.
+//	 this one will be treated as message even if it starts with a -.
 //
 // Tooltip returns 'w'.
 //
