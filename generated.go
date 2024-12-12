@@ -1155,6 +1155,44 @@ type ListboxWidget struct {
 	*Window
 }
 
+
+//List - Create and manipulate 'list' list widget
+//
+// The resulting [Window] is a child of 'w'
+//
+// For details please see [list]
+
+func List(options ...Opt) *TkList {
+	return App.List(options...)
+}
+
+func (w *Window) List(options ...Opt) *TkList {
+	return &TkList{w.newChild("list",options...)}
+}
+
+type TkList struct {
+	*Window
+}
+
+// TreeView - Create and manipulate 'ttk_treeview' treeview widget
+//
+// The resulting [Window] is a child of 'w'
+//
+// For details please see 'treeview'
+
+func TreeView(options ...Opt) *TreeViewWidget {
+	return App.TreeView(options...)
+}
+
+func (w *Window) TreeView(options ...Opt) *TreeViewWidget {
+	return &TreeViewWidget{w.newChild("ttk_treeview", options...)}
+}
+
+type TreeViewWidget struct {
+	*Window
+}
+	
+
 // Menu — Create and manipulate 'menu' widgets and menubars
 //
 // Use [Window.Menu] to create a Menu with a particular parent.

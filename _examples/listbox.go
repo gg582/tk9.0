@@ -5,7 +5,7 @@ import . "modernc.org/tk9.0"
 func main() {
     l := Listbox()
     l2 := Listbox()
-    l.AddItem(0, "white red blue")
+    l.AddItems(0, "white red blue")
     l.Background("grey")
     l.Foreground("blue")
     l.SelectBackground("blue")
@@ -32,7 +32,7 @@ func main() {
         for i, c := range sel {
             itm := l.Get(c,c)
             selected_varStore = append(selected_varStore, itm[0])
-            l2.AddItem(i,itm[0])
+            l2.AddItems(i,itm[0])
         }
     }))
 

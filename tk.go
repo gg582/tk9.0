@@ -1018,19 +1018,51 @@ func Destroy(options ...Opt) {
 	evalErr(fmt.Sprintf("destroy %s", collect(options...)))
 }
 
-//This commands implement listbox and its items' style configuration.
+// # Description
+// This command sets items by parsing string with braces.
+// l.Set("{ {1,2}, {1,2} }") will be initialized as: [ [1,2], [1,2] ]
 
-func (l *ListboxWidget) AddItem(index int, items string) {
+func (l *TkList) Set(items string) {
+	evalErr(fmt.Sprintf("set %s %s", l.fpath, items))
+}
+
+// # Description 
+
+// This command appends items by parsing string with/without braces.
+// l.Add("{ {1,2}, {1,2} }") appends [ [1,2], [1,2] ] in the end of list.
+// 
+
+func (l *TkList) Append(items string) {
+	evalErr(fmt.Sprintf("lappend %s %s", l.fpath, items))
+}
+
+// # Description
+// This command add items separated with spaces.
+// l.AddItems(0,"1 2 3") appends [1, 2, 3] into index 0 of listbox.
+
+
+func (l *ListboxWidget) AddItems(index int, items string) {
 	evalErr(fmt.Sprintf("%s insert %d %s", l.fpath, index, items))
 }
+
+// # Description
+// This command deletes items by getting range to delete.
+// l.DeleteItems(0,3) deletes index 0-3 of listbox.
+
 func (l *ListboxWidget) DeleteItems(first int, last int) {
 	evalErr(fmt.Sprintf("%s delete %d %d", l.fpath, first, last))
 }
+
+// # Description
+// This command deletes item by getting a single index.
+// l.Delete(3) deletes index 3 of listbox.
 
 func (l *ListboxWidget) DeleteOne(index int) {
 	l.DeleteItems(index,index)
 }
 
+// # Description
+// This command returns indexes of selected items as integer slice.
 
 func (l *ListboxWidget) Selected() []int {
 	t := evalErr(fmt.Sprintf("%s curselection", l.fpath))
@@ -1046,17 +1078,26 @@ func (l *ListboxWidget) Selected() []int {
 	return d
 }
 
+// # Description 
+// This command returns items' value within index range of start - end.
+
+
 func (l *ListboxWidget) Get(start int, end int) []string {
 	t := evalErr(fmt.Sprintf("%s get %d %d", l.fpath, start, end))
 	s := strings.Split(t, " ")
 	return s
 }
 
+// # Description
+// This command returns single items' value of index.
+
 func (l *ListboxWidget) GetOne (index int) string {
 	s := evalErr(fmt.Sprintf("%s get %d", l.fpath, index))
 	return s
 }
 
+// # Description
+// This commands set up style formats of listbox.
 
 func (l *ListboxWidget) ItemForeground(index int, color string) {
 	evalErr(fmt.Sprintf("%s itemconfigure %d -foreground %s", l.fpath, index, color))
@@ -1121,6 +1162,45 @@ func (l *ListboxWidget) HighlightBackground(color string) {
 	evalErr(fmt.Sprintf("%s configure -highlightbackground %s", l.fpath, color))
 }
 
+// # Description
+// This implements ttk_treeview::insert
+func (tr *TreeViewWidget) Insert(parent string, label string, value string, index int) string {
+	if parent == "" {
+		parent = "{}"
+	}
+	cmd := fmt.Sprintf("set %s [%s insert %s %d -text %s]", label, tr.fpath, parent, index, value)
+	evalErr(cmd)
+	return cmd
+}
+
+// # Description
+// This implements ttk_treeview::selection
+func (tr *TreeViewWidget) Selected() []string {
+	cmd := evalErr(fmt.Sprintf("%s selection", tr.fpath))
+	s := strings.Split(cmd," ")
+	return s
+}
+
+// # Description 
+// This implements ttk_treeview's select mode configurateion
+func (tr *TreeViewWidget) SelectMode(mode string) {
+	evalErr(fmt.Sprintf("%s configure -selectmode %s", tr.fpath, mode))
+}
+
+// # Description
+// This implements ttk_treeview::delete
+func (tr *TreeViewWidget) Delete(items []string) {
+	for _, s := range items {
+		evalErr(fmt.Sprintf("%s delete %s", tr.fpath,s)) 
+	}
+}
+
+// # Description
+// This implements tcl/tk <label> <target>
+
+func Set(label string, target string) {
+	evalErr(fmt.Sprintf("set %s %s", label, target))
+}
 
 
 
@@ -1134,7 +1214,8 @@ func (l *ListboxWidget) HighlightBackground(color string) {
 //
 // The first argument must be a *Window.
 //
-// The following options are supported:
+// The following options are supported
+
 //
 //   - [After] other
 //
