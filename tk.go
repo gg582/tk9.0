@@ -5,51 +5,51 @@
 package tk9_0 // import "modernc.org/tk9.0"
 
 import (
-	"bytes"
-	"context"
-	"crypto/sha256"
-	_ "embed"
-	"encoding/base64"
-	"errors"
-	"fmt"
-	"image/png"
-	"io/fs"
-	"os"
-	"os/exec"
-	"path/filepath"
-	"reflect"
-	"runtime"
-	"strconv"
-	"strings"
-	"sync/atomic"
-	"time"
-	"github.com/mat/besticon/v3/ico"
-	"golang.org/x/net/html"
+    "bytes"
+    "context"
+    "crypto/sha256"
+    _ "embed"
+    "encoding/base64"
+    "errors"
+    "fmt"
+    "image/png"
+    "io/fs"
+    "os"
+    "os/exec"
+    "path/filepath"
+    "reflect"
+    "runtime"
+    "strconv"
+    "strings"
+    "sync/atomic"
+    "time"
+    "github.com/mat/besticon/v3/ico"
+    "golang.org/x/net/html"
 )
 
 const (
-	// ThemeEnvVar, if non-blank and containing a valid built-in theme
-	// name, is used to set the default application theme. Calling
-	// StyleThemeUse() will override the default.
-	ThemeEnvVar = "TK9_THEME"
+    // ThemeEnvVar, if non-blank and containing a valid built-in theme
+    // name, is used to set the default application theme. Calling
+    // StyleThemeUse() will override the default.
+    ThemeEnvVar = "TK9_THEME"
 
-	// ScaleEnvVar, if a valid (floating point) number, sets the TkScaling
-	// value at package initialization to NativeScaling*TK9_SCALE.
-	ScaleEnvVar = "TK9_SCALE"
+    // ScaleEnvVar, if a valid (floating point) number, sets the TkScaling
+    // value at package initialization to NativeScaling*TK9_SCALE.
+    ScaleEnvVar = "TK9_SCALE"
 
-	gnuplotTimeout = time.Minute //TODO do not let the UI freeze
-	goarch		 = runtime.GOARCH
-	goos		   = runtime.GOOS
-	libVersion	 = "tk9.0.0"
+    gnuplotTimeout = time.Minute //TODO do not let the UI freeze
+    goarch         = runtime.GOARCH
+    goos           = runtime.GOOS
+    libVersion     = "tk9.0.0"
 
-	tcl_eval_direct = 0x40000
-	tcl_ok		  = 0
-	tcl_error	   = 1
-	tcl_return	  = 2
-	tcl_break	   = 3
-	tcl_continue	= 4
+    tcl_eval_direct = 0x40000
+    tcl_ok          = 0
+    tcl_error       = 1
+    tcl_return      = 2
+    tcl_break       = 3
+    tcl_continue    = 4
 
-	exitButtonTooltip = "Quit the application"
+    exitButtonTooltip = "Quit the application"
 )
 
 // NativeScaling is the value returned by TKScaling in package initialization before it is possibly
@@ -63,10 +63,10 @@ var App = &Window{}
 
 // Error modes
 const (
-	// Errors will panic with a stack trace.
-	PanicOnError = iota
-	// Errors will be recorded into the Error variable using errors.Join
-	CollectErrors
+    // Errors will panic with a stack trace.
+    PanicOnError = iota
+    // Errors will be recorded into the Error variable using errors.Join
+    CollectErrors
 )
 
 // ErrorMode selects the action taken on errors.
@@ -76,240 +76,240 @@ var ErrorMode int
 var Error error
 
 var (
-	_ Opt	= (*MenuItem)(nil)
-	_ Widget = (*Window)(nil)
+    _ Opt    = (*MenuItem)(nil)
+    _ Widget = (*Window)(nil)
 
-	//go:embed embed/gotk.png
-	icon []byte
-	//go:embed embed/tklib/tooltip/tooltip.tcl
-	tooltip []byte
+    //go:embed embed/gotk.png
+    icon []byte
+    //go:embed embed/tklib/tooltip/tooltip.tcl
+    tooltip []byte
 
-	autocenterDisabled bool
-	cleanupDirs		[]string
-	exitHandler		Opt
-	finished		   atomic.Int32
-	forcedX			= -1
-	forcedY			= -1
-	handlers		   = map[int32]*eventHandler{}
-	id				 atomic.Int32
-	initialized		bool
-	isBuilder		  = os.Getenv("MODERNC_BUILDER") != ""
-	wmTitle			string
+    autocenterDisabled bool
+    cleanupDirs        []string
+    exitHandler        Opt
+    finished           atomic.Int32
+    forcedX            = -1
+    forcedY            = -1
+    handlers           = map[int32]*eventHandler{}
+    id                 atomic.Int32
+    initialized        bool
+    isBuilder          = os.Getenv("MODERNC_BUILDER") != ""
+    wmTitle            string
 
-	// https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
-	//
-	// The following characters are dissallowed or have special meanings in Tcl and
-	// so are escaped:
-	//
-	//	&;`'"|*?~<>^()[]{}$\
-	badChars = [...]bool{
-		' ':  true,
-		'"':  true,
-		'$':  true,
-		'&':  true,
-		'(':  true,
-		')':  true,
-		'*':  true,
-		';':  true,
-		'<':  true,
-		'>':  true,
-		'?':  true,
-		'[':  true,
-		'\'': true,
-		'\\': true,
-		'\n': true,
-		'\r': true,
-		'\t': true,
-		']':  true,
-		'^':  true,
-		'`':  true,
-		'{':  true,
-		'|':  true,
-		'}':  true,
-		'~':  true,
-	}
+    // https://pdos.csail.mit.edu/archive/rover/RoverDoc/escape_shell_table.html
+    //
+    // The following characters are dissallowed or have special meanings in Tcl and
+    // so are escaped:
+    //
+    //    &;`'"|*?~<>^()[]{}$\
+    badChars = [...]bool{
+        ' ':  true,
+        '"':  true,
+        '$':  true,
+        '&':  true,
+        '(':  true,
+        ')':  true,
+        '*':  true,
+        ';':  true,
+        '<':  true,
+        '>':  true,
+        '?':  true,
+        '[':  true,
+        '\'': true,
+        '\\': true,
+        '\n': true,
+        '\r': true,
+        '\t': true,
+        ']':  true,
+        '^':  true,
+        '`':  true,
+        '{':  true,
+        '|':  true,
+        '}':  true,
+        '~':  true,
+    }
 
-	//TODO remove the associated tcl var on window destroy event both from the
-	//interp and this map.
-	textVariables = map[*Window]string{} // : tclName
-	windowIndex   = map[string]*Window{}
+    //TODO remove the associated tcl var on window destroy event both from the
+    //interp and this map.
+    textVariables = map[*Window]string{} // : tclName
+    windowIndex   = map[string]*Window{}
 )
 
 func DefaultTheme(theme string, path string) {
-	evalErr(fmt.Sprintf("lappend auto_path \"%s\";package require %s;ttk::style theme use %s", path,theme,theme))
+    evalErr(fmt.Sprintf("lappend auto_path \"%s\";package require %s;ttk::style theme use %s", path,theme,theme))
 }
 
 func commonLazyInit() {
-	eval(string(tooltip))
+    eval(string(tooltip))
 }
 
 func checkSig(dir string, sig map[string]string) (r bool) {
-	if dmesgs {
-		dmesg("checkSig(%q, %q)", dir, sig)
-	}
-	if err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
+    if dmesgs {
+        dmesg("checkSig(%q, %q)", dir, sig)
+    }
+    if err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+        if err != nil {
+            return err
+        }
 
-		if d.IsDir() {
-			return nil
-		}
+        if d.IsDir() {
+            return nil
+        }
 
-		base := filepath.Base(path)
-		sum := sig[base]
-		if sum == "" {
-			return nil
-		}
+        base := filepath.Base(path)
+        sum := sig[base]
+        if sum == "" {
+            return nil
+        }
 
-		b, err := os.ReadFile(path)
-		if err != nil {
-			return err
-		}
+        b, err := os.ReadFile(path)
+        if err != nil {
+            return err
+        }
 
-		if g, e := fmt.Sprintf("%0x", sha256.Sum256(b)), sum; g != e {
-			return fmt.Errorf("check failed: %s %s != %s", path, g, e)
-		}
+        if g, e := fmt.Sprintf("%0x", sha256.Sum256(b)), sum; g != e {
+            return fmt.Errorf("check failed: %s %s != %s", path, g, e)
+        }
 
-		delete(sig, base)
-		return nil
-	}); err != nil || len(sig) != 0 {
-		if dmesgs {
-			dmesg("checkSig(%q) failed: %v", dir, err)
-		}
-		return false
-	}
+        delete(sig, base)
+        return nil
+    }); err != nil || len(sig) != 0 {
+        if dmesgs {
+            dmesg("checkSig(%q) failed: %v", dir, err)
+        }
+        return false
+    }
 
-	return true
+    return true
 }
 
 // Returns a single Tcl string, no braces, except {} if returned for s == "".
 func tclSafeString(s string) string {
-	if s == "" {
-		return "{}"
-	}
+    if s == "" {
+        return "{}"
+    }
 
-	const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badChars) && badChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
+    const badString = "&;`'\"|*?~<>^()[]{}$\\\n\r\t "
+    if strings.ContainsAny(s, badString) {
+        var b strings.Builder
+        for _, c := range s {
+            switch {
+            case int(c) < len(badChars) && badChars[c]:
+                fmt.Fprintf(&b, "\\x%02x", c)
+            default:
+                b.WriteRune(c)
+            }
+        }
+        s = b.String()
+    }
+    return s
 }
 
 // Same as tclSafeStrings but does not escape <>.
 func tclSafeStringBind(s string) string {
-	if s == "" {
-		return "{}"
-	}
+    if s == "" {
+        return "{}"
+    }
 
-	const badString = "&;`'\"|*?~^()[]{}$\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badChars) && badChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
+    const badString = "&;`'\"|*?~^()[]{}$\\\n\r\t "
+    if strings.ContainsAny(s, badString) {
+        var b strings.Builder
+        for _, c := range s {
+            switch {
+            case int(c) < len(badChars) && badChars[c]:
+                fmt.Fprintf(&b, "\\x%02x", c)
+            default:
+                b.WriteRune(c)
+            }
+        }
+        s = b.String()
+    }
+    return s
 }
 
 // Returns a space separated list of safe Tcl strings.
 func tclSafeList(list ...any) string {
-	var a []string
-	for _, v := range list {
-		a = append(a, tclSafeString(fmt.Sprint(v)))
-	}
-	return strings.Join(a, " ")
+    var a []string
+    for _, v := range list {
+        a = append(a, tclSafeString(fmt.Sprint(v)))
+    }
+    return strings.Join(a, " ")
 }
 
 // Returns a space separated list of safe Tcl strings.
 func tclSafeStrings(s ...string) string {
-	var a []string
-	for _, v := range s {
-		a = append(a, tclSafeString(v))
-	}
-	return strings.Join(a, " ")
+    var a []string
+    for _, v := range s {
+        a = append(a, tclSafeString(v))
+    }
+    return strings.Join(a, " ")
 }
 
 // Returns a Tcl string that is safe inside {...}
 func tclSafeInBraces(s string) string {
-	const badString = "}\\\n\r\t "
-	if strings.ContainsAny(s, badString) {
-		var b strings.Builder
-		for _, c := range s {
-			switch {
-			case int(c) < len(badMLChars) && badMLChars[c]:
-				fmt.Fprintf(&b, "\\x%02x", c)
-			default:
-				b.WriteRune(c)
-			}
-		}
-		s = b.String()
-	}
-	return s
+    const badString = "}\\\n\r\t "
+    if strings.ContainsAny(s, badString) {
+        var b strings.Builder
+        for _, c := range s {
+            switch {
+            case int(c) < len(badMLChars) && badMLChars[c]:
+                fmt.Fprintf(&b, "\\x%02x", c)
+            default:
+                b.WriteRune(c)
+            }
+        }
+        s = b.String()
+    }
+    return s
 }
 
 func setDefaults() {
-	windowIndex[""] = App
-	windowIndex["."] = App
-	exitHandler = Command(func() { Destroy(App) })
-	evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
-	NativeScaling = TkScaling()
-	if s := os.Getenv(ScaleEnvVar); s != "" {
-		if k, err := strconv.ParseFloat(s, 64); err == nil {
-			TkScaling(min(max(k, 0.5), 5) * NativeScaling)
-		}
-	}
-	if nm := os.Getenv(ThemeEnvVar); nm != "" {
-		StyleThemeUse(nm)
-	}
-	App.IconPhoto(NewPhoto(Data(icon)))
-	wmTitle = filepath.Base(os.Args[0])
-	wmTitle = strings.TrimSuffix(wmTitle, ".exe")
-	App.WmTitle(wmTitle)
-	x, y := -1, -1
-	if os.Getenv("TK9_DEMO") == "1" {
-		for i := 1; i < len(os.Args); i++ {
-			s := os.Args[i]
-			if !strings.HasPrefix(s, "+") {
-				continue
-			}
+    windowIndex[""] = App
+    windowIndex["."] = App
+    exitHandler = Command(func() { Destroy(App) })
+    evalErr("option add *tearOff 0") // https://tkdocs.com/tutorial/menus.html
+    NativeScaling = TkScaling()
+    if s := os.Getenv(ScaleEnvVar); s != "" {
+        if k, err := strconv.ParseFloat(s, 64); err == nil {
+            TkScaling(min(max(k, 0.5), 5) * NativeScaling)
+        }
+    }
+    if nm := os.Getenv(ThemeEnvVar); nm != "" {
+        StyleThemeUse(nm)
+    }
+    App.IconPhoto(NewPhoto(Data(icon)))
+    wmTitle = filepath.Base(os.Args[0])
+    wmTitle = strings.TrimSuffix(wmTitle, ".exe")
+    App.WmTitle(wmTitle)
+    x, y := -1, -1
+    if os.Getenv("TK9_DEMO") == "1" {
+        for i := 1; i < len(os.Args); i++ {
+            s := os.Args[i]
+            if !strings.HasPrefix(s, "+") {
+                continue
+            }
 
-			a := strings.Split(s[1:], "+")
-			if len(a) != 2 {
-				continue
-			}
+            a := strings.Split(s[1:], "+")
+            if len(a) != 2 {
+                continue
+            }
 
-			var err error
-			if x, err = strconv.Atoi(a[0]); err != nil || x < 0 {
-				x = -1
-				break
-			}
+            var err error
+            if x, err = strconv.Atoi(a[0]); err != nil || x < 0 {
+                x = -1
+                break
+            }
 
-			if y, err = strconv.Atoi(a[1]); err != nil || y < 0 {
-				y = -1
-			}
-			break
-		}
-	}
-	App.Configure(Padx("4m"), Pady("3m"))
-	if x >= 0 && y >= 0 {
-		forcedX, forcedY = x, y
-	}
+            if y, err = strconv.Atoi(a[1]); err != nil || y < 0 {
+                y = -1
+            }
+            break
+        }
+    }
+    App.Configure(Padx("4m"), Pady("3m"))
+    if x >= 0 && y >= 0 {
+        forcedX, forcedY = x, y
+    }
 }
 
 // Window represents a Tk window/widget. It implements common widget methods.
@@ -317,7 +317,7 @@ func setDefaults() {
 // Window implements Opt. When a Window instance is used as an Opt, it provides
 // its path name.
 type Window struct {
-	fpath string
+    fpath string
 }
 
 func (w *Window) isWidget() {}
@@ -327,130 +327,130 @@ func (w *Window) isWidget() {}
 // Widget implements Opt. When a Widget instance is used as an Opt, it provides
 // its path name.
 type Widget interface {
-	isWidget()
-	optionString(*Window) string
+    isWidget()
+    optionString(*Window) string
 }
 
 // String implements fmt.Stringer.
 func (w *Window) String() (r string) {
-	if r = w.fpath; r == "" {
-		r = "."
-	}
-	return r
+    if r = w.fpath; r == "" {
+        r = "."
+    }
+    return r
 }
 
 
 func (w *Window) optionString(_ *Window) string {
-	return w.String()
+    return w.String()
 }
 
 
 func (w *Window) split(options []Opt) (opts []Opt, tvs []textVarOpt) {
-	for _, v := range options {
-		switch x := v.(type) {
-		case textVarOpt:
-			tvs = append(tvs, x)
-		default:
-			opts = append(opts, x)
-		}
-	}
-	return opts, tvs
+    for _, v := range options {
+        switch x := v.(type) {
+        case textVarOpt:
+            tvs = append(tvs, x)
+        default:
+            opts = append(opts, x)
+        }
+    }
+    return opts, tvs
 }
 
 func (w *Window) newChild(nm string, options ...Opt) (rw *Window) {
-	class := strings.Replace(nm, "ttk_", "ttk::", 1)
-	nm = strings.Replace(nm, "ttk::", "t", 1)
-	if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
-		nm += "_"
-	}
-	path := fmt.Sprintf("%s.%s%v", w, nm, id.Add(1))
-	options, tvs := w.split(options)
-	rw = &Window{}
-	code := fmt.Sprintf("%s %s %s", class, path, winCollect(rw, options...))
-	var err error
-	if rw.fpath, err = eval(code); err != nil {
-		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, rw.fpath, err))
-	}
-	if len(tvs) != 0 {
-		rw.Configure(tvs[len(tvs)-1])
-	}
-	windowIndex[rw.fpath] = rw
-	return rw
+    class := strings.Replace(nm, "ttk_", "ttk::", 1)
+    nm = strings.Replace(nm, "ttk::", "t", 1)
+    if c := nm[len(nm)-1]; c >= '0' && c <= '9' {
+        nm += "_"
+    }
+    path := fmt.Sprintf("%s.%s%v", w, nm, id.Add(1))
+    options, tvs := w.split(options)
+    rw = &Window{}
+    code := fmt.Sprintf("%s %s %s", class, path, winCollect(rw, options...))
+    var err error
+    if rw.fpath, err = eval(code); err != nil {
+        fail(fmt.Errorf("code=%s -> r=%s err=%v", code, rw.fpath, err))
+    }
+    if len(tvs) != 0 {
+        rw.Configure(tvs[len(tvs)-1])
+    }
+    windowIndex[rw.fpath] = rw
+    return rw
 }
 
 func evalErr(code string) (r string) {
-	r, err := eval(code)
-	if err != nil {
-		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
-	}
-	return r
+    r, err := eval(code)
+    if err != nil {
+        fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+    }
+    return r
 }
 
 func fail(err error) {
-	switch ErrorMode {
-	default:
-		fallthrough
-	case PanicOnError:
-		if dmesgs {
-			dmesg("PANIC %v", err)
-		}
-		panic(err)
-	case CollectErrors:
-		Error = errors.Join(Error, err)
-	}
+    switch ErrorMode {
+    default:
+        fallthrough
+    case PanicOnError:
+        if dmesgs {
+            dmesg("PANIC %v", err)
+        }
+        panic(err)
+    case CollectErrors:
+        Error = errors.Join(Error, err)
+    }
 }
 
 func winCollect(w *Window, options ...Opt) string {
-	var a []string
-	for _, v := range options {
-		a = append(a, v.optionString(w))
-	}
-	return strings.Join(a, " ")
+    var a []string
+    for _, v := range options {
+        a = append(a, v.optionString(w))
+    }
+    return strings.Join(a, " ")
 }
 
 func collectAny(options ...any) string {
-	var a []string
-	for _, v := range options {
-		switch x := v.(type) {
-		case Opt:
-			a = append(a, x.optionString(nil))
-		default:
-			a = append(a, tclSafeString(fmt.Sprint(x)))
-		}
-	}
-	return strings.Join(a, " ")
+    var a []string
+    for _, v := range options {
+        switch x := v.(type) {
+        case Opt:
+            a = append(a, x.optionString(nil))
+        default:
+            a = append(a, tclSafeString(fmt.Sprint(x)))
+        }
+    }
+    return strings.Join(a, " ")
 }
 
 func collect(options ...Opt) string {
-	var a []string
-	for _, v := range options {
-		a = append(a, v.optionString(nil))
-	}
-	return strings.Join(a, " ")
+    var a []string
+    for _, v := range options {
+        a = append(a, v.optionString(nil))
+    }
+    return strings.Join(a, " ")
 }
 
 // Opts is a list of options. It implements Opt.
 type Opts []Opt
 
 func (o Opts) optionString(w *Window) string {
-	return winCollect(w, []Opt(o)...)
+    return winCollect(w, []Opt(o)...)
 }
 
 // Opt represents an optional argument.
 type Opt interface {
-	optionString(w *Window) string
+    optionString(w *Window) string
 }
 
 type rawOption string
 
 func (s rawOption) optionString(w *Window) string {
-	return string(s)
+    return string(s)
 }
 
 type stringOption string
 
 func (s stringOption) optionString(w *Window) string {
-	return tclSafeString(string(s))
+    return tclSafeString(string(s))
 }
 
 // EventHandler is the type used by call backs.
@@ -459,185 +459,185 @@ type EventHandler func(*Event)
 // Event communicates information with an event handler. All handlers can use the Err field. Simple
 // handlers, like in
 //
-//	Button(..., Command(func(e *Event) {...}))
+//    Button(..., Command(func(e *Event) {...}))
 //
 // can use the 'W' field, if applicable.  All other fields are valid only in
 // handlers bound using [Bind].
 type Event struct {
-	// Event handlers should set Err on failure.
-	Err error
-	// Result can be optionally set by the handler. The field is returned by
-	// certain methods, for example [TCheckbuttonWidget.Invoke].
-	Result string
-	// Event source, if any. This field is set when the event handler was
-	// created.
-	W *Window
+    // Event handlers should set Err on failure.
+    Err error
+    // Result can be optionally set by the handler. The field is returned by
+    // certain methods, for example [TCheckbuttonWidget.Invoke].
+    Result string
+    // Event source, if any. This field is set when the event handler was
+    // created.
+    W *Window
 
-	returnCode int // One of tcl_ok .. tcl_continue
+    returnCode int // One of tcl_ok .. tcl_continue
 
-	// The window to which the event was reported (the window field from
-	// the event). Valid for all event types.  This field is set when the
-	// event is handled.
-	EventWindow *Window
-	// The keysym corresponding to the event, substituted as a textual string.
-	// Valid only for Key and KeyRelease events.
-	Keysym string
-	// The number of the last client request processed by the server (the serial
-	// field from the event). Valid for all event types.
-	Serial int64
+    // The window to which the event was reported (the window field from
+    // the event). Valid for all event types.  This field is set when the
+    // event is handled.
+    EventWindow *Window
+    // The keysym corresponding to the event, substituted as a textual string.
+    // Valid only for Key and KeyRelease events.
+    Keysym string
+    // The number of the last client request processed by the server (the serial
+    // field from the event). Valid for all event types.
+    Serial int64
 
-	args []string
+    args []string
 }
 
 // Called from eventDispatcher. Arg1 is handler id, optionally followed by a
 // list of Bind substitution values.
 func newEvent(arg1 string) (id int, e *Event, err error) {
-	e = &Event{returnCode: tcl_ok}
-	a := strings.Fields(arg1)
-	if len(a) == 0 {
-		return -1, e, fmt.Errorf("internal error: missing handler ID")
-	}
+    e = &Event{returnCode: tcl_ok}
+    a := strings.Fields(arg1)
+    if len(a) == 0 {
+        return -1, e, fmt.Errorf("internal error: missing handler ID")
+    }
 
-	if id, err = strconv.Atoi(a[0]); err != nil {
-		return id, e, fmt.Errorf("newEvent: parsing event ID %q: %v", a[0], err)
-	}
+    if id, err = strconv.Atoi(a[0]); err != nil {
+        return id, e, fmt.Errorf("newEvent: parsing event ID %q: %v", a[0], err)
+    }
 
-	for i, v := range a[1:] {
-		switch i {
-		case 0: // %#
-			if e.Serial, err = strconv.ParseInt(v, 10, 64); err != nil {
-				return id, e, fmt.Errorf("newEvent: parsing event serial %q: %v", v, err)
-			}
-		case 1: // %W
-			e.EventWindow = windowIndex[v]
-		case 2: // %K
-			e.Keysym = v
-		}
-	}
-	return id, e, nil
+    for i, v := range a[1:] {
+        switch i {
+        case 0: // %#
+            if e.Serial, err = strconv.ParseInt(v, 10, 64); err != nil {
+                return id, e, fmt.Errorf("newEvent: parsing event serial %q: %v", v, err)
+            }
+        case 1: // %W
+            e.EventWindow = windowIndex[v]
+        case 2: // %K
+            e.Keysym = v
+        }
+    }
+    return id, e, nil
 }
 
 // SetReturnCodeOK sets return code of 'e' to TCL_OK.
 func (e *Event) SetReturnCodeOK() {
-	e.returnCode = tcl_ok
+    e.returnCode = tcl_ok
 }
 
 // SetReturnCodeError sets return code of 'e' to TCL_ERROR.
 func (e *Event) SetReturnCodeError() {
-	e.returnCode = tcl_error
+    e.returnCode = tcl_error
 }
 
 // SetReturnCodeReturn sets return code of 'e' to TCL_RETURN.
 func (e *Event) SetReturnCodeReturn() {
-	e.returnCode = tcl_return
+    e.returnCode = tcl_return
 }
 
 // SetReturnCodeBreak sets return code of 'e' to TCL_BREAK.
 func (e *Event) SetReturnCodeBreak() {
-	e.returnCode = tcl_break
+    e.returnCode = tcl_break
 }
 
 // SetReturnCodeContinue sets return code of 'e' to TCL_CONTINUE.
 func (e *Event) SetReturnCodeContinue() {
-	e.returnCode = tcl_continue
+    e.returnCode = tcl_continue
 }
 
 // ScrollSet communicates events to scrollbars. Example:
 //
-//	var scroll *TScrollbarWidget
-//	// tcl: text .text -yscrollcommand ".scroll set"
-//	t := Text(..., Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }))
+//    var scroll *TScrollbarWidget
+//    // tcl: text .text -yscrollcommand ".scroll set"
+//    t := Text(..., Yscrollcommand(func(e *Event) { e.ScrollSet(scroll) }))
 func (e *Event) ScrollSet(w Widget) {
-	if len(e.args) > 1 {
-		evalErr(fmt.Sprintf("%s set %s %s", w, e.args[0], e.args[1]))
-	}
+    if len(e.args) > 1 {
+        evalErr(fmt.Sprintf("%s set %s %s", w, e.args[0], e.args[1]))
+    }
 }
 
 // Xview communicates events to views. Example:
 //
-//	var scroll *TScrollbarWidget
-//	t := Text(...)
-//	// tcl: ttk::scrollbar .scroll -command ".text xview"
-//	scroll = TScrollbar(Command(func(e *Event) { e.Xview(t)}))
+//    var scroll *TScrollbarWidget
+//    t := Text(...)
+//    // tcl: ttk::scrollbar .scroll -command ".text xview"
+//    scroll = TScrollbar(Command(func(e *Event) { e.Xview(t)}))
 func (e *Event) Xview(w Widget) {
-	if len(e.args) > 1 {
-		evalErr(fmt.Sprintf("%s xview %s", w, strings.Join(e.args, " ")))
-	}
+    if len(e.args) > 1 {
+        evalErr(fmt.Sprintf("%s xview %s", w, strings.Join(e.args, " ")))
+    }
 }
 
 // Yview communicates events to views. Example:
 //
-//	var scroll *TScrollbarWidget
-//	t := Text(...)
-//	// tcl: ttk::scrollbar .scroll -command ".text yview"
-//	scroll = TScrollbar(Command(func(e *Event) { e.Yview(t)}))
+//    var scroll *TScrollbarWidget
+//    t := Text(...)
+//    // tcl: ttk::scrollbar .scroll -command ".text yview"
+//    scroll = TScrollbar(Command(func(e *Event) { e.Yview(t)}))
 func (e *Event) Yview(w Widget) {
-	if len(e.args) > 1 {
-		evalErr(fmt.Sprintf("%s yview %s", w, strings.Join(e.args, " ")))
-	}
+    if len(e.args) > 1 {
+        evalErr(fmt.Sprintf("%s yview %s", w, strings.Join(e.args, " ")))
+    }
 }
 
 type eventHandler struct {
-	callback func(*Event)
-	id	   int32
-	tcl	  string
-	w		*Window
+    callback func(*Event)
+    id       int32
+    tcl      string
+    w        *Window
 
-	lateBind bool
+    lateBind bool
 }
 
 func newEventHandler(option string, handler any) (r *eventHandler) {
-	var callback func(*Event)
-	switch x := handler.(type) {
-	case EventHandler:
-		callback = x
-	case func(*Event):
-		callback = x
-	case func():
-		callback = func(*Event) { x() }
-	default:
-		fail(fmt.Errorf("registering event handler: unsupported handler type: %T", handler))
-		return nil
-	}
+    var callback func(*Event)
+    switch x := handler.(type) {
+    case EventHandler:
+        callback = x
+    case func(*Event):
+        callback = x
+    case func():
+        callback = func(*Event) { x() }
+    default:
+        fail(fmt.Errorf("registering event handler: unsupported handler type: %T", handler))
+        return nil
+    }
 
-	r = &eventHandler{
-		callback: callback,
-		id:	   id.Add(1),
-		tcl:	  option,
-	}
-	handlers[r.id] = r
-	return r
+    r = &eventHandler{
+        callback: callback,
+        id:       id.Add(1),
+        tcl:      option,
+    }
+    handlers[r.id] = r
+    return r
 }
 
 func (e *eventHandler) optionString(w *Window) string {
-	if e == nil {
-		return ""
-	}
+    if e == nil {
+        return ""
+    }
 
-	e.w = w
-	switch {
-	case e.lateBind:
-		return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K}}", e.tcl, e.id)
-	default:
-		return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
-	}
+    e.w = w
+    switch {
+    case e.lateBind:
+        return fmt.Sprintf("%s {eventDispatcher {%v %%# %%W %%K}}", e.tcl, e.id)
+    default:
+        return fmt.Sprintf("%s {eventDispatcher %v}", e.tcl, e.id)
+    }
 }
 
 func optionString(v any) string {
-	switch x := v.(type) {
-	case time.Duration:
-		return fmt.Sprint(int64((x + time.Millisecond/2) / time.Millisecond))
-	case []byte:
-		return base64.StdEncoding.EncodeToString(x)
-	case []FileType:
-		var a []string
-		for _, v := range x {
-			a = append(a, fmt.Sprintf("{%s {%s} %s}", tclSafeString(v.TypeName), tclSafeStrings(v.Extensions...), v.MacType))
-		}
-		return fmt.Sprintf("{%s}", strings.Join(a, " "))
-	default:
-		return tclSafeString(fmt.Sprint(v))
-	}
+    switch x := v.(type) {
+    case time.Duration:
+        return fmt.Sprint(int64((x + time.Millisecond/2) / time.Millisecond))
+    case []byte:
+        return base64.StdEncoding.EncodeToString(x)
+    case []FileType:
+        var a []string
+        for _, v := range x {
+            a = append(a, fmt.Sprintf("{%s {%s} %s}", tclSafeString(v.TypeName), tclSafeStrings(v.Extensions...), v.MacType))
+        }
+        return fmt.Sprintf("{%s}", strings.Join(a, " "))
+    default:
+        return tclSafeString(fmt.Sprint(v))
+    }
 }
 
 // bind — Arrange for X events to invoke functions
@@ -671,13 +671,13 @@ func optionString(v any) string {
 // tags provide the following behavior:
 //
 //   - If a tag is the name of an internal window the binding applies to that
-//	 window.
+//     window.
 //   - If the tag is the name of a class of widgets, such as Button, the
-//	 binding applies to all widgets in that class.
+//     binding applies to all widgets in that class.
 //   - If the tag is the name of a toplevel window the binding applies to the
-//	 toplevel window and all its internal windows.
+//     toplevel window and all its internal windows.
 //   - If tag has the value all, the binding applies to all windows in the
-//	 application.
+//     application.
 //
 // Example usage in _examples/events.go.
 //
@@ -685,29 +685,29 @@ func optionString(v any) string {
 //
 // [Tcl/Tk bind]: https://www.tcl.tk/man/tcl9.0/TkCmd/bind.html
 func Bind(options ...any) {
-	a := []string{"bind"}
-	var w *Window
-	for _, v := range options {
-		switch x := v.(type) {
-		case *Window:
-			if w == nil {
-				w = x
-			}
-			a = append(a, x.String())
-		case *eventHandler:
-			x.tcl = ""
-			x.lateBind = true
-			a = append(a, x.optionString(w))
-		default:
-			a = append(a, tclSafeStringBind(fmt.Sprint(x)))
-		}
-	}
-	evalErr(strings.Join(a, " "))
+    a := []string{"bind"}
+    var w *Window
+    for _, v := range options {
+        switch x := v.(type) {
+        case *Window:
+            if w == nil {
+                w = x
+            }
+            a = append(a, x.String())
+        case *eventHandler:
+            x.tcl = ""
+            x.lateBind = true
+            a = append(a, x.optionString(w))
+        default:
+            a = append(a, tclSafeStringBind(fmt.Sprint(x)))
+        }
+    }
+    evalErr(strings.Join(a, " "))
 }
 
 // Img represents a Tk image.
 type Img struct {
-	name string
+    name string
 }
 
 // image — Create and manipulate images
@@ -722,20 +722,20 @@ type Img struct {
 // image is recreated with another call to image create, the existing instances
 // will use the new image.
 func (m *Img) Delete() {
-	evalErr(fmt.Sprintf("image delete %s", m))
+    evalErr(fmt.Sprintf("image delete %s", m))
 }
 
 // String implements fmt.Stringer.
 func (m *Img) String() string {
-	return m.optionString(nil)
+    return m.optionString(nil)
 }
 
 func (m *Img) optionString(_ *Window) string {
-	if m != nil {
-		return m.name
-	}
+    if m != nil {
+        return m.name
+    }
 
-	return "img0" // does not exist
+    return "img0" // does not exist
 }
 
 // Bitmap — Images that display two colors
@@ -792,15 +792,15 @@ func (m *Img) optionString(_ *Window) string {
 //
 // [Tcl/Tk bitmap]: https://www.tcl.tk/man/tcl9.0/TkCmd/bitmap.html
 func NewBitmap(options ...Opt) *Img {
-	nm := fmt.Sprintf("bmp%v", id.Add(1))
-	code := fmt.Sprintf("image create bitmap %s %s", nm, collect(options...))
-	r, err := eval(code)
-	if err != nil {
-		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
-		return nil
-	}
+    nm := fmt.Sprintf("bmp%v", id.Add(1))
+    code := fmt.Sprintf("image create bitmap %s %s", nm, collect(options...))
+    r, err := eval(code)
+    if err != nil {
+        fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+        return nil
+    }
 
-	return &Img{name: nm}
+    return &Img{name: nm}
 }
 
 // Photo — Full-color images
@@ -877,15 +877,15 @@ func NewBitmap(options ...Opt) *Img {
 //
 // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func NewPhoto(options ...Opt) *Img {
-	nm := fmt.Sprintf("img%v", id.Add(1))
-	code := fmt.Sprintf("image create photo %s %s", nm, collect(options...))
-	r, err := eval(code)
-	if err != nil {
-		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
-		return nil
-	}
+    nm := fmt.Sprintf("img%v", id.Add(1))
+    code := fmt.Sprintf("image create photo %s %s", nm, collect(options...))
+    r, err := eval(code)
+    if err != nil {
+        fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+        return nil
+    }
 
-	return &Img{name: nm}
+    return &Img{name: nm}
 }
 
 // Width — Get the configured option value.
@@ -894,7 +894,7 @@ func NewPhoto(options ...Opt) *Img {
 //
 // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Width() string {
-	return evalErr(fmt.Sprintf(`image width %s`, m))
+    return evalErr(fmt.Sprintf(`image width %s`, m))
 }
 
 // Height — Get the configured option value.
@@ -903,7 +903,7 @@ func (m *Img) Width() string {
 //
 // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Height() string {
-	return evalErr(fmt.Sprintf(`image height %s`, m))
+    return evalErr(fmt.Sprintf(`image height %s`, m))
 }
 
 // // Returns photo data.
@@ -912,8 +912,8 @@ func (m *Img) Height() string {
 // //
 // // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 // func (m *Img) Data(options ...Opt) []byte {
-// 	s := evalErr(fmt.Sprintf("%s data %s", collect(options...)))
-// 	panic(todo("%q", s))
+//     s := evalErr(fmt.Sprintf("%s data %s", collect(options...)))
+//     panic(todo("%q", s))
 // }
 
 // photo — Full-color images
@@ -949,8 +949,8 @@ func (m *Img) Height() string {
 //
 // [Tcl/Tk photo]: https://www.tcl.tk/man/tcl9.0/TkCmd/photo.html
 func (m *Img) Copy(src *Img, options ...Opt) (r *Img) {
-	evalErr(fmt.Sprintf("%s copy %s %s", m, src, collect(options...)))
-	return m
+    evalErr(fmt.Sprintf("%s copy %s %s", m, src, collect(options...)))
+    return m
 }
 
 // From option.
@@ -962,7 +962,7 @@ func (m *Img) Copy(src *Img, options ...Opt) (r *Img) {
 //   - [TScale] (widget specific)
 //   - [TSpinbox] (widget specific)
 func From(val ...any) Opt {
-	return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
+    return rawOption(fmt.Sprintf(`-from %s`, collectAny(val...)))
 }
 
 // To option.
@@ -974,7 +974,7 @@ func From(val ...any) Opt {
 //   - [TScale] (widget specific)
 //   - [TSpinbox] (widget specific)
 func To(val ...any) Opt {
-	return rawOption(fmt.Sprintf(`-to %s`, collectAny(val...)))
+    return rawOption(fmt.Sprintf(`-to %s`, collectAny(val...)))
 }
 
 // Graph — use gnuplot to draw on a photo. Graph returns 'm'
@@ -987,21 +987,21 @@ func To(val ...any) Opt {
 //
 // [gnuplot site]: http://www.gnuplot.info/
 func (m *Img) Graph(script string) *Img {
-	switch {
-	case strings.HasPrefix(m.name, "img"):
-		w, h := m.Width(), m.Height()
-		script = fmt.Sprintf("set terminal pngcairo size %s, %s\n%s", w, h, script)
-		out, err := gnuplot(script)
-		if err != nil {
-			fail(fmt.Errorf("plot: executing script: %s", err))
-			break
-		}
+    switch {
+    case strings.HasPrefix(m.name, "img"):
+        w, h := m.Width(), m.Height()
+        script = fmt.Sprintf("set terminal pngcairo size %s, %s\n%s", w, h, script)
+        out, err := gnuplot(script)
+        if err != nil {
+            fail(fmt.Errorf("plot: executing script: %s", err))
+            break
+        }
 
-		*m = *NewPhoto(Width(w), Height(h), Data(out))
-	default:
-		fail(fmt.Errorf("plot: %s is not a photo", m))
-	}
-	return m
+        *m = *NewPhoto(Width(w), Height(h), Data(out))
+    default:
+        fail(fmt.Errorf("plot: %s is not a photo", m))
+    }
+    return m
 }
 
 // Destroy — Destroy one or more windows
@@ -1015,7 +1015,7 @@ func (m *Img) Graph(script string) *Img {
 // command aborts without destroying the remaining windows. No error is
 // returned if window does not exist.
 func Destroy(options ...Opt) {
-	evalErr(fmt.Sprintf("destroy %s", collect(options...)))
+    evalErr(fmt.Sprintf("destroy %s", collect(options...)))
 }
 
 // # Description
@@ -1023,7 +1023,7 @@ func Destroy(options ...Opt) {
 // l.Set("{ {1,2}, {1,2} }") will be initialized as: [ [1,2], [1,2] ]
 
 func (l *TkList) Set(items string) {
-	evalErr(fmt.Sprintf("set %s %s", l.fpath, items))
+    evalErr(fmt.Sprintf("set %s %s", l.fpath, items))
 }
 
 // # Description 
@@ -1033,175 +1033,680 @@ func (l *TkList) Set(items string) {
 // 
 
 func (l *TkList) Append(items string) {
-	evalErr(fmt.Sprintf("lappend %s %s", l.fpath, items))
+    evalErr(fmt.Sprintf("lappend %s %s", l.fpath, items))
 }
 
-// # Description
-// This command add items separated with spaces.
-// l.AddItems(0,"1 2 3") appends [1, 2, 3] into index 0 of listbox.
 
-
-func (l *ListboxWidget) AddItems(index int, items string) {
-	evalErr(fmt.Sprintf("%s insert %d %s", l.fpath, index, items))
-}
-
-// # Description
-// This command deletes items by getting range to delete.
-// l.DeleteItems(0,3) deletes index 0-3 of listbox.
-
-func (l *ListboxWidget) DeleteItems(first int, last int) {
-	evalErr(fmt.Sprintf("%s delete %d %d", l.fpath, first, last))
-}
-
-// # Description
-// This command deletes item by getting a single index.
-// l.Delete(3) deletes index 3 of listbox.
-
-func (l *ListboxWidget) DeleteOne(index int) {
-	l.DeleteItems(index,index)
-}
-
-// # Description
-// This command returns indexes of selected items as integer slice.
-
-func (l *ListboxWidget) Selected() []int {
-	t := evalErr(fmt.Sprintf("%s curselection", l.fpath))
-	s := strings.Split(t," ")
-	d := make([]int,0,len(s))
-	for _,i := range s {
-		dec, err := strconv.Atoi(i)
-		if err != nil {
-			continue
-		}
-		d = append(d,dec)
+// AddItems appends one or more items to the listbox at the specified index.
+func (l *ListboxWidget) AddItems(index int, items ...string) {
+	if len(items) == 0 {
+		return
 	}
-	return d
+
+	quotedItems := make([]string, len(items))
+	for i, item := range items {
+        items[i] = fmt.Sprintf("{%s}", item)
+	}
+
+	itemsStr := strings.Join(quotedItems, " ")
+	cmd := fmt.Sprintf("%s insert %d %s", l.fpath, index, itemsStr)
+    evalErr(cmd)
 }
 
-// # Description 
-// This command returns items' value within index range of start - end.
+// # Description
+// Deletes a range of items in the listbox from the given 'first' index to 'last' index, inclusive.
+// Useful for clearing or removing multiple entries at once.
+//
+// Example:
+//   l.DeleteItems(0, 3)  // Deletes items at index 0, 1, 2, and 3
+func (l *ListboxWidget) DeleteItems(first int, last int) {
+    evalErr(fmt.Sprintf("%s delete %d %d", l.fpath, first, last))
+}
 
+// # Description
+// Deletes a single item from the listbox at the specified index.
+//
+// Example:
+//   l.DeleteOne(3)  // Deletes the item at index 3
+func (l *ListboxWidget) DeleteOne(index int) {
+    l.DeleteItems(index, index)
+}
 
+// # Description
+// Returns the list of currently selected item indexes in the listbox.
+// The result is a slice of integers representing each selected item's index.
+//
+// Example:
+//   sel := l.Selected()  // Returns something like []int{1, 3}
+func (l *ListboxWidget) Selected() []int {
+    t := evalErr(fmt.Sprintf("%s curselection", l.fpath))
+    s := strings.Split(t, " ")
+    d := make([]int, 0, len(s))
+    for _, i := range s {
+        dec, err := strconv.Atoi(i)
+        if err != nil {
+            continue
+        }
+        d = append(d, dec)
+    }
+    return d
+}
+
+// # Description
+// Retrieves values of items in the listbox between the given range: from 'start' to 'end' index inclusive.
+// Returns a slice of strings containing the values.
+//
+// Example:
+//   values := l.Get(0, 2)  // Might return []string{"Apple", "Banana", "Cherry"}
 func (l *ListboxWidget) Get(start int, end int) []string {
-	t := evalErr(fmt.Sprintf("%s get %d %d", l.fpath, start, end))
-	s := strings.Split(t, " ")
-	return s
+    t := evalErr(fmt.Sprintf("%s get %d %d", l.fpath, start, end))
+    s := strings.Split(t, " ")
+    return s
 }
 
 // # Description
-// This command returns single items' value of index.
-
-func (l *ListboxWidget) GetOne (index int) string {
-	s := evalErr(fmt.Sprintf("%s get %d", l.fpath, index))
-	return s
+// Retrieves the value of a single item at the specified index from the listbox.
+//
+// Example:
+//   val := l.GetOne(2)  // Might return "Banana"
+func (l *ListboxWidget) GetOne(index int) string {
+    s := evalErr(fmt.Sprintf("%s get %d", l.fpath, index))
+    return s
 }
 
 // # Description
-// This commands set up style formats of listbox.
-
+// Sets the foreground (text color) of a specific item in the listbox.
+//
+// Example:
+//   l.ItemForeground(1, "red")
 func (l *ListboxWidget) ItemForeground(index int, color string) {
-	evalErr(fmt.Sprintf("%s itemconfigure %d -foreground %s", l.fpath, index, color))
+    evalErr(fmt.Sprintf("%s itemconfigure %d -foreground %s", l.fpath, index, color))
 }
+
+// # Description
+// Sets the background color of a specific item in the listbox.
+//
+// Example:
+//   l.ItemBackground(1, "yellow")
 func (l *ListboxWidget) ItemBackground(index int, color string) {
-	evalErr(fmt.Sprintf("%s itemconfigure %d -background %s", l.fpath, index, color))
+    evalErr(fmt.Sprintf("%s itemconfigure %d -background %s", l.fpath, index, color))
 }
 
+// # Description
+// Sets the text color of a selected item (only when selected).
+//
+// Example:
+//   l.ItemSelectForeground(1, "white")
 func (l *ListboxWidget) ItemSelectForeground(index int, color string) {
-	evalErr(fmt.Sprintf("%s itemconfigure %d -selectforeground %s", l.fpath, index, color))
+    evalErr(fmt.Sprintf("%s itemconfigure %d -selectforeground %s", l.fpath, index, color))
 }
 
+// # Description
+// Sets the background color of a selected item (only when selected).
+//
+// Example:
+//   l.ItemSelectBackground(1, "blue")
 func (l *ListboxWidget) ItemSelectBackground(index int, color string) {
-	evalErr(fmt.Sprintf("%s itemconfigure %d -selectbackground %s", l.fpath, index, color))
+    evalErr(fmt.Sprintf("%s itemconfigure %d -selectbackground %s", l.fpath, index, color))
 }
 
-//Relief style should be one of flat, groove, raised, ridge, solid, or sunken
+// # Description
+// Sets the relief style (border type) of the listbox.
+// Valid styles: "flat", "groove", "raised", "ridge", "solid", "sunken"
+//
+// Example:
+//   l.Relief("ridge")
 func (l *ListboxWidget) Relief(style string) {
-	evalErr(fmt.Sprintf("%s configure -relief %s", l.fpath, style))
+    evalErr(fmt.Sprintf("%s configure -relief %s", l.fpath, style))
 }
 
-func (l  *ListboxWidget) Background(color string) {
-	evalErr(fmt.Sprintf("%s configure -background %s", l.fpath,color))
-}
-func (l  *ListboxWidget) Foreground(color string) {
-	evalErr(fmt.Sprintf("%s configure -foreground %s", l.fpath,color))
+// # Description
+// Sets the background color of the entire listbox widget.
+//
+// Example:
+//   l.Background("black")
+func (l *ListboxWidget) Background(color string) {
+    evalErr(fmt.Sprintf("%s configure -background %s", l.fpath, color))
 }
 
+// # Description
+// Sets the foreground (text) color of the entire listbox widget.
+//
+// Example:
+//   l.Foreground("green")
+func (l *ListboxWidget) Foreground(color string) {
+    evalErr(fmt.Sprintf("%s configure -foreground %s", l.fpath, color))
+}
+
+// # Description
+// Sets the foreground color for disabled state of the listbox.
+//
+// Example:
+//   l.DisabledForeground("gray")
 func (l *ListboxWidget) DisabledForeground(color string) {
-	evalErr(fmt.Sprintf("%s configure -disabledforeground %s", l.fpath, color))
+    evalErr(fmt.Sprintf("%s configure -disabledforeground %s", l.fpath, color))
 }
 
+// # Description
+// Sets the background color used when an item is selected.
+//
+// Example:
+//   l.SelectBackground("orange")
 func (l *ListboxWidget) SelectBackground(color string) {
-	evalErr(fmt.Sprintf("%s configure -selectbackground %s", l.fpath, color))
+    evalErr(fmt.Sprintf("%s configure -selectbackground %s", l.fpath, color))
 }
 
+// # Description
+// Sets the foreground (text) color used when an item is selected.
+//
+// Example:
+//   l.SelectForeground("white")
 func (l *ListboxWidget) SelectForeground(color string) {
-	evalErr(fmt.Sprintf("%s configure -selectforeground %s", l.fpath,color))
+    evalErr(fmt.Sprintf("%s configure -selectforeground %s", l.fpath, color))
 }
 
+// # Description
+// Sets the selection mode of the listbox.
+// Valid values: "single", "browse", "multiple", "extended"
+//
+// Example:
+//   l.SelectMode("multiple")
 func (l *ListboxWidget) SelectMode(mode string) {
-	evalErr(fmt.Sprintf("%s configure -selectmode %s", l.fpath, mode))
+    kinds := []string{"single", "browse", "multiple", "extended"}
+    found := false
+    for _, kind := range kinds {
+        if kind == mode {
+            found = true
+            break
+        }
+    }
+    if found == false {
+        return
+    }
+    evalErr(fmt.Sprintf("%s configure -selectmode %s", l.fpath, mode))
 }
 
+// # Description
+// Sets the height (number of visible rows) of the listbox.
+//
+// Example:
+//   l.Height(10)
 func (l *ListboxWidget) Height(h int) {
-	evalErr(fmt.Sprintf("%s configure -height %d", l.fpath, h))
+    evalErr(fmt.Sprintf("%s configure -height %d", l.fpath, h))
 }
 
+// # Description
+// Sets the width (character units) of the listbox.
+//
+// Example:
+//   l.Width(30)
 func (l *ListboxWidget) Width(w int) {
-	evalErr(fmt.Sprintf("%s configure -width %d", l.fpath, w))
+    evalErr(fmt.Sprintf("%s configure -width %d", l.fpath, w))
 }
 
-
+// # Description
+// Sets the highlight thickness (border width when focused) for the listbox.
+//
+// Example:
+//   l.HighlightThickness(2)
 func (l *ListboxWidget) HighlightThickness(size int) {
-	evalErr(fmt.Sprintf("%s configure -highlightthickness %d", l.fpath, size))
-}
-func (l *ListboxWidget) HighlightColor(color string) {
-	evalErr(fmt.Sprintf("%s configure -highlightcolor %s", l.fpath, color))
+    evalErr(fmt.Sprintf("%s configure -highlightthickness %d", l.fpath, size))
 }
 
+// # Description
+// Sets the highlight color (outline color when focused) for the listbox.
+//
+// Example:
+//   l.HighlightColor("blue")
+func (l *ListboxWidget) HighlightColor(color string) {
+    evalErr(fmt.Sprintf("%s configure -highlightcolor %s", l.fpath, color))
+}
+
+// # Description
+// Sets the highlight background color for the listbox (when focused).
+//
+// Example:
+//   l.HighlightBackground("lightgray")
 func (l *ListboxWidget) HighlightBackground(color string) {
-	evalErr(fmt.Sprintf("%s configure -highlightbackground %s", l.fpath, color))
+    evalErr(fmt.Sprintf("%s configure -highlightbackground %s", l.fpath, color))
+}
+
+// # Description
+// Applies a raw configuration string directly to the listbox.
+// For advanced use cases requiring custom options.
+//
+// Example:
+//   l.Configure("-exportselection 0")
+func (l *ListboxWidget) Configure(option string) {
+    evalErr(fmt.Sprintf("%s configure %s", l.fpath, option))
+}
+
+// # Description
+// Builds and returns a formatted option-value string used in configuration.
+//
+// Example:
+//   opt := l.Options("foreground", "blue")  // returns "-foreground blue"
+func (l *ListboxWidget) Options(option string, val string) string {
+    return "-" + option + " " + val
+}
+
+
+
+// # Description
+// Applies one or more raw configuration options to the treeview.
+// Example:
+//   tr.Configure("-exportselection", "0", "-show", "headings")
+func (tr *TreeViewWidget) Configure(options ...string) {
+    // join all option tokens into a single string
+    optStr := strings.Join(options, " ")
+    evalErr(fmt.Sprintf("%s configure %s", tr.fpath, optStr))
+}
+
+func Quote(itm string) string {
+    return fmt.Sprintf("{%s}", itm)
+}
+
+// # Description
+// This implements ttk_treeview::parent by asking Tcl/Tk for the list of children
+// and returning the ID at the given index.
+// If you want the “parent” of a specific item, you can call tv.ParentOf(itemID).
+func (tr *TreeViewWidget) Parent(index int) string {
+    if index <= 0 {
+        return "{}"
+    }
+    // ask Tcl for the list of top‑level items
+    raw, err := eval(fmt.Sprintf("%s children {}", tr.fpath))
+    if err != nil {
+        fmt.Println("Error fetching children:", err)
+        return ""
+    }
+    // split into individual IDs
+    ids := strings.Fields(raw)
+    if index >= len(ids) {
+        return ""
+    }
+    return ids[index]
+}
+
+// # Description
+// This implements ttk_treeview::parent-of, returning the parent ID of a given item.
+// Example:
+//    parentID := tr.ParentOf("I00102")
+func (tr *TreeViewWidget) ParentOf(itemID string) string {
+    raw, err := eval(fmt.Sprintf("%s parent %s", tr.fpath, itemID))
+    if err != nil {
+        fmt.Println("Error fetching parent of", itemID, ":", err)
+        return ""
+    }
+    return raw
 }
 
 // # Description
 // This implements ttk_treeview::insert
-func (tr *TreeViewWidget) Insert(parent string, label string, value string, index int) string {
-	if parent == "" {
-		parent = "{}"
-	}
-	cmd := fmt.Sprintf("set %s [%s insert %s %d -text %s]", label, tr.fpath, parent, index, value)
-	evalErr(cmd)
-	return cmd
+// Insert adds a new item under the specified parent at the end of its children.
+func (tr *TreeViewWidget) Insert(itemID, text string, parent, _index int, values []string) {
+    parentID := tr.Parent(parent)
+
+    // join all values into one space‑separated string, then wrap in a single pair of braces
+    all := strings.Join(values, " ")
+    valArg := fmt.Sprintf("{%s}", all)
+
+    // now -values has exactly one argument: the whole list
+    cmd := fmt.Sprintf("%s insert %s end -id {%s} -text {%s} -values %s",
+        tr.fpath, parentID, itemID, text, valArg)
+    evalErr(cmd)
+}
+
+
+// # Description
+// Retrieves the specified property or option for the given item in the TreeView by item ID.
+//
+// Example:
+//   itemText := tr.GetItem("I001", "-text")  // Returns the text of item I001
+func (tr *TreeViewWidget) GetItem(itemID string, options string) string {
+    cmd := fmt.Sprintf("%s item %s %s", tr.fpath, itemID, options)
+    evalErr(cmd)
+    return cmd
 }
 
 // # Description
-// This implements ttk_treeview::selection
+// This implements getting an option for a specific item in ttk_treeview.
+// It retrieves the value of the specified column for the given item.
+// Example usage:
+//   name := tv.GetColumn("I001", "Name")  // Gets the value of the "Name" column for item "I001".
+func (tr *TreeViewWidget) GetColumn(itemID string, columnID string) string {
+    cmd := fmt.Sprintf("%s get %s %s", tr.fpath, itemID, columnID)
+    result, err := eval(cmd)
+    if err != nil {
+        fmt.Println("Error getting item:", err)
+        return ""
+    }
+    return result
+}
+
+
+
+// # Description
+// This implements ttk_treeview::selection, which retrieves the currently selected items in the TreeView widget.
+//
+// It returns a slice of strings representing the unique item IDs of the selected items.
+//
+// Example usage:
+//   selectedItems := tr.Selected()  // Gets the list of selected item IDs.
 func (tr *TreeViewWidget) Selected() []string {
-	cmd := evalErr(fmt.Sprintf("%s selection", tr.fpath))
-	s := strings.Split(cmd," ")
-	return s
+    cmd := evalErr(fmt.Sprintf("%s selection", tr.fpath))
+    s := strings.Split(cmd," ")
+    return s
 }
 
-// # Description 
-// This implements ttk_treeview's select mode configurateion
+// # Description
+// This implements ttk_treeview's select mode configuration.
+// It allows configuring the selection mode, which can be "browse", "extended", or "multiple".
+// Example usage:
+//   tr.SelectMode("extended")  // Set the selection mode to extended.
 func (tr *TreeViewWidget) SelectMode(mode string) {
-	evalErr(fmt.Sprintf("%s configure -selectmode %s", tr.fpath, mode))
+    kinds := []string{"none", "browse", "extended"}
+    found := false
+    for _, kind := range kinds {
+        if mode == kind {
+            found = true
+            break
+        }
+    }
+    if found == false {
+        return
+    }
+
+    evalErr(fmt.Sprintf("%s configure -selectmode %s", tr.fpath, mode))
 }
 
 // # Description
-// This implements ttk_treeview::delete
+// This implements ttk_treeview::delete.
+// It deletes one or more items from the TreeView based on a list of item IDs.
+// Example usage:
+//   tr.Delete([]string{"item1", "item2"})  // Deletes item1 and item2.
 func (tr *TreeViewWidget) Delete(items []string) {
-	for _, s := range items {
-		evalErr(fmt.Sprintf("%s delete %s", tr.fpath,s)) 
-	}
+    evalErr(fmt.Sprintf("%s delete {%s}", tr.fpath, items))
 }
 
 // # Description
-// This implements tcl/tk <label> <target>
-
+// This implements tcl/tk set command for setting a variable value.
+// It sets the value of the specified label to the target.
+// Example usage:
+//   Set("myLabel", "newValue")  // Sets the value of 'myLabel' to 'newValue'.
 func Set(label string, target string) {
-	evalErr(fmt.Sprintf("set %s %s", label, target))
+    evalErr(fmt.Sprintf("set %s %s", label, target))
 }
 
+// # Description
+// This implements the item configuration of ttk_treeview.
+// It allows getting or setting options for a specific item in the TreeView.
+// Example usage:
+//   tr.Item("item1", "-text {New Text}")  // Sets the text of item1 to "New Text".
+func (tr *TreeViewWidget) Item(itemID string, options string) {
+    cmd := fmt.Sprintf("%s item %s %s", tr.fpath, itemID, options)
+    evalErr(cmd)
+}
+
+// # Description
+// This implements ttk_treeview's column configuration.
+// It configures the columns of the TreeView, taking a slice of column identifiers.
+// Example usage:
+//   tr.Columns([]string{"Name", "Detail"})  // Configures columns "Name" and "Detail".
+func (tr *TreeViewWidget) Columns(cols []string) {
+    arg := strings.Join(cols, " ")
+    evalErr(fmt.Sprintf("%s configure -columns {%s}", tr.fpath, arg))
+}
+
+// # Description
+// This implements options formatting for ttk_treeview.
+// It formats options as "-option value" string pair.
+// Example usage:
+//   tr.Options("height", "100")  // Returns the formatted string "-height 100".
+func (tr *TreeViewWidget) Options(option string, val string) string {
+    return "-"+option+" "+val
+}
+
+// # Description
+// This implements ttk_treeview::selection command to modify the selection of items.
+// It supports the operations "set", "add", "remove", and "toggle" on a list of item IDs.
+// Example usage:
+//   tr.Selection("set", []string{"item1", "item2"})  // Sets selection to item1 and item2.
+func (tr *TreeViewWidget) Selection(operation string, items []string) {
+    itemList := strings.Join(items, " ")
+    evalErr(fmt.Sprintf("%s selection %s {%s}", tr.fpath, operation, itemList))
+}
+
+// # Description
+// This implements the column configuration of ttk_treeview.
+// It configures the options for a specific column in the TreeView.
+// Example usage:
+//   tr.Column("#0", "-width 150 -anchor center")  // Configures the first column with width and anchor.
+func (tr *TreeViewWidget) Column(columnID string, options string) {
+    evalErr(fmt.Sprintf("%s column %s %s", tr.fpath, columnID, options))
+}
+
+// # Description
+// This implements the heading configuration of ttk_treeview.
+// It configures the options for specific column headings in the TreeView.
+// Example usage:
+//   tr.Heading("#0", []string{-text {Column Header 1} -anchor center", "#1 -text {Column Header 2} -anchor w"})
+//   // Sets multiple column headers at once.
+// Heading configures a single column heading, e.g. "-text {Name} -anchor w".
+func (tr *TreeViewWidget) Heading(columnID string, options ...string) {
+	optStr := strings.Join(options, " ")
+	evalErr(fmt.Sprintf("%s heading %s %s", tr.fpath, columnID, optStr))
+}
+
+
+// # Description
+// This implements adding tags to specified items in the TreeView.
+// Tags are used to apply styling or other operations to a group of items.
+// Example usage:
+//   tr.TagAdd("highlighted", []string{"item1", "item2"})  // Adds the "highlighted" tag to item1 and item2.
+func (tr *TreeViewWidget) TagAdd(tagName string, items []string) {
+    itemList := strings.Join(items, " ")
+    evalErr(fmt.Sprintf("%s tag add %s {%s}", tr.fpath, tagName, itemList))
+}
+
+// # Description
+// This implements configuring options for a tag in the TreeView.
+// It allows setting visual properties such as background and foreground colors for a tag.
+// Example usage:
+//   tr.TagConfigure("highlighted", "-background yellow -foreground black")  // Configures the "highlighted" tag.
+func (tr *TreeViewWidget) TagConfigure(tagName string, options string) {
+    evalErr(fmt.Sprintf("%s tag configure %s %s", tr.fpath, tagName, options))
+}
+
+// # Description
+// This implements making a specific item visible in the TreeView.
+// It ensures that the item is scrolled into view if necessary.
+// Example usage:
+//   tr.See("item1")  // Makes item1 visible in the TreeView.
+func (tr *TreeViewWidget) See(itemID string) {
+    evalErr(fmt.Sprintf("%s see %s", tr.fpath, itemID))
+}
+
+// # Description
+// This implements checking if an item exists in the TreeView by its item ID.
+// Returns true if the item exists, false otherwise.
+// Example usage:
+//   exists := tr.Exists("item1")  // Checks if item1 exists in the TreeView.
+func (tr *TreeViewWidget) Exists(itemID string) bool {
+    r, err := eval(fmt.Sprintf("%s exists %s", tr.fpath, itemID))
+    if err != nil || r == "" {
+        return false
+    }
+    return true
+}
+
+// # Description
+// This implements setting or getting the focused item in the TreeView.
+// If an itemID is provided, it sets the focus to that item.
+// If no itemID is provided, it returns the ID of the currently focused item.
+// Example usage:
+//   tr.Focus("item1")  // Sets the focus to item1.
+func (tr *TreeViewWidget) Focus(itemID string) {
+    evalErr(fmt.Sprintf("%s focus %s", tr.fpath, itemID))
+}
+
+// # Description
+// This implements the identify command for TreeView components.
+// It retrieves information about the component at the specified coordinates.
+// Example usage:
+//   tr.Identify("item", 100, 200)  // Identifies the component at position (100, 200).
+func (tr *TreeViewWidget) Identify(component string, x int, y int) {
+    evalErr(fmt.Sprintf("%s identify %s %d %d", tr.fpath, component, x, y))
+}
+
+// # Description
+// This implements the bounding box (bbox) command for an item or cell in the TreeView.
+// It returns the coordinates and dimensions (x, y, width, height) of the item or cell.
+// Example usage:
+//   bbox, err := tr.Bbox("item1", "#0")  // Retrieves the bounding box for item1 in column "#0".
+func (tr *TreeViewWidget) Bbox(itemID string, columnID string) ([]int, error) {
+    cmd := fmt.Sprintf("%s bbox %s %s", tr.fpath, itemID, columnID)
+    r ,err := eval(cmd)
+    if err != nil {
+        return nil, err
+    }
+    parts := strings.Split(r , " ")
+    if len(parts) != 4 {
+        return nil, fmt.Errorf("unexpected bbox format: %s", r)
+    }
+    bbox := make([]int, 4)
+    for i, part := range parts {
+        val, err := strconv.Atoi(part)
+        if err != nil {
+            return nil, fmt.Errorf("failed to convert bbox value: %w", err)
+        }
+        bbox[i] = val
+    }
+    return bbox, nil
+}
+
+
+
+
+// # Description
+// This implements the move command to reorder items within the TreeView.
+// It allows moving an item to a new parent and/or index.
+// Example usage:
+//   tr.Move("item1", "new_parent", "0") // Moves item1 to the beginning of new_parent's children.
+func (tr *TreeViewWidget) Move(itemID string, parentID string, index string) {
+    evalErr(fmt.Sprintf("%s move %s %s %s", tr.fpath, itemID, parentID, index))
+}
+
+// # Description
+// This implements the children command to get the children of a specific item.
+// If no itemID is provided, it returns the top-level items.
+// Example usage:
+//   children := tr.Children("parent_item") // Gets the children of "parent_item".
+//   topLevelItems := tr.Children("")       // Gets the top-level items.
+func (tr *TreeViewWidget) Children(itemID string) []string {
+    cmd := fmt.Sprintf("%s children %s", tr.fpath, itemID)
+    r, err := eval(cmd)
+    if err != nil {
+        panic(err)
+    }
+    if r == "" {
+        return []string{}
+    }
+    return strings.Split(r, " ")
+}
+
+
+// # Description
+// This implements the selection command with the 'items' subcommand to get the currently selected items.
+// Example usage:
+//   selectedItems := tr.SelectionItems() // Gets the IDs of the selected items.
+func (tr *TreeViewWidget) SelectionItems() []string {
+    cmd := fmt.Sprintf("%s selection items", tr.fpath)
+    r, err := eval(cmd)
+    if err != nil {
+        panic(err)
+    }
+    if r == "" {
+        return []string{}
+    }
+    return strings.Split(r, " ")
+}
+
+// # Description
+// This implements the tag has command to check if an item has a specific tag.
+// Example usage:
+//   hasTag := tr.TagHas("item1", "highlighted") // Checks if "item1" has the "highlighted" tag.
+func (tr *TreeViewWidget) TagHas(itemID string, tagName string) bool {
+    cmd := fmt.Sprintf("%s tag has %s %s", tr.fpath, itemID, tagName)
+    r, err := eval(cmd)
+    if err != nil {
+        panic(err)
+    }
+    return r == "1"
+}
+
+// # Description
+// This implements the tag remove command to remove a tag from specified items.
+// Example usage:
+//   tr.TagRemove("highlighted", []string{"item1"}) // Removes the "highlighted" tag from "item1".
+func (tr *TreeViewWidget) TagRemove(tagName string, items []string) {
+    quotedItems := make([]string, len(items))
+    for i, item := range items {
+        quotedItems[i] = fmt.Sprintf("{%s}", item)
+    }
+    itemList := strings.Join(quotedItems, " ")
+    evalErr(fmt.Sprintf("%s tag remove %s %s", tr.fpath, tagName, itemList))
+}
+
+// # Description
+// This implements the tag names command to get the tags associated with a specific item,
+// or all tags in the TreeView if no itemID is provided.
+// Example usage:
+//   itemTags := tr.TagNames("item1") // Gets the tags of "item1".
+//   allTags := tr.TagNames("")      // Gets all tags in the TreeView.
+func (tr *TreeViewWidget) TagNames(itemID string) []string {
+    cmd := fmt.Sprintf("%s tag names %s", tr.fpath, itemID)
+    r, err := eval(cmd)
+    if err != nil {
+        panic(err)
+    }
+    if r == "" {
+        return []string{}
+    }
+    return strings.Split(r, " ")
+}
+
+// # Description
+// This implements the set command without a value to get the values of an item.
+// If a columnID is provided, it returns the value of that specific cell.
+// Example usage:
+//   values := tr.Set("item1", "")      // Gets all values of "item1" as a map.
+//   name := tr.Set("item1", "Name", "") // Gets the value of the "Name" column for "item1".
+func (tr *TreeViewWidget) Set(itemID string, columnID string, value string) interface{} {
+    cmd := ""
+    if value == "" { // Get operation
+        cmd = fmt.Sprintf("%s set %s %s", tr.fpath, itemID, columnID)
+        r, err := eval(cmd)
+        if err != nil {
+            panic(err)
+        }
+        if columnID == "" {
+            result := make(map[string]string)
+            parts := strings.Split(r, " ")
+            for i := 0; i < len(parts); i += 2 {
+                if i+1 < len(parts) {
+                    result[strings.Trim(parts[i], "{}")] = strings.Trim(parts[i+1], "{}")
+                }
+            }
+            return result
+        }
+        return strings.Trim(r, "{}")
+    } else { // Set operation (already implemented in the initial code)
+        cmd = fmt.Sprintf("%s set %s %s {%s}", tr.fpath, itemID, columnID, value)
+        evalErr(cmd)
+        return nil
+    }
+}
 
 
 // Pack — Geometry manager that packs around edges of cavity
@@ -1247,11 +1752,11 @@ func Set(label string, target string) {
 // values:
 //
 //   - "none" - Give the content its requested dimensions plus any internal
-//	 padding requested with -ipadx or -ipady. This is the default.
+//     padding requested with -ipadx or -ipady. This is the default.
 //   - "x" - Stretch the content horizontally to fill the entire width of its
-//	 parcel (except leave external padding as specified by -padx).
+//     parcel (except leave external padding as specified by -padx).
 //   - "y" - Stretch the content vertically to fill the entire height of its parcel
-//	 (except leave external padding as specified by -pady).
+//     (except leave external padding as specified by -pady).
 //   - "both": Stretch the content both horizontally and vertically.
 //
 // .
@@ -1301,10 +1806,10 @@ func Set(label string, target string) {
 //
 // [Tcl/Tk pack]: https://www.tcl.tk/man/tcl9.0/TkCmd/pack.html
 func Pack(options ...Opt) {
-	evalErr(fmt.Sprintf("pack %s", collect(options...)))
+    evalErr(fmt.Sprintf("pack %s", collect(options...)))
 }
 func PackForget(options ...Opt) {
-	evalErr(fmt.Sprintf("pack forget %s", collect(options...)))
+    evalErr(fmt.Sprintf("pack forget %s", collect(options...)))
 }
 
 
@@ -1323,7 +1828,7 @@ func PackForget(options ...Opt) {
 //
 // [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
 func (w *Window) SetResizable(width, height bool) {
-	evalErr(fmt.Sprintf("wm resizable %s %v %v", w, width, height))
+    evalErr(fmt.Sprintf("wm resizable %s %v %v", w, width, height))
 }
 
 // Wait — Wait for a window to be destroyed
@@ -1339,17 +1844,17 @@ func (w *Window) SetResizable(width, height bool) {
 // If an event handler invokes Wait again, the nested call to Wait must
 // complete before the outer call can complete.
 func (w *Window) Wait() {
-	if w == App {
-		switch {
-		case forcedX >= 0 && forcedY >= 0: // Behind TK9_DEMO=1.
-			evalErr(fmt.Sprintf("wm geometry . +%v+%v", forcedX, forcedY)) //TODO add API func
-			forcedX, forcedY = -1, -1									  // Apply only the first time.
-		case !autocenterDisabled:
-			autocenterDisabled = true
-			w.Center()
-		}
-	}
-	evalErr(fmt.Sprintf("tkwait window %s", w))
+    if w == App {
+        switch {
+        case forcedX >= 0 && forcedY >= 0: // Behind TK9_DEMO=1.
+            evalErr(fmt.Sprintf("wm geometry . +%v+%v", forcedX, forcedY)) //TODO add API func
+            forcedX, forcedY = -1, -1                                      // Apply only the first time.
+        case !autocenterDisabled:
+            autocenterDisabled = true
+            w.Center()
+        }
+    }
+    evalErr(fmt.Sprintf("tkwait window %s", w))
 }
 
 // WaitVisibility — Wait for a window to change visibility
@@ -1366,7 +1871,7 @@ func (w *Window) Wait() {
 // If an event handler invokes Wait again, the nested call to Wait must
 // complete before the outer call can complete.
 func (w *Window) WaitVisibility() {
-	evalErr(fmt.Sprintf("tkwait visibility %s", w))
+    evalErr(fmt.Sprintf("tkwait visibility %s", w))
 }
 
 // IconPhoto — change window icon
@@ -1402,7 +1907,7 @@ func (w *Window) WaitVisibility() {
 //
 // [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
 func (w *Window) IconPhoto(options ...Opt) {
-	evalErr(fmt.Sprintf("wm iconphoto %s %s", w, collect(options...)))
+    evalErr(fmt.Sprintf("wm iconphoto %s %s", w, collect(options...)))
 }
 
 // WmTitle — change the window manager title
@@ -1419,17 +1924,17 @@ func (w *Window) IconPhoto(options ...Opt) {
 //
 // [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
 func (w *Window) WmTitle(s string) string {
-	if s != "" {
-		s = tclSafeString(s)
-	}
-	return evalErr(fmt.Sprintf("wm title %s %s", w, s))
+    if s != "" {
+        s = tclSafeString(s)
+    }
+    return evalErr(fmt.Sprintf("wm title %s %s", w, s))
 }
 
 // Center centers 'w' and returns 'w'.
 func (w *Window) Center() *Window {
-	autocenterDisabled = true
-	evalErr(fmt.Sprintf("tk::PlaceWindow %s center", w))
-	return w
+    autocenterDisabled = true
+    evalErr(fmt.Sprintf("tk::PlaceWindow %s center", w))
+    return w
 }
 
 // Grid — Geometry manager that arranges widgets in a grid
@@ -1524,11 +2029,11 @@ func (w *Window) Center() *Window {
 //
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
 func Grid(w Widget, options ...Opt) {
-	evalErr(fmt.Sprintf("grid configure %s %s", w, collect(options...)))
+    evalErr(fmt.Sprintf("grid configure %s %s", w, collect(options...)))
 }
 
 func GridForget(options ...Opt) {
-	evalErr(fmt.Sprintf("grid forget %s", collect(options...)))
+    evalErr(fmt.Sprintf("grid forget %s", collect(options...)))
 }
 // Grid — Geometry manager that arranges widgets in a grid
 //
@@ -1542,7 +2047,7 @@ func GridForget(options ...Opt) {
 //
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
 func GridAnchor(w *Window, anchor string) string {
-	return evalErr(fmt.Sprintf("grid anchor %s %s", w, tclSafeString(anchor)))
+    return evalErr(fmt.Sprintf("grid anchor %s %s", w, tclSafeString(anchor)))
 }
 
 // Grid — Geometry manager that arranges widgets in a grid
@@ -1578,7 +2083,7 @@ func GridAnchor(w *Window, anchor string) string {
 //
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
 func GridRowConfigure(w Widget, index int, options ...Opt) {
-	evalErr(fmt.Sprintf("grid rowconfigure %s %v %s", w, index, collect(options...)))
+    evalErr(fmt.Sprintf("grid rowconfigure %s %v %s", w, index, collect(options...)))
 }
 
 // Minsize option.
@@ -1587,7 +2092,7 @@ func GridRowConfigure(w Widget, index int, options ...Opt) {
 //   - [GridColumnConfigure]
 //   - [GridRowConfigure]
 func Minsize(val ...any) Opt {
-	return rawOption(fmt.Sprintf(`-minsize %s`, collectAny(val...)))
+    return rawOption(fmt.Sprintf(`-minsize %s`, collectAny(val...)))
 }
 
 // Grid — Geometry manager that arranges widgets in a grid
@@ -1623,26 +2128,26 @@ func Minsize(val ...any) Opt {
 //
 // [Tcl/Tk grid]: https://www.tcl.tk/man/tcl9.0/TkCmd/grid.html
 func GridColumnConfigure(w Widget, index int, options ...Opt) {
-	evalErr(fmt.Sprintf("grid columnconfigure %s %v %s", w, index, collect(options...)))
+    evalErr(fmt.Sprintf("grid columnconfigure %s %v %s", w, index, collect(options...)))
 }
 
 // Configure alters the configuration of 'w' and returns 'w'.
 func (w *Window) Configure(options ...Opt) *Window {
-	options, tvs := w.split(options)
-	if len(options) != 0 {
-		evalErr(fmt.Sprintf("%s configure %s", w, collect(options...)))
-	}
-	if len(tvs) != 0 {
-		tvo := tvs[len(tvs)-1]
-		tclVar := textVariables[w]
-		if tclVar == "" {
-			tclVar = fmt.Sprintf("textVar%d", id.Add(1))
-			textVariables[w] = tclVar
-			evalErr(fmt.Sprintf("%s configure -textvariable %s", w, tclVar))
-		}
-		evalErr(fmt.Sprintf("set %s %s", tclVar, tclSafeString(string(tvo))))
-	}
-	return w
+    options, tvs := w.split(options)
+    if len(options) != 0 {
+        evalErr(fmt.Sprintf("%s configure %s", w, collect(options...)))
+    }
+    if len(tvs) != 0 {
+        tvo := tvs[len(tvs)-1]
+        tclVar := textVariables[w]
+        if tclVar == "" {
+            tclVar = fmt.Sprintf("textVar%d", id.Add(1))
+            textVariables[w] = tclVar
+            evalErr(fmt.Sprintf("%s configure -textvariable %s", w, tclVar))
+        }
+        evalErr(fmt.Sprintf("set %s %s", tclVar, tclSafeString(string(tvo))))
+    }
+    return w
 }
 
 // tk_messageBox — pops up a message window and waits for user response.
@@ -1714,7 +2219,7 @@ func (w *Window) Configure(options ...Opt) *Window {
 //
 // [Tcl/Tk messageBox]: https://www.tcl.tk/man/tcl9.0/TkCmd/messageBox.html
 func MessageBox(options ...Opt) string {
-	return evalErr(fmt.Sprintf("tk_messageBox %s", collect(options...)))
+    return evalErr(fmt.Sprintf("tk_messageBox %s", collect(options...)))
 }
 
 // Bell — Ring a display's bell
@@ -1738,7 +2243,7 @@ func MessageBox(options ...Opt) string {
 //
 // [Tcl/Tk bell]: https://www.tcl.tk/man/tcl9.0/TclCmd/bell.html
 func Bell(options ...Opt) {
-	evalErr(fmt.Sprintf("bell %s", collect(options...)))
+    evalErr(fmt.Sprintf("bell %s", collect(options...)))
 }
 
 // ChooseColor — pops up a dialog box for the user to select a color.
@@ -1771,7 +2276,7 @@ func Bell(options ...Opt) {
 //
 // [Tcl/Tk choosecolor]: https://www.tcl.tk/man/tcl9.0/TclCmd/chooseColor.html
 func ChooseColor(options ...Opt) string {
-	return evalErr(fmt.Sprintf("tk_chooseColor %s", collect(options...)))
+    return evalErr(fmt.Sprintf("tk_chooseColor %s", collect(options...)))
 }
 
 // Busy — confine pointer events to a window sub-tree
@@ -1793,7 +2298,7 @@ func ChooseColor(options ...Opt) string {
 //
 // [Tcl/Tk update]: https://www.tcl.tk/man/tcl9.0/TclCmd/busy.html
 func (w *Window) Busy(options ...Opt) {
-	evalErr(fmt.Sprintf("tk busy %s %s", w, collect(options...)))
+    evalErr(fmt.Sprintf("tk busy %s %s", w, collect(options...)))
 }
 
 // BusyForget — undo Busy
@@ -1810,7 +2315,7 @@ func (w *Window) Busy(options ...Opt) {
 //
 // [Tcl/Tk update]: https://www.tcl.tk/man/tcl9.0/TclCmd/busy.html
 func (w *Window) BusyForget(options ...Opt) {
-	evalErr(fmt.Sprintf("tk busy forget %s %s", w, collect(options...)))
+    evalErr(fmt.Sprintf("tk busy forget %s %s", w, collect(options...)))
 }
 
 // Update — Process pending events and idle callbacks
@@ -1819,7 +2324,7 @@ func (w *Window) BusyForget(options ...Opt) {
 //
 // [Tcl/Tk update]: https://www.tcl.tk/man/tcl9.0/TclCmd/update.html
 func Update() {
-	evalErr("update")
+    evalErr("update")
 }
 
 //TODO?
@@ -1875,7 +2380,7 @@ func Update() {
 //
 // [Tcl/Tk chooseDirectory]: https://www.tcl.tk/man/tcl9.0/TkCmd/chooseDirectory.html
 func ChooseDirectory(options ...Opt) string {
-	return evalErr(fmt.Sprintf("tk_chooseDirectory %s", collect(options...)))
+    return evalErr(fmt.Sprintf("tk_chooseDirectory %s", collect(options...)))
 }
 
 // ClipboardAppend — Manipulate Tk clipboard
@@ -1926,7 +2431,7 @@ func ChooseDirectory(options ...Opt) string {
 //
 // [Tcl/Tk clipboard]: https://www.tcl.tk/man/tcl9.0/TkCmd/clipboard.html
 func ClipboardAppend(data string, options ...Opt) {
-	evalErr(fmt.Sprintf("clipboard append %s -- %s", collect(options...), tclSafeString(data)))
+    evalErr(fmt.Sprintf("clipboard append %s -- %s", collect(options...), tclSafeString(data)))
 }
 
 // ClipboardClear — Manipulate Tk clipboard
@@ -1940,7 +2445,7 @@ func ClipboardAppend(data string, options ...Opt) {
 //
 // [Tcl/Tk clipboard]: https://www.tcl.tk/man/tcl9.0/TkCmd/clipboard.html
 func ClipboardClear(options ...Opt) {
-	evalErr(fmt.Sprintf("clipboard clear %s", collect(options...)))
+    evalErr(fmt.Sprintf("clipboard clear %s", collect(options...)))
 }
 
 // ClipboardGet — Manipulate Tk clipboard
@@ -1964,12 +2469,12 @@ func ClipboardClear(options ...Opt) {
 //
 // [Tcl/Tk clipboard]: https://www.tcl.tk/man/tcl9.0/TkCmd/clipboard.html
 func ClipboardGet(options ...Opt) string {
-	return evalErr(fmt.Sprintf("clipboard get %s", collect(options...)))
+    return evalErr(fmt.Sprintf("clipboard get %s", collect(options...)))
 }
 
 // ExitHandler returns a canned [Command] that destroys the [App].
 func ExitHandler() Opt {
-	return exitHandler
+    return exitHandler
 }
 
 // Exit provides a canned [Button] with default [Txt] "Exit", bound to the
@@ -1977,7 +2482,7 @@ func ExitHandler() Opt {
 //
 // Use [Window.Exit] to create a Exit with a particular parent.
 func Exit(options ...Opt) *ButtonWidget {
-	return App.Exit(options...)
+    return App.Exit(options...)
 }
 
 // Exit provides a canned [Button] with default [Txt] "Exit", bound to the
@@ -1985,7 +2490,7 @@ func Exit(options ...Opt) *ButtonWidget {
 //
 // The resulting [Window] is a child of 'w'
 func (w *Window) Exit(options ...Opt) *ButtonWidget {
-	return Tooltip(w.Button(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...), exitButtonTooltip).(*ButtonWidget)
+    return Tooltip(w.Button(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...), exitButtonTooltip).(*ButtonWidget)
 }
 
 // TExit provides a canned [TButton] with default [Txt] "Exit", bound to the
@@ -1993,7 +2498,7 @@ func (w *Window) Exit(options ...Opt) *ButtonWidget {
 //
 // Use [Window.TExit] to create a TExit with a particular parent.
 func TExit(options ...Opt) *TButtonWidget {
-	return App.TExit(options...)
+    return App.TExit(options...)
 }
 
 // TExit provides a canned [TButton] with default [Txt] "Exit", bound to the
@@ -2001,13 +2506,13 @@ func TExit(options ...Opt) *TButtonWidget {
 //
 // The resulting [Window] is a child of 'w'
 func (w *Window) TExit(options ...Opt) *TButtonWidget {
-	return Tooltip(w.TButton(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...), exitButtonTooltip).(*TButtonWidget)
+    return Tooltip(w.TButton(append([]Opt{Txt("Exit"), ExitHandler()}, options...)...), exitButtonTooltip).(*TButtonWidget)
 }
 
 type textVarOpt string
 
 func (textVarOpt) optionString(*Window) string {
-	panic("internal error") // Not supposed to be invoked.
+    panic("internal error") // Not supposed to be invoked.
 }
 
 // Textvariable option.
@@ -2034,7 +2539,7 @@ func (textVarOpt) optionString(*Window) string {
 //   - [TMenubutton]
 //   - [TRadiobutton]
 func Textvariable(s string) Opt {
-	return textVarOpt(s)
+    return textVarOpt(s)
 }
 
 // Textvariable — Get the configured option value.
@@ -2056,11 +2561,11 @@ func Textvariable(s string) Opt {
 //   - [TMenubutton]
 //   - [TRadiobutton]
 func (w *Window) Textvariable() (r string) {
-	if tclVar := textVariables[w]; tclVar != "" {
-		return evalErr(fmt.Sprintf("set %s", tclVar))
-	}
+    if tclVar := textVariables[w]; tclVar != "" {
+        return evalErr(fmt.Sprintf("set %s", tclVar))
+    }
 
-	return ""
+    return ""
 }
 
 // Focus — Manage the input focus
@@ -2095,7 +2600,7 @@ func (w *Window) Textvariable() (r string) {
 //
 // The focus command can take any of the following forms:
 //
-//	Focus()
+//    Focus()
 //
 // Returns the path name of the focus window on the display containing the
 // application's main window, or an empty string if no window in this
@@ -2103,7 +2608,7 @@ func (w *Window) Textvariable() (r string) {
 // display explicitly using -displayof (see below) so that the code will work
 // in applications using multiple displays.
 //
-//	Focus(window)
+//    Focus(window)
 //
 // If the application currently has the input focus on window's display, this
 // command resets the input focus for window's display to window and returns an
@@ -2112,13 +2617,13 @@ func (w *Window) Textvariable() (r string) {
 // the next time the focus arrives at the top-level, Tk will redirect it to
 // window. If window is an empty string then the command does nothing.
 //
-//	Focus(Displayof(window))
+//    Focus(Displayof(window))
 //
 // Returns the name of the focus window on the display containing window. If
 // the focus window for window's display is not in this application, the return
 // value is an empty string.
 //
-//	Focus(Force(window))
+//    Focus(Force(window))
 //
 // Sets the focus of window's display to window, even if the application does
 // not currently have the input focus for the display. This command should be
@@ -2126,7 +2631,7 @@ func (w *Window) Textvariable() (r string) {
 // the focus for itself; instead, it should wait for the window manager to give
 // it the focus. If window is an empty string then the command does nothing.
 //
-//	Focus(Lastfor(window))
+//    Focus(Lastfor(window))
 //
 // Returns the name of the most recent window to have the input focus among all
 // the windows in the same top-level as window. If no window in that top-level
@@ -2150,25 +2655,25 @@ func (w *Window) Textvariable() (r string) {
 //
 // [Tcl/Tk focus]: https://www.tcl.tk/man/tcl9.0/TkCmd/focus.html
 func Focus(options ...Opt) string {
-	return evalErr(fmt.Sprintf("focus %s", collect(options...)))
+    return evalErr(fmt.Sprintf("focus %s", collect(options...)))
 }
 
 // FontFace represents a Tk font.
 type FontFace struct {
-	name string
+    name string
 }
 
 func (f *FontFace) optionString(_ *Window) (r string) {
-	if f != nil {
-		return f.name
-	}
+    if f != nil {
+        return f.name
+    }
 
-	return "font0" // does not exist
+    return "font0" // does not exist
 }
 
 // String implements fmt.Stringer.
 func (f *FontFace) String() string {
-	return f.optionString(nil)
+    return f.optionString(nil)
 }
 
 // NewFont — Create and inspect fonts.
@@ -2238,15 +2743,15 @@ func (f *FontFace) String() string {
 //
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
 func NewFont(options ...Opt) *FontFace {
-	nm := fmt.Sprintf("font%v", id.Add(1))
-	code := fmt.Sprintf("font create %s %s", nm, collect(options...))
-	r, err := eval(code)
-	if err != nil {
-		fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
-		return nil
-	}
+    nm := fmt.Sprintf("font%v", id.Add(1))
+    code := fmt.Sprintf("font create %s %s", nm, collect(options...))
+    r, err := eval(code)
+    if err != nil {
+        fail(fmt.Errorf("code=%s -> r=%s err=%v", code, r, err))
+        return nil
+    }
 
-	return &FontFace{name: nm}
+    return &FontFace{name: nm}
 }
 
 // FontFamilies — Create and inspect fonts.
@@ -2263,43 +2768,43 @@ func NewFont(options ...Opt) *FontFace {
 //
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
 func FontFamilies(options ...Opt) []string {
-	return parseList(evalErr(fmt.Sprintf("font families %s", collect(options...))))
+    return parseList(evalErr(fmt.Sprintf("font families %s", collect(options...))))
 }
 
 // Can handle "{abc def} ghi" -> ["abc def", "ghi"].
 // Can not handle "{abc {def ghi}} jkl", too many levels.
 func parseList(s string) (r []string) {
-	r = strings.Fields(s)
-	w := 0
-	in := false
-	var a []string
-	for _, v := range r {
-		switch {
-		case in:
-			switch {
-			case strings.HasSuffix(v, "}"):
-				a = append(a, v[:len(v)-1])
-				r[w] = strings.Join(a, " ")
-				w++
-				in = false
-			default:
-				a = append(a, v)
-			}
-		default:
-			switch {
-			case v == "{}":
-				r[w] = ""
-				w++
-			case strings.HasPrefix(v, "{"):
-				a = append(a[:0], v[1:])
-				in = true
-			default:
-				r[w] = v
-				w++
-			}
-		}
-	}
-	return r[:w]
+    r = strings.Fields(s)
+    w := 0
+    in := false
+    var a []string
+    for _, v := range r {
+        switch {
+        case in:
+            switch {
+            case strings.HasSuffix(v, "}"):
+                a = append(a, v[:len(v)-1])
+                r[w] = strings.Join(a, " ")
+                w++
+                in = false
+            default:
+                a = append(a, v)
+            }
+        default:
+            switch {
+            case v == "{}":
+                r[w] = ""
+                w++
+            case strings.HasPrefix(v, "{"):
+                a = append(a[:0], v[1:])
+                in = true
+            default:
+                r[w] = v
+                w++
+            }
+        }
+    }
+    return r[:w]
 }
 
 // Delete — Manipulate fonts.
@@ -2317,7 +2822,7 @@ func parseList(s string) (r []string) {
 //
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
 func (f *FontFace) Delete() {
-	evalErr(fmt.Sprintf("font delete %s", f))
+    evalErr(fmt.Sprintf("font delete %s", f))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2349,7 +2854,7 @@ func (f *FontFace) Delete() {
 // as a place to insert characters or one endpoint of a range of characters to
 // delete. Indices have the syntax
 //
-//	base modifier modifier modifier ...
+//    base modifier modifier modifier ...
 //
 // Where base gives a starting point and the modifiers adjust the index from
 // the starting point (e.g. move forward or backward one character). Every
@@ -2366,7 +2871,7 @@ func (f *FontFace) Delete() {
 //
 // The base for an index must have one of the following forms:
 //
-//	"line.char"
+//    "line.char"
 //
 // Indicates char'th character on line line. Lines are numbered from 1 for
 // consistency with other UNIX programs that use this numbering scheme. Within
@@ -2375,37 +2880,37 @@ func (f *FontFace) Delete() {
 //
 // This form of index can be passed as [LC]{line, char}.
 //
-//	"@x,y"
+//    "@x,y"
 //
 // Indicates the character that covers the pixel whose x and y coordinates
 // within the text's window are x and y.
 //
-//	"end"
+//    "end"
 //
 // Indicates the end of the text (the character just after the last newline).
 //
-//	"mark"
+//    "mark"
 //
 // Indicates the character just after the mark whose name is mark (see MARKS
 // for details).
 //
-//	"tag.first"
+//    "tag.first"
 //
 // Indicates the first character in the text that has been tagged with tag.
 // This form generates an error if no characters are currently tagged with tag.
 //
-//	"tag.last"
+//    "tag.last"
 //
 // Indicates the character just after the last one in the text that has been
 // tagged with tag. This form generates an error if no characters are currently
 // tagged with tag.
 //
-//	"pathName"
+//    "pathName"
 //
 // Indicates the position of the embedded window whose name is pathName. This
 // form generates an error if there is no embedded window by the given name.
 //
-//	"imageName"
+//    "imageName"
 //
 // Indicates the position of the embedded image whose name is imageName. This
 // form generates an error if there is no embedded image by the given name.
@@ -2416,7 +2921,7 @@ func (f *FontFace) Delete() {
 // must have one of the forms listed below. Keywords such as chars and wordend
 // may be abbreviated as long as the abbreviation is unambiguous.
 //
-//	"+ count ?submodifier? chars"
+//    "+ count ?submodifier? chars"
 //
 // Adjust the index forward by count characters, moving to later lines in the
 // text if necessary. If there are fewer than count characters in the text
@@ -2429,7 +2934,7 @@ func (f *FontFace) Delete() {
 // future major release, so if you need an index count, you are encouraged to
 // use indices instead wherever possible.
 //
-//	"- count ?submodifier? chars"
+//    "- count ?submodifier? chars"
 //
 // Adjust the index backward by count characters, moving to earlier lines in
 // the text if necessary. If there are fewer than count characters in the text
@@ -2442,7 +2947,7 @@ func (f *FontFace) Delete() {
 // changed in a future major release, so if you need an index count, you are
 // encouraged to use indices instead wherever possible.
 //
-//	"+ count ?submodifier? indices"
+//    "+ count ?submodifier? indices"
 //
 // Adjust the index forward by count index positions, moving to later lines in
 // the text if necessary. If there are fewer than count index positions in the
@@ -2453,7 +2958,7 @@ func (f *FontFace) Delete() {
 // without being counted. If any is given, then all indices are counted; this
 // is also the default behaviour if no modifier is given.
 //
-//	"- count ?submodifier? indices"
+//    "- count ?submodifier? indices"
 //
 // Adjust the index backward by count index positions, moving to earlier lines
 // in the text if necessary. If there are fewer than count index positions in
@@ -2463,7 +2968,7 @@ func (f *FontFace) Delete() {
 // being counted. If any is given, then all indices are counted; this is also
 // the default behaviour if no modifier is given.
 //
-//	"+ count ?submodifier? lines"
+//    "+ count ?submodifier? lines"
 //
 // Adjust the index forward by count lines, retaining the same character
 // position within the line. If there are fewer than count lines after the line
@@ -2478,7 +2983,7 @@ func (f *FontFace) Delete() {
 // relevant lines are not wrapped, then these two methods of counting are
 // equivalent.
 //
-//	"- count ?submodifier? lines"
+//    "- count ?submodifier? lines"
 //
 // Adjust the index backward by count logical lines, retaining the same
 // character position within the line. If there are fewer than count lines
@@ -2493,19 +2998,19 @@ func (f *FontFace) Delete() {
 // the relevant lines are not wrapped, then these two methods of counting are
 // equivalent.
 //
-//	"?submodifier? linestart"
+//    "?submodifier? linestart"
 //
 // Adjust the index to refer to the first index on the line. If the display
 // submodifier is given, this is the first index on the display line, otherwise
 // on the logical line.
 //
-//	"?submodifier? lineend"
+//    "?submodifier? lineend"
 //
 // Adjust the index to refer to the last index on the line (the newline). If
 // the display submodifier is given, this is the last index on the display
 // line, otherwise on the logical line.
 //
-//	"?submodifier? wordstart"
+//    "?submodifier? wordstart"
 //
 // Adjust the index to refer to the first character of the word containing the
 // current index. A word consists of any number of adjacent characters that are
@@ -2513,7 +3018,7 @@ func (f *FontFace) Delete() {
 // these. If the display submodifier is given, this only examines non-elided
 // characters, otherwise all characters (elided or not) are examined.
 //
-//	"?submodifier? wordend"
+//    "?submodifier? wordend"
 //
 // Adjust the index to refer to the character just after the last one of the
 // word containing the current index. If the current index refers to the last
@@ -2540,9 +3045,9 @@ func (f *FontFace) Delete() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Insert(index any, chars string, options ...string) any {
-	idx := fmt.Sprint(index)
-	evalErr(fmt.Sprintf("%s insert %s %s %s", w, tclSafeString(idx), tclSafeString(chars), tclSafeStrings(options...)))
-	return index
+    idx := fmt.Sprint(index)
+    evalErr(fmt.Sprintf("%s insert %s %s %s", w, tclSafeString(idx), tclSafeString(chars), tclSafeStrings(options...)))
+    return index
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2587,7 +3092,7 @@ func (w *TextWidget) Insert(index any, chars string, options ...string) any {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) TagBind(tag, sequence string, handler any) string {
-	return evalErr(fmt.Sprintf("%s tag bind %s %s %s", w, tclSafeString(tag), tclSafeString(sequence), newEventHandler("", handler).optionString(w.Window)))
+    return evalErr(fmt.Sprintf("%s tag bind %s %s %s", w, tclSafeString(tag), tclSafeString(sequence), newEventHandler("", handler).optionString(w.Window)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2610,33 +3115,33 @@ func (w *TextWidget) TagBind(tag, sequence string, handler any) string {
 // <<WidgetViewSync>>. The count options are interpreted as follows:
 //
 //   - [Chars] Count all characters, whether elided or not. Do not count
-//	 embedded windows or images.
+//     embedded windows or images.
 //   - [Displaychars] Count all non-elided characters.
 //   - [Displayindices] Count all non-elided characters, windows and images.
 //   - [Displaylines] Count all display lines (i.e. counting one for each time
-//	 a line wraps) from the line of the first index up to, but not including
-//	 the display line of the second index. Therefore if they are both on the
-//	 same display line, zero will be returned. By definition displaylines are
-//	 visible and therefore this only counts portions of actual visible lines.
+//     a line wraps) from the line of the first index up to, but not including
+//     the display line of the second index. Therefore if they are both on the
+//     same display line, zero will be returned. By definition displaylines are
+//     visible and therefore this only counts portions of actual visible lines.
 //   - [Indices] Count all characters and embedded windows or images (i.e.
-//	 everything which counts in text-widget index space), whether they are
-//	 elided or not.
+//     everything which counts in text-widget index space), whether they are
+//     elided or not.
 //   - [Lines] Count all logical lines (irrespective of wrapping) from the line
-//	 of the first index up to, but not including the line of the second index.
-//	 Therefore if they are both on the same line, zero will be returned.
-//	 Logical lines are counted whether they are currently visible (non-elided)
-//	 or not.
+//     of the first index up to, but not including the line of the second index.
+//     Therefore if they are both on the same line, zero will be returned.
+//     Logical lines are counted whether they are currently visible (non-elided)
+//     or not.
 //   - [Xpixels] Count the number of horizontal pixels from the first pixel of
-//	 the first index to (but not including) the first pixel of the second
-//	 index. To count the total desired width of the text widget (assuming
-//	 wrapping is not enabled), first find the longest line and then use “.text
-//	 count -xpixels "${line}.0" "${line}.0 lineend"”.
+//     the first index to (but not including) the first pixel of the second
+//     index. To count the total desired width of the text widget (assuming
+//     wrapping is not enabled), first find the longest line and then use “.text
+//     count -xpixels "${line}.0" "${line}.0 lineend"”.
 //   - [Ypixels] Count the number of vertical pixels from the first pixel of
-//	 the first index to (but not including) the first pixel of the second
-//	 index. If both indices are on the same display line, zero will be
-//	 returned. To count the total number of vertical pixels in the text widget,
-//	 use “.text count -ypixels 1.0 end”, and to ensure this is up to date, use
-//	 “.text count -update -ypixels 1.0 end”.
+//     the first index to (but not including) the first pixel of the second
+//     index. If both indices are on the same display line, zero will be
+//     returned. To count the total number of vertical pixels in the text widget,
+//     use “.text count -ypixels 1.0 end”, and to ensure this is up to date, use
+//     “.text count -update -ypixels 1.0 end”.
 //
 // The command returns a positive or negative integer corresponding to the
 // number of items counted between the two indices. One such integer is
@@ -2648,7 +3153,7 @@ func (w *TextWidget) TagBind(tag, sequence string, handler any) string {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Count(options ...any) []string {
-	return parseList(evalErr(fmt.Sprintf("%s count %s", w, collectAny(options...))))
+    return parseList(evalErr(fmt.Sprintf("%s count %s", w, collectAny(options...))))
 }
 
 // Displayindices option.
@@ -2656,7 +3161,7 @@ func (w *TextWidget) Count(options ...any) []string {
 // Known uses:
 //   - [TextWidget] (command specific)
 func Displayindices() Opt {
-	return rawOption("-displayindices")
+    return rawOption("-displayindices")
 }
 
 // Displaylines option.
@@ -2664,7 +3169,7 @@ func Displayindices() Opt {
 // Known uses:
 //   - [TextWidget] (command specific)
 func Displaylines() Opt {
-	return rawOption("-displaylines")
+    return rawOption("-displaylines")
 }
 
 // Indices option.
@@ -2672,7 +3177,7 @@ func Displaylines() Opt {
 // Known uses:
 //   - [TextWidget] (command specific)
 func Indices() Opt {
-	return rawOption("-indices")
+    return rawOption("-indices")
 }
 
 // Lines option.
@@ -2680,7 +3185,7 @@ func Indices() Opt {
 // Known uses:
 //   - [TextWidget] (command specific)
 func Lines() Opt {
-	return rawOption("-lines")
+    return rawOption("-lines")
 }
 
 // Xpixels option.
@@ -2688,7 +3193,7 @@ func Lines() Opt {
 // Known uses:
 //   - [TextWidget] (command specific)
 func Xpixels() Opt {
-	return rawOption("-xpixels")
+    return rawOption("-xpixels")
 }
 
 // Ypixels option.
@@ -2696,7 +3201,7 @@ func Xpixels() Opt {
 // Known uses:
 //   - [TextWidget] (command specific)
 func Ypixels() Opt {
-	return rawOption("-ypixels")
+    return rawOption("-ypixels")
 }
 
 // Chars option.
@@ -2704,7 +3209,7 @@ func Ypixels() Opt {
 // Known uses:
 //   - [TextWidget] (command specific)
 func Chars() Opt {
-	return rawOption("-chars")
+    return rawOption("-chars")
 }
 
 // Displaychars option.
@@ -2712,7 +3217,7 @@ func Chars() Opt {
 // Known uses:
 //   - [TextWidget] (command specific)
 func Displaychars() Opt {
-	return rawOption("-displaychars")
+    return rawOption("-displaychars")
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2725,7 +3230,7 @@ func Displaychars() Opt {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) EditReset() {
-	evalErr(fmt.Sprintf("%s edit reset", w))
+    evalErr(fmt.Sprintf("%s edit reset", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2738,7 +3243,7 @@ func (w *TextWidget) EditReset() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) SetModified(v bool) {
-	evalErr(fmt.Sprintf("%s edit modified %v", w, v))
+    evalErr(fmt.Sprintf("%s edit modified %v", w, v))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2752,19 +3257,19 @@ func (w *TextWidget) SetModified(v bool) {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Modified() bool {
-	return tclBool(evalErr(fmt.Sprintf("%s edit modified", w)))
+    return tclBool(evalErr(fmt.Sprintf("%s edit modified", w)))
 }
 
 func tclBool(s string) bool {
-	switch s {
-	case "1", "true", "yes":
-		return true
-	case "0", "false", "no":
-		return false
-	default:
-		fail(fmt.Errorf("unexpected Tcl bool: %q", s))
-		return false
-	}
+    switch s {
+    case "1", "true", "yes":
+        return true
+    case "0", "false", "no":
+        return false
+    default:
+        fail(fmt.Errorf("unexpected Tcl bool: %q", s))
+        return false
+    }
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2783,10 +3288,10 @@ func tclBool(s string) bool {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) TagNames(index string) []string {
-	if index != "" {
-		index = tclSafeString(index)
-	}
-	return parseList(evalErr(fmt.Sprintf("%s tag names %s", w, index)))
+    if index != "" {
+        index = tclSafeString(index)
+    }
+    return parseList(evalErr(fmt.Sprintf("%s tag names %s", w, index)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2801,7 +3306,7 @@ func (w *TextWidget) TagNames(index string) []string {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) MarkGravity(markName, direction string) {
-	evalErr(fmt.Sprintf("%s mark gravity %s %s", w, tclSafeString(markName), tclSafeString(direction)))
+    evalErr(fmt.Sprintf("%s mark gravity %s %s", w, tclSafeString(markName), tclSafeString(direction)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2816,7 +3321,7 @@ func (w *TextWidget) MarkGravity(markName, direction string) {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) MarkSet(markName string, index any) {
-	evalErr(fmt.Sprintf("%s mark set %s %s", w, tclSafeString(markName), tclSafeString(fmt.Sprint(index))))
+    evalErr(fmt.Sprintf("%s mark set %s %s", w, tclSafeString(markName), tclSafeString(fmt.Sprint(index))))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2831,7 +3336,7 @@ func (w *TextWidget) MarkSet(markName string, index any) {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) MarkUnset(markName ...string) {
-	evalErr(fmt.Sprintf("%s mark unset %s", w, tclSafeStrings(markName...)))
+    evalErr(fmt.Sprintf("%s mark unset %s", w, tclSafeStrings(markName...)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2845,7 +3350,7 @@ func (w *TextWidget) MarkUnset(markName ...string) {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) MarkNames() []string {
-	return parseList(evalErr(fmt.Sprintf("%s mark names", w)))
+    return parseList(evalErr(fmt.Sprintf("%s mark names", w)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2862,17 +3367,17 @@ func (w *TextWidget) MarkNames() []string {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Search(options ...any) string {
-	var switches Opts
-	var args []any
-	for _, v := range options {
-		switch x := v.(type) {
-		case Opt:
-			switches = append(switches, x)
-		default:
-			args = append(args, v)
-		}
-	}
-	return evalErr(fmt.Sprintf("%s search %s %s", w, collect(switches...), tclSafeList(args...)))
+    var switches Opts
+    var args []any
+    for _, v := range options {
+        switch x := v.(type) {
+        case Opt:
+            switches = append(switches, x)
+        default:
+            args = append(args, v)
+        }
+    }
+    return evalErr(fmt.Sprintf("%s search %s %s", w, collect(switches...), tclSafeList(args...)))
 }
 
 // Forward option.
@@ -2880,7 +3385,7 @@ func (w *TextWidget) Search(options ...any) string {
 // Known uses:
 //   - [Text] (widget specific, applies to Search)
 func Forward() Opt {
-	return rawOption(fmt.Sprintf(`-forward`))
+    return rawOption(fmt.Sprintf(`-forward`))
 }
 
 // Backward option.
@@ -2888,7 +3393,7 @@ func Forward() Opt {
 // Known uses:
 //   - [Text] (widget specific, applies to Search)
 func Backward() Opt {
-	return rawOption(fmt.Sprintf(`-backward`))
+    return rawOption(fmt.Sprintf(`-backward`))
 }
 
 // Regexp option.
@@ -2896,7 +3401,7 @@ func Backward() Opt {
 // Known uses:
 //   - [Text] (widget specific, applies to Search)
 func Regexp() Opt {
-	return rawOption(fmt.Sprintf(`-regexp`))
+    return rawOption(fmt.Sprintf(`-regexp`))
 }
 
 // Nocase option.
@@ -2904,7 +3409,7 @@ func Regexp() Opt {
 // Known uses:
 //   - [Text] (widget specific, applies to Search)
 func Nocase() Opt {
-	return rawOption(fmt.Sprintf(`-nocase`))
+    return rawOption(fmt.Sprintf(`-nocase`))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2920,7 +3425,7 @@ func Nocase() Opt {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) TagDelete(tags ...string) {
-	evalErr(fmt.Sprintf("%s tag delete %s", w, tclSafeStrings(tags...)))
+    evalErr(fmt.Sprintf("%s tag delete %s", w, tclSafeStrings(tags...)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2929,9 +3434,9 @@ func (w *TextWidget) TagDelete(tags ...string) {
 //
 // Clear makes 'w' empty.
 func (w *TextWidget) Clear() {
-	w.Delete("0.0", "end")
-	w.TagDelete(w.TagNames("")...)
-	w.MarkUnset(w.MarkNames()...)
+    w.Delete("0.0", "end")
+    w.TagDelete(w.TagNames("")...)
+    w.MarkUnset(w.MarkNames()...)
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2944,7 +3449,7 @@ func (w *TextWidget) Clear() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Copy() {
-	evalErr(fmt.Sprintf("tk_textCopy %s", w))
+    evalErr(fmt.Sprintf("tk_textCopy %s", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2959,7 +3464,7 @@ func (w *TextWidget) Copy() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Cut() {
-	evalErr(fmt.Sprintf("tk_textCut %s", w))
+    evalErr(fmt.Sprintf("tk_textCut %s", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2972,7 +3477,7 @@ func (w *TextWidget) Cut() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Paste() {
-	evalErr(fmt.Sprintf("tk_textPaste %s", w))
+    evalErr(fmt.Sprintf("tk_textPaste %s", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -2989,7 +3494,7 @@ func (w *TextWidget) Paste() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Undo() {
-	evalErr(fmt.Sprintf("%s edit undo", w))
+    evalErr(fmt.Sprintf("%s edit undo", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3005,7 +3510,7 @@ func (w *TextWidget) Undo() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Redo() {
-	evalErr(fmt.Sprintf("%s edit redo", w))
+    evalErr(fmt.Sprintf("%s edit redo", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3033,23 +3538,23 @@ func (w *TextWidget) Redo() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Get(options ...any) (r []string) {
-	return []string{evalErr(fmt.Sprintf("%s get %s", w, collectAny(options...)))}
+    return []string{evalErr(fmt.Sprintf("%s get %s", w, collectAny(options...)))}
 }
 
 // Text is a shortcut for w.Get("1.0", "end-1c")[0].
 func (w *TextWidget) Text() string {
-	return w.Get("1.0", "end-1c")[0]
+    return w.Get("1.0", "end-1c")[0]
 }
 
 // LC encodes a text index consisting of a line and char number.
 type LC struct {
-	Line int // 1-based line number within the text content.
-	Char int // 0-based char number within the line.
+    Line int // 1-based line number within the text content.
+    Char int // 0-based char number within the line.
 }
 
 // String implements fmt.Stringer.
 func (lc LC) String() string {
-	return fmt.Sprintf("%d.%d", lc.Line, lc.Char)
+    return fmt.Sprintf("%d.%d", lc.Line, lc.Char)
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3067,8 +3572,8 @@ func (lc LC) String() string {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) ImageCreate(index any, options ...Opt) {
-	idx := fmt.Sprint(index)
-	evalErr(fmt.Sprintf("%s image create %s %s", w, tclSafeString(idx), collect(options...)))
+    idx := fmt.Sprint(index)
+    evalErr(fmt.Sprintf("%s image create %s %s", w, tclSafeString(idx), collect(options...)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3084,8 +3589,8 @@ func (w *TextWidget) ImageCreate(index any, options ...Opt) {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) WindowCreate(index any, options ...Opt) {
-	idx := fmt.Sprint(index)
-	evalErr(fmt.Sprintf("%s window create %s %s", w, tclSafeString(idx), collect(options...)))
+    idx := fmt.Sprint(index)
+    evalErr(fmt.Sprintf("%s window create %s %s", w, tclSafeString(idx), collect(options...)))
 }
 
 // Win option.
@@ -3093,7 +3598,7 @@ func (w *TextWidget) WindowCreate(index any, options ...Opt) {
 // Known uses:
 //   - [Text] (widget specific, applies to embedded windows)
 func Win(val any) Opt {
-	return rawOption(fmt.Sprintf(`-window %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-window %s`, optionString(val)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3113,7 +3618,7 @@ func Win(val any) Opt {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Yview() string {
-	return evalErr(fmt.Sprintf("%s yview", w))
+    return evalErr(fmt.Sprintf("%s yview", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3134,7 +3639,7 @@ func (w *TextWidget) Yview() string {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Yviewmoveto(fraction any) string {
-	return evalErr(fmt.Sprintf("%s yview moveto %s", w, tclSafeString(fmt.Sprint(fraction))))
+    return evalErr(fmt.Sprintf("%s yview moveto %s", w, tclSafeString(fmt.Sprint(fraction))))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3151,7 +3656,7 @@ func (w *TextWidget) Yviewmoveto(fraction any) string {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) See(index any) {
-	evalErr(fmt.Sprintf("%s see %s", w, tclSafeString(fmt.Sprint(index))))
+    evalErr(fmt.Sprintf("%s see %s", w, tclSafeString(fmt.Sprint(index))))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3170,7 +3675,7 @@ func (w *TextWidget) See(index any) {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) TagRanges(tagName string) (r []string) {
-	return parseList(evalErr(fmt.Sprintf("%s tag ranges %s", w, tclSafeString(tagName))))
+    return parseList(evalErr(fmt.Sprintf("%s tag ranges %s", w, tclSafeString(tagName))))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3185,7 +3690,7 @@ func (w *TextWidget) TagRanges(tagName string) (r []string) {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Index(index any) (r string) {
-	return evalErr(fmt.Sprintf("%s index %s", w, tclSafeString(fmt.Sprint(index))))
+    return evalErr(fmt.Sprintf("%s index %s", w, tclSafeString(fmt.Sprint(index))))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3205,7 +3710,7 @@ func (w *TextWidget) Index(index any) (r string) {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Xview() string {
-	return evalErr(fmt.Sprintf("%s xview", w))
+    return evalErr(fmt.Sprintf("%s xview", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3229,7 +3734,7 @@ func (w *TextWidget) Xview() string {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) TagConfigure(tagName string, options ...Opt) {
-	evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(tagName), collect(options...)))
+    evalErr(fmt.Sprintf("%s tag configure %s %s", w, tclSafeString(tagName), collect(options...)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3238,7 +3743,7 @@ func (w *TextWidget) TagConfigure(tagName string, options ...Opt) {
 //
 // Select all text in 'w'.
 func (w *TextWidget) SelectAll() {
-	evalErr(fmt.Sprintf("%s tag add sel 1.0 end", w))
+    evalErr(fmt.Sprintf("%s tag add sel 1.0 end", w))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3259,20 +3764,20 @@ func (w *TextWidget) SelectAll() {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) TagAdd(options ...any) string {
-	tag := fmt.Sprintf("tag%d", id.Add(1))
-	var a []Opt
-	for _, v := range options {
-		switch x := v.(type) {
-		case Opts:
-			a = append(a, x)
-		case Opt:
-			a = append(a, x)
-		default:
-			a = append(a, stringOption(fmt.Sprint(x)))
-		}
-	}
-	evalErr(fmt.Sprintf("%s tag add %s %s", w, tag, collect(a...)))
-	return tag
+    tag := fmt.Sprintf("tag%d", id.Add(1))
+    var a []Opt
+    for _, v := range options {
+        switch x := v.(type) {
+        case Opts:
+            a = append(a, x)
+        case Opt:
+            a = append(a, x)
+        default:
+            a = append(a, stringOption(fmt.Sprint(x)))
+        }
+    }
+    evalErr(fmt.Sprintf("%s tag add %s %s", w, tag, collect(a...)))
+    return tag
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3303,7 +3808,7 @@ func (w *TextWidget) TagAdd(options ...any) string {
 //
 // [Tcl/Tk text]: https://www.tcl.tk/man/tcl9.0/TkCmd/text.html
 func (w *TextWidget) Delete(options ...any) {
-	evalErr(fmt.Sprintf("%s delete %s", w, collectAny(options...)))
+    evalErr(fmt.Sprintf("%s delete %s", w, collectAny(options...)))
 }
 
 // Text — Create and manipulate 'text' hypertext editing widgets
@@ -3318,186 +3823,186 @@ func (w *TextWidget) Delete(options ...any) {
 // The <img> tag is reserved for embedded images. You can inline the image
 // directly:
 //
-//	InsertML("Hello", NewPhoto(...), Align("top"), "world!")
+//    InsertML("Hello", NewPhoto(...), Align("top"), "world!")
 //
 // The <embed> tag is reserved for embedded widgets. You can inline a widget
 // directly:
 //
-//	InsertML("Hello", Button(Txt("Foo")), Align("center"), "world!")
+//    InsertML("Hello", Button(Txt("Foo")), Align("center"), "world!")
 //
 // The <pre> tag works similarly to HTML, ie. white space and line breaks are
 // kept. To make the content of a <pre> rendered in monospace, configure the
 // tag, for example:
 //
-//	t.TagConfigure("pre", Font(CourierFont(), 10)
+//    t.TagConfigure("pre", Font(CourierFont(), 10)
 //
 // Other ML-tags are used as names of configured 'w' tags, if configured,
 // ignored otherwise.
 //
 // Example usage in _examples/embed.go.
 func (w *TextWidget) InsertML(list ...any) {
-	var ml bytes.Buffer
-	for i := 0; i < len(list); i++ {
-		switch x := list[i].(type) {
-		case string:
-			ml.WriteString(x)
-		case *Img:
-			var opts Opts
-			for j := i + 1; j < len(list); j++ {
-				x, ok := list[j].(Opt)
-				if !ok {
-					break
-				}
+    var ml bytes.Buffer
+    for i := 0; i < len(list); i++ {
+        switch x := list[i].(type) {
+        case string:
+            ml.WriteString(x)
+        case *Img:
+            var opts Opts
+            for j := i + 1; j < len(list); j++ {
+                x, ok := list[j].(Opt)
+                if !ok {
+                    break
+                }
 
-				opts = append(opts, x)
-			}
-			fmt.Fprintf(&ml, "<img src=%q", x)
-			for _, v := range opts {
-				fmt.Fprintf(&ml, " opt=%q", v.optionString(w.Window))
-				i++
-			}
-			ml.WriteString(">")
-		case Widget:
-			var opts Opts
-			for j := i + 1; j < len(list); j++ {
-				x, ok := list[j].(Opt)
-				if !ok {
-					break
-				}
+                opts = append(opts, x)
+            }
+            fmt.Fprintf(&ml, "<img src=%q", x)
+            for _, v := range opts {
+                fmt.Fprintf(&ml, " opt=%q", v.optionString(w.Window))
+                i++
+            }
+            ml.WriteString(">")
+        case Widget:
+            var opts Opts
+            for j := i + 1; j < len(list); j++ {
+                x, ok := list[j].(Opt)
+                if !ok {
+                    break
+                }
 
-				opts = append(opts, x)
-			}
-			fmt.Fprintf(&ml, "<embed src=%q", x)
-			for _, v := range opts {
-				fmt.Fprintf(&ml, " opt=%q", v.optionString(w.Window))
-				i++
-			}
-			ml.WriteString(">")
-		}
-	}
-	doc, err := html.Parse(&ml)
-	if err != nil {
-		fail(err)
-		return
-	}
+                opts = append(opts, x)
+            }
+            fmt.Fprintf(&ml, "<embed src=%q", x)
+            for _, v := range opts {
+                fmt.Fprintf(&ml, " opt=%q", v.optionString(w.Window))
+                i++
+            }
+            ml.WriteString(">")
+        }
+    }
+    doc, err := html.Parse(&ml)
+    if err != nil {
+        fail(err)
+        return
+    }
 
-	var tags []string
-	var body int
-	k := TkScaling() * 72 / 600
-	walk(0, doc, func(lvl int, n *html.Node) bool {
-		switch n.Type {
-		case html.TextNode:
-			if lvl < len(tags) {
-				tags = tags[:lvl]
-			}
-			tags := tags[body+1:]
-			for _, v := range tags {
-				if v == "pre" {
-					evalErr(fmt.Sprintf("%s insert end %s %s", w, tclSafeString(unescapeML(n.Data)), tclSafeStrings(tags...)))
-					return true
-				}
-			}
+    var tags []string
+    var body int
+    k := TkScaling() * 72 / 600
+    walk(0, doc, func(lvl int, n *html.Node) bool {
+        switch n.Type {
+        case html.TextNode:
+            if lvl < len(tags) {
+                tags = tags[:lvl]
+            }
+            tags := tags[body+1:]
+            for _, v := range tags {
+                if v == "pre" {
+                    evalErr(fmt.Sprintf("%s insert end %s %s", w, tclSafeString(unescapeML(n.Data)), tclSafeStrings(tags...)))
+                    return true
+                }
+            }
 
-			ids, toks := tokenize(n.Data)
-			for i, id := range ids {
-				switch id {
-				default:
-					if s := toks[i]; strings.HasPrefix(s, "$$") && strings.HasSuffix(s, "$$") || strings.HasPrefix(s, "$") && strings.HasSuffix(s, "$") {
-						img := NewPhoto(Data(TeX(s, k)))
-						evalErr(fmt.Sprintf("%v image create end -image %s -align top", w, img))
-						break
-					}
+            ids, toks := tokenize(n.Data)
+            for i, id := range ids {
+                switch id {
+                default:
+                    if s := toks[i]; strings.HasPrefix(s, "$$") && strings.HasSuffix(s, "$$") || strings.HasPrefix(s, "$") && strings.HasSuffix(s, "$") {
+                        img := NewPhoto(Data(TeX(s, k)))
+                        evalErr(fmt.Sprintf("%v image create end -image %s -align top", w, img))
+                        break
+                    }
 
-					fallthrough
-				case 0:
-					evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(unescapeML(toks[i])), tclSafeStrings(tags...)))
-				}
-			}
-		case html.ElementNode:
-			switch n.Data {
-			case "br":
-				evalErr(fmt.Sprintf("%s insert end \\n {%s}", w, tclSafeStrings(tags...)))
-			case "body":
-				tags = append(tags, n.Data)
-				body = lvl
-			case "img":
-				var src string
-				var opts []string
-				for _, v := range n.Attr {
-					switch v.Key {
-					case "src":
-						src = v.Val
-					case "opt":
-						opts = append(opts, v.Val)
-					}
-				}
-				evalErr(fmt.Sprintf("%v image create end -image %s %s", w, src, strings.Join(opts, " ")))
-			case "embed":
-				var src string
-				var opts []string
-				for _, v := range n.Attr {
-					switch v.Key {
-					case "src":
-						src = v.Val
-					case "opt":
-						opts = append(opts, v.Val)
-					}
-				}
-				evalErr(fmt.Sprintf("%v window create end -window %s %s", w, src, strings.Join(opts, " ")))
-			default:
-				tags = append(tags, n.Data)
-			}
-		}
-		return true
-	})
+                    fallthrough
+                case 0:
+                    evalErr(fmt.Sprintf("%s insert end %s {%s}", w, tclFromElementNode(unescapeML(toks[i])), tclSafeStrings(tags...)))
+                }
+            }
+        case html.ElementNode:
+            switch n.Data {
+            case "br":
+                evalErr(fmt.Sprintf("%s insert end \\n {%s}", w, tclSafeStrings(tags...)))
+            case "body":
+                tags = append(tags, n.Data)
+                body = lvl
+            case "img":
+                var src string
+                var opts []string
+                for _, v := range n.Attr {
+                    switch v.Key {
+                    case "src":
+                        src = v.Val
+                    case "opt":
+                        opts = append(opts, v.Val)
+                    }
+                }
+                evalErr(fmt.Sprintf("%v image create end -image %s %s", w, src, strings.Join(opts, " ")))
+            case "embed":
+                var src string
+                var opts []string
+                for _, v := range n.Attr {
+                    switch v.Key {
+                    case "src":
+                        src = v.Val
+                    case "opt":
+                        opts = append(opts, v.Val)
+                    }
+                }
+                evalErr(fmt.Sprintf("%v window create end -window %s %s", w, src, strings.Join(opts, " ")))
+            default:
+                tags = append(tags, n.Data)
+            }
+        }
+        return true
+    })
 }
 
 func unescapeML(s string) string {
-	s = strings.ReplaceAll(s, "\\$", "$")
-	s = strings.ReplaceAll(s, "&lt;", "<")
-	s = strings.ReplaceAll(s, "&gt;", ">")
-	return s
+    s = strings.ReplaceAll(s, "\\$", "$")
+    s = strings.ReplaceAll(s, "&lt;", "<")
+    s = strings.ReplaceAll(s, "&gt;", ">")
+    return s
 }
 
 func tokenize(s string) (ids []int, toks []string) {
-	for {
-		id, len := mlToken(s)
-		if len == 0 {
-			return ids, toks
-		}
+    for {
+        id, len := mlToken(s)
+        if len == 0 {
+            return ids, toks
+        }
 
-		ids = append(ids, id)
-		toks = append(toks, s[:len])
-		s = s[len:]
-	}
+        ids = append(ids, id)
+        toks = append(toks, s[:len])
+        s = s[len:]
+    }
 }
 
 func tclFromElementNode(s string) string {
-	a := strings.Fields(s)
-	var prefix, suffix string
-	if s != "" {
-		switch s[0] {
-		case '\n', ' ', '\t':
-			prefix = " "
-		}
-		switch s[len(s)-1] {
-		case '\n', ' ', '\t':
-			suffix = " "
-		}
-	}
-	for i, v := range a {
-		a[i] = tclSafeInBraces(v)
-	}
-	r := fmt.Sprintf("{%s%s%s}", prefix, strings.Join(a, " "), suffix)
-	return r
+    a := strings.Fields(s)
+    var prefix, suffix string
+    if s != "" {
+        switch s[0] {
+        case '\n', ' ', '\t':
+            prefix = " "
+        }
+        switch s[len(s)-1] {
+        case '\n', ' ', '\t':
+            suffix = " "
+        }
+    }
+    for i, v := range a {
+        a[i] = tclSafeInBraces(v)
+    }
+    r := fmt.Sprintf("{%s%s%s}", prefix, strings.Join(a, " "), suffix)
+    return r
 }
 
 var badMLChars = [...]bool{
-	'}':  true,
-	'\\': true,
-	'\n': true,
-	'\r': true,
-	'\t': true,
+    '}':  true,
+    '\\': true,
+    '\n': true,
+    '\r': true,
+    '\t': true,
 }
 
 // Align option.
@@ -3505,15 +4010,15 @@ var badMLChars = [...]bool{
 // Known uses:
 //   - [Text] (widget specific, applies to embedded images)
 func Align(val any) Opt {
-	return rawOption(fmt.Sprintf(`-align %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-align %s`, optionString(val)))
 }
 
 func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)) {
-	for ; n != nil; n = n.NextSibling {
-		if visitor(lvl, n) {
-			walk(lvl+1, n.FirstChild, visitor)
-		}
-	}
+    for ; n != nil; n = n.NextSibling {
+        if visitor(lvl, n) {
+            walk(lvl+1, n.FirstChild, visitor)
+        }
+    }
 }
 
 // Fontchooser — control font selection dialog
@@ -3561,7 +4066,7 @@ func walk(lvl int, n *html.Node, visitor func(lvl int, n *html.Node) (dive bool)
 //
 // [Tcl/Tk fontchooser]: https://www.tcl.tk/man/tcl9.0/TkCmd/fontchooser.html
 func Fontchooser(options ...Opt) {
-	evalErr(fmt.Sprintf("tk fontchooser configure %s", collect(options...)))
+    evalErr(fmt.Sprintf("tk fontchooser configure %s", collect(options...)))
 }
 
 // FontchooserFont — control font selection dialog
@@ -3570,13 +4075,13 @@ func Fontchooser(options ...Opt) {
 //
 // Returns the selected font description in the form
 //
-//	family size style...
+//    family size style...
 //
 // Additional information might be available at the [Tcl/Tk fontchooser] page.
 //
 // [Tcl/Tk fontchooser]: https://www.tcl.tk/man/tcl9.0/TkCmd/fontchooser.html
 func FontchooserFont() []string {
-	return parseList(evalErr("tk fontchooser config -font"))
+    return parseList(evalErr("tk fontchooser config -font"))
 }
 
 // FontchooserShow — control font selection dialog
@@ -3590,7 +4095,7 @@ func FontchooserFont() []string {
 //
 // [Tcl/Tk fontchooser]: https://www.tcl.tk/man/tcl9.0/TkCmd/fontchooser.html
 func FontchooserShow() {
-	evalErr("tk  fontchooser show")
+    evalErr("tk  fontchooser show")
 }
 
 // FontchooserHide — control font selection dialog
@@ -3604,7 +4109,7 @@ func FontchooserShow() {
 //
 // [Tcl/Tk fontchooser]: https://www.tcl.tk/man/tcl9.0/TkCmd/fontchooser.html
 func FontchooserHide() {
-	evalErr("tk fontchooser hide")
+    evalErr("tk fontchooser hide")
 }
 
 // GetOpenFile — pop up a dialog box for the user to select a file to open.
@@ -3671,19 +4176,19 @@ func FontchooserHide() {
 //
 // [Tcl/Tk getopenfile]: https://www.tcl.tk/man/tcl9.0/TkCmd/getOpenFile.html
 func GetOpenFile(options ...Opt) (r []string) {
-	switch s := evalErr(fmt.Sprintf("tk_getOpenFile %s", collect(options...))); {
-	case strings.HasPrefix(s, "{") && strings.HasSuffix(s, "}"):
-		return parseList(s)
-	default:
-		return []string{s}
-	}
+    switch s := evalErr(fmt.Sprintf("tk_getOpenFile %s", collect(options...))); {
+    case strings.HasPrefix(s, "{") && strings.HasSuffix(s, "}"):
+        return parseList(s)
+    default:
+        return []string{s}
+    }
 }
 
 // FileType specifies a single file type for the [Filetypes] option.
 type FileType struct {
-	TypeName   string   // Eg. "Go files"
-	Extensions []string // Eg. []string{".go"}
-	MacType	string   // Eg. "TEXT"
+    TypeName   string   // Eg. "Go files"
+    Extensions []string // Eg. []string{".go"}
+    MacType    string   // Eg. "TEXT"
 }
 
 // GetSaveFile — pop up a dialog box for the user to select a file to save.
@@ -3752,7 +4257,7 @@ type FileType struct {
 //
 // [Tcl/Tk getopenfile]: https://www.tcl.tk/man/tcl9.0/TkCmd/getOpenFile.html
 func GetSaveFile(options ...Opt) string {
-	return evalErr(fmt.Sprintf("tk_getSaveFile %s", collect(options...)))
+    return evalErr(fmt.Sprintf("tk_getSaveFile %s", collect(options...)))
 }
 
 // Place — Geometry manager for fixed or rubber-sheet placement
@@ -3886,8 +4391,8 @@ func GetSaveFile(options ...Opt) string {
 //
 // [Tcl/Tk place]: https://www.tcl.tk/man/tcl9.0/TkCmd/place.htm
 func Place(options ...Opt) {
-	autocenterDisabled = true
-	evalErr(fmt.Sprintf("place %s", collect(options...)))
+    autocenterDisabled = true
+    evalErr(fmt.Sprintf("place %s", collect(options...)))
 }
 
 // Lower — Change a window's position in the stacking order
@@ -3911,11 +4416,11 @@ func Place(options ...Opt) {
 //
 // [Tcl/Tk lower]: https://www.tcl.tk/man/tcl9.0/TkCmd/lower.html
 func (w *Window) Lower(belowThis Widget) {
-	b := ""
-	if belowThis != nil {
-		b = belowThis.optionString(nil)
-	}
-	evalErr(fmt.Sprintf("lower %s %s", w, b))
+    b := ""
+    if belowThis != nil {
+        b = belowThis.optionString(nil)
+    }
+    evalErr(fmt.Sprintf("lower %s %s", w, b))
 }
 
 // Raise — Change a window's position in the stacking order
@@ -3941,11 +4446,11 @@ func (w *Window) Lower(belowThis Widget) {
 //
 // [Tcl/Tk raise]: https://www.tcl.tk/man/tcl9.0/TkCmd/raise.html
 func (w *Window) Raise(aboveThis Widget) {
-	b := ""
-	if aboveThis != nil {
-		b = aboveThis.optionString(nil)
-	}
-	evalErr(fmt.Sprintf("raise %s %s", w, b))
+    b := ""
+    if aboveThis != nil {
+        b = aboveThis.optionString(nil)
+    }
+    evalErr(fmt.Sprintf("raise %s %s", w, b))
 }
 
 // Graph — use gnuplot to draw on a canvas. Graph returns 'w'.
@@ -3956,52 +4461,52 @@ func (w *Window) Raise(aboveThis Widget) {
 //
 // [gnuplot site]: http://www.gnuplot.info/
 func (w *CanvasWidget) Graph(script string) *CanvasWidget {
-	script = fmt.Sprintf("set terminal tkcanvas size %s, %s\n%s", w.Width(), w.Height(), script)
-	out, err := gnuplot(script)
-	if err != nil {
-		fail(fmt.Errorf("plot: executing script: %s", err))
-		return w
-	}
+    script = fmt.Sprintf("set terminal tkcanvas size %s, %s\n%s", w.Width(), w.Height(), script)
+    out, err := gnuplot(script)
+    if err != nil {
+        fail(fmt.Errorf("plot: executing script: %s", err))
+        return w
+    }
 
-	evalErr(fmt.Sprintf("%s\ngnuplot %s", out, w))
-	return w
+    evalErr(fmt.Sprintf("%s\ngnuplot %s", out, w))
+    return w
 }
 
 func gnuplot(script string) (out []byte, err error) {
-	f, err := os.CreateTemp("", "tk9.0-")
-	if err != nil {
-		return nil, err
-	}
+    f, err := os.CreateTemp("", "tk9.0-")
+    if err != nil {
+        return nil, err
+    }
 
-	defer os.Remove(f.Name())
+    defer os.Remove(f.Name())
 
-	if err := os.WriteFile(f.Name(), []byte(script), 0660); err != nil {
-		return nil, err
-	}
+    if err := os.WriteFile(f.Name(), []byte(script), 0660); err != nil {
+        return nil, err
+    }
 
-	ctx, cancel := context.WithTimeout(context.Background(), gnuplotTimeout)
+    ctx, cancel := context.WithTimeout(context.Background(), gnuplotTimeout)
 
-	defer cancel()
+    defer cancel()
 
-	return exec.CommandContext(ctx, "gnuplot", f.Name()).Output()
+    return exec.CommandContext(ctx, "gnuplot", f.Name()).Output()
 }
 
 // MenuItem represents an entry on a menu.
 type MenuItem struct {
-	id string
+    id string
 }
 
 // String implements fmt.Stringer.
 func (m *MenuItem) String() string {
-	return m.optionString(nil)
+    return m.optionString(nil)
 }
 
 func (m *MenuItem) optionString(_ *Window) string {
-	if m != nil {
-		return m.id
-	}
+    if m != nil {
+        return m.id
+    }
 
-	return "mnu_non_existing"
+    return "mnu_non_existing"
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -4014,7 +4519,7 @@ func (m *MenuItem) optionString(_ *Window) string {
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) AddRadiobutton(options ...Opt) *MenuItem {
-	return &MenuItem{id: evalErr(fmt.Sprintf("%s add radiobutton %s", w, winCollect(w.Window, options...)))}
+    return &MenuItem{id: evalErr(fmt.Sprintf("%s add radiobutton %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -4027,7 +4532,7 @@ func (w *MenuWidget) AddRadiobutton(options ...Opt) *MenuItem {
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) AddCheckbutton(options ...Opt) *MenuItem {
-	return &MenuItem{id: evalErr(fmt.Sprintf("%s add checkbutton %s", w, winCollect(w.Window, options...)))}
+    return &MenuItem{id: evalErr(fmt.Sprintf("%s add checkbutton %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -4040,7 +4545,7 @@ func (w *MenuWidget) AddCheckbutton(options ...Opt) *MenuItem {
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) AddCommand(options ...Opt) *MenuItem {
-	return &MenuItem{id: evalErr(fmt.Sprintf("%s add command %s", w, winCollect(w.Window, options...)))}
+    return &MenuItem{id: evalErr(fmt.Sprintf("%s add command %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -4053,7 +4558,7 @@ func (w *MenuWidget) AddCommand(options ...Opt) *MenuItem {
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) AddCascade(options ...Opt) *MenuItem {
-	return &MenuItem{id: evalErr(fmt.Sprintf("%s add cascade %s", w, winCollect(w.Window, options...)))}
+    return &MenuItem{id: evalErr(fmt.Sprintf("%s add cascade %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -4066,7 +4571,7 @@ func (w *MenuWidget) AddCascade(options ...Opt) *MenuItem {
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) AddSeparator(options ...Opt) *MenuItem {
-	return &MenuItem{id: evalErr(fmt.Sprintf("%s add separator %s", w, winCollect(w.Window, options...)))}
+    return &MenuItem{id: evalErr(fmt.Sprintf("%s add separator %s", w, winCollect(w.Window, options...)))}
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -4085,7 +4590,7 @@ func (w *MenuWidget) AddSeparator(options ...Opt) *MenuItem {
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) Invoke(index uint) {
-	evalErr(fmt.Sprintf("%s invoke %d", w, index))
+    evalErr(fmt.Sprintf("%s invoke %d", w, index))
 }
 
 // Menu — Create and manipulate 'menu' widgets and menubars
@@ -4105,7 +4610,7 @@ func (w *MenuWidget) Invoke(index uint) {
 //
 // [Tcl/Tk menu]: https://www.tcl.tk/man/tk9.0/TkCmd/menu.htm
 func (w *MenuWidget) EntryConfigure(index uint, options ...Opt) {
-	evalErr(fmt.Sprintf("%s entryconfigure %d %s", w, index, winCollect(w.Window, options...)))
+    evalErr(fmt.Sprintf("%s entryconfigure %d %s", w, index, winCollect(w.Window, options...)))
 }
 
 // TScrollbar — Control the viewport of a scrollable widget
@@ -4120,7 +4625,7 @@ func (w *MenuWidget) EntryConfigure(index uint, options ...Opt) {
 //
 // [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tk9.0/TkCmd/ttk_scrollbar.htm
 func (w *TScrollbarWidget) Set(firstLast string) {
-	evalErr(fmt.Sprintf("%s set %s", w, firstLast))
+    evalErr(fmt.Sprintf("%s set %s", w, firstLast))
 }
 
 // tk — Manipulate Tk internal state
@@ -4154,26 +4659,26 @@ func (w *TScrollbarWidget) Set(firstLast string) {
 //
 // [Tcl/Tk tk]: https://www.tcl.tk/man/tcl9.0/TkCmd/tk.html
 func TkScaling(options ...any) float64 {
-	var a []Opt
-	for _, v := range options {
-		switch x := v.(type) {
-		case Opts:
-			a = append(a, x)
-		case Opt:
-			a = append(a, x)
-		default:
-			a = append(a, stringOption(fmt.Sprint(x)))
-		}
-	}
-	if s := evalErr(fmt.Sprintf("tk scaling %s", collect(a...))); s != "" {
-		n, err := strconv.ParseFloat(s, 64)
-		if err == nil {
-			return n
-		}
+    var a []Opt
+    for _, v := range options {
+        switch x := v.(type) {
+        case Opts:
+            a = append(a, x)
+        case Opt:
+            a = append(a, x)
+        default:
+            a = append(a, stringOption(fmt.Sprint(x)))
+        }
+    }
+    if s := evalErr(fmt.Sprintf("tk scaling %s", collect(a...))); s != "" {
+        n, err := strconv.ParseFloat(s, 64)
+        if err == nil {
+            return n
+        }
 
-		fail(err)
-	}
-	return 1
+        fail(err)
+    }
+    return 1
 }
 
 // Font option.
@@ -4205,7 +4710,7 @@ func TkScaling(options ...any) float64 {
 //   - [TextWidget.TagConfigure] (command specific)
 //   - [Text]
 func Font(list ...any) Opt {
-	return rawOption(fmt.Sprintf(`-font {%s}`, tclSafeList(list...)))
+    return rawOption(fmt.Sprintf(`-font {%s}`, tclSafeList(list...)))
 }
 
 // Font — Get the configured option value.
@@ -4228,23 +4733,23 @@ func Font(list ...any) Opt {
 //   - [TProgressbar]
 //   - [Text]
 func (w *Window) Font() string {
-	return evalErr(fmt.Sprintf(`%s cget -font`, w))
+    return evalErr(fmt.Sprintf(`%s cget -font`, w))
 }
 
 // + ttk::style configure style ?-option ?value option value...? ?
 // + ttk::style element args
-// 	+ ttk::style element create elementName type ?args...?
-// 	+ ttk::style element names
-// 	+ ttk::style element options element
+//     + ttk::style element create elementName type ?args...?
+//     + ttk::style element names
+//     + ttk::style element options element
 // + ttk::style layout style ?layoutSpec?
 // + ttk::style lookup style -option ?state ?default??
 // + ttk::style map style ?-option { statespec value... }?
 // - ttk::style theme args
-// 	- ttk::style theme create themeName ?-parent basedon? ?-settings script... ?
-// 	+ ttk::style theme names
-// 	- ttk::style theme settings themeName script
-// 	+ ttk::style theme styles ?themeName?
-// 	+ ttk::style theme use ?themeName?
+//     - ttk::style theme create themeName ?-parent basedon? ?-settings script... ?
+//     + ttk::style theme names
+//     - ttk::style theme settings themeName script
+//     + ttk::style theme styles ?themeName?
+//     + ttk::style theme use ?themeName?
 
 // ttk::style — Manipulate style database
 //
@@ -4253,17 +4758,17 @@ func (w *Window) Font() string {
 // Sets the default value of the specified option(s) in style. If style does
 // not exist, it is created. Example:
 //
-//	StyleConfigure(".", Font("times"), Background(LightBlue))
+//    StyleConfigure(".", Font("times"), Background(LightBlue))
 //
 // If only style and -option are specified, get the default value for option
 // -option of style style. Example:
 //
-//	StyleConfigure(".", Font)
+//    StyleConfigure(".", Font)
 //
 // If only style is specified, get the default value for all options of style
 // style. Example:
 //
-//	StyleConfigure(".")
+//    StyleConfigure(".")
 //
 // Additional information might be available at the [Tcl/Tk style] page.
 // There's also a [Styles and Themes] tutorial at tkdoc.com.
@@ -4271,69 +4776,69 @@ func (w *Window) Font() string {
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleConfigure(style string, options ...any) []string {
-	if len(options) == 0 {
-		return parseList(evalErr(fmt.Sprintf("ttk::style configure %s", tclSafeString(style))))
-	}
+    if len(options) == 0 {
+        return parseList(evalErr(fmt.Sprintf("ttk::style configure %s", tclSafeString(style))))
+    }
 
-	if len(options) == 1 {
-		o := options[0]
-		if x, ok := o.(Opt); ok {
-			return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), x.optionString(nil)))}
-		}
+    if len(options) == 1 {
+        o := options[0]
+        if x, ok := o.(Opt); ok {
+            return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), x.optionString(nil)))}
+        }
 
-		if s := funcToTclOption(o); s != "" {
-			return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), s))}
-		}
+        if s := funcToTclOption(o); s != "" {
+            return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), s))}
+        }
 
-		return nil
-	}
+        return nil
+    }
 
-	var a []string
-	for _, v := range options {
-		switch x := v.(type) {
-		case Opt:
-			a = append(a, x.optionString(nil))
-		default:
-			fail(fmt.Errorf("expected Opt: %T", x))
-			return nil
-		}
-	}
+    var a []string
+    for _, v := range options {
+        switch x := v.(type) {
+        case Opt:
+            a = append(a, x.optionString(nil))
+        default:
+            fail(fmt.Errorf("expected Opt: %T", x))
+            return nil
+        }
+    }
 
-	return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), strings.Join(a, " ")))}
+    return []string{evalErr(fmt.Sprintf("ttk::style configure %s %s", tclSafeString(style), strings.Join(a, " ")))}
 }
 
 func funcToTclOption(fn any) string {
-	t := reflect.TypeOf(fn)
-	if t.Kind() != reflect.Func {
-		return ""
-	}
+    t := reflect.TypeOf(fn)
+    if t.Kind() != reflect.Func {
+        return ""
+    }
 
-	s := runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name()
-	if s == "" {
-		fail(fmt.Errorf("failed to determine function name"))
-		return ""
-	}
+    s := runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name()
+    if s == "" {
+        fail(fmt.Errorf("failed to determine function name"))
+        return ""
+    }
 
-	a := strings.Split(s, ".")
-	if len(a) == 0 {
-		fail(fmt.Errorf("failed to determine function name: %q", s))
-		return ""
-	}
+    a := strings.Split(s, ".")
+    if len(a) == 0 {
+        fail(fmt.Errorf("failed to determine function name: %q", s))
+        return ""
+    }
 
-	s = strings.ToLower(a[len(a)-1])
-	if r, ok := replaceOpt[s]; ok {
-		return "-" + r
-	}
+    s = strings.ToLower(a[len(a)-1])
+    if r, ok := replaceOpt[s]; ok {
+        return "-" + r
+    }
 
-	return "-" + s
+    return "-" + s
 }
 
 var replaceOpt = map[string]string{
-	"btn": "button",
-	"lbl": "label",
-	"mnu": "menu",
-	"msg": "message",
-	"txt": "text",
+    "btn": "button",
+    "lbl": "label",
+    "mnu": "menu",
+    "msg": "message",
+    "txt": "text",
 }
 
 // ttk::style — Manipulate style database
@@ -4346,13 +4851,13 @@ var replaceOpt = map[string]string{
 // versions of Windows an element factory is registered to create Windows theme
 // elements (see ttk_vsapi(n)). Examples:
 //
-//	StyleElementCreate("TSpinbox.uparrow", "from", "default") // Inherit the existing element from theme 'default'.
+//    StyleElementCreate("TSpinbox.uparrow", "from", "default") // Inherit the existing element from theme 'default'.
 //
-//	StyleElementCreate("Red.Corner.TButton.indicator", "image", NewPhoto(File("red_corner.png")), Width(10))
+//    StyleElementCreate("Red.Corner.TButton.indicator", "image", NewPhoto(File("red_corner.png")), Width(10))
 //
-//	imageN := NewPhoto(...)
-//	StyleElementCreate("TCheckbutton.indicator", "image", image5, "disabled selected", image6, "disabled alternate",
-//		image8, "disabled", image9, "alternate", image7, "!selected", image4, Width(20), Border(4), Sticky("w"))
+//    imageN := NewPhoto(...)
+//    StyleElementCreate("TCheckbutton.indicator", "image", image5, "disabled selected", image6, "disabled alternate",
+//        image8, "disabled", image9, "alternate", image7, "!selected", image4, Width(20), Border(4), Sticky("w"))
 //
 // After the type "image" comes a list of one or more images. Every image is
 // optionally followed by a space separated list of states the image applies
@@ -4366,32 +4871,32 @@ var replaceOpt = map[string]string{
 // [Tcl/Tk modifying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleElementCreate(elementName, typ string, options ...any) string {
-	// ttk::style element create TRadiobutton.indicator image {pyimage11 {disabled selected} pyimage12 disabled pyimage13 !selected pyimage10} -width 20 -border 4 -sticky w
-	var a, b []string
-	for _, v := range options {
-		switch x := v.(type) {
-		case *Img:
-			a = append(a, x.optionString(nil))
-		case Opt:
-			b = append(b, x.optionString(nil))
-		default:
-			switch s := strings.Fields(fmt.Sprint(v)); {
-			case len(s) == 1:
-				a = append(a, tclSafeInBraces(s[0]))
-			default:
-				for i, v := range s {
-					s[i] = tclSafeInBraces(v)
-				}
-				a = append(a, fmt.Sprintf("{%s}", strings.Join(s, " ")))
-			}
-		}
-	}
-	switch {
-	case len(a) == 2 && a[0] == "from":
-		return evalErr(fmt.Sprintf("ttk::style element create from %s", a[1]))
-	default:
-		return evalErr(fmt.Sprintf("ttk::style element create {%s} image {%s} %s", tclSafeInBraces(elementName), strings.Join(a, " "), strings.Join(b, " ")))
-	}
+    // ttk::style element create TRadiobutton.indicator image {pyimage11 {disabled selected} pyimage12 disabled pyimage13 !selected pyimage10} -width 20 -border 4 -sticky w
+    var a, b []string
+    for _, v := range options {
+        switch x := v.(type) {
+        case *Img:
+            a = append(a, x.optionString(nil))
+        case Opt:
+            b = append(b, x.optionString(nil))
+        default:
+            switch s := strings.Fields(fmt.Sprint(v)); {
+            case len(s) == 1:
+                a = append(a, tclSafeInBraces(s[0]))
+            default:
+                for i, v := range s {
+                    s[i] = tclSafeInBraces(v)
+                }
+                a = append(a, fmt.Sprintf("{%s}", strings.Join(s, " ")))
+            }
+        }
+    }
+    switch {
+    case len(a) == 2 && a[0] == "from":
+        return evalErr(fmt.Sprintf("ttk::style element create from %s", a[1]))
+    default:
+        return evalErr(fmt.Sprintf("ttk::style element create {%s} image {%s} %s", tclSafeInBraces(elementName), strings.Join(a, " "), strings.Join(b, " ")))
+    }
 }
 
 // ttk::style — Manipulate style database
@@ -4406,7 +4911,7 @@ func StyleElementCreate(elementName, typ string, options ...any) string {
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleElementNames() []string {
-	return parseList(evalErr("ttk::style element names"))
+    return parseList(evalErr("ttk::style element names"))
 }
 
 // ttk::style — Manipulate style database
@@ -4421,7 +4926,7 @@ func StyleElementNames() []string {
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleElementOptions(element string) []string {
-	return parseList(evalErr(fmt.Sprintf("ttk::style element options %s", tclSafeString(element))))
+    return parseList(evalErr(fmt.Sprintf("ttk::style element options %s", tclSafeString(element))))
 }
 
 // ttk::style — Manipulate style database
@@ -4432,12 +4937,12 @@ func StyleElementOptions(element string) []string {
 // of layoutSpec. If layoutSpec is omitted, return the layout specification for
 // style style. Example:
 //
-//	StyleLayout("Red.Corner.Button",
-//		"Button.border", Sticky("nswe"), Border(1), Children(
-//			"Button.focus", Sticky("nswe"), Children(
-//				"Button.padding", Sticky("nswe"), Children(
-//					"Button.label", Sticky("nswe"),
-//					"Red.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
+//    StyleLayout("Red.Corner.Button",
+//        "Button.border", Sticky("nswe"), Border(1), Children(
+//            "Button.focus", Sticky("nswe"), Children(
+//                "Button.padding", Sticky("nswe"), Children(
+//                    "Button.label", Sticky("nswe"),
+//                    "Red.Corner.TButton.indicator", Side("right"), Sticky("ne")))))
 //
 // Additional information might be available at the [Tcl/Tk modifying a button]
 // and [Tcl/Tk style] pages.
@@ -4447,12 +4952,12 @@ func StyleElementOptions(element string) []string {
 // [Tcl/Tk modifying a button]: https://wiki.tcl-lang.org/page/Tutorial%3A+Modifying+a+ttk+button%27s+style
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleLayout(style string, options ...any) string {
-	if len(options) == 0 {
-		return evalErr(fmt.Sprintf("ttk::style layout %s", tclSafeString(style)))
-	}
+    if len(options) == 0 {
+        return evalErr(fmt.Sprintf("ttk::style layout %s", tclSafeString(style)))
+    }
 
-	evalErr(fmt.Sprintf("ttk::style layout %s %s", tclSafeString(style), children("", options...)))
-	return ""
+    evalErr(fmt.Sprintf("ttk::style layout %s %s", tclSafeString(style), children("", options...)))
+    return ""
 }
 
 // ttk::style — Manipulate style database
@@ -4466,7 +4971,7 @@ func StyleLayout(style string, options ...any) string {
 // specification for -option is found. If style does not exist, it is created.
 // For example,
 //
-//	StyleLookup("TButton", Font)
+//    StyleLookup("TButton", Font)
 //
 // may return "TkDefaultFont", depending on the operating system, theme in use
 // and the configured style options.
@@ -4477,13 +4982,13 @@ func StyleLayout(style string, options ...any) string {
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleLookup(style string, options ...any) string {
-	for i, v := range options {
-		if s := funcToTclOption(v); s != "" {
-			options[i] = rawOption(s)
-		}
-	}
+    for i, v := range options {
+        if s := funcToTclOption(v); s != "" {
+            options[i] = rawOption(s)
+        }
+    }
 
-	return evalErr(fmt.Sprintf("ttk::style lookup %s %s", tclSafeString(style), collectAny(options...)))
+    return evalErr(fmt.Sprintf("ttk::style lookup %s %s", tclSafeString(style), collectAny(options...)))
 }
 
 // ttk::style — Manipulate style database
@@ -4500,7 +5005,7 @@ func StyleLookup(style string, options ...any) string {
 // With no options the function returns the currently configured style map for
 // 'style'.  For example,
 //
-//	StyleMap("TButton")
+//    StyleMap("TButton")
 //
 // may return "-relief {{!disabled pressed} sunken}", depending on the
 // operating system, theme in use and the configured style options.
@@ -4508,28 +5013,28 @@ func StyleLookup(style string, options ...any) string {
 // Setting a style map is done by providing a list of options, each option is
 // followed by a list of states and a value. For example:
 //
-//	StyleMap("TButton",
-//		Background, "disabled", "#112233", "active", "#445566",
-//		Foreground, "disabled", "#778899",
-//			Relief, "pressed", "!disabled", "sunken")
+//    StyleMap("TButton",
+//        Background, "disabled", "#112233", "active", "#445566",
+//        Foreground, "disabled", "#778899",
+//            Relief, "pressed", "!disabled", "sunken")
 //
 // # Widget states
 //
 // The widget state is a bitmap of independent state flags.
 //
 //   - active - The mouse cursor is over the widget and pressing a mouse button
-//	 will cause some action to occur
+//     will cause some action to occur
 //   - alternate - A widget-specific alternate display format
 //   - background - Windows and Mac have a notion of an “active” or foreground
-//	 window. The background state is set for widgets in a background window,
-//	 and cleared for those in the foreground window
+//     window. The background state is set for widgets in a background window,
+//     and cleared for those in the foreground window
 //   - disabled - Widget is disabled under program control
 //   - focus - Widget has keyboard focus
 //   - invalid - The widget’s value is invalid
 //   - pressed - Widget is being pressed
 //   - readonly - Widget should not allow user modification
 //   - selected - “On”, “true”, or “current” for things like Checkbuttons and
-//	 radiobuttons
+//     radiobuttons
 //
 // A state specification is a sequence of state names, optionally prefixed with
 // an exclamation point indicating that the bit is off.
@@ -4540,92 +5045,92 @@ func StyleLookup(style string, options ...any) string {
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleMap(style string, options ...any) string {
-	if len(options) == 0 {
-		return evalErr(fmt.Sprintf("ttk::style map %s", tclSafeString(style)))
-	}
+    if len(options) == 0 {
+        return evalErr(fmt.Sprintf("ttk::style map %s", tclSafeString(style)))
+    }
 
-	a, err := parseStyleMapOpts(options...)
-	if err != nil {
-		fail(fmt.Errorf("parsing StyleMap options: %v", err))
-		return ""
-	}
+    a, err := parseStyleMapOpts(options...)
+    if err != nil {
+        fail(fmt.Errorf("parsing StyleMap options: %v", err))
+        return ""
+    }
 
-	evalErr(fmt.Sprintf("ttk::style map %s %s", tclSafeString(style), strings.Join(a, " ")))
-	return ""
+    evalErr(fmt.Sprintf("ttk::style map %s %s", tclSafeString(style), strings.Join(a, " ")))
+    return ""
 }
 
 func parseStyleMapOpts(in ...any) (r []string, err error) {
-	for len(in) != 0 {
-		opt := funcToTclOption(in[0])
-		if opt == "" {
-			return nil, fmt.Errorf("expected option, eg. 'Relief' (the function, not Relief(argument)), got %T", in[0])
-		}
+    for len(in) != 0 {
+        opt := funcToTclOption(in[0])
+        if opt == "" {
+            return nil, fmt.Errorf("expected option, eg. 'Relief' (the function, not Relief(argument)), got %T", in[0])
+        }
 
-		in = in[1:]
-		r = append(r, opt)
-		var list []string
-		for {
-			var states []string
-			for len(in) != 0 {
-				s, ok := in[0].(string)
-				if !ok || !isState(s) {
-					break
-				}
+        in = in[1:]
+        r = append(r, opt)
+        var list []string
+        for {
+            var states []string
+            for len(in) != 0 {
+                s, ok := in[0].(string)
+                if !ok || !isState(s) {
+                    break
+                }
 
-				states = append(states, s)
-				in = in[1:]
-			}
-			if len(in) == 0 {
-				return nil, fmt.Errorf("missing option value")
-			}
+                states = append(states, s)
+                in = in[1:]
+            }
+            if len(in) == 0 {
+                return nil, fmt.Errorf("missing option value")
+            }
 
-			val := tclSafeString(fmt.Sprint(in[0]))
-			in = in[1:]
+            val := tclSafeString(fmt.Sprint(in[0]))
+            in = in[1:]
 
-			var s string
-			switch len(states) {
-			case 0:
-				// nop
-			case 1:
-				s = states[0]
-			default:
-				s = fmt.Sprintf("{%s}", strings.Join(states, " "))
-			}
-			list = append(list, fmt.Sprintf("%s %s", s, val))
-			if len(in) == 0 || funcToTclOption(in[0]) != "" {
-				break
-			}
-		}
-		r = append(r, fmt.Sprintf("{%s}", strings.Join(list, " ")))
-	}
-	return r, nil
+            var s string
+            switch len(states) {
+            case 0:
+                // nop
+            case 1:
+                s = states[0]
+            default:
+                s = fmt.Sprintf("{%s}", strings.Join(states, " "))
+            }
+            list = append(list, fmt.Sprintf("%s %s", s, val))
+            if len(in) == 0 || funcToTclOption(in[0]) != "" {
+                break
+            }
+        }
+        r = append(r, fmt.Sprintf("{%s}", strings.Join(list, " ")))
+    }
+    return r, nil
 }
 
 func isState(s string) bool {
-	if len(s) == 0 {
-		return false
-	}
+    if len(s) == 0 {
+        return false
+    }
 
-	if s[0] == '!' {
-		s = s[1:]
-	}
+    if s[0] == '!' {
+        s = s[1:]
+    }
 
-	switch s {
-	case
-		"active",
-		"alternate",
-		"background",
-		"disabled",
-		"focus",
-		"invalid",
-		"pressed",
-		"readonly",
-		"selected":
+    switch s {
+    case
+        "active",
+        "alternate",
+        "background",
+        "disabled",
+        "focus",
+        "invalid",
+        "pressed",
+        "readonly",
+        "selected":
 
-		return true
-	default:
-		return false
-	}
+        return true
+    default:
+        return false
+    }
 }
 
 // Border option.
@@ -4633,7 +5138,7 @@ func isState(s string) bool {
 // Known uses:
 //   - [StyleLayout]
 func Border(val any) Opt {
-	return rawOption(fmt.Sprintf(`-border %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-border %s`, optionString(val)))
 }
 
 // Focuscolor option.
@@ -4641,7 +5146,7 @@ func Border(val any) Opt {
 // Known uses:
 //   - [StyleConfigure]
 func Focuscolor(val any) Opt {
-	return rawOption(fmt.Sprintf(`-focuscolor %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-focuscolor %s`, optionString(val)))
 }
 
 // Focusthickness option.
@@ -4649,7 +5154,7 @@ func Focuscolor(val any) Opt {
 // Known uses:
 //   - [StyleConfigure]
 func Focusthickness(val any) Opt {
-	return rawOption(fmt.Sprintf(`-focusthickness %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-focusthickness %s`, optionString(val)))
 }
 
 // Focussolid option.
@@ -4657,7 +5162,7 @@ func Focusthickness(val any) Opt {
 // Known uses:
 //   - [StyleConfigure]
 func Focussolid(val any) Opt {
-	return rawOption(fmt.Sprintf(`-focussolid %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-focussolid %s`, optionString(val)))
 }
 
 // Children option.
@@ -4667,15 +5172,15 @@ func Focussolid(val any) Opt {
 //
 // Children describes children of a style layout.
 func Children(list ...any) Opt {
-	return children("-children", list...)
+    return children("-children", list...)
 }
 
 func children(prefixed string, list ...any) Opt {
-	var a []string
-	for _, v := range list {
-		a = append(a, fmt.Sprint(v))
-	}
-	return rawOption(fmt.Sprintf(" %s {%s}", prefixed, strings.Join(a, " ")))
+    var a []string
+    for _, v := range list {
+        a = append(a, fmt.Sprint(v))
+    }
+    return rawOption(fmt.Sprintf(" %s {%s}", prefixed, strings.Join(a, " ")))
 }
 
 // ttk::style — Manipulate style database
@@ -4688,7 +5193,7 @@ func children(prefixed string, list ...any) Opt {
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 func StyleThemeNames() []string {
-	return parseList(evalErr("ttk::style theme names"))
+    return parseList(evalErr("ttk::style theme names"))
 }
 
 // ttk::style — Manipulate style database
@@ -4702,11 +5207,11 @@ func StyleThemeNames() []string {
 //
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 func StyleThemeStyles(themeName ...string) []string {
-	var s string
-	if len(themeName) != 0 {
-		s = tclSafeString(themeName[0])
-	}
-	return parseList(evalErr(fmt.Sprintf("ttk::style theme styles %s", s)))
+    var s string
+    if len(themeName) != 0 {
+        s = tclSafeString(themeName[0])
+    }
+    return parseList(evalErr(fmt.Sprintf("ttk::style theme styles %s", s)))
 }
 
 // ttk::style — Manipulate style database
@@ -4722,20 +5227,20 @@ func StyleThemeStyles(themeName ...string) []string {
 // [Tcl/Tk style]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_style.html
 // [Styles and Themes]: https://tkdocs.com/tutorial/styles.html
 func StyleThemeUse(themeName ...string) string {
-	var s string
-	if len(themeName) != 0 {
-		s = tclSafeString(themeName[0])
-	}
-	return evalErr(fmt.Sprintf("ttk::style theme use %s", s))
+    var s string
+    if len(themeName) != 0 {
+        s = tclSafeString(themeName[0])
+    }
+    return evalErr(fmt.Sprintf("ttk::style theme use %s", s))
 }
 
 // CourierFont returns "{courier new}" on Windows and "courier" elsewhere.
 func CourierFont() string {
-	if runtime.GOOS == "windows" {
-		return "courier new"
-	}
+    if runtime.GOOS == "windows" {
+        return "courier new"
+    }
 
-	return "courier"
+    return "courier"
 }
 
 // button — Create and manipulate 'button' action widgets
@@ -4751,7 +5256,7 @@ func CourierFont() string {
 //
 // [Tcl/Tk button]: https://www.tcl.tk/man/tcl9.0/TkCmd/button.html
 func (w *ButtonWidget) Invoke() string {
-	return evalErr(fmt.Sprintf("%s invoke", w))
+    return evalErr(fmt.Sprintf("%s invoke", w))
 }
 
 // TButton — Widget that issues a command when pressed
@@ -4764,7 +5269,7 @@ func (w *ButtonWidget) Invoke() string {
 //
 // [Tcl/Tk ttk::button]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_button.html
 func (w *TButtonWidget) Invoke() string {
-	return evalErr(fmt.Sprintf("%s invoke", w))
+    return evalErr(fmt.Sprintf("%s invoke", w))
 }
 
 // TButton — Widget that issues a command when pressed
@@ -4774,7 +5279,7 @@ func (w *TButtonWidget) Invoke() string {
 // Shiftrelief specifies how far the button contents are shifted down and right
 // in the pressed state. This action provides additional skeuomorphic feedback.
 func Shiftrelief(val any) Opt {
-	return rawOption(fmt.Sprintf(`-shiftrelief %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-shiftrelief %s`, optionString(val)))
 }
 
 // Bordercolor — Styling widgets
@@ -4784,7 +5289,7 @@ func Shiftrelief(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Bordercolor(val any) Opt {
-	return rawOption(fmt.Sprintf(`-bordercolor %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-bordercolor %s`, optionString(val)))
 }
 
 // Darkcolor — Styling widgets
@@ -4794,7 +5299,7 @@ func Bordercolor(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Darkcolor(val any) Opt {
-	return rawOption(fmt.Sprintf(`-darkcolor %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-darkcolor %s`, optionString(val)))
 }
 
 // Lightcolor — Styling widgets
@@ -4804,7 +5309,7 @@ func Darkcolor(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Lightcolor(val any) Opt {
-	return rawOption(fmt.Sprintf(`-lightcolor %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-lightcolor %s`, optionString(val)))
 }
 
 // Indicatorbackground — Styling widgets
@@ -4814,7 +5319,7 @@ func Lightcolor(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Indicatorbackground(val any) Opt {
-	return rawOption(fmt.Sprintf(`-indicatorbackground %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-indicatorbackground %s`, optionString(val)))
 }
 
 // Indicatorcolor — Styling widgets
@@ -4824,7 +5329,7 @@ func Indicatorbackground(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Indicatorcolor(val any) Opt {
-	return rawOption(fmt.Sprintf(`-indicatorcolor %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-indicatorcolor %s`, optionString(val)))
 }
 
 // Indicatormargin — Styling widgets
@@ -4834,7 +5339,7 @@ func Indicatorcolor(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Indicatormargin(val any) Opt {
-	return rawOption(fmt.Sprintf(`-indicatormargin %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-indicatormargin %s`, optionString(val)))
 }
 
 // Indicatorrelief — Styling widgets
@@ -4844,7 +5349,7 @@ func Indicatormargin(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Indicatorrelief(val any) Opt {
-	return rawOption(fmt.Sprintf(`-indicatorrelief %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-indicatorrelief %s`, optionString(val)))
 }
 
 // Arrowcolor — Styling widgets
@@ -4854,7 +5359,7 @@ func Indicatorrelief(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Arrowcolor(val any) Opt {
-	return rawOption(fmt.Sprintf(`-arrowcolor %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-arrowcolor %s`, optionString(val)))
 }
 
 // Arrowsize — Styling widgets
@@ -4864,7 +5369,7 @@ func Arrowcolor(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Arrowsize(val any) Opt {
-	return rawOption(fmt.Sprintf(`-arrosize %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-arrosize %s`, optionString(val)))
 }
 
 // Focusfill — Styling widgets
@@ -4874,7 +5379,7 @@ func Arrowsize(val any) Opt {
 //
 // [Tcl/Tk ttk_combobox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_combobox.html
 func Focusfill(val any) Opt {
-	return rawOption(fmt.Sprintf(`-focusfill %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-focusfill %s`, optionString(val)))
 }
 
 // Fieldbackground — Styling widgets
@@ -4884,7 +5389,7 @@ func Focusfill(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Fieldbackground(val any) Opt {
-	return rawOption(fmt.Sprintf(`-fieldbackground %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-fieldbackground %s`, optionString(val)))
 }
 
 // Insertcolor — Styling widgets
@@ -4894,7 +5399,7 @@ func Fieldbackground(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Insertcolor(val any) Opt {
-	return rawOption(fmt.Sprintf(`-insertcolor %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-insertcolor %s`, optionString(val)))
 }
 
 // Postoffset — Styling widgets
@@ -4904,7 +5409,7 @@ func Insertcolor(val any) Opt {
 //
 // [Tcl/Tk ttk_combobox]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_combobox.html
 func Postoffset(val any) Opt {
-	return rawOption(fmt.Sprintf(`-postoffset %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-postoffset %s`, optionString(val)))
 }
 
 // Labelmargins — Styling widgets
@@ -4914,7 +5419,7 @@ func Postoffset(val any) Opt {
 //
 // [Tcl/Tk ttk_labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_labelframe.html
 func Labelmargins(val any) Opt {
-	return rawOption(fmt.Sprintf(`-labelmargins %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-labelmargins %s`, optionString(val)))
 }
 
 // Labeloutside — Styling widgets
@@ -4924,7 +5429,7 @@ func Labelmargins(val any) Opt {
 //
 // [Tcl/Tk ttk_labelframe]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_labelframe.html
 func Labeloutside(val any) Opt {
-	return rawOption(fmt.Sprintf(`-labeloutside %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-labeloutside %s`, optionString(val)))
 }
 
 // Tabmargins — Styling widgets
@@ -4934,7 +5439,7 @@ func Labeloutside(val any) Opt {
 //
 // [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
 func Tabmargins(val any) Opt {
-	return rawOption(fmt.Sprintf(`-tabmargins %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-tabmargins %s`, optionString(val)))
 }
 
 // Tabposition — Styling widgets
@@ -4945,7 +5450,7 @@ func Tabmargins(val any) Opt {
 //
 // [Tcl/Tk ttk_notebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
 func Tabposition(val any) Opt {
-	return rawOption(fmt.Sprintf(`-tabposition %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-tabposition %s`, optionString(val)))
 }
 
 // Sashthickness — Styling widgets
@@ -4955,7 +5460,7 @@ func Tabposition(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Sashthickness(val any) Opt {
-	return rawOption(fmt.Sprintf(`-sashthickness %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-sashthickness %s`, optionString(val)))
 }
 
 // panedwindow — Create and manipulate 'panedwindow' split container widgets
@@ -4971,7 +5476,7 @@ func Sashthickness(val any) Opt {
 //
 // [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/panedwindow.html
 func (w *PanedwindowWidget) Add(subwindow *Window, options ...Opt) {
-	evalErr(fmt.Sprintf("%s add %s %s", w, subwindow, collect(options...)))
+    evalErr(fmt.Sprintf("%s add %s %s", w, subwindow, collect(options...)))
 }
 
 // panedwindow — Create and manipulate 'panedwindow' split container widgets
@@ -4992,7 +5497,7 @@ func (w *PanedwindowWidget) Add(subwindow *Window, options ...Opt) {
 //
 // [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/panedwindow.html
 func (w *PanedwindowWidget) Paneconfigure(subwindow *Window, options ...Opt) string {
-	return evalErr(fmt.Sprintf("%s paneconfigure %s %s", w, subwindow, collect(options...)))
+    return evalErr(fmt.Sprintf("%s paneconfigure %s %s", w, subwindow, collect(options...)))
 }
 
 // Stretch option.
@@ -5015,7 +5520,7 @@ func (w *PanedwindowWidget) Paneconfigure(subwindow *Window, options ...Opt) str
 // Known uses:
 //   - [PanedwindowWidget] (command specific)
 func Stretch(when string) Opt {
-	return rawOption(fmt.Sprintf(`-stretch %s`, tclSafeString(when)))
+    return rawOption(fmt.Sprintf(`-stretch %s`, tclSafeString(when)))
 }
 
 // panedwindow — Create and manipulate 'panedwindow' split container widgets
@@ -5029,7 +5534,7 @@ func Stretch(when string) Opt {
 //
 // [Tcl/Tk panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/panedwindow.html
 func (w *PanedwindowWidget) Panecget(subwindow *Window, opt any) string {
-	return evalErr(fmt.Sprintf("%s panecget %s %s", w, subwindow, funcToTclOption(opt)))
+    return evalErr(fmt.Sprintf("%s panecget %s %s", w, subwindow, funcToTclOption(opt)))
 }
 
 // ttk::panedwindow — Multi-pane container window
@@ -5042,7 +5547,7 @@ func (w *PanedwindowWidget) Panecget(subwindow *Window, opt any) string {
 //
 // [Tcl/Tk ttk_panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_panedwindow.html
 func (w *TPanedwindowWidget) Add(subwindow *Window, options ...Opt) {
-	evalErr(fmt.Sprintf("%s add %s %s", w, subwindow, collect(options...)))
+    evalErr(fmt.Sprintf("%s add %s %s", w, subwindow, collect(options...)))
 }
 
 // Gripsize — Styling widgets
@@ -5054,7 +5559,7 @@ func (w *TPanedwindowWidget) Add(subwindow *Window, options ...Opt) {
 // [Tcl/Tk ttk_panedwindow]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_panedwindow.html
 // [Tcl/Tk ttk_scrollbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scrollbar.html
 func Gripsize(val any) Opt {
-	return rawOption(fmt.Sprintf(`-tabposition %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-tabposition %s`, optionString(val)))
 }
 
 // Maxphase — Styling widgets
@@ -5064,7 +5569,7 @@ func Gripsize(val any) Opt {
 //
 // [Tcl/Tk ttk_progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
 func Maxphase(val any) Opt {
-	return rawOption(fmt.Sprintf(`-maxphase %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-maxphase %s`, optionString(val)))
 }
 
 // Period — Styling widgets
@@ -5074,7 +5579,7 @@ func Maxphase(val any) Opt {
 //
 // [Tcl/Tk ttk_progressbar]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_progressbar.html
 func Period(val any) Opt {
-	return rawOption(fmt.Sprintf(`-period %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-period %s`, optionString(val)))
 }
 
 // Groovewidth — Styling widgets
@@ -5084,7 +5589,7 @@ func Period(val any) Opt {
 //
 // [Tcl/Tk ttk_scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scale.html
 func Groovewidth(val any) Opt {
-	return rawOption(fmt.Sprintf(`-groovewidth %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-groovewidth %s`, optionString(val)))
 }
 
 // Sliderwidth — Styling widgets
@@ -5094,7 +5599,7 @@ func Groovewidth(val any) Opt {
 //
 // [Tcl/Tk ttk_scale]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_scale.html
 func Sliderwidth(val any) Opt {
-	return rawOption(fmt.Sprintf(`-sliderwidth %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-sliderwidth %s`, optionString(val)))
 }
 
 // Troughrelief — Styling widgets
@@ -5104,7 +5609,7 @@ func Sliderwidth(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Troughrelief(val any) Opt {
-	return rawOption(fmt.Sprintf(`-troughrelief %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-troughrelief %s`, optionString(val)))
 }
 
 // Indent — Styling widgets
@@ -5114,7 +5619,7 @@ func Troughrelief(val any) Opt {
 //
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func Indent(val any) Opt {
-	return rawOption(fmt.Sprintf(`-indent %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-indent %s`, optionString(val)))
 }
 
 // Columnseparatorwidth — Styling widgets
@@ -5124,7 +5629,7 @@ func Indent(val any) Opt {
 //
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func Columnseparatorwidth(val any) Opt {
-	return rawOption(fmt.Sprintf(`-columnseparatorwidth %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-columnseparatorwidth %s`, optionString(val)))
 }
 
 // Rowheight — Styling widgets
@@ -5134,7 +5639,7 @@ func Columnseparatorwidth(val any) Opt {
 //
 // [Changing Widget Colors]: https://wiki.tcl-lang.org/page/Changing+Widget+Colors
 func Rowheight(val any) Opt {
-	return rawOption(fmt.Sprintf(`-rowheight %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-rowheight %s`, optionString(val)))
 }
 
 // Stripedbackground — Styling widgets
@@ -5144,7 +5649,7 @@ func Rowheight(val any) Opt {
 //
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func Stripedbackground(val any) Opt {
-	return rawOption(fmt.Sprintf(`-stripedbackground %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-stripedbackground %s`, optionString(val)))
 }
 
 // Indicatormargins — Styling widgets
@@ -5154,7 +5659,7 @@ func Stripedbackground(val any) Opt {
 //
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func Indicatormargins(val any) Opt {
-	return rawOption(fmt.Sprintf(`-indicatormargins %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-indicatormargins %s`, optionString(val)))
 }
 
 // Indicatorsize — Styling widgets
@@ -5164,7 +5669,7 @@ func Indicatormargins(val any) Opt {
 //
 // [Tcl/Tk ttk_treeview]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_treeview.html
 func Indicatorsize(val any) Opt {
-	return rawOption(fmt.Sprintf(`-indicatorsize %s`, optionString(val)))
+    return rawOption(fmt.Sprintf(`-indicatorsize %s`, optionString(val)))
 }
 
 // wm — Communicate with window manager
@@ -5211,14 +5716,14 @@ func Indicatorsize(val any) Opt {
 //
 // [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
 func WmProtocol(w *Window, name string, command any) string {
-	switch {
-	case command == nil:
-		return evalErr(fmt.Sprintf("wm protocol %s %s", w, tclSafeString(name)))
-	case command == "":
-		return evalErr(fmt.Sprintf("wm protocol %s %s {}", w, tclSafeString(name)))
-	default:
-		return evalErr(fmt.Sprintf("wm protocol %s %s %s", w, tclSafeString(name), newEventHandler("", command).optionString(w)))
-	}
+    switch {
+    case command == nil:
+        return evalErr(fmt.Sprintf("wm protocol %s %s", w, tclSafeString(name)))
+    case command == "":
+        return evalErr(fmt.Sprintf("wm protocol %s %s {}", w, tclSafeString(name)))
+    default:
+        return evalErr(fmt.Sprintf("wm protocol %s %s %s", w, tclSafeString(name), newEventHandler("", command).optionString(w)))
+    }
 }
 
 // wm — Communicate with window manager
@@ -5239,7 +5744,7 @@ func WmProtocol(w *Window, name string, command any) string {
 //
 // [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
 func WmSetMaxSize(w *Window, width, height int) {
-	evalErr(fmt.Sprintf("wm maxsize %s %v %v", w, width, height))
+    evalErr(fmt.Sprintf("wm maxsize %s %v %v", w, width, height))
 }
 
 // wm — Communicate with window manager
@@ -5254,27 +5759,27 @@ func WmSetMaxSize(w *Window, width, height int) {
 //
 // [Tcl/Tk wm]: https://www.tcl.tk/man/tcl9.0/TkCmd/wm.html
 func WmMaxSize(w *Window) (width, height int) {
-	a := strings.Fields(evalErr(fmt.Sprintf("wm maxsize %s", w)))
-	if len(a) != 2 {
-		return -1, -1
-	}
+    a := strings.Fields(evalErr(fmt.Sprintf("wm maxsize %s", w)))
+    if len(a) != 2 {
+        return -1, -1
+    }
 
-	var err error
-	if width, err = strconv.Atoi(a[0]); err != nil {
-		return -1, -1
-	}
+    var err error
+    if width, err = strconv.Atoi(a[0]); err != nil {
+        return -1, -1
+    }
 
-	if height, err = strconv.Atoi(a[1]); err != nil {
-		return -1, -1
-	}
+    if height, err = strconv.Atoi(a[1]); err != nil {
+        return -1, -1
+    }
 
-	return width, height
+    return width, height
 }
 
 // Initalize enforces the parts of package initialization that are otherwise
 // done lazily. The function may panic if ErrorMode is PanicOnError.
 func Initialize() {
-	lazyInit()
+    lazyInit()
 }
 
 // ttk::notebook — Multi-paned container widget
@@ -5289,7 +5794,7 @@ func Initialize() {
 //
 // [Tcl/Tk TNotebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
 func (w *TNotebookWidget) Add(options ...Opt) {
-	evalErr(fmt.Sprintf("%s add %v", w, winCollect(w.Window, options...)))
+    evalErr(fmt.Sprintf("%s add %v", w, winCollect(w.Window, options...)))
 }
 
 // TNotebook — Multi-paned container widget
@@ -5304,11 +5809,11 @@ func (w *TNotebookWidget) Add(options ...Opt) {
 //
 // [Tcl/Tk TNotebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
 func (w *TNotebookWidget) Select(tabid any) string {
-	var arg string
-	if tabid != nil && tabid != "" {
-		arg = tclSafeString(fmt.Sprint(tabid))
-	}
-	return evalErr(fmt.Sprintf("%s select %s", w, arg))
+    var arg string
+    if tabid != nil && tabid != "" {
+        arg = tclSafeString(fmt.Sprint(tabid))
+    }
+    return evalErr(fmt.Sprintf("%s select %s", w, arg))
 }
 
 // TNotebook — Multi-paned container widget
@@ -5322,11 +5827,11 @@ func (w *TNotebookWidget) Select(tabid any) string {
 //
 // [Tcl/Tk TNotebook]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_notebook.html
 func (w *TNotebookWidget) Tabs() (r []*Window) {
-	a := parseList(evalErr(fmt.Sprintf("%s tabs", w)))
-	for _, v := range a {
-		r = append(r, windowIndex[v])
-	}
-	return r
+    a := parseList(evalErr(fmt.Sprintf("%s tabs", w)))
+    for _, v := range a {
+        r = append(r, windowIndex[v])
+    }
+    return r
 }
 
 // tk_dialog — Create modal dialog and wait for response
@@ -5337,24 +5842,24 @@ func (w *TNotebookWidget) Tabs() (r []*Window) {
 // the tk_messageBox. Its arguments describe a dialog box:
 //
 //   - window - Name of top-level window to use for dialog. Any existing window
-//	 by this name is destroyed.
+//     by this name is destroyed.
 //
 //   - title - Text to appear in the window manager's title bar for the dialog.
 //
 //   - text - Message to appear in the top portion of the dialog box.
 //
 //   - bitmap - If non-empty, specifies a bitmap (in a form suitable for
-//	 Tk_GetBitmap) to display in the top portion of the dialog, to the left of
-//	 the text. If this is an empty string then no bitmap is displayed in the
-//	 dialog.
+//     Tk_GetBitmap) to display in the top portion of the dialog, to the left of
+//     the text. If this is an empty string then no bitmap is displayed in the
+//     dialog.
 //
 //   - defaultButton - If this is an integer greater than or equal to zero, then it
-//	 gives the index of the button that is to be the default button for the
-//	 dialog (0 for the leftmost button, and so on). If negative or an empty
-//	 string then there will not be any default button.
+//     gives the index of the button that is to be the default button for the
+//     dialog (0 for the leftmost button, and so on). If negative or an empty
+//     string then there will not be any default button.
 //
 //   - buttons - There will be one button for each of these arguments. Each string
-//	 specifies text to display in a button, in order from left to right.
+//     specifies text to display in a button, in order from left to right.
 //
 // After creating a dialog box, tk_dialog waits for the user to select one of
 // the buttons either by clicking on the button with the mouse or by typing
@@ -5367,39 +5872,39 @@ func (w *TNotebookWidget) Tabs() (r []*Window) {
 // prevents the user from interacting with the application in any way except to
 // invoke the dialog box.
 // func Dialog(window *Window, title, text, bitmap string, defaultButton int, buttons ...string) (r int) {
-// 	s := evalErr(fmt.Sprintf("tk_dialog %s %s %s", window, tclSafeStrings(title, text, bitmap), tclSafeStrings(buttons...)))
-// 	if s == "" {
-// 		return -1
-// 	}
+//     s := evalErr(fmt.Sprintf("tk_dialog %s %s %s", window, tclSafeStrings(title, text, bitmap), tclSafeStrings(buttons...)))
+//     if s == "" {
+//         return -1
+//     }
 //
-// 	var err error
-// 	if r, err = strconv.Atoi(s); err != nil {
-// 		fail(err)
-// 		return -1
-// 	}
+//     var err error
+//     if r, err = strconv.Atoi(s); err != nil {
+//         fail(err)
+//         return -1
+//     }
 //
-// 	return r
+//     return r
 // }
 
 type Ticker struct {
-	eh *eventHandler
+    eh *eventHandler
 }
 
 func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
-	eh := newEventHandler("", handler)
-	nm := fmt.Sprintf("ticker%v", id.Add(1))
-	if _, err = eval(fmt.Sprintf(`proc %s {} {
-	after %v {
-		eventDispatcher %v
-		%[1]s
-	}
+    eh := newEventHandler("", handler)
+    nm := fmt.Sprintf("ticker%v", id.Add(1))
+    if _, err = eval(fmt.Sprintf(`proc %s {} {
+    after %v {
+        eventDispatcher %v
+        %[1]s
+    }
 }
 %[1]s
 `, nm, d.Milliseconds(), eh.id)); err != nil {
-		return nil, err
-	}
+        return nil, err
+    }
 
-	return &Ticker{eh: eh}, nil
+    return &Ticker{eh: eh}, nil
 }
 
 
@@ -5416,7 +5921,7 @@ func NewTicker(d time.Duration, handler func()) (r *Ticker, err error) {
 //
 // [Tcl/Tk TCheckbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/ttk_checkbutton.html
 func (w *TCheckbuttonWidget) Invoke() string {
-	return evalErr(fmt.Sprintf("%s invoke", w))
+    return evalErr(fmt.Sprintf("%s invoke", w))
 }
 
 // // ttk::checkbutton — On/off widget
@@ -5425,24 +5930,24 @@ func (w *TCheckbuttonWidget) Invoke() string {
 // //
 // // Set the on/off state of 'w'.
 // func (w *TCheckbuttonWidget) Set(on bool) string {
-// 	return evalErr(fmt.Sprintf("set %s %v", w.variable(cfgVar), on))
+//     return evalErr(fmt.Sprintf("set %s %v", w.variable(cfgVar), on))
 // }
 //
 // func cfgVar(w *Window, nm string) {
-// 	w.Configure(Variable(nm))
+//     w.Configure(Variable(nm))
 // }
 //
 // func (w *Window) variable(reg func(w *Window, nm string)) (r string) {
-// 	if r, ok := variables[w]; ok {
-// 		return r
-// 	}
+//     if r, ok := variables[w]; ok {
+//         return r
+//     }
 //
-// 	r = fmt.Sprintf("::tk9var%d", id.Add(1))
-// 	variables[w] = r
-// 	if reg != nil {
-// 		reg(w, r)
-// 	}
-// 	return r
+//     r = fmt.Sprintf("::tk9var%d", id.Add(1))
+//     variables[w] = r
+//     if reg != nil {
+//         reg(w, r)
+//     }
+//     return r
 // }
 //
 // // ttk::checkbutton — On/off widget
@@ -5451,19 +5956,19 @@ func (w *TCheckbuttonWidget) Invoke() string {
 // //
 // // Get the on/off state of 'w'.
 // func (w *TCheckbuttonWidget) Get() bool {
-// 	return toBool(evalErr(fmt.Sprintf("return $%s", w.variable(cfgVar))))
+//     return toBool(evalErr(fmt.Sprintf("return $%s", w.variable(cfgVar))))
 // }
 //
 // func toBool(s string) (r bool) {
-// 	switch s {
-// 	case "false", "0":
-// 		return false
-// 	case "true", "1":
-// 		return true
-// 	}
+//     switch s {
+//     case "false", "0":
+//         return false
+//     case "true", "1":
+//         return true
+//     }
 //
-// 	fail(fmt.Errorf("invalid boolean: %q", s))
-// 	return false
+//     fail(fmt.Errorf("invalid boolean: %q", s))
+//     return false
 // }
 
 // checkbutton — Create and manipulate 'checkbutton' boolean selection widgets
@@ -5476,7 +5981,7 @@ func (w *TCheckbuttonWidget) Invoke() string {
 //
 // [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
 func (w *CheckbuttonWidget) Select() {
-	evalErr(fmt.Sprintf("%s select", w))
+    evalErr(fmt.Sprintf("%s select", w))
 }
 
 // checkbutton — Create and manipulate 'checkbutton' boolean selection widgets
@@ -5494,7 +5999,7 @@ func (w *CheckbuttonWidget) Select() {
 //
 // [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
 func (w *CheckbuttonWidget) Invoke() string {
-	return evalErr(fmt.Sprintf("%s invoke", w))
+    return evalErr(fmt.Sprintf("%s invoke", w))
 }
 
 // checkbutton — Create and manipulate 'checkbutton' boolean selection widgets
@@ -5507,7 +6012,7 @@ func (w *CheckbuttonWidget) Invoke() string {
 //
 // [Tcl/Tk checkbutton]: https://www.tcl.tk/man/tcl9.0/TkCmd/checkbutton.html
 func (w *CheckbuttonWidget) Deselect() {
-	evalErr(fmt.Sprintf("%s deselect", w))
+    evalErr(fmt.Sprintf("%s deselect", w))
 }
 
 // font — Create and inspect fonts.
@@ -5533,17 +6038,17 @@ func (w *CheckbuttonWidget) Deselect() {
 //
 // [Tcl/Tk font]: https://www.tcl.tk/man/tcl9.0/TkCmd/font.html
 func FontConfigure(name string, options ...any) []string {
-	for i, v := range options {
-		if s := funcToTclOption(v); s != "" {
-			options[i] = rawOption(s)
-		}
-	}
-	return parseList(evalErr(fmt.Sprintf("font configure %s %s", tclSafeString(name), collectAny(options...))))
+    for i, v := range options {
+        if s := funcToTclOption(v); s != "" {
+            options[i] = rawOption(s)
+        }
+    }
+    return parseList(evalErr(fmt.Sprintf("font configure %s %s", tclSafeString(name), collectAny(options...))))
 }
 
 var (
-	pngSig = []byte{137, 80, 78, 71, 13, 10, 26, 10} // http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
-	icoSig = []byte{'\x00', '\x00', '\x01', '\x00'}  // https://en.wikipedia.org/wiki/ICO_(file_format)#Header
+    pngSig = []byte{137, 80, 78, 71, 13, 10, 26, 10} // http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
+    icoSig = []byte{'\x00', '\x00', '\x01', '\x00'}  // https://en.wikipedia.org/wiki/ICO_(file_format)#Header
 )
 
 // Data option.
@@ -5552,29 +6057,29 @@ var (
 //   - [NewBitmap] (command specific)
 //   - [NewPhoto] (command specific)
 func Data(val any) Opt {
-	switch x := val.(type) {
-	case []byte:
-		switch {
-		case bytes.HasPrefix(x, pngSig):
-			// ok
-		case bytes.HasPrefix(x, icoSig):
-			b := bytes.NewBuffer(x)
-			img, err := ico.Decode(bytes.NewReader(x))
-			if err != nil {
-				fail(err)
-				return rawOption("")
-			}
+    switch x := val.(type) {
+    case []byte:
+        switch {
+        case bytes.HasPrefix(x, pngSig):
+            // ok
+        case bytes.HasPrefix(x, icoSig):
+            b := bytes.NewBuffer(x)
+            img, err := ico.Decode(bytes.NewReader(x))
+            if err != nil {
+                fail(err)
+                return rawOption("")
+            }
 
-			b.Reset()
-			if err := png.Encode(b, img); err != nil {
-				fail(err)
-				return rawOption("")
-			}
+            b.Reset()
+            if err := png.Encode(b, img); err != nil {
+                fail(err)
+                return rawOption("")
+            }
 
-			val = b.Bytes()
-		}
-	}
-	return rawOption(fmt.Sprintf(`-data %s`, optionString(val)))
+            val = b.Bytes()
+        }
+    }
+    return rawOption(fmt.Sprintf(`-data %s`, optionString(val)))
 }
 
 // winfo — Return window-related information
@@ -5592,7 +6097,7 @@ func Data(val any) Opt {
 //
 // [Tcl/Tk winfo]: https://www.tcl.tk/man/tcl9.0/TkCmd/winfo.html
 func WinfoHeight(w *Window) string {
-	return evalErr(fmt.Sprintf("winfo height %s", w))
+    return evalErr(fmt.Sprintf("winfo height %s", w))
 }
 
 // winfo — Return window-related information
@@ -5610,7 +6115,7 @@ func WinfoHeight(w *Window) string {
 //
 // [Tcl/Tk winfo]: https://www.tcl.tk/man/tcl9.0/TkCmd/winfo.html
 func WinfoWidth(w *Window) string {
-	return evalErr(fmt.Sprintf("winfo width %s", w))
+    return evalErr(fmt.Sprintf("winfo width %s", w))
 }
 
 // tooltip — Tooltip management
@@ -5624,11 +6129,11 @@ func WinfoWidth(w *Window) string {
 //
 // [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
 func TooltipClear(pattern string) {
-	s := ""
-	if pattern != "" {
-		s = tclSafeString(pattern)
-	}
-	evalErr(fmt.Sprintf("tooltip::tooltip clear %s", s))
+    s := ""
+    if pattern != "" {
+        s = tclSafeString(pattern)
+    }
+    evalErr(fmt.Sprintf("tooltip::tooltip clear %s", s))
 }
 
 // tooltip — Tooltip management
@@ -5644,7 +6149,7 @@ func TooltipClear(pattern string) {
 //
 // [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
 func TooltipConfigure(options ...any) string {
-	return evalErr(fmt.Sprintf("tooltip::tooltip configure %s", collectAny(options)))
+    return evalErr(fmt.Sprintf("tooltip::tooltip configure %s", collectAny(options)))
 }
 
 // tooltip — Tooltip management
@@ -5660,11 +6165,11 @@ func TooltipConfigure(options ...any) string {
 //
 // [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
 func TooltipDelay(delay time.Duration) string {
-	s := ""
-	if delay >= 0 {
-		s = optionString(delay)
-	}
-	return evalErr(fmt.Sprintf("tooltip::tooltip delay %s", s))
+    s := ""
+    if delay >= 0 {
+        s = optionString(delay)
+    }
+    return evalErr(fmt.Sprintf("tooltip::tooltip delay %s", s))
 }
 
 // tooltip — Tooltip management
@@ -5679,7 +6184,7 @@ func TooltipDelay(delay time.Duration) string {
 //
 // [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
 func TooltipFade(v bool) string {
-	return evalErr(fmt.Sprintf("tooltip::tooltip fade %v", v))
+    return evalErr(fmt.Sprintf("tooltip::tooltip fade %v", v))
 }
 
 // tooltip — Tooltip management
@@ -5692,7 +6197,7 @@ func TooltipFade(v bool) string {
 //
 // [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
 func TooltipOff(v bool) string {
-	return evalErr("tooltip::tooltip off")
+    return evalErr("tooltip::tooltip off")
 }
 
 // tooltip — Tooltip management
@@ -5705,7 +6210,7 @@ func TooltipOff(v bool) string {
 //
 // [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
 func TooltipOn(v bool) string {
-	return evalErr("tooltip::tooltip on")
+    return evalErr("tooltip::tooltip on")
 }
 
 // tooltip — Tooltip management
@@ -5721,44 +6226,44 @@ func TooltipOn(v bool) string {
 // column headings, ttk::notebook tabs, or text widget tags.
 //
 //   - [Heading] columnId: This option is used to set a tooltip for a
-//	 ttk::treeview column heading. The column does not need to already exist.
-//	 You should not use the same identifiers for columns and items in a widget
-//	 for which you are using tooltips as their tooltips will be mixed. The
-//	 widget must be a ttk::treeview widget.
+//     ttk::treeview column heading. The column does not need to already exist.
+//     You should not use the same identifiers for columns and items in a widget
+//     for which you are using tooltips as their tooltips will be mixed. The
+//     widget must be a ttk::treeview widget.
 //
 //   - [Image] image: The specified (photo) image will be displayed to the left
-//	 of the primary tooltip message.
+//     of the primary tooltip message.
 //
 //   - [Index] index: This option is used to set a tooltip on a menu item. The
-//	 index may be either the entry index or the entry label. The widget must be
-//	 a menu widget but the entries do not have to exist when the tooltip is
-//	 set.
+//     index may be either the entry index or the entry label. The widget must be
+//     a menu widget but the entries do not have to exist when the tooltip is
+//     set.
 //
 //   - [Info] info: The specified info text will be displayed as additional
-//	 information below the primary tooltip message.
+//     information below the primary tooltip message.
 //
 //   - [Items] items: This option is used to set a tooltip for canvas, listbox
-//	 or ttk::treview items. For the canvas widget, the item must already be
-//	 present in the canvas and will be found with a find withtag lookup. For
-//	 listbox and ttk::treview widgets the item(s) may be created later but the
-//	 programmer is responsible for managing the link between the listbox or
-//	 ttk::treview item index and the corresponding tooltip. If the listbox or
-//	 ttk::treview items are re-ordered, the tooltips will need amending.
+//     or ttk::treview items. For the canvas widget, the item must already be
+//     present in the canvas and will be found with a find withtag lookup. For
+//     listbox and ttk::treview widgets the item(s) may be created later but the
+//     programmer is responsible for managing the link between the listbox or
+//     ttk::treview item index and the corresponding tooltip. If the listbox or
+//     ttk::treview items are re-ordered, the tooltips will need amending.
 //
-//	 If the widget is not a canvas, listbox or ttk::treview then an error is
-//	 raised.
+//     If the widget is not a canvas, listbox or ttk::treview then an error is
+//     raised.
 //
 //   - [Tab] tabId: The -tab option can be used to set a tooltip for a
-//	 ttk::notebook tab. The tab should already be present when this command is
-//	 called, or an error will be returned. The widget must be a ttk::notebook
-//	 widget.
+//     ttk::notebook tab. The tab should already be present when this command is
+//     called, or an error will be returned. The widget must be a ttk::notebook
+//     widget.
 //
 //   - [Tag] name: The -tag option can be used to set a tooltip for a text
-//	 widget tag. The tag should already be present when this command is called,
-//	 or an error will be returned. The widget must be a text widget.
+//     widget tag. The tag should already be present when this command is called,
+//     or an error will be returned. The widget must be a text widget.
 //
 //   - "--": The -- option marks the end of options. The argument following
-//	 this one will be treated as message even if it starts with a -.
+//     this one will be treated as message even if it starts with a -.
 //
 // Tooltip returns 'w'.
 //
@@ -5766,8 +6271,8 @@ func TooltipOn(v bool) string {
 //
 // [Tklib tooltip]: https://core.tcl-lang.org/tklib/doc/trunk/embedded/md/tklib/files/modules/tooltip/tooltip.md
 func Tooltip(w Widget, options ...any) (r Widget) {
-	evalErr(fmt.Sprintf("tooltip::tooltip %s %s", w, collectAny(options...)))
-	return w
+    evalErr(fmt.Sprintf("tooltip::tooltip %s %s", w, collectAny(options...)))
+    return w
 }
 
 // Heading option.
@@ -5775,7 +6280,7 @@ func Tooltip(w Widget, options ...any) (r Widget) {
 // Known uses:
 //   - [Tooltip] (command specific)
 func Heading(columnId string) Opt {
-	return rawOption(fmt.Sprintf(`-heading %s`, optionString(columnId)))
+    return rawOption(fmt.Sprintf(`-heading %s`, optionString(columnId)))
 }
 
 // Index option.
@@ -5783,7 +6288,7 @@ func Heading(columnId string) Opt {
 // Known uses:
 //   - [Tooltip] (command specific)
 func Index(index any) Opt {
-	return rawOption(fmt.Sprintf(`-index %s`, optionString(index)))
+    return rawOption(fmt.Sprintf(`-index %s`, optionString(index)))
 }
 
 // Info option.
@@ -5791,7 +6296,7 @@ func Index(index any) Opt {
 // Known uses:
 //   - [Tooltip] (command specific)
 func Info(info string) Opt {
-	return rawOption(fmt.Sprintf(`-info %s`, optionString(info)))
+    return rawOption(fmt.Sprintf(`-info %s`, optionString(info)))
 }
 
 // Items option.
@@ -5799,7 +6304,7 @@ func Info(info string) Opt {
 // Known uses:
 //   - [Tooltip] (command specific)
 func Items(items ...any) Opt {
-	return rawOption(fmt.Sprintf(`-items %s`, collectAny(items...)))
+    return rawOption(fmt.Sprintf(`-items %s`, collectAny(items...)))
 }
 
 // Tab option.
@@ -5807,7 +6312,7 @@ func Items(items ...any) Opt {
 // Known uses:
 //   - [Tooltip] (command specific)
 func Tab(tabId any) Opt {
-	return rawOption(fmt.Sprintf(`-tab %s`, collectAny(tabId)))
+    return rawOption(fmt.Sprintf(`-tab %s`, collectAny(tabId)))
 }
 
 // Tag option.
@@ -5815,5 +6320,5 @@ func Tab(tabId any) Opt {
 // Known uses:
 //   - [Tooltip] (command specific)
 func Tag(name string) Opt {
-	return rawOption(fmt.Sprintf(`-tag %s`, optionString(name)))
+    return rawOption(fmt.Sprintf(`-tag %s`, optionString(name)))
 }
