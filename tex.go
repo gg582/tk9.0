@@ -14,7 +14,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package tk9_0 // import "github.com/yoonjin67/tk9.0"
+package tk9_0 // import "modernc.org/tk9.0"
 
 import (
 	"bytes"
@@ -29,11 +29,11 @@ import (
 	"github.com/disintegration/imaging"
 	"golang.org/x/image/font"
 	fixedmath "golang.org/x/image/math/fixed"
-	"github.com/yoonjin67/knuth/dvi"
-	"github.com/yoonjin67/knuth/font/fixed"
-	"github.com/yoonjin67/knuth/font/pkf"
-	"github.com/yoonjin67/knuth/kpath"
-	"github.com/yoonjin67/knuth/tex"
+	"modernc.org/knuth/dvi"
+	"modernc.org/knuth/font/fixed"
+	"modernc.org/knuth/font/pkf"
+	"modernc.org/knuth/kpath"
+	"modernc.org/knuth/tex"
 )
 
 const (
