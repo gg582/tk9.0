@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package tk9_0 // import "github.com/yoonjin67/tk9.0"
+package tk9_0 // import "modernc.orgtk9.0"
 
 import (
 	_ "embed"
@@ -14,8 +14,8 @@ import (
 	_ "github.com/adrg/xdg"       // generator.go
 	_ "github.com/expr-lang/expr" // examples
 	_ "golang.org/x/net/html"     // generator.go
-	_ "github.com/yoonjin67/ngrab/lib"     // generator.go
-	_ "github.com/yoonjin67/rec/lib"       // generator.go
+	_ "modernc.orgngrab/lib"     // generator.go
+	_ "modernc.orgrec/lib"       // generator.go
 )
 
 func TestMain(m *testing.M) {

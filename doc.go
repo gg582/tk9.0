@@ -11,7 +11,7 @@
 //
 //	package main
 //
-//	import . "github.com/yoonjin67/tk9.0"
+//	import . "modernc.orgtk9.0"
 //
 //	func main() {
 //		Pack(Button(Txt("Hello"), Command(func() { Destroy(App) })))
@@ -36,7 +36,7 @@
 //	// Build this program using -tags=tk.dmesg
 //	package main
 //
-//	import . "github.com/yoonjin67/tk9.0"
+//	import . "modernc.orgtk9.0"
 //
 //	func main() {
 //		Pack(
@@ -2353,11 +2353,11 @@
 // [MVP]: https://en.wikipedia.org/wiki/Minimum_viable_product
 // [RERO]: https://en.wikipedia.org/wiki/Release_early,_release_often
 // [Tkinter]: https://en.wikipedia.org/wiki/Tkinter
-// [equ]: https://pkg.go.dev/github.com/yoonjin67/equ
+// [equ]: https://pkg.go.dev/modernc.orgequ
 // [issue tracker]: https://gitlab.com/cznic/tk9.0/-/issues
 // [jnml's LiberaPay]: https://liberapay.com/jnml/donate
 // [modern-c.appspot.com]: https://modern-c.appspot.com/-/builder/?importpath=github.com/yoonjin67%2ftk9.0
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
-package tk9_0 // import "github.com/yoonjin67/tk9.0"
+package tk9_0 // import "modernc.orgtk9.0"
