@@ -14,8 +14,8 @@ import (
 	_ "github.com/adrg/xdg"       // generator.go
 	_ "github.com/expr-lang/expr" // examples
 	_ "golang.org/x/net/html"     // generator.go
-	_ "modernc.orgngrab/lib"     // generator.go
-	_ "modernc.orgrec/lib"       // generator.go
+	_ "modernc.org/ngrab/lib"     // generator.go
+	_ "modernc.org/rec/lib"       // generator.go
 )
 
 func TestMain(m *testing.M) {

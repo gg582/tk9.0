@@ -17,7 +17,7 @@ import (
 
 	"github.com/ebitengine/purego"
 	"github.com/evilsocket/islazy/zip"
-	"modernc.orgmemory"
+	"modernc.org/memory"
 )
 
 var (

@@ -11,7 +11,7 @@
 //
 //	package main
 //
-//	import . "modernc.orgtk9.0"
+//	import . "modernc.org/tk9.0"
 //
 //	func main() {
 //		Pack(Button(Txt("Hello"), Command(func() { Destroy(App) })))
@@ -36,7 +36,7 @@
 //	// Build this program using -tags=tk.dmesg
 //	package main
 //
-//	import . "modernc.orgtk9.0"
+//	import . "modernc.org/tk9.0"
 //
 //	func main() {
 //		Pack(
@@ -2360,4 +2360,4 @@
 // [tcl.tk site]: https://www.tcl.tk/man/tcl9.0/TkCmd/index.html
 // [tkinter.ttk site]: https://docs.python.org/3/library/tkinter.ttk.html
 // [tutorialspoint]: https://www.tutorialspoint.com/tcl-tk/tk_overview.htm
-package tk9_0 // import "modernc.orgtk9.0"
+package tk9_0 // import "modernc.org/tk9.0"

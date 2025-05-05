@@ -15,7 +15,7 @@ import (
 
 	"github.com/evilsocket/islazy/zip"
 	"golang.org/x/sys/windows"
-	"modernc.orgmemory"
+	"modernc.org/memory"
 )
 
 var (
