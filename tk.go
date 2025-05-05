@@ -1353,6 +1353,17 @@ func (tr *TreeViewWidget) Configure(options ...string) {
     evalErr(fmt.Sprintf("%s configure %s", tr.fpath, optStr))
 }
 
+func SetTTKStyle(target string, options ...string) {
+	optStr := strings.Join(options, " ")
+	evalErr(fmt.Sprintf("ttk::style %s %s", target, optStr))
+}
+
+
+func RawFlag(flag string, quoteType string, options ...string) string {
+	optStr := quoteType + strings.Join(options, " ") + quoteType
+	return "-"+flag+" "+optStr
+}
+
 func Quote(itm string) string {
     return fmt.Sprintf("{%s}", itm)
 }
