@@ -4,7 +4,7 @@
 
 //go:build (linux && (amd64 || arm64)) || (darwin && (amd64 || arm64)) || (freebsd && (amd64 || arm64))
 
-package tk9_0 // import "modernc.org/tk9.0"
+package tk9_0 // import "github.com/yoonjin67/tk9.0"
 
 import (
 	"errors"
@@ -17,7 +17,7 @@ import (
 
 	"github.com/ebitengine/purego"
 	"github.com/evilsocket/islazy/zip"
-	"modernc.org/memory"
+	"github.com/yoonjin67/memory"
 )
 
 var (
@@ -167,7 +167,7 @@ func getCacheDir() (r string, err error) {
 		return "", err
 	}
 
-	r0 := filepath.Join(r, "modernc.org", libVersion, goos)
+	r0 := filepath.Join(r, "github.com/yoonjin67", libVersion, goos)
 	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {

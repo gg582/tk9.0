@@ -4,7 +4,7 @@
 
 //go:build linux && (386 || arm || loong64 || ppc64le || riscv64 || s390x)
 
-package tk9_0 // import "modernc.org/tk9.0"
+package tk9_0 // import "github.com/yoonjin67/tk9.0"
 
 import (
 	_ "embed"
@@ -14,12 +14,12 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"modernc.org/libc"
-	libtcl "modernc.org/libtcl9.0"
-	tcllib "modernc.org/libtcl9.0/library"
-	libtk "modernc.org/libtk9.0"
-	tklib "modernc.org/libtk9.0/library"
-	tcl "modernc.org/tcl9.0"
+	"github.com/yoonjin67/libc"
+	libtcl "github.com/yoonjin67/libtcl9.0"
+	tcllib "github.com/yoonjin67/libtcl9.0/library"
+	libtk "github.com/yoonjin67/libtk9.0"
+	tklib "github.com/yoonjin67/libtk9.0/library"
+	tcl "github.com/yoonjin67/tcl9.0"
 )
 
 const (
@@ -100,7 +100,7 @@ func getCacheDir() (r string, err error) {
 		return "", err
 	}
 
-	r0 := filepath.Join(r, "modernc.org", libVersion, goos)
+	r0 := filepath.Join(r, "github.com/yoonjin67", libVersion, goos)
 	r = filepath.Join(r0, goarch)
 	fi, err := os.Stat(r)
 	if err == nil && fi.IsDir() {
