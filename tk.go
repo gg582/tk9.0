@@ -312,6 +312,46 @@ func setDefaults() {
     }
 }
 
+func GetFPath(widget interface{}) string {
+	val := reflect.ValueOf(widget)
+	if val.Kind() != reflect.Ptr || val.IsNil() {
+		err := errors.New("[GetFPath] Retrieved value is not a pointer")
+		panic(err)
+	}
+	val = val.Elem()
+
+	if val.Kind() != reflect.Struct {
+		err := errors.New("[GetFPath] Widget Pointer is corrupted")
+		panic(err)
+	}
+
+	var window *Window
+	found := false
+	for i := 0; i < val.NumField() && found == false; i++ {
+		field := val.Field(i)
+		fieldType := field.Type()
+		if fieldType == reflect.TypeOf(&Window{}) {
+			if field.CanSet() || field.CanAddr() {
+				window = field.Interface().(*Window)
+				found = true
+			} else if field.CanAddr() {
+				ptr := field.Addr()
+				if ptr.Type() == reflect.TypeOf(&Window{}) {
+					window = ptr.Interface().(*Window)
+					found = true
+				}
+			}
+		}
+	}
+
+	if found == false {
+		err := errors.New("[GetFPath] Window Pointer not found")
+		panic(err)
+	}
+	return window.fpath
+}
+
+
 // Window represents a Tk window/widget. It implements common widget methods.
 //
 // Window implements Opt. When a Window instance is used as an Opt, it provides
