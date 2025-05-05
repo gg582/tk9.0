@@ -1185,10 +1185,15 @@ func TreeView(options ...Opt) *TreeViewWidget {
 }
 
 func (w *Window) TreeView(options ...Opt) *TreeViewWidget {
-	return &TreeViewWidget{w.newChild("ttk_treeview", options...)}
+	return &TreeViewWidget{
+		columns: make(map[string]int), 
+		Window: w.newChild("ttk_treeview", options...),
+	}
 }
 
 type TreeViewWidget struct {
+	columns map[string]int
+	idx int
 	*Window
 }
 	

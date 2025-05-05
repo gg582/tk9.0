@@ -1039,17 +1039,17 @@ func (l *TkList) Append(items string) {
 
 // AddItems appends one or more items to the listbox at the specified index.
 func (l *ListboxWidget) AddItems(index int, items ...string) {
-	if len(items) == 0 {
-		return
-	}
+    if len(items) == 0 {
+        return
+    }
 
-	quotedItems := make([]string, len(items))
-	for i, item := range items {
+    quotedItems := make([]string, len(items))
+    for i, item := range items {
         items[i] = fmt.Sprintf("{%s}", item)
-	}
+    }
 
-	itemsStr := strings.Join(quotedItems, " ")
-	cmd := fmt.Sprintf("%s insert %d %s", l.fpath, index, itemsStr)
+    itemsStr := strings.Join(quotedItems, " ")
+    cmd := fmt.Sprintf("%s insert %d %s", l.fpath, index, itemsStr)
     evalErr(cmd)
 }
 
@@ -1362,27 +1362,16 @@ func (tr *TreeViewWidget) Insert(itemID, text string, parent, _index int, values
 // Retrieves the specified property or option for the given item in the TreeView by item ID.
 //
 // Example:
-//   itemText := tr.GetItem("I001", "-text")  // Returns the text of item I001
-func (tr *TreeViewWidget) GetItem(itemID string, options string) string {
-    cmd := fmt.Sprintf("%s item %s %s", tr.fpath, itemID, options)
-    evalErr(cmd)
-    return cmd
+//   itemText := tr.GetColumn("I001", "text")  // Returns the text column of item I001
+func (tr *TreeViewWidget) GetColumn(itemID string, columnID string) string {
+    cmd := fmt.Sprintf("lindex [%s item  %s -values] %d", tr.fpath, itemID, tr.columns[columnID])
+    r, err := eval(cmd)
+    if err != nil {
+        panic(err)
+    }
+    return r
 }
 
-// # Description
-// This implements getting an option for a specific item in ttk_treeview.
-// It retrieves the value of the specified column for the given item.
-// Example usage:
-//   name := tv.GetColumn("I001", "Name")  // Gets the value of the "Name" column for item "I001".
-func (tr *TreeViewWidget) GetColumn(itemID string, columnID string) string {
-    cmd := fmt.Sprintf("%s get %s %s", tr.fpath, itemID, columnID)
-    result, err := eval(cmd)
-    if err != nil {
-        fmt.Println("Error getting item:", err)
-        return ""
-    }
-    return result
-}
 
 
 
@@ -1484,6 +1473,10 @@ func (tr *TreeViewWidget) Selection(operation string, items []string) {
 //   tr.Column("#0", "-width 150 -anchor center")  // Configures the first column with width and anchor.
 func (tr *TreeViewWidget) Column(columnID string, options string) {
     evalErr(fmt.Sprintf("%s column %s %s", tr.fpath, columnID, options))
+    if tr.idx != 0 {
+        tr.columns[columnID] = tr.idx-1
+    }
+    tr.idx++
 }
 
 // # Description
@@ -1494,8 +1487,8 @@ func (tr *TreeViewWidget) Column(columnID string, options string) {
 //   // Sets multiple column headers at once.
 // Heading configures a single column heading, e.g. "-text {Name} -anchor w".
 func (tr *TreeViewWidget) Heading(columnID string, options ...string) {
-	optStr := strings.Join(options, " ")
-	evalErr(fmt.Sprintf("%s heading %s %s", tr.fpath, columnID, optStr))
+    optStr := strings.Join(options, " ")
+    evalErr(fmt.Sprintf("%s heading %s %s", tr.fpath, columnID, optStr))
 }
 
 

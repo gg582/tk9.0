@@ -51,6 +51,7 @@ func main() {
     printBtn := Button(Txt("Show Selected"), Command(func() {
         for _, itm := range tr.Selected() {
             fmt.Println("Selected item IDs:", itm)
+			fmt.Println(tr.GetColumn(itm, "guitar"))
         }
     }))
 
