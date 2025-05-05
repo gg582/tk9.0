@@ -1342,7 +1342,6 @@ func (e *TEntryWidget) Get() string {
 	return r
 }
 
-
 // # Description
 // Applies one or more raw configuration options to the treeview.
 // Example:
@@ -1353,16 +1352,26 @@ func (tr *TreeViewWidget) Configure(options ...string) {
     evalErr(fmt.Sprintf("%s configure %s", tr.fpath, optStr))
 }
 
-func SetTTKStyle(target string, options ...string) {
+func (tr *TreeViewWidget) SetOptions(options ...Opt) {
+    evalErr(fmt.Sprintf("%s configure %s", tr.fpath, collect(options...)))
+}
+
+func SetTTKStyle(styleName string, action string, options ...Opt) {
+	cmd := fmt.Sprintf("ttk::style %s %s %s", action, styleName, collect(options...))
+	evalErr(cmd)
+}
+
+func RawEval(options ...string) (string, error) {
 	optStr := strings.Join(options, " ")
-	evalErr(fmt.Sprintf("ttk::style %s %s", target, optStr))
+	return eval(optStr)
 }
 
-
-func RawFlag(flag string, quoteType string, options ...string) string {
-	optStr := quoteType + strings.Join(options, " ") + quoteType
-	return "-"+flag+" "+optStr
+func RawFlag(flag string, options ...string) string {
+	optStr := strings.Join(options, " ")
+	optStr = Quote(optStr)
+	return Quote("-"+flag+" "+optStr)
 }
+
 
 func Quote(itm string) string {
     return fmt.Sprintf("{%s}", itm)
@@ -1406,16 +1415,11 @@ func (tr *TreeViewWidget) ParentOf(itemID string) string {
 // # Description
 // This implements ttk_treeview::insert
 // Insert adds a new item under the specified parent at the end of its children.
-func (tr *TreeViewWidget) Insert(itemID, text string, parent, _index int, values []string) {
+func (tr *TreeViewWidget) Insert(itemID, text string, parent, _index int, values []string, options ...Opt) {
     parentID := tr.Parent(parent)
 
-    // join all values into one space‑separated string, then wrap in a single pair of braces
-    all := strings.Join(values, " ")
-    valArg := fmt.Sprintf("{%s}", all)
-
-    // now -values has exactly one argument: the whole list
     cmd := fmt.Sprintf("%s insert %s end -id {%s} -text {%s} -values %s",
-        tr.fpath, parentID, itemID, text, valArg)
+        tr.fpath, parentID, itemID, text, collect(options...))
     evalErr(cmd)
 }
 
@@ -1509,6 +1513,7 @@ func (tr *TreeViewWidget) Columns(cols []string) {
     evalErr(fmt.Sprintf("%s configure -columns {%s}", tr.fpath, arg))
 }
 
+
 // # Description
 // This implements options formatting for ttk_treeview.
 // It formats options as "-option value" string pair.
@@ -1569,7 +1574,7 @@ func (tr *TreeViewWidget) TagAdd(tagName string, items []string) {
 // It allows setting visual properties such as background and foreground colors for a tag.
 // Example usage:
 //   tr.TagConfigure("highlighted", "-background yellow -foreground black")  // Configures the "highlighted" tag.
-func (tr *TreeViewWidget) TagConfigure(tagName string, options string) {
+func (tr *TreeViewWidget) TagConfigure(tagName string, options ...Opt) {
     evalErr(fmt.Sprintf("%s tag configure %s %s", tr.fpath, tagName, options))
 }
 
