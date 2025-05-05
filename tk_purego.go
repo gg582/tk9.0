@@ -4,7 +4,7 @@
 
 //go:build (linux && (amd64 || arm64)) || (darwin && (amd64 || arm64)) || (freebsd && (amd64 || arm64))
 
-package tk9_0 // import "modernc.orgtk9.0"
+package tk9_0 // import "github.com/yoonjin67/tk9.0"
 
 import (
 	"errors"
