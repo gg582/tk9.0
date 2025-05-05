@@ -2,7 +2,7 @@
 
 package main
 
-import . "modernc.org/tk9.0"
+import . "github.com/yoonjin67/tk9.0"
 
 func main() {
 	Pack(TExit(Txt("Hello")), Ipadx(10), Ipady(5), Padx(20), Pady(10))

@@ -1,4 +1,4 @@
-package b5 // import "modernc.org/tk9.0"
+package b5 // import "github.com/yoonjin67/tk9.0"
 
 import (
 	"fmt"

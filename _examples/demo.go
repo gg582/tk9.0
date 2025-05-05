@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"time"
 
-	. "modernc.org/tk9.0"
+	. "github.com/yoonjin67/tk9.0"
 )
 
 var (

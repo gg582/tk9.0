@@ -1,7 +1,7 @@
 package main
 
 import "fmt"
-import . "modernc.org/tk9.0"
+import . "github.com/yoonjin67/tk9.0"
 
 func main() {
 	Pack(

@@ -1,6 +1,6 @@
 package main
 
-import . "modernc.org/tk9.0"
+import . "github.com/yoonjin67/tk9.0"
 import _ "embed"
 
 //go:embed gotk.png

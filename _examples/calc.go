@@ -1,7 +1,7 @@
 package main
 
 import "github.com/expr-lang/expr"
-import . "modernc.org/tk9.0"
+import . "github.com/yoonjin67/tk9.0"
 
 func main() {
 	out := Label(Height(2), Anchor("e"), Txt("(123+232)/(123-10)"))

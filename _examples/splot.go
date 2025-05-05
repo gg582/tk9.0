@@ -1,6 +1,6 @@
 package main
 
-import . "modernc.org/tk9.0"
+import . "github.com/yoonjin67/tk9.0"
 
 var cm = int(TkScaling()*72/2.54 + 0.5)
 

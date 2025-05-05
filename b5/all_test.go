@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package b5 // import "modernc.org/tk9.0/b5"
+package b5 // import "github.com/yoonjin67/tk9.0/b5"
 
 import (
 	"testing"
 
-	. "modernc.org/tk9.0"
+	. "github.com/yoonjin67/tk9.0"
 )
 
 func Test1(t *testing.T) {

@@ -1,6 +1,6 @@
 package main
 
-import . "modernc.org/tk9.0"
+import . "github.com/yoonjin67/tk9.0"
 
 // https://en.wikipedia.org/wiki/SVG
 const svg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>

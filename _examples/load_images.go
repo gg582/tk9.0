@@ -9,7 +9,7 @@ import (
     "strings"
     "path"
 
-    . "modernc.org/tk9.0"
+    . "github.com/yoonjin67/tk9.0"
 )
 
 var pbuttons []*TButtonWidget

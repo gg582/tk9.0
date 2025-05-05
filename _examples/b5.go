@@ -1,8 +1,8 @@
 package main
 
 import (
-	. "modernc.org/tk9.0"
-	"modernc.org/tk9.0/b5"
+	. "github.com/yoonjin67/tk9.0"
+	"github.com/yoonjin67/tk9.0/b5"
 )
 
 func main() {

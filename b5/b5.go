@@ -4,13 +4,13 @@
 
 // The b5 package is a work in progress with no stable API yet. It will eventually become
 // a full theme package.
-package b5 // import "modernc.org/tk9.0/b5"
+package b5 // import "github.com/yoonjin67/tk9.0/b5"
 
 import (
 	"fmt"
 	"math"
 
-	. "modernc.org/tk9.0"
+	. "github.com/yoonjin67/tk9.0"
 )
 
 const (
