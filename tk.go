@@ -1290,6 +1290,17 @@ func (l *ListboxWidget) Options(option string, val string) string {
     return "-" + option + " " + val
 }
 
+// # Description 
+// Gets internal text of TEntry
+// Example:
+// text := e.Get()
+func (e *TEntryWidget) Get() string {
+	r, err := eval(fmt.Sprintf("%s get", e.fpath))
+	if err != nil { 
+		panic(err)
+	}
+	return r
+}
 
 
 // # Description
