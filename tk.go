@@ -1417,9 +1417,11 @@ func (tr *TreeViewWidget) ParentOf(itemID string) string {
 // Insert adds a new item under the specified parent at the end of its children.
 func (tr *TreeViewWidget) Insert(itemID, text string, parent, _index int, values []string, options ...Opt) {
     parentID := tr.Parent(parent)
+    all := strings.Join(values, " ")
+    valArg := fmt.Sprintf("{%s}", all)
 
     cmd := fmt.Sprintf("%s insert %s end -id {%s} -text {%s} -values %s",
-        tr.fpath, parentID, itemID, text, collect(options...))
+        tr.fpath, parentID, itemID, text, valArg, collect(options...))
     evalErr(cmd)
 }
 
