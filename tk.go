@@ -1420,7 +1420,7 @@ func (tr *TreeViewWidget) Insert(itemID, text string, parent, _index int, values
     all := strings.Join(values, " ")
     valArg := fmt.Sprintf("{%s}", all)
 
-    cmd := fmt.Sprintf("%s insert %s end -id {%s} -text {%s} -values %s",
+    cmd := fmt.Sprintf("%s insert %s end -id {%s} -text {%s} -values %s %s",
         tr.fpath, parentID, itemID, text, valArg, collect(options...))
     evalErr(cmd)
 }
@@ -1483,7 +1483,12 @@ func (tr *TreeViewWidget) SelectMode(mode string) {
 // Example usage:
 //   tr.Delete([]string{"item1", "item2"})  // Deletes item1 and item2.
 func (tr *TreeViewWidget) Delete(items []string) {
-    evalErr(fmt.Sprintf("%s delete {%s}", tr.fpath, items))
+	item := ""
+	for _, it := range items {
+		item += Quote(it) + " "
+	}
+	item = Quote(item)
+   	evalErr(fmt.Sprintf("%s delete %s", tr.fpath, item))
 }
 
 // # Description
