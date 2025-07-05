@@ -1,6 +1,6 @@
 package main
 
-import . "github.com/yoonjin67/tk9.0"
+import . "github.com/gg582/tk9.0"
 
 // https://gnuplot.sourceforge.net/demo_5.4/surface2.9.gnu
 const script = `

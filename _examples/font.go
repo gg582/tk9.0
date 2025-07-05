@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 import "slices"
-import . "github.com/yoonjin67/tk9.0"
+import . "github.com/gg582/tk9.0"
 
 func main() {
 	var scroll *TScrollbarWidget

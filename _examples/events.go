@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	. "github.com/yoonjin67/tk9.0"
+	. "github.com/gg582/tk9.0"
 )
 
 func click(e *Event) {

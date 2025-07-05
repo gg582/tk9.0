@@ -1,6 +1,6 @@
 package main
 
-import . "github.com/yoonjin67/tk9.0"
+import . "github.com/gg582/tk9.0"
 
 func main() {
 	f := Frame(Width("50m"), Height("10m"))
