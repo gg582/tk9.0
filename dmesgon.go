@@ -5,7 +5,7 @@
 //go:build tk.dmesg
 // +build tk.dmesg
 
-package tk9_0 // import "github.com/yoonjin67/tk9.0"
+package tk9_0 // import "github.com/gg582/tk9.0"
 
 import (
 	"fmt"

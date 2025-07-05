@@ -4,7 +4,7 @@
 
 //go:build linux && (386 || arm || loong64 || ppc64le || riscv64 || s390x)
 
-package tk9_0 // import "github.com/yoonjin67/tk9.0"
+package tk9_0 // import "github.com/gg582/tk9.0"
 
 import (
 	_ "embed"

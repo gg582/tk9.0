@@ -96,7 +96,7 @@ win65:
 		--exclude \*.gz \
 		--exclude html/ \
 		.  \
-		win65:src/github.com/yoonjin67/tk9.0
+		win65:src/github.com/gg582/tk9.0
 
 lib_win: lib_win64 lib_win32 lib_winarm64
 

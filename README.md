@@ -7,7 +7,7 @@ Using Go embedded images (_examples/photo.go).
      1	package main
      2	
      3	import _ "embed"
-     4	import . "github.com/yoonjin67/tk9.0"
+     4	import . "github.com/gg582/tk9.0"
      5	
      6	//go:embed gopher.png
      7	var gopher []byte
@@ -27,7 +27,7 @@ Cascading menus (_examples/menu.go)
      2	
      3	import (
      4		"fmt"
-     5		. "github.com/yoonjin67/tk9.0"
+     5		. "github.com/gg582/tk9.0"
      6		"runtime"
      7	)
      8	
@@ -73,7 +73,7 @@ Rich text using markup (_examples/text.go).
 
      1	package main
      2	
-     3	import . "github.com/yoonjin67/tk9.0"
+     3	import . "github.com/gg582/tk9.0"
      4	
      5	func main() {
      6		var scroll *TScrollbarWidget
@@ -141,7 +141,7 @@ Using svg (_examples/svg.go).
 
      1	package main
      2	
-     3	import . "github.com/yoonjin67/tk9.0"
+     3	import . "github.com/gg582/tk9.0"
      4	
      5	// https://en.wikipedia.org/wiki/SVG
      6	const svg = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -170,7 +170,7 @@ A simple calculator (_examples/calc.go).
      1	package main
      2	
      3	import "github.com/expr-lang/expr"
-     4	import . "github.com/yoonjin67/tk9.0"
+     4	import . "github.com/gg582/tk9.0"
      5	
      6	func main() {
      7		out := Label(Height(2), Anchor("e"), Txt("(123+232)/(123-10)"))
@@ -210,7 +210,7 @@ A font previewer (_examples/font.go).
      2	
      3	import "fmt"
      4	import "slices"
-     5	import . "github.com/yoonjin67/tk9.0"
+     5	import . "github.com/gg582/tk9.0"
      6	
      7	func main() {
      8		var scroll *TScrollbarWidget
@@ -242,7 +242,7 @@ Surface plot (_examples/splot.go). This example requires Gnuplot 5.4+ installati
 
      1	package main
      2	
-     3	import . "github.com/yoonjin67/tk9.0"
+     3	import . "github.com/gg582/tk9.0"
      4	
      5	var cm = int(TkScaling()*72/2.54 + 0.5)
      6	
@@ -259,7 +259,7 @@ Interlocked tori plot (_examples/tori.go). This example requires Gnuplot 5.4+ in
 
      1	package main
      2	
-     3	import . "github.com/yoonjin67/tk9.0"
+     3	import . "github.com/gg582/tk9.0"
      4	
      5	// https://gnuplot.sourceforge.net/demo_5.4/hidden2.html
      6	const script = `
@@ -304,7 +304,7 @@ Interlocked tori plot on canvas (_examples/tori_canvas.go). This example require
 
      1	package main
      2	
-     3	import . "github.com/yoonjin67/tk9.0"
+     3	import . "github.com/gg582/tk9.0"
      4	
      5	// https://gnuplot.sourceforge.net/demo_5.4/surface2.9.gnu
      6	const script = `
@@ -346,7 +346,7 @@ Rendering plain TeX (_examples/tex.go). No runtime dependencies required.
 
      1	package main
      2	
-     3	import . "github.com/yoonjin67/tk9.0"
+     3	import . "github.com/gg582/tk9.0"
      4	
      5	func main() {
      6		tex := `$$\int _0 ^\infty {{\sin ax \sin bx}\over{x^2}}\,dx = {\pi a\over 2}$$`
@@ -362,7 +362,7 @@ Embedding pictures, TeX and other widgets in Text (_examples/embed.go).
 
      1	package main
      2	
-     3	import . "github.com/yoonjin67/tk9.0"
+     3	import . "github.com/gg582/tk9.0"
      4	import _ "embed"
      5	
      6	//go:embed gotk.png
@@ -408,7 +408,7 @@ Styling a button (_examples/tbutton.go). See the discussion at [Tutorial: Modify
      1	package main
      2	
      3	import _ "embed"
-     4	import . "github.com/yoonjin67/tk9.0"
+     4	import . "github.com/gg582/tk9.0"
      5	
      6	//go:embed red_corner.png
      7	var red []byte
@@ -451,8 +451,8 @@ get there, eventually.
      1	package main
      2	
      3	import (
-     4		. "github.com/yoonjin67/tk9.0"
-     5		"github.com/yoonjin67/tk9.0/b5"
+     4		. "github.com/gg582/tk9.0"
+     5		"github.com/gg582/tk9.0/b5"
      6	)
      7	
      8	func main() {
@@ -516,7 +516,7 @@ Windows 11
 
 ![windows11](_examples/windows11.png "windows11")
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/yoonjin67/tk9.0.svg)](https://pkg.go.dev/github.com/yoonjin67/tk9.0)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gg582/tk9.0.svg)](https://pkg.go.dev/github.com/gg582/tk9.0)
 
 [![LiberaPay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/jnml/donate)
 [![receives](https://img.shields.io/liberapay/receives/jnml.svg?logo=liberapay)](https://liberapay.com/jnml/donate)
